@@ -1,0 +1,7 @@
+
+//The Wildstand config file
+com.wildstangs.logger.Logger.logIp=127.0.0.1
+com.wildstangs.logger.Logger.port=17654
+com.wildstangs.logger.Logger.logToServer=true
+com.wildstangs.logger.Logger.logToStdout=true
+com.wildstangs.logger.Logger.logLevel="ALL"
