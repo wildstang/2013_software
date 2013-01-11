@@ -2,8 +2,8 @@ package com.wildstangs.inputfacade.inputs.joystick.manipulator;
 
 import com.wildstangs.inputfacade.base.IInput;
 import com.wildstangs.inputfacade.base.IInputEnum;
-import com.wildstangs.inputs.joystick.IHardwareJoystick;
-import com.wildstangs.inputs.joystick.IJoystick;
+import com.wildstangs.inputfacade.inputs.joystick.IHardwareJoystick;
+import com.wildstangs.inputfacade.inputs.joystick.IJoystick;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
