@@ -1,5 +1,6 @@
 package com.wildstangs.outputfacade.outputs;
 
+import com.wildstangs.outputfacade.base.IOutput;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -10,7 +11,7 @@ import edu.wpi.first.wpilibj.Victor;
  *
  * @author Nathan
  */
-public class WsDriveSpeed {
+public class WsDriveSpeed implements IOutput {
 
     DoubleSubject motorSpeed;
     Victor victor1;

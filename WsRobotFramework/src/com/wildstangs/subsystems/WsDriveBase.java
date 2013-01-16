@@ -19,10 +19,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
     public void update() {
-        
     }
 }

@@ -1,10 +1,13 @@
 package com.wildstangs.inputfacade.base;
 
+import com.wildstangs.subjects.base.IObservable;
+
+
 /**
  *
  * @author Nathan
  */
-public interface IInput {
+public interface IInput extends IObservable {
 
     /**
      * Method to set values in the data element.

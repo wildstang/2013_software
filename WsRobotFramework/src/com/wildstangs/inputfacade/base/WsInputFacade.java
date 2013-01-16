@@ -1,5 +1,7 @@
 package com.wildstangs.inputfacade.base;
 
+import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystick;
+import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystick;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -98,6 +100,9 @@ public class WsInputFacade {
     /**
      * Keys to represent Inputs
      */
+    public static final String DRIVER_JOYSTICK = "DriverJoystick";
+    public static final String MANIPULATOR_JOYSTICK = "ManipulatorJoystick";
+    
     /**
      * Constructor for the WsInputFacade.
      *
@@ -106,5 +111,7 @@ public class WsInputFacade {
      */
     protected WsInputFacade() {
         //Add the facade data elements
+        oiInputs.put(DRIVER_JOYSTICK, new WsDriverJoystick());
+        oiInputs.put(MANIPULATOR_JOYSTICK, new WsManipulatorJoystick());
     }
 }
