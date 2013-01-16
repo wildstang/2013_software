@@ -14,7 +14,7 @@ import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
-import edu.wpi.first.wpilibj.GraphingVictor;
+import edu.wpi.first.wpilibj.DoubleSubjectGraph;
 
 /**
  *
@@ -59,22 +59,18 @@ public class WsSimulation {
         WsSubsystemContainer.getInstance();
 
         Subject subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).getSubject(null);
-        GraphingVictor leftDriveSpeed = new GraphingVictor("Left Drive Speed", subject);
+        DoubleSubjectGraph leftDriveSpeed = new DoubleSubjectGraph("Left Drive Speed", subject);
 
         subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null);
-        GraphingVictor rightDriveSpeed = new GraphingVictor("Right Drive Speed", subject);
+        DoubleSubjectGraph rightDriveSpeed = new DoubleSubjectGraph("Right Drive Speed", subject);
 
         double i = 0;
 
         while (true) {
-            i = i + 0.001;
-            if (i >= .1) {
-                ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).getSubject(null).setValue(i);
-                ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null).setValue(i);
-            }
             //Update the Victor graphs
             leftDriveSpeed.update();
             rightDriveSpeed.update();
+            
             WsInputFacade.getInstance().updateOiData();
             WsInputFacade.getInstance().updateSensorData();
             WsSubsystemContainer.getInstance().update();
