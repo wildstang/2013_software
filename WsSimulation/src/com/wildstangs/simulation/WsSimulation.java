@@ -75,6 +75,7 @@ public class WsSimulation {
             WsInputFacade.getInstance().updateSensorData();
             WsSubsystemContainer.getInstance().update();
             WsOutputFacade.getInstance().update();
+            WsSolenoidContainer.getInstance().update();
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {

@@ -7,6 +7,8 @@
 
 package edu.wpi.first.wpilibj;
 
+import com.wildstangs.simulation.*;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
@@ -23,23 +25,11 @@ public class Solenoid {
     private int mChannel;
     private boolean outputState;
     
-    private JFrame frame;
-    private JLabel outputLabel;
 /**
      * Common function to implement constructor behavior.
      */
     private void initSolenoid() {
         outputState = false;
-        frame = new JFrame("Solenoid: " + mChannel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(300, 100));
-	frame.setLayout(new BorderLayout());
-		
-	outputLabel = new JLabel("Solenoid State: Off");
-	frame.add(outputLabel, BorderLayout.NORTH);
-		
-	frame.pack();
-	frame.setVisible(true);
     }
 
     /**
@@ -49,6 +39,7 @@ public class Solenoid {
      * @param channel The channel on the module to control.
      */
     public Solenoid(final int moduleNumber, final int channel) {
+        WsSolenoidContainer.getInstance().add(this, moduleNumber, channel);
 	mChannel = channel;
         initSolenoid();
     }
@@ -59,8 +50,7 @@ public class Solenoid {
      * @param channel The channel on the module to control.
      */
     public Solenoid(final int channel) {
-	mChannel = channel;
-        initSolenoid();
+        this(1,channel); 
     }
 
     /**
@@ -75,11 +65,6 @@ public class Solenoid {
      */
     public void set(boolean value) {
         outputState = value;
-	if ( outputState == true ) {
-		outputLabel.setText("Solenoid State: on");
-	} else {
-		outputLabel.setText("Solenoid State: off");
-	}
     }
 
     /**
