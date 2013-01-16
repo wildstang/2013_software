@@ -50,33 +50,7 @@ public class Victor implements ComponentListener, ActionListener {
      * @param channel The Digital Sidecar channel it should be connected to.
      */
     public Victor(int channel) {
-        frame = new JFrame("Victor Emulator: " + channel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setResizable(false);
-        frame.setLocation(510, 0);
-        frame.setLayout(new BorderLayout());
-        frame.setPreferredSize(new Dimension(300, 320));
-        
-        //tells the current speed of the victor in % above the graph.
-        victorSpeed = new JLabel("Current Speed: " + (speed*100) + "%");
-        frame.add(victorSpeed, BorderLayout.NORTH);
-        
-        //allows user to stop the movement of the graph. button located under the graph.
-        startStop = new JButton("Stop Graph");
-        startStop.addActionListener(this);
-        frame.add(startStop, BorderLayout.SOUTH);
-        
-        //makes the actual graph.
-        graph = new SpeedGrapher(300, 300);
-        frame.add(graph, BorderLayout.CENTER);
-        
-        startTime = 0;
-        isGraphRunning = true;
-        
-        frame.addComponentListener(this);
 
-        frame.pack();
-        frame.setVisible(true);
     }
 
 	/**
@@ -84,12 +58,7 @@ public class Victor implements ComponentListener, ActionListener {
      * @param speed The speed value of the Victor between -1.0 and +1.0.
      */
     public void set(double speed) {
-    	if (System.currentTimeMillis() - startTime > 35 && isGraphRunning) {
-    		graph.appendSpeed(speed);
-    		startTime = System.currentTimeMillis();
-    	}
-        this.speed = speed;
-        victorSpeed.setText((int)((speed*100)*10)/10.0 + "%");
+
     }
 
     /**

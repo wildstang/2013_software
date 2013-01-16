@@ -7,17 +7,21 @@ package com.wildstangs.simulation;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
-import com.wildstangs.subsystems.base.WsSubsystemContainer;
-import com.wildstangs.logviewer.LogViewer;
+import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.logger.*;
+import com.wildstangs.logviewer.LogViewer;
+import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
+import com.wildstangs.subjects.base.Subject;
+import com.wildstangs.subsystems.base.WsSubsystemContainer;
+import edu.wpi.first.wpilibj.GraphingVictor;
 
 /**
  *
  * @author ChadS
  */
 public class WsSimulation {
-    
+
     static String c = "WsSimulation";
 
     /**
@@ -25,21 +29,20 @@ public class WsSimulation {
      */
     public static void main(String[] args) {
         //Instantiate the Facades and Containers
-        
-       //start the log viewer.
+
+        //start the log viewer.
         (new Thread(new LogViewer())).start();
-        
+
         try {
-           WsConfigFacade.getInstance().setFileName("/Config/ws_config.txt"); 
-           WsConfigFacade.getInstance().readConfig();
-           //System.out.println(WsConfigFacade.getInstance().getConfigParamByName("com.wildstangs.WsInputFacade.WsDriverJoystick.trim"));
-        }
-        catch (WsConfigFacadeException wscfe) {
+            WsConfigFacade.getInstance().setFileName("/Config/ws_config.txt");
+            WsConfigFacade.getInstance().readConfig();
+            //System.out.println(WsConfigFacade.getInstance().getConfigParamByName("com.wildstangs.WsInputFacade.WsDriverJoystick.trim"));
+        } catch (WsConfigFacadeException wscfe) {
             System.out.println(wscfe.toString());
         }
-        
+
         Logger logger = Logger.getLogger();
-     
+
         //System.out.println(WsConfigFacade.getInstance().getConfigItemName("com.wildstangs.WsInputFacade.WsDriverJoystick.trim"));
         //System.out.println(WsConfigFacade.getInstance().dumpConfigData());
         logger.always(c, "sim_startup", "Simulation starting.");
@@ -54,10 +57,24 @@ public class WsSimulation {
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
         WsSubsystemContainer.getInstance();
-        
-        
-        
+
+        Subject subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).getSubject(null);
+        GraphingVictor leftDriveSpeed = new GraphingVictor("Left Drive Speed", subject);
+
+        subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null);
+        GraphingVictor rightDriveSpeed = new GraphingVictor("Right Drive Speed", subject);
+
+        double i = 0;
+
         while (true) {
+            i = i + 0.001;
+            if (i >= .1) {
+                ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).getSubject(null).setValue(i);
+                ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null).setValue(i);
+            }
+            //Update the Victor graphs
+            leftDriveSpeed.update();
+            rightDriveSpeed.update();
             WsInputFacade.getInstance().updateOiData();
             WsInputFacade.getInstance().updateSensorData();
             WsSubsystemContainer.getInstance().update();
@@ -65,11 +82,9 @@ public class WsSimulation {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
-                
             }
-            
+
         }
-        
+
     }
 }
-
