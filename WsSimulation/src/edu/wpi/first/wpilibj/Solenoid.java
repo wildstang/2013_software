@@ -7,6 +7,8 @@
 
 package edu.wpi.first.wpilibj;
 
+import com.wildstangs.simulation.*;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
@@ -30,16 +32,7 @@ public class Solenoid {
      */
     private void initSolenoid() {
         outputState = false;
-        frame = new JFrame("Solenoid: " + mChannel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(300, 100));
-	frame.setLayout(new BorderLayout());
-		
-	outputLabel = new JLabel("Solenoid State: Off");
-	frame.add(outputLabel, BorderLayout.NORTH);
-		
-	frame.pack();
-	frame.setVisible(true);
+        WsSolenoidContainer.getInstance();
     }
 
     /**
@@ -49,6 +42,7 @@ public class Solenoid {
      * @param channel The channel on the module to control.
      */
     public Solenoid(final int moduleNumber, final int channel) {
+        WsSolenoidContainer.getInstance().add(this, moduleNumber, channel);
 	mChannel = channel;
         initSolenoid();
     }
