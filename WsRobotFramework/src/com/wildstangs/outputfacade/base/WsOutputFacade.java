@@ -1,5 +1,6 @@
 package com.wildstangs.outputfacade.base;
 
+import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -59,6 +60,8 @@ public class WsOutputFacade {
         return (IOutput) outputs.get(key);
     }
     //Key Values - Need to update for each new output element.
+    public static final String RIGHT_DRIVE_SPEED = "RightDriveSpeed";
+    public static final String LEFT_DRIVE_SPEED = "LeftDriveSpeed";
 
     /**
      * Constructor for WsOutputFacade.
@@ -68,5 +71,7 @@ public class WsOutputFacade {
      */
     protected WsOutputFacade() {
         //Add the facade data elements
+        outputs.put(RIGHT_DRIVE_SPEED, new WsDriveSpeed(RIGHT_DRIVE_SPEED, 1, 2));
+        outputs.put(LEFT_DRIVE_SPEED, new WsDriveSpeed(LEFT_DRIVE_SPEED, 3, 4));
     }
 }
