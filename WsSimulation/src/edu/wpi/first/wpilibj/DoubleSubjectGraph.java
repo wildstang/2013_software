@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class GraphingVictor implements ComponentListener, ActionListener, IObserver {
+public class DoubleSubjectGraph implements ComponentListener, ActionListener, IObserver {
 
     private double speed;
     private long startTime;
@@ -28,7 +28,7 @@ public class GraphingVictor implements ComponentListener, ActionListener, IObser
     /**
      * Creates a new Victor speed grapher.
      */
-    public GraphingVictor(String name, Subject watchingSubject) {
+    public DoubleSubjectGraph(String name, Subject watchingSubject) {
         frame = new JFrame("Victor Emulator: " + name);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //frame.setResizable(false);
