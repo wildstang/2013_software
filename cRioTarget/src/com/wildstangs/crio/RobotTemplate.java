@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.wildstang.crio;
+package com.wildstangs.crio;
 
 
 import edu.wpi.first.wpilibj.IterativeRobot;
