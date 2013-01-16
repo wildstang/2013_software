@@ -7,6 +7,7 @@ package com.wildstangs.subsystems.base;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import com.wildstangs.subsystems.WsDriveBase;
 
 /**
  *
@@ -57,6 +58,7 @@ public class WsSubsystemContainer {
         }
     }
     //Subsystem keys - must add a new key for each subsystem.
+    public static final String WS_DRIVE_BASE = "WsDriveBase";
 
     /**
      * Constructor for the subsystem container.
@@ -65,5 +67,6 @@ public class WsSubsystemContainer {
      * instantiated as well as placed in the subsystem container.
      */
     protected WsSubsystemContainer() {
+        subsystem.put(WS_DRIVE_BASE, new WsDriveBase(WS_DRIVE_BASE));
     }
 }
