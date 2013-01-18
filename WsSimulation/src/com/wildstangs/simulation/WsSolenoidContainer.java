@@ -54,7 +54,6 @@ public class WsSolenoidContainer
             return;
         if((channel > solenoids[0].length) || (channel < 1))
             return;
-        
         solenoids[module - 1][channel - 1] = s;
     }
     
@@ -66,14 +65,13 @@ public class WsSolenoidContainer
             {
                 Solenoid s = solenoids[cy][cx];
                 if(s == null)
-                    break;
+                    continue;
                 
                 labels[cy][cx].setText(String.format("%d - %d : %s", cy + 1, cx + 1, s.get()));
             }
         }
         solenoidWindow.invalidate();
         solenoidWindow.validate();
-
     }
     
     private WsSolenoidContainer()
