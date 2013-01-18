@@ -8,3 +8,6 @@
 /WsRobotFramework/dist/
 /WsSimulation/dist/
 /WsSimulation/build/
+/cRioTarget/build/
+/cRioTarget/nbproject/project.bak.xml
+/cRioTarget/nbproject/private/
