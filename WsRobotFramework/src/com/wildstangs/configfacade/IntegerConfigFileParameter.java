@@ -28,7 +28,8 @@ public class IntegerConfigFileParameter extends ConfigFileParameter {
     public int getValue() {
         String fullName = getFullParamName();
         try {
-            return Integer.parseInt(WsConfigFacade.getInstance().getConfigParamByName(fullName));
+            Integer i = Integer.parseInt(WsConfigFacade.getInstance().getConfigParamByName(fullName));
+            return i.intValue();
         } catch (Exception e) {
             return defaultValue;
         }

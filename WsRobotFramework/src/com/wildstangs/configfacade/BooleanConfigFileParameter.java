@@ -32,7 +32,8 @@ public class BooleanConfigFileParameter extends ConfigFileParameter {
     public boolean getValue() {
         String fullName = getFullParamName();
         try {
-            return Boolean.parseBoolean(WsConfigFacade.getInstance().getConfigParamByName(fullName));
+            Boolean b = Boolean.parseBoolean(WsConfigFacade.getInstance().getConfigParamByName(fullName));
+            return b.booleanValue();
         } catch (Exception e) {
             return defaultValue;
         }

@@ -28,7 +28,8 @@ public class DoubleConfigFileParameter extends ConfigFileParameter {
     public double getValue() {
         String fullName = getFullParamName();
         try {
-            return Double.parseDouble(WsConfigFacade.getInstance().getConfigParamByName(fullName));
+            Double d = Double.parseDouble(WsConfigFacade.getInstance().getConfigParamByName(fullName));
+            return d.doubleValue();
         } catch (Exception e) {
             return defaultValue;
         }
