@@ -16,31 +16,30 @@ import javax.swing.JLabel;
 
 public class DoubleSubjectGraph implements ComponentListener, ActionListener, IObserver {
 
-    private double speed;
+    private double value;
     private long startTime;
     private boolean isGraphRunning;
     private JFrame frame;
-    private JLabel victorNum;
-    private JLabel victorSpeed;
+    private JLabel valueLabel;
     private JButton startStop;
     private SpeedGrapher graph;
 
     /**
-     * Creates a new Victor speed grapher.
+     * Creates a new double subject grapher.
      */
-    public DoubleSubjectGraph(String name, Subject watchingSubject) {
-        frame = new JFrame("Victor Emulator: " + name);
+    public DoubleSubjectGraph(String name, Subject subject) {
+        frame = new JFrame("Double Subject: " + name);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //frame.setResizable(false);
         frame.setLocation(510, 0);
         frame.setLayout(new BorderLayout());
         frame.setPreferredSize(new Dimension(300, 320));
 
-        //Tells the current speed of the victor in % above the graph.
-        victorSpeed = new JLabel("Current Speed: " + (speed * 100) + "%");
-        frame.add(victorSpeed, BorderLayout.NORTH);
+        //Tells the current value of the subject in % above the graph.
+        valueLabel = new JLabel("Current Value: " + (value * 100) + "%");
+        frame.add(valueLabel, BorderLayout.NORTH);
 
-        //Allows user to stop the movement of the graph. button located under the graph.
+        //Allows user to stop the movement of the graph. Button located under the graph.
         startStop = new JButton("Stop Graph");
         startStop.addActionListener(this);
         frame.add(startStop, BorderLayout.SOUTH);
@@ -57,8 +56,8 @@ public class DoubleSubjectGraph implements ComponentListener, ActionListener, IO
         frame.pack();
         frame.setVisible(true);
 
-        //Attach outselves to the subject
-        watchingSubject.attach(this);
+        //Attach to the subject
+        subject.attach(this);
     }
 
     public void componentResized(ComponentEvent e) {
@@ -85,14 +84,14 @@ public class DoubleSubjectGraph implements ComponentListener, ActionListener, IO
 
     public void update() {
         if (System.currentTimeMillis() - startTime > 35 && isGraphRunning) {
-            graph.appendSpeed(speed);
+            graph.appendSpeed(value);
             startTime = System.currentTimeMillis();
         }
-        victorSpeed.setText((int) ((speed * 100) * 10) / 10.0 + "%");
+        valueLabel.setText((int) ((value * 100) * 10) / 10.0 + "%");
     }
 
     @Override
     public void acceptNotification(Subject subjectThatCaused) {
-        this.speed = ((DoubleSubject) subjectThatCaused).getValue();
+        this.value = ((DoubleSubject) subjectThatCaused).getValue();
     }
 }
