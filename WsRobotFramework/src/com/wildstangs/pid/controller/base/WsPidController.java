@@ -472,4 +472,20 @@ public class WsPidController implements IPidController {
 
         return clipped_input;
     }
+    
+    public void notifyConfigChange() {
+        p = p_config.getValue();
+        i =i_config.getValue();
+        d = d_config.getValue();
+        errorIncrement = errorIncrement_config.getValue();
+        errorEpsilon = errorEpsilon_config.getValue();
+        staticEpsilon = staticEpsilon_config.getValue();
+        maxIntegral = maxIntegral_config.getValue();
+        integralErrorThresh = integralErrorThresh_config.getValue();
+        differentiatorBandLimit = differentiatorBandLimit_config.getValue();
+        maxOutput = maxOutput_config.getValue();
+        minOutput = minOutput_config.getValue();
+        maxInput = maxInput_config.getValue();
+        minInput = minInput_config.getValue();
+    }
 }
