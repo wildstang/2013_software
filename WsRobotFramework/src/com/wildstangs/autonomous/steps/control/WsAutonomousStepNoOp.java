@@ -5,6 +5,7 @@
 
 package com.wildstangs.autonomous.steps.control;
 
+import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousStep;
 
 /**
@@ -13,7 +14,9 @@ import com.wildstangs.autonomous.WsAutonomousStep;
  */
 public class WsAutonomousStepNoOp extends WsAutonomousStep 
 {
-    
+    //Note: This step silently passes on the error status of the previous step.
+    //(That is, if the previous step had an error, this step doesn't log an error, but WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError() will remain true.
+
     public WsAutonomousStepNoOp()
     {
         
@@ -22,6 +25,11 @@ public class WsAutonomousStepNoOp extends WsAutonomousStep
     public void initialize()
     {
         finished = true; //This step does nothing, and finishes immediately.
+        if (WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError())
+        {
+            pass = false;
+            errorInfo = "";
+        }
     }
 
     public void update()

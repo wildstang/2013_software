@@ -4,6 +4,7 @@
  */
 package com.wildstangs.autonomous;
 
+import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
 import java.util.Arrays;
 
 /**
@@ -96,7 +97,11 @@ public abstract class WsAutonomousProgram implements IStepContainer
     
     public void setNextStep(WsAutonomousStep newStep)
     {
-        if (currentStep + 1 < programSteps.length)
+        if (programSteps[currentStep] instanceof WsAutonomousStepGroup)
+        {
+            ((WsAutonomousStepGroup)programSteps[currentStep]).setNextStep(newStep);
+        }
+        else if (currentStep + 1 < programSteps.length)
         {
             programSteps[currentStep+1] = newStep;
         }
@@ -149,6 +154,10 @@ public abstract class WsAutonomousProgram implements IStepContainer
     
     public boolean lastStepHadError()
     {
+        if (programSteps[currentStep] instanceof WsAutonomousStepGroup)
+        {
+            return ((WsAutonomousStepGroup)programSteps[currentStep]).lastStepHadError();
+        }
         return lastStepError;
     }
 

@@ -86,7 +86,11 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements 
     
     public void setNextStep(WsAutonomousStep newStep)
     {
-        if (currentStep + 1 < steps.length)
+        if (steps[currentStep] instanceof WsAutonomousStepGroup)
+        {
+            ((WsAutonomousStepGroup)steps[currentStep]).setNextStep(newStep);
+        }
+        else if (currentStep + 1 < steps.length)
         {
             steps[currentStep+1] = newStep;
         }
@@ -140,6 +144,10 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements 
     
     public boolean lastStepHadError()
     {
+        if (steps[currentStep] instanceof WsAutonomousStepGroup)
+        {
+            return ((WsAutonomousStepGroup)steps[currentStep]).lastStepHadError();
+        }
         return lastStepError;
     }
 

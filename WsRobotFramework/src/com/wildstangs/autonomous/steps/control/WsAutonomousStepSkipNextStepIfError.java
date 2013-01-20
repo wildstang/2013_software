@@ -14,7 +14,9 @@ import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
  */
 public class WsAutonomousStepSkipNextStepIfError extends WsAutonomousStep 
 {
-    
+    //Note: This step silently passes on the error status of the previous step.
+    //(That is, if the previous step had an error, this step doesn't log an error, but WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError() will remain true.
+   
     public WsAutonomousStepSkipNextStepIfError()
     {
         //Nothing to set.
@@ -28,25 +30,11 @@ public class WsAutonomousStepSkipNextStepIfError extends WsAutonomousStep
     public void update()
     {
         finished = true;
-        boolean bottomOfTree = false;
-        IStepContainer container = WsAutonomousManager.getInstance().getRunningProgram();
-        while (!bottomOfTree)
-        {
-            WsAutonomousStep currStep = container.getCurrentStep();
-            if (currStep instanceof WsAutonomousStepGroup)
-            {
-                container = (WsAutonomousStepGroup)currStep;
-            }
-            else
-            {
-                bottomOfTree = true;
-            }
-        }
-        if (container.lastStepHadError())
+        if (WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError())
         {
             errorInfo = "";
             pass = false;
-            container.setNextStep(new WsAutonomousStepNoOp());
+            WsAutonomousManager.getInstance().getRunningProgram().setNextStep(new WsAutonomousStepNoOp());
         }
     }
 
