@@ -33,7 +33,6 @@ public class WsAutonomousStepNoOp extends WsAutonomousStep
     {
         if (o instanceof WsAutonomousStepNoOp)
         {
-            WsAutonomousStepNoOp obj = (WsAutonomousStepNoOp)o;
             return true;
         }
         return false;

@@ -4,17 +4,18 @@
  */
 package com.wildstangs.autonomous.steps;
 
+import com.wildstangs.autonomous.IStepContainer;
 import java.util.Arrays;
 import com.wildstangs.autonomous.WsAutonomousStep;
 /**
  *
  * @author coder65535
  */
-public abstract class WsAutonomousStepGroup extends WsAutonomousStep
+public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements IStepContainer
 {
     protected final WsAutonomousStep[] steps;
     protected int currentStep, errorCount;
-    protected boolean finishedStep;
+    protected boolean finishedStep, lastStepError;
     public WsAutonomousStepGroup(int stepCount)
     {
         steps = new WsAutonomousStep[stepCount];
@@ -56,8 +57,46 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep
             finishedStep = true;
             if (!step.isPassed())
             {
+                lastStepError = true;
                 failedStep(step);
             }
+            else
+            {
+                lastStepError = false;
+            }
+        }
+    }
+    
+    public WsAutonomousStep getCurrentStep()
+    {
+        return steps[currentStep];
+    }
+
+    public WsAutonomousStep getNextStep()
+    {
+        if (currentStep + 1 < steps.length)
+        {
+            return steps[currentStep+1];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    public void setNextStep(WsAutonomousStep newStep)
+    {
+        if (currentStep + 1 < steps.length)
+        {
+            steps[currentStep+1] = newStep;
+        }
+    }
+    
+    public void setStep(WsAutonomousStep newStep, int stepNumber)
+    {
+        if (currentStep != stepNumber && stepNumber>=0 && stepNumber <steps.length)
+        {
+            steps[stepNumber] = newStep;
         }
     }
     protected void cleanup()
@@ -66,6 +105,10 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep
         {
             steps[i] = null;
         }
+    }
+    public void finishGroup()
+    {
+        finished = true;
     }
     protected final void failedStep(WsAutonomousStep step)
     {
@@ -93,6 +136,11 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep
         }
         errorInfo += ++errorCount + ": Error in substep "+ currentStep +"(" + step.toString() + "): "/* + "\n"*/ + step.errorInfo + ", "/* + "\n"*/;
         // I am unsure whether this looks better as one line or as multiple.
+    }
+    
+    public boolean lastStepHadError()
+    {
+        return lastStepError;
     }
 
     public int hashCode()

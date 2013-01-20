@@ -26,5 +26,9 @@ public class WsAutonomousProgramSleeper extends WsAutonomousProgram
     {
         programSteps[0] = new WsAutonomousStepStop();
     }
+    public String toString()
+    {
+        return "Sleeper";
+    }
 }
 

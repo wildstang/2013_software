@@ -10,12 +10,12 @@ import java.util.Arrays;
  *
  * @author coder65535
  */
-public abstract class WsAutonomousProgram
+public abstract class WsAutonomousProgram implements IStepContainer
 {
 
     protected final WsAutonomousStep[] programSteps;
     protected int currentStep;
-    protected boolean finishedStep, finished;
+    protected boolean finishedStep, finished, lastStepError;
 
     public WsAutonomousProgram(int size)
     {
@@ -26,12 +26,12 @@ public abstract class WsAutonomousProgram
     }
 
     protected abstract void defineSteps();
-    
+
     public void initialize()
     {
         defineSteps();
     }
-    
+
     public void cleanup()
     {
         for (int i = 0; i < programSteps.length; i++)
@@ -67,8 +67,46 @@ public abstract class WsAutonomousProgram
             finishedStep = true;
             if (!step.isPassed())
             {
+                lastStepError = true;
                 failedStep(step);
             }
+            else
+            {
+                lastStepError = false;
+            }
+        }
+    }
+
+    public WsAutonomousStep getCurrentStep()
+    {
+        return programSteps[currentStep];
+    }
+
+    public WsAutonomousStep getNextStep()
+    {
+        if (currentStep + 1 < programSteps.length)
+        {
+            return programSteps[currentStep+1];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    public void setNextStep(WsAutonomousStep newStep)
+    {
+        if (currentStep + 1 < programSteps.length)
+        {
+            programSteps[currentStep+1] = newStep;
+        }
+    }
+    
+    public void setStep(WsAutonomousStep newStep, int stepNumber)
+    {
+        if (currentStep != stepNumber && stepNumber>=0 && stepNumber <programSteps.length)
+        {
+            programSteps[stepNumber] = newStep;
         }
     }
 
@@ -92,6 +130,10 @@ public abstract class WsAutonomousProgram
 
     protected void handleError(WsAutonomousStep step)
     {
+        if(step.errorInfo.isEmpty())
+        {
+            return;
+        }
         // TODO: add error handling/logging
     }
 
@@ -103,6 +145,11 @@ public abstract class WsAutonomousProgram
     public boolean isFinished()
     {
         return finished;
+    }
+    
+    public boolean lastStepHadError()
+    {
+        return lastStepError;
     }
 
     public int hashCode()
@@ -121,4 +168,6 @@ public abstract class WsAutonomousProgram
         }
         return false;
     }
+
+    public abstract String toString();
 }

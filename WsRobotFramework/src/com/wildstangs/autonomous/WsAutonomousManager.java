@@ -5,58 +5,121 @@
 package com.wildstangs.autonomous;
 
 import com.wildstangs.autonomous.programs.WsAutonomousProgramSleeper;
-
+import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.subjects.base.*;
 
 /**
  *
  * @author coder65535
  */
-public class WsAutonomousManager
+public class WsAutonomousManager implements IObserver
 {
 
     private WsAutonomousProgram[] programs;
     private int currentProgram;
-    private boolean programFinished, finished;
+    private float selectorSwitch;
+    private WsAutonomousProgram runningProgram;
+    private boolean programFinished, programRunning, lockInSwitch;
+    private static WsAutonomousManager instance = null;
 
-    public WsAutonomousManager()
+    private WsAutonomousManager()
     {
         definePrograms();
         currentProgram = -1;
-        finished = false;
         programFinished = true;
+        programRunning = false;
+        runningProgram = programs[0];
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.AUTO_PROGRAM_SELECTOR).getSubject((ISubjectEnum)null).attach(this);
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.LOCK_IN_SWITCH).getSubject((ISubjectEnum)null).attach(this);
+        selectorSwitch = 0;
+        lockInSwitch = false;
     }
 
     public void update()
+
     {
-        if (finished)
-        {
-            return;
-        }
         if (programFinished)
         {
-            programs[currentProgram].cleanup();
+            runningProgram.cleanup();
             programFinished = false;
-            currentProgram++;
-            if (currentProgram >= programs.length)
-            {
-                finished = true;
-                return;
-            }
-            programs[currentProgram].initialize();
+            programs[0].initialize();
         }
-        WsAutonomousProgram program = programs[currentProgram]; //Prevent errors caused by mistyping.
-        program.update();
-        if (program.isFinished())
+        if (programRunning)
         {
-            program.logResults();
-            programFinished = true;
+            runningProgram.update();
+            if (runningProgram.isFinished())
+            {
+                runningProgram.logResults();
+                programFinished = true;
+            }
         }
+        else
+        {
+            programs[0].update();
+        }
+    }
+    
+    public void startCurrentProgram()
+    {
+        if (lockInSwitch)
+        {
+            runningProgram = programs[currentProgram];
+        }
+        else
+        {
+            runningProgram = programs[0];
+        }
+        runningProgram.initialize();
+    }
+
+    public WsAutonomousProgram getRunningProgram()
+    {
+        if (programRunning)
+        {
+            return runningProgram;
+        }
+        else
+        {
+            return (WsAutonomousProgram)null;
+        }
+    }
+
+    public String getRunningProgramName()
+    {
+        return runningProgram.toString();
+    }
+    
+    public String getSelectedProgramName()
+    {
+        return programs[currentProgram].toString();
+    }
+    
+    public void acceptNotification(Subject cause)
+    {
+        if (cause instanceof DoubleSubject)
+        {
+            selectorSwitch = (float)((DoubleSubject)cause).getValue();
+            currentProgram = (int)(Math.floor((selectorSwitch/3.33)*programs.length));
+        }
+        else if (cause instanceof BooleanSubject)
+        {
+            lockInSwitch = ((BooleanSubject)cause).getValue();
+        }
+    }
+    
+    public static WsAutonomousManager getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new WsAutonomousManager();
+        }
+        return instance;
     }
 
     private void definePrograms()
     {
         //TODO: implement reading of program list from config file
         programs = new WsAutonomousProgram[1];
-        programs[0] = new WsAutonomousProgramSleeper();
+        programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper
     }
 }
