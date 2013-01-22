@@ -99,7 +99,14 @@ public abstract class WsAutonomousProgram implements IStepContainer
     {
         if (programSteps[currentStep] instanceof WsAutonomousStepGroup)
         {
-            ((WsAutonomousStepGroup)programSteps[currentStep]).setNextStep(newStep);
+            if (((WsAutonomousStepGroup)programSteps[currentStep]).getNextStep() != null)
+            {
+                ((WsAutonomousStepGroup)programSteps[currentStep]).setNextStep(newStep);
+            }
+            else
+            {
+                programSteps[currentStep+1] = newStep;
+            }
         }
         else if (currentStep + 1 < programSteps.length)
         {
