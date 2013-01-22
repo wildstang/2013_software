@@ -6,7 +6,6 @@
 package com.wildstangs.autonomous.steps.control;
 
 import com.wildstangs.autonomous.*;
-import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
 
 /**
  *
