@@ -109,11 +109,11 @@ public class WsAutonomousManager implements IObserver
     
     public static WsAutonomousManager getInstance()
     {
-        if (instance == null)
+        if (WsAutonomousManager.instance == null)
         {
-            instance = new WsAutonomousManager();
+            WsAutonomousManager.instance = new WsAutonomousManager();
         }
-        return instance;
+        return WsAutonomousManager.instance;
     }
 
     private void definePrograms()
