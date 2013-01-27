@@ -1,0 +1,18 @@
+
+//The Wildstand config file
+com.wildstangs.logger.Logger.logIp=10.1.11.22
+com.wildstangs.logger.Logger.port=17654
+com.wildstangs.logger.Logger.logToServer=true
+com.wildstangs.logger.Logger.logToStdout=true
+com.wildstangs.logger.Logger.logLevel="ALL"
+com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.
+com.wildstangs.inputfacade.inputs.WsDigitalInput.startState=false
+com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystick.trim=0.1
+
+//Digital Outputs: Replace 'NAME' with whatever name you send in
+com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
+
+//Solenoids: Replace 'NAME' with whatever ame you send in
+com.wildstangs.outputfacade.outputs.WsSolenoid.NAME.shouldStartTrue=false
+
+
