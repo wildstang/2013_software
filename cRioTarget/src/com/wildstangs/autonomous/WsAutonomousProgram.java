@@ -5,7 +5,6 @@
 package com.wildstangs.autonomous;
 
 import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
-import java.util.Arrays;
 
 /**
  *
@@ -168,22 +167,22 @@ public abstract class WsAutonomousProgram implements IStepContainer
         return lastStepError;
     }
 
-    public int hashCode()
-    {
-        int hash = 7;
-        hash = 97 * hash + Arrays.deepHashCode(this.programSteps);
-        return hash;
-    }
-
-    public boolean equals(Object o)
-    {
-        if (o instanceof WsAutonomousProgram)
-        {
-            WsAutonomousProgram obj = (WsAutonomousProgram) o;
-            return Arrays.equals(obj.programSteps, programSteps);
-        }
-        return false;
-    }
+//    public int hashCode()
+//    {
+//        int hash = 7;
+//        hash = 97 * hash + Arrays.deepHashCode(this.programSteps);
+//        return hash;
+//    }
+//
+//    public boolean equals(Object o)
+//    {
+//        if (o instanceof WsAutonomousProgram)
+//        {
+//            WsAutonomousProgram obj = (WsAutonomousProgram) o;
+//            return Arrays.equals(obj.programSteps, programSteps);
+//        }
+//        return false;
+//    }
 
     public abstract String toString();
 }
