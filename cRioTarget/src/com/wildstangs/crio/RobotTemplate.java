@@ -68,4 +68,17 @@ public class RobotTemplate extends IterativeRobot {
     public void testPeriodic() {
         Watchdog.getInstance().feed();
     }
+    
+    public void disabledInit()
+    {
+        try
+        {
+            WsConfigFacade.getInstance().readConfig();
+        }
+        catch(Throwable e)
+        {
+            System.out.println(e.getMessage());
+        }
+        WsConfigFacade.getInstance().dumpConfigData();
+    }
 }
