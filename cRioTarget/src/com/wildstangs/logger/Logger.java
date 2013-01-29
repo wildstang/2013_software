@@ -4,7 +4,6 @@ import com.wildstangs.types.Level;
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.StringConfigFileParameter;
 import com.wildstangs.logger.impl.LoggerImpl;
-import java.util.Date;
 
 /**
  *
@@ -86,7 +85,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void trace(String c, String id, Object message) {
-        if (logLevel > Level.TRACE_INT) {
+        if (logLevel < Level.TRACE_INT) {
             return;
         }
         
@@ -100,7 +99,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void debug(String c, String id, Object message) {
-        if (logLevel > Level.DEBUG_INT) {
+        if (logLevel < Level.DEBUG_INT) {
             return;
         }
         
@@ -114,7 +113,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void info(String c, String id, Object message) {
-        if (logLevel > Level.INFO_INT) {
+        if (logLevel < Level.INFO_INT) {
             return;
         }
         
@@ -128,7 +127,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void notice(String c, String id, Object message) {
-        if (logLevel > Level.NOTICE_INT) {
+        if (logLevel < Level.NOTICE_INT) {
             return;
         }
         
@@ -142,7 +141,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void warning(String c, String id, Object message) {
-        if (logLevel > Level.WARNING_INT) {
+        if (logLevel < Level.WARNING_INT) {
             return;
         }
         
@@ -156,7 +155,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void error(String c, String id, Object message) {
-        if (logLevel > Level.ERROR_INT) {
+        if (logLevel < Level.ERROR_INT) {
             return;
         }
         
@@ -170,7 +169,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void fatal(String c, String id, Object message) {
-        if (logLevel > Level.FATAL_INT) {
+        if (logLevel < Level.FATAL_INT) {
             return;
         }
         
