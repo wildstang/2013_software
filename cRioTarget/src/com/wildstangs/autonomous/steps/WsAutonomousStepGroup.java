@@ -6,6 +6,7 @@ package com.wildstangs.autonomous.steps;
 
 import com.wildstangs.autonomous.IStepContainer;
 import com.wildstangs.autonomous.WsAutonomousStep;
+import com.wildstangs.logger.Logger;
 /**
  *
  * @author coder65535
@@ -18,13 +19,13 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements 
     public WsAutonomousStepGroup(int stepCount)
     {
         steps = new WsAutonomousStep[stepCount];
-        finishedStep = false;
-        currentStep = 0;
-        errorCount = 0;
     }
     protected abstract void defineSteps(WsAutonomousStep[] steps);
     public void initialize()
     {
+        finishedStep = false;
+        currentStep = 0;
+        errorCount = 0;
         defineSteps(steps);
         steps[0].initialize();
     }
@@ -140,12 +141,8 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements 
     protected void handleError(WsAutonomousStep step) //Separate method for easy overrides.
     {
         pass = false;
-        if (errorInfo.equals("Passed"))
-        {
-            errorInfo = "";
-        }
-        errorInfo += ++errorCount + ": Error in substep "+ currentStep +"(" + step.toString() + "): "/* + "\n"*/ + step.errorInfo + ", "/* + "\n"*/;
-        // I am unsure whether this looks better as one line or as multiple.
+        errorInfo = "";
+        Logger.getLogger().error("Substep " + currentStep + "(" + step.toString() + ") of autonomous step group "+this.toString(), "Auto Step", step.errorInfo);
     }
     
     public boolean lastStepHadError()

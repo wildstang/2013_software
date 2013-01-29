@@ -5,6 +5,7 @@
 package com.wildstangs.autonomous;
 
 import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
+import com.wildstangs.logger.Logger;
 
 /**
  *
@@ -20,9 +21,6 @@ public abstract class WsAutonomousProgram implements IStepContainer
     public WsAutonomousProgram(int size)
     {
         programSteps = new WsAutonomousStep[size];
-        currentStep = -1;
-        finishedStep = true; //This is set to true to make the update code start the first task
-        finished = false;
     }
 
     protected abstract void defineSteps();
@@ -30,6 +28,9 @@ public abstract class WsAutonomousProgram implements IStepContainer
     public void initialize()
     {
         defineSteps();
+        currentStep = -1;
+        finishedStep = true; //This is set to true to make the update code start the first task
+        finished = false;
     }
 
     public void cleanup()
@@ -145,12 +146,7 @@ public abstract class WsAutonomousProgram implements IStepContainer
         {
             return;
         }
-        // TODO: add error handling/logging
-    }
-
-    public void logResults()
-    {
-        // TODO: add result logging
+        Logger.getLogger().error("Autonomous step " + currentStep + " (" + step.toString() + ")", "Auto Step", step.errorInfo);
     }
 
     public boolean isFinished()
