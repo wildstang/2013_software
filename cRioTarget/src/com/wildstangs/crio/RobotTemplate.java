@@ -33,7 +33,7 @@ public class RobotTemplate extends IterativeRobot {
             WsConfigFacade.getInstance().setFileName("/ws_config.txt");
             WsConfigFacade.getInstance().readConfig();
             WsConfigFacade.getInstance().dumpConfigData();
-
+            WsSubsystemContainer.getInstance().init();
         } catch (WsConfigFacadeException wscfe) {
             System.out.println(wscfe.toString());
         }
@@ -42,6 +42,21 @@ public class RobotTemplate extends IterativeRobot {
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
         WsSubsystemContainer.getInstance();
+    }
+    
+    public void teleopInit()
+    {
+        WsSubsystemContainer.getInstance().init();
+    }
+    
+    public void autonomousInit()
+    {
+        WsSubsystemContainer.getInstance().init();
+    }
+    
+    public void disabledInit()
+    {
+        WsSubsystemContainer.getInstance().init();
     }
 
     /**
@@ -57,7 +72,6 @@ public class RobotTemplate extends IterativeRobot {
     public void teleopPeriodic() {
         WsInputFacade.getInstance().updateOiData();
         WsInputFacade.getInstance().updateSensorData();
-        WsSubsystemContainer.getInstance().update();
         WsOutputFacade.getInstance().update();
         Watchdog.getInstance().feed();
     }

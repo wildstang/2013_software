@@ -11,6 +11,10 @@ public class WsIntake extends WsSubsystem {
     public WsIntake (String name) {
         super(name);
    }
+    
+    public void init()
+    {
+    }
 
     public void update() {
     }

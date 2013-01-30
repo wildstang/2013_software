@@ -25,6 +25,17 @@ public class WsSubsystemContainer {
         }
         return WsSubsystemContainer.instance;
     }
+    
+    public void init()
+    {
+        getSubsystem(WS_DRIVE_BASE).init();
+        getSubsystem(WS_FLOOR_PICKUP).init();
+        getSubsystem(WS_COMPRESSOR).init();
+        getSubsystem(WS_HOPPER).init();
+        getSubsystem(WS_INTAKE).init();
+        getSubsystem(WS_LANDING_GEAR).init();
+        getSubsystem(WS_SHOOTER).init();
+    }
 
     /**
      * Retrieves a subsystem based on a key value.

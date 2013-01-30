@@ -15,6 +15,10 @@ public class WsCompressor extends WsSubsystem {
         compressor = new Compressor(pressureSwitchSlot, pressureSwitchChannel, compresssorRelaySlot, compressorRelayChannel);
         compressor.start();
     }
+    
+    public void init()
+    {
+    }
 
     public void update() {
     }
