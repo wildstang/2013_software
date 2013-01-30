@@ -21,8 +21,14 @@ public class WsHopper extends WsSubsystem implements IObserver
 {
     private static final boolean kicker_default_value = false;
     private static final DoubleSolenoid.Value lift_default_value = DoubleSolenoid.Value.kReverse;
+    private static final int forwardCycles = 8;
+    private static final int reverseCycles = 8;
+    private int cycle;
+    
     private boolean kicker_value;
     private DoubleSolenoid.Value lift_value;
+    
+    
     
     public WsHopper (String name)
     {
@@ -40,10 +46,16 @@ public class WsHopper extends WsSubsystem implements IObserver
     {
         kicker_value = kicker_default_value;
         lift_value = lift_default_value;
+        cycle = 0;
     }
 
     public void update() 
     {
+        cycle++;
+        if(cycle >= forwardCycles)
+        {
+            kicker_value = false;
+        }
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kicker_value));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, lift_value);
     }
@@ -62,6 +74,10 @@ public class WsHopper extends WsSubsystem implements IObserver
             if(lift_value.value == DoubleSolenoid.Value.kReverse_val)
             {
                 kicker_value = false;
+            }
+            if(kicker_value == true)
+            {
+                cycle = 0;
             }
         }
         else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON3)
