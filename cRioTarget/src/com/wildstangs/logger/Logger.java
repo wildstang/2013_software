@@ -86,7 +86,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void trace(String c, String id, Object message) {
-        if (logLevel > Level.TRACE_INT) {
+        if (logLevel < Level.TRACE_INT) {
             return;
         }
         

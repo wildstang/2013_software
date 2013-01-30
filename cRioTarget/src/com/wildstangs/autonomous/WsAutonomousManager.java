@@ -4,8 +4,10 @@
  */
 package com.wildstangs.autonomous;
 
+import com.wildstangs.autonomous.programs.WsAutonomousProgramForwardsTest;
 import com.wildstangs.autonomous.programs.WsAutonomousProgramSleeper;
 import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.subjects.base.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,8 +28,6 @@ public class WsAutonomousManager implements IObserver
     private WsAutonomousManager()
     {
         definePrograms();
-        currentProgram = -1;
-        lockedProgram = -1;
         programFinished = true;
         programRunning = false;
         runningProgram = programs[0];
@@ -45,6 +45,8 @@ public class WsAutonomousManager implements IObserver
             runningProgram.cleanup();
             programFinished = false;
             programs[0].initialize();
+            runningProgram = programs[0];
+            SmartDashboard.putString("Running Autonomous Program", runningProgram.toString());
         }
         if (programRunning)
         {
@@ -62,16 +64,11 @@ public class WsAutonomousManager implements IObserver
     
     public void startCurrentProgram()
     {
-        if (lockInSwitch)
-        {
-            runningProgram = programs[lockedProgram];
-        }
-        else
-        {
-            runningProgram = programs[0];
-        }
+        runningProgram = programs[lockedProgram];
+        Logger.getLogger().always("WsAutonomousManager", "Value of lockedProgram when started", new Integer(lockedProgram));
+        Logger.getLogger().always("WsAutonomousManager", "Value of runningProgram when started", runningProgram.toString());
         runningProgram.initialize();
-        SmartDashboard.putString("Running Program", runningProgram.toString());
+        SmartDashboard.putString("Running Autonomous Program", runningProgram.toString());
     }
     
     public void clear()
@@ -81,8 +78,10 @@ public class WsAutonomousManager implements IObserver
         runningProgram.cleanup();
         runningProgram = programs[0];
         lockedProgram = 0;
-        SmartDashboard.putString("Running Program", "No Program Running");
-        SmartDashboard.putString("Locked Program", programs[lockedProgram].toString());
+        currentProgram = 0;
+        SmartDashboard.putString("Running Autonomous Program", "No Program Running");
+        SmartDashboard.putString("Locked Autonomous Program", programs[lockedProgram].toString());
+        SmartDashboard.putString("Current Autonomous Program", programs[currentProgram].toString());
     }
 
     public WsAutonomousProgram getRunningProgram()
@@ -117,14 +116,14 @@ public class WsAutonomousManager implements IObserver
         if (cause instanceof DoubleSubject)
         {
             selectorSwitch = (float)((DoubleSubject)cause).getValue();
-            currentProgram = (int)(Math.floor((selectorSwitch/3.33)*programs.length));
-            SmartDashboard.putString("Current Program", programs[currentProgram].toString());
+            currentProgram = (int)(Math.floor((selectorSwitch/5.0)*programs.length));
+            SmartDashboard.putString("Current Autonomous Program", programs[currentProgram].toString());
         }
         else if (cause instanceof BooleanSubject)
         {
             lockInSwitch = ((BooleanSubject)cause).getValue();
             lockedProgram = lockInSwitch?currentProgram:0;
-            SmartDashboard.putString("Locked Program", programs[lockedProgram].toString());
+            SmartDashboard.putString("Locked Autonomous Program", programs[lockedProgram].toString());
         }
     }
     
@@ -139,7 +138,8 @@ public class WsAutonomousManager implements IObserver
 
     private void definePrograms()
     {
-        programs = new WsAutonomousProgram[1];
-        programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper
+        programs = new WsAutonomousProgram[2];
+        programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper.
+        programs[1] = new WsAutonomousProgramForwardsTest();
     }
 }

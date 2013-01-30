@@ -28,13 +28,16 @@ public abstract class WsAutonomousProgram implements IStepContainer
     public void initialize()
     {
         defineSteps();
-        currentStep = -1;
-        finishedStep = true; //This is set to true to make the update code start the first task
+        currentStep = 0;
+        finishedStep = false;
         finished = false;
+        lastStepError = false;
+        programSteps[0].initialize();
     }
 
     public void cleanup()
     {
+        Logger.getLogger().debug(this.toString(), "Cleanup", "The program was cleaned up.");
         for (int i = 0; i < programSteps.length; i++)
         {
             programSteps[i] = null;

@@ -11,10 +11,10 @@ import com.wildstangs.autonomous.WsAutonomousStep;
  *
  * @author coder65535
  */
-public class WsAutonomousStepStop extends WsAutonomousStep 
+public class WsAutonomousStepStopAutonomous extends WsAutonomousStep 
 {
     
-    public WsAutonomousStepStop()
+    public WsAutonomousStepStopAutonomous()
     {
         // Do nothing. This step does nothing, and never finishes, effectively halting autonomous operations.
     }
@@ -29,23 +29,23 @@ public class WsAutonomousStepStop extends WsAutonomousStep
         // Do nothing.
     }
 
-    public boolean equals(Object o)
-    {
-        if (o instanceof WsAutonomousStepStop)
-        {
-            return true;
-        }
-        return false;
-    }
+//    public boolean equals(Object o)
+//    {
+//        if (o instanceof WsAutonomousStepStop)
+//        {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public String toString()
     {
         return "Stop auto-op";
     }
 
-    public int hashCode()
-    {
-        int hash = 7;
-        return hash;
-    }
+//    public int hashCode()
+//    {
+//        int hash = 7;
+//        return hash;
+//    }
 }

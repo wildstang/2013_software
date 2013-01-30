@@ -1,6 +1,7 @@
 package com.wildstangs.inputfacade.inputs.driverstation;
 
 import com.wildstangs.config.BooleanConfigFileParameter;
+import com.wildstangs.inputfacade.base.IInput;
 import com.wildstangs.inputfacade.base.IInputEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -11,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  *
  * @author Nathan
  */
-public class WsDSDigitalInput {
+public class WsDSDigitalInput implements IInput {
 
     BooleanSubject digitalValue;
     int channel;

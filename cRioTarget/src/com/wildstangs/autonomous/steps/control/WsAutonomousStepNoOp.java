@@ -37,23 +37,23 @@ public class WsAutonomousStepNoOp extends WsAutonomousStep
         
     }
 
-    public boolean equals(Object o)
-    {
-        if (o instanceof WsAutonomousStepNoOp)
-        {
-            return true;
-        }
-        return false;
-    }
+//    public boolean equals(Object o)
+//    {
+//        if (o instanceof WsAutonomousStepNoOp)
+//        {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public String toString()
     {
         return "No-Op";
     }
 
-    public int hashCode()
-    {
-        int hash = 7;
-        return hash;
-    }
+//    public int hashCode()
+//    {
+//        int hash = 7;
+//        return hash;
+//    }
 }

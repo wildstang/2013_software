@@ -28,6 +28,11 @@ public class WsAutonomousStepDelay extends WsAutonomousStep
             errorInfo = "Negative delay";
         }
     }
+    
+    public WsAutonomousStepDelay()
+    {
+        this(50);
+    }
 
     public void initialize() // Do nothing, as the variables have been initialised in the constructor.
     {
@@ -46,24 +51,24 @@ public class WsAutonomousStepDelay extends WsAutonomousStep
         return "Delay for " + originalCount + " frames";
     }
 
-    public int hashCode()
-    {
-        int hash = 5;
-        hash = 53 * hash + this.originalCount;
-        return hash;
-    }
-
-    public boolean equals(Object o)
-    {
-        if (o instanceof WsAutonomousStepDelay)
-        {
-            WsAutonomousStepDelay step = (WsAutonomousStepDelay) o;
-            if (step.originalCount == this.originalCount)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public int hashCode()
+//    {
+//        int hash = 5;
+//        hash = 53 * hash + this.originalCount;
+//        return hash;
+//    }
+//
+//    public boolean equals(Object o)
+//    {
+//        if (o instanceof WsAutonomousStepDelay)
+//        {
+//            WsAutonomousStepDelay step = (WsAutonomousStepDelay) o;
+//            if (step.originalCount == this.originalCount)
+//            {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 }

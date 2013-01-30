@@ -6,7 +6,7 @@
 package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
-import com.wildstangs.autonomous.steps.control.WsAutonomousStepStop;
+import com.wildstangs.autonomous.steps.control.WsAutonomousStepStopAutonomous;
 
 /**
  *
@@ -24,7 +24,7 @@ public class WsAutonomousProgramSleeper extends WsAutonomousProgram
     }
     public void defineSteps()
     {
-        programSteps[0] = new WsAutonomousStepStop();
+        programSteps[0] = new WsAutonomousStepStopAutonomous();
     }
     public String toString()
     {
