@@ -28,6 +28,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static final double WS_MAX_MOTOR_OUTPUT = 1.0;
     private static final double WS_NEG_MAX_MOTOR_OUTPUT = -1.0;
     private static final double WS_ANTI_TURBO_MAX_DEFLECTION = 0.500;
+    private static final double WS_THROTTLE_ACCEL_FACTOR = 0.250;
+    private static final double WS_HEADING_ACCEL_FACTOR = 0.500;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static boolean antiTurboFlag = false;
@@ -93,7 +95,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         }
 
         //Setting throttle
-        driveBaseThrottleValue = new_throttle;
+        driveBaseThrottleValue = driveBaseThrottleValue + (new_throttle - driveBaseThrottleValue) * WS_THROTTLE_ACCEL_FACTOR;
 
         if (driveBaseThrottleValue > MAX_INPUT_THROTTLE_VALUE) {
             driveBaseThrottleValue = MAX_INPUT_THROTTLE_VALUE;
@@ -118,7 +120,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         }
 
         //Setting heading
-        driveBaseHeadingValue = new_heading;
+        driveBaseHeadingValue = driveBaseHeadingValue + (new_heading - driveBaseHeadingValue) * WS_HEADING_ACCEL_FACTOR;
 
         if (driveBaseHeadingValue > MAX_INPUT_HEADING_VALUE) {
             driveBaseHeadingValue = MAX_INPUT_HEADING_VALUE;
