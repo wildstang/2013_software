@@ -1,6 +1,7 @@
 package com.wildstangs.inputfacade.inputs;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
+import com.wildstangs.inputfacade.base.IInput;
 import com.wildstangs.inputfacade.base.IInputEnum;
 import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -11,7 +12,7 @@ import edu.wpi.first.wpilibj.AnalogChannel;
  *
  * @author Nathan
  */
-public class WsAnalogInput {
+public class WsAnalogInput implements IInput {
 
     DoubleSubject analogValue;
     AnalogChannel input;
