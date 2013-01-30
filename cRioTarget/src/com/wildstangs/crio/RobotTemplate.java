@@ -54,11 +54,6 @@ public class RobotTemplate extends IterativeRobot {
         WsSubsystemContainer.getInstance().init();
     }
     
-    public void disabledInit()
-    {
-        WsSubsystemContainer.getInstance().init();
-    }
-
     /**
      * This function is called periodically during autonomous
      */
@@ -94,6 +89,7 @@ public class RobotTemplate extends IterativeRobot {
         {
             System.out.println(e.getMessage());
         }
+        WsSubsystemContainer.getInstance().init();
         WsConfigFacade.getInstance().dumpConfigData();
     }
 }

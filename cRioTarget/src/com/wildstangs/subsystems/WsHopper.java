@@ -44,26 +44,6 @@ public class WsHopper extends WsSubsystem implements IObserver
 
     public void update() 
     {
-        BooleanSubject button2 = (BooleanSubject)(WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2));
-        BooleanSubject button3 = (BooleanSubject)(WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3));
-
-        kicker_value = button2.getValue();
-        if(lift_value.value == DoubleSolenoid.Value.kReverse_val)
-        {
-            kicker_value = false;
-        }
-        
-        if(button3.getValue() == true && (button3.getPreviousValue() == false))
-        {
-            if(lift_value.value == DoubleSolenoid.Value.kReverse_val)
-            {
-                lift_value = DoubleSolenoid.Value.kForward;
-            }
-            else
-            {
-                lift_value = DoubleSolenoid.Value.kReverse;
-            }
-        }
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kicker_value));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, lift_value);
     }
@@ -74,5 +54,29 @@ public class WsHopper extends WsSubsystem implements IObserver
 
     public void acceptNotification(Subject subjectThatCaused) 
     {
+        BooleanSubject button = (BooleanSubject)subjectThatCaused;
+        
+        if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON2)
+        {
+            kicker_value = button.getValue();
+            if(lift_value.value == DoubleSolenoid.Value.kReverse_val)
+            {
+                kicker_value = false;
+            }
+        }
+        else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON3)
+        {
+            if(button.getValue() == true && (button.getPreviousValue() == false))
+            {
+                if(lift_value.value == DoubleSolenoid.Value.kReverse_val)
+                {
+                    lift_value = DoubleSolenoid.Value.kForward;
+                }
+                else
+                {
+                    lift_value = DoubleSolenoid.Value.kReverse;
+                }
+            }
+        }
     }
 }
