@@ -27,6 +27,10 @@ public class WsInputFacade {
         return instance;
     }
 
+    public void init()
+    {
+    }
+    
     /**
      * Method to trigger updates of all the sensor data input containers
      */

@@ -12,6 +12,10 @@ public class WsLandingGear extends WsSubsystem {
         super(name);
    }
 
+    public void init()
+    {
+    }
+    
     public void update() {
     }
 

@@ -12,6 +12,10 @@ public class WsShooter extends WsSubsystem {
         super(name);
    }
 
+    public void init()
+    {
+    }
+    
     public void update() {
     }
 

@@ -25,6 +25,14 @@ public class WsSubsystemContainer {
         }
         return WsSubsystemContainer.instance;
     }
+    
+    public void init()
+    {
+        for(int c = 0; c < subsystem.size(); c++)
+        {
+            ((WsSubsystem)(subsystem.get(c))).init();
+        }
+    }
 
     /**
      * Retrieves a subsystem based on a key value.

@@ -11,6 +11,10 @@ public class WsFloorPickup extends WsSubsystem {
     public WsFloorPickup (String name) {
         super(name);
    }
+    
+    public void init()
+    {
+    }
 
     public void update() {
     }

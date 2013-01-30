@@ -19,6 +19,10 @@ public class WsSubsystem {
         subSystemName = name; 
     } 
     
+    public void init()
+    {
+    }
+    
     /**
      * Gets the name of the subsystem.
      * 

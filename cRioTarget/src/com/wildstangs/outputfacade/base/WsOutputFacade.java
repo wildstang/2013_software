@@ -29,6 +29,11 @@ public class WsOutputFacade {
     /**
      * Method to cause all output elements to update.
      */
+    
+    public void init()
+    {
+    }
+    
     public void update() {
         for (int i = 0; i < outputs.size(); i++) {
             ((IOutput)(((DataElement) outputs.get(i)).getValue())).update();

@@ -38,7 +38,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public WsDriveBase(String name) {
         super(name);
-
+        init();
+        
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickEnum.HEADING);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickEnum.THROTTLE);
@@ -49,6 +50,15 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         //Shifter Button
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON6);
         subject.attach(this);
+    }
+    
+    public void init()
+    {
+        driveBaseThrottleValue = 0.0;
+        driveBaseHeadingValue = 0.0;
+        antiTurboFlag = false;
+        shifterFlag = false;
+        quickTurnFlag = false;
     }
 
     public void update() {
