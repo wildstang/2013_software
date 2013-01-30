@@ -70,8 +70,8 @@ public class WsOutputFacade {
     public static final String RIGHT_DRIVE_SPEED = "RightDriveSpeed";
     public static final String LEFT_DRIVE_SPEED = "LeftDriveSpeed";
     public static final String SHIFTER = "shifter";
-    public static final String SHOOTER_VICTOR_1 = "ShooterVictor1";
-    public static final String SHOOTER_VICTOR_2 = "ShooterVictor1";
+    public static final String SHOOTER_VICTOR_ENTER = "ShooterVictorEnter";
+    public static final String SHOOTER_VICTOR_EXIT = "ShooterVictorExit";
 
     /**
      * Constructor for WsOutputFacade.
@@ -84,7 +84,7 @@ public class WsOutputFacade {
         outputs.add(new DataElement(RIGHT_DRIVE_SPEED, new WsDriveSpeed(RIGHT_DRIVE_SPEED, 1, 2)));
         outputs.add(new DataElement(LEFT_DRIVE_SPEED, new WsDriveSpeed(LEFT_DRIVE_SPEED, 3, 4)));
         outputs.add(new DataElement(SHIFTER, new WsSolenoid(SHIFTER, 1, 4)));
-        outputs.add(new DataElement(SHOOTER_VICTOR_1, new WsVictor(SHOOTER_VICTOR_1, 5)));
-        outputs.add(new DataElement(SHOOTER_VICTOR_2, new WsVictor(SHOOTER_VICTOR_2, 6)));
+        outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
+        outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
     }
 }

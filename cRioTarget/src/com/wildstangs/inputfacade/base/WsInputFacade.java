@@ -1,5 +1,6 @@
 package com.wildstangs.inputfacade.base;
 
+import com.wildstangs.inputfacade.inputs.WsAnalogInput;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystick;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystick;
 import edu.wpi.first.wpilibj.networktables2.util.List;
@@ -104,6 +105,7 @@ public class WsInputFacade {
      */
     public static final String DRIVER_JOYSTICK = "DriverJoystick";
     public static final String MANIPULATOR_JOYSTICK = "ManipulatorJoystick";
+    public static final String SHOOTER_SPEED_INPUT = "ShooterSpeedInput";
     
     /**
      * Constructor for the WsInputFacade.
@@ -115,5 +117,7 @@ public class WsInputFacade {
         //Add the facade data elements
         oiInputs.add(new DataElement(DRIVER_JOYSTICK, new WsDriverJoystick()));
         oiInputs.add(new DataElement(MANIPULATOR_JOYSTICK, new WsManipulatorJoystick()));
+        
+        oiInputs.add(new DataElement(SHOOTER_SPEED_INPUT, new WsAnalogInput(2)));
     }
 }
