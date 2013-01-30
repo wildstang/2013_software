@@ -72,9 +72,9 @@ public class RobotTemplate extends IterativeRobot {
     public void teleopPeriodic() {
         WsInputFacade.getInstance().updateOiData();
         WsInputFacade.getInstance().updateSensorData();
+        WsSubsystemContainer.getInstance().update();
         WsOutputFacade.getInstance().update();
         Watchdog.getInstance().feed();
-        WsSubsystemContainer.getInstance().init();
     }
 
     /**
