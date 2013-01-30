@@ -28,13 +28,10 @@ public class WsSubsystemContainer {
     
     public void init()
     {
-        getSubsystem(WS_DRIVE_BASE).init();
-        getSubsystem(WS_FLOOR_PICKUP).init();
-        getSubsystem(WS_COMPRESSOR).init();
-        getSubsystem(WS_HOPPER).init();
-        getSubsystem(WS_INTAKE).init();
-        getSubsystem(WS_LANDING_GEAR).init();
-        getSubsystem(WS_SHOOTER).init();
+        for(int c = 0; c < subsystem.size(); c++)
+        {
+            ((WsSubsystem)(subsystem.get(c))).init();
+        }
     }
 
     /**
