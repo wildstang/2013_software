@@ -21,7 +21,7 @@ public class WsHopper extends WsSubsystem implements IObserver
 {
     private static final boolean kicker_default_value = false;
     private static final DoubleSolenoid.Value lift_default_value = DoubleSolenoid.Value.kReverse;
-    private static final int forwardCycles = 8;
+    private static final int forwardCycles = 30;
     private static final int reverseCycles = 8;
     private int cycle;
     
@@ -57,7 +57,7 @@ public class WsHopper extends WsSubsystem implements IObserver
             kicker_value = false;
         }
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kicker_value));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, lift_value);
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, new Integer(lift_value.value));
     }
 
     public void notifyConfigChange() 
@@ -75,7 +75,7 @@ public class WsHopper extends WsSubsystem implements IObserver
             {
                 kicker_value = false;
             }
-            if(kicker_value == true)
+            if(kicker_value == true && (button.getPreviousValue() == false))
             {
                 cycle = 0;
             }
@@ -84,7 +84,7 @@ public class WsHopper extends WsSubsystem implements IObserver
         {
             if(button.getValue() == true && (button.getPreviousValue() == false))
             {
-                if(lift_value.value == DoubleSolenoid.Value.kReverse_val)
+                if(lift_value == DoubleSolenoid.Value.kReverse)
                 {
                     lift_value = DoubleSolenoid.Value.kForward;
                 }
