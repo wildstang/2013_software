@@ -54,8 +54,6 @@ public class WsAutonomousManager implements IObserver
     public void startCurrentProgram()
     {
         runningProgram = programs[lockedProgram];
-        Logger.getLogger().always("WsAutonomousManager", "Value of lockedProgram when started", new Integer(lockedProgram));
-        Logger.getLogger().always("WsAutonomousManager", "Value of runningProgram when started", runningProgram.toString());
         runningProgram.initialize();
         SmartDashboard.putString("Running Autonomous Program", runningProgram.toString());
     }
