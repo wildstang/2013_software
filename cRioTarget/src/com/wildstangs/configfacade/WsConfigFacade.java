@@ -100,7 +100,7 @@ public class WsConfigFacade {
         for (int i = 0; i < config.size(); i++) {
             String name = ((String) ((DataElement) config.get(i)).getKey());
             String value = ((String) ((DataElement) config.get(i)).getValue().toString());
-            System.out.println(myClassName + "dumpConfigData" + name + "=" + value);
+            System.out.println(name + "=" + value);
         }
         return null;
     }

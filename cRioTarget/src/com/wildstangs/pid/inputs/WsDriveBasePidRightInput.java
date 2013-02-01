@@ -8,9 +8,9 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Nathan
  */
-public class WsDriveBasePidRightDistance implements IPidInput {
+public class WsDriveBasePidRightInput implements IPidInput {
     
-    public WsDriveBasePidRightDistance() {
+    public WsDriveBasePidRightInput() {
         //Nothing to do here
     }
 

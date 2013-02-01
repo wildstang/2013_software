@@ -3,14 +3,15 @@
  */
 package com.wildstangs.subsystems;
 
+import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.controller.base.WsPidController;
-import com.wildstangs.pid.inputs.WsDriveBasePidLeftDistance;
-import com.wildstangs.pid.inputs.WsDriveBasePidRightDistance;
+import com.wildstangs.pid.inputs.WsDriveBasePidLeftInput;
+import com.wildstangs.pid.inputs.WsDriveBasePidRightInput;
 import com.wildstangs.pid.outputs.WsDriveBasePidLeftOutput;
 import com.wildstangs.pid.outputs.WsDriveBasePidRightOutput;
 import com.wildstangs.subjects.base.BooleanSubject;
@@ -38,9 +39,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static final double WS_ANTI_TURBO_MAX_DEFLECTION = 0.500;
     private static final double WS_THROTTLE_ACCEL_FACTOR = 0.250;
     private static final double WS_HEADING_ACCEL_FACTOR = 0.500;
-    private static final double TICKS_PER_ROTATION = 256.0;
+    private static double TICKS_PER_ROTATION = 360.0;
     //Wheel diameter in inches
-    private static final double WHEEL_DIAMETER = 4;
+    private static double WHEEL_DIAMETER = 4;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static boolean antiTurboFlag = false;
@@ -52,15 +53,20 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double leftEncoderValue;
     private static double rightEncoderValue;
     private static WsPidController leftDriveDistancePid;
-    private static WsDriveBasePidLeftDistance leftDriveDistancePidInput;
+    private static WsDriveBasePidLeftInput leftDriveDistancePidInput;
     private static WsDriveBasePidLeftOutput leftDriveDistancePidOutput;
     private static WsPidController rightDriveDistancePid;
-    private static WsDriveBasePidRightDistance rightDriveDistancePidInput;
+    private static WsDriveBasePidRightInput rightDriveDistancePidInput;
     private static WsDriveBasePidRightOutput rightDriveDistancePidOutput;
     private static boolean distancePidEnabled = false;
+    private static DoubleConfigFileParameter WHEEL_DIAMETER_config;
+    private static DoubleConfigFileParameter TICKS_PER_ROTATION_config;    
 
     public WsDriveBase(String name) {
         super(name);
+        
+        WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 4.0);
+        TICKS_PER_ROTATION_config = new DoubleConfigFileParameter(this.getClass().getName(), "ticks_per_roation", 360.0);
 
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickEnum.HEADING);
         subject.attach(this);
@@ -75,17 +81,23 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
         //Initialize the drive base encoders
         //@TODO: change the channels to the correct one
-        leftDriveEncoder = new Encoder(1, 2, true, CounterBase.EncodingType.k4X);
+        //leftDriveEncoder = new Encoder(1, 2, true, CounterBase.EncodingType.k4X);
+        leftDriveEncoder = new Encoder(1, 1, 1);
         leftDriveEncoder.reset();
         leftDriveEncoder.start();
-        rightDriveEncoder = new Encoder(3, 4, false, CounterBase.EncodingType.k4X);
+        //rightDriveEncoder = new Encoder(3, 4, false, CounterBase.EncodingType.k4X);
+        rightDriveEncoder = new Encoder(1, 1, 1);
         rightDriveEncoder.reset();
         rightDriveEncoder.start();
 
         //Initialize the gyro
-        headingGyro = new Gyro(1);
+        //headingGyro = new Gyro(1);
 
         //Initialize the PIDs
+        leftDriveDistancePidInput = new WsDriveBasePidLeftInput();
+        leftDriveDistancePidOutput = new WsDriveBasePidLeftOutput();
+        rightDriveDistancePidInput = new WsDriveBasePidRightInput();
+        rightDriveDistancePidOutput = new WsDriveBasePidRightOutput();
         leftDriveDistancePid = new WsPidController(leftDriveDistancePidInput, leftDriveDistancePidOutput, "WsDriveBaseLeftDistancePID");
         rightDriveDistancePid = new WsPidController(rightDriveDistancePidInput, rightDriveDistancePidOutput, "WsDriveBaseRightDistancePID");
     }
@@ -118,6 +130,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
             //Set gear shift output
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, (shifterFlag ? Boolean.TRUE : Boolean.FALSE));
+        } else {
+            leftDriveDistancePid.Enable();
+            rightDriveDistancePid.Enable();
+            leftDriveDistancePid.calcPid();
+            rightDriveDistancePid.calcPid();
         }
     }
 
@@ -245,6 +262,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     /*
      * ENCODER/GYRO STUFF
      */
+    public Encoder getLeftEncoder() {
+        return leftDriveEncoder;
+    }
+
+    public Encoder getRightEncoder() {
+        return rightDriveEncoder;
+    }
+
     public double getLeftEncoderValue() {
         return leftDriveEncoder.get();
     }
@@ -294,13 +319,15 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         leftDriveDistancePid.Disable();
         rightDriveDistancePid.Disable();
     }
-    
+
     public void resetDistancePid() {
         leftDriveDistancePid.Reset();
         rightDriveDistancePid.Reset();
     }
 
     public void notifyConfigChange() {
+        WHEEL_DIAMETER = WHEEL_DIAMETER_config.getValue();
+        TICKS_PER_ROTATION = TICKS_PER_ROTATION_config.getValue();
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
