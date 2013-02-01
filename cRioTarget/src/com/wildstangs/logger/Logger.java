@@ -178,7 +178,7 @@ public class Logger {
     
     /**
      * Always logs a message, regardless of the current log level, 
-     * even it the logging is off
+     * even if the logging is off
      * @param c The name of the class logging the message.
      * @param id A unique identifier per class for easy debugging.
      * @param message The message to log.
