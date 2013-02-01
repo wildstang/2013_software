@@ -64,7 +64,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     public void update() {
 
         //Get the inputs for heading and throttle
-        //Set headign and throttle values
+        //Set headign and throttleheading values
         double throttleValue = 0.0;
         double headingValue = 0.0;
 

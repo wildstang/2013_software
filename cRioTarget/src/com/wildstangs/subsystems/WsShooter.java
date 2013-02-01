@@ -1,9 +1,12 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
+import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsVictor;
+import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
@@ -21,6 +24,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
     private double wheelEnterSpeed = 0;
     private double wheelExitSpeed = 0;
     private double previousTime = 0;
+    private boolean angleFlag = false; //could be true, not sure yet
     public WsShooter (String name) 
     {
         super(name);
@@ -30,6 +34,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
         //Implement this later for testing
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+        subject.attach(this);
     }
 
     public void init()
@@ -74,6 +80,10 @@ public class WsShooter extends WsSubsystem implements IObserver{
         {
             victorExit.set(null, Double.valueOf(0.0));
         }
+        
+        //set shooter angle
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, (angleFlag ? Boolean.TRUE : Boolean.FALSE)); 
+
     }
 
     public void notifyConfigChange() 
@@ -93,6 +103,12 @@ public class WsShooter extends WsSubsystem implements IObserver{
 
     public void acceptNotification(Subject subjectThatCaused) 
     {
-        
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) 
+        {
+            if(((BooleanSubject)subjectThatCaused).getValue() == true)
+            {
+                angleFlag = !angleFlag;
+            }
+        }
     }
 }
