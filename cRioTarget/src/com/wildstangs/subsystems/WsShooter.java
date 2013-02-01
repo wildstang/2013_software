@@ -1,14 +1,14 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
-import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Victor;
 
 public class WsShooter extends WsSubsystem implements IObserver{
 
@@ -46,33 +46,33 @@ public class WsShooter extends WsSubsystem implements IObserver{
         
         previousTime = newTime;
         
-        Victor victorEnter = (Victor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER);
-        Victor victorExit = (Victor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_EXIT);
+        WsVictor victorEnter = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER);
+        WsVictor victorExit = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_EXIT);
         
         if(speedEnter < lowerWheelSpeed.getValue())
         {
-            victorEnter.set(lowerVictorSpeed.getValue());
+            victorEnter.set(null, Double.valueOf(lowerVictorSpeed.getValue()));
         }
         else if(speedEnter < wheelEnterSpeed)
         {
-            victorEnter.set(1.0f); 
+            victorEnter.set(null, Double.valueOf(1.0)); 
         }
         else
         {
-            victorEnter.set(0.0f);
+            victorEnter.set(null, Double.valueOf(0.0));
         }
         
         if(speedExit < lowerWheelSpeed.getValue())
         {
-            victorExit.set(lowerVictorSpeed.getValue());
+            victorExit.set((IOutputEnum) null, Double.valueOf(lowerVictorSpeed.getValue()));
         }
         if(speedExit < wheelExitSpeed)
         {
-            victorExit.set(1.0f);
+            victorExit.set(null, Double.valueOf(1.0));
         }
         else
         {
-            victorExit.set(0.0f);
+            victorExit.set(null, Double.valueOf(0.0));
         }
     }
 
