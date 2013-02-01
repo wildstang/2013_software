@@ -3,6 +3,7 @@ package com.wildstangs.outputfacade.base;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsSolenoid;
 import com.wildstangs.outputfacade.outputs.WsDoubleSolenoid;
+import com.wildstangs.outputfacade.outputs.WsVictor;
 import edu.wpi.first.wpilibj.networktables2.util.List;
 import com.wildstangs.types.DataElement;
 
@@ -72,8 +73,10 @@ public class WsOutputFacade {
     public static final String SHIFTER = "shifter";
     public static final String LIFT = "lift";
     public static final String KICKER = "kicker";
-    
-    
+    public static final String SHOOTER_VICTOR_ENTER = "ShooterVictorEnter";
+    public static final String SHOOTER_VICTOR_EXIT = "ShooterVictorExit";
+    public static final String SHOOTER_ANGLE = "ShooterAngle";
+
     /**
      * Constructor for WsOutputFacade.
      *
@@ -87,6 +90,9 @@ public class WsOutputFacade {
         outputs.add(new DataElement(SHIFTER, new WsSolenoid(SHIFTER, 1, 4)));
         outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 1, 1)));
         outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 2)));
-        
+        outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
+        outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
+        outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 5))); //probably needs different value
+
     }
 }

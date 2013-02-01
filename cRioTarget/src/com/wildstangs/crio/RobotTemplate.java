@@ -112,5 +112,5 @@ public class RobotTemplate extends IterativeRobot {
     public void testPeriodic() {
         Watchdog.getInstance().feed();
     }
-    
+
 }
