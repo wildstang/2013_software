@@ -46,11 +46,6 @@ public class RobotTemplate extends IterativeRobot {
         WsAutonomousManager.getInstance();
     }
 
-    public void disabledInit()
-    {
-        WsAutonomousManager.getInstance().clear();
-    }
-
     public void disabledPeriodic()
     {
         WsInputFacade.getInstance().updateOiData();
@@ -60,14 +55,10 @@ public class RobotTemplate extends IterativeRobot {
     public void autonomousInit()
     {
         WsAutonomousManager.getInstance().startCurrentProgram();
-    }
-    
-    public void teleopInit()
-    {
         WsSubsystemContainer.getInstance().init();
     }
     
-    public void autonomousInit()
+    public void teleopInit()
     {
         WsSubsystemContainer.getInstance().init();
     }
@@ -117,5 +108,6 @@ public class RobotTemplate extends IterativeRobot {
             System.out.println(e.getMessage());
         }
         WsConfigFacade.getInstance().dumpConfigData();
+        WsAutonomousManager.getInstance().clear();
     }
 }
