@@ -8,6 +8,7 @@ import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
+import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.Encoder;
@@ -36,6 +37,11 @@ public class WsShooter extends WsSubsystem implements IObserver{
         //subject.attach(this);
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
         subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum)null); 
+        subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum)null); 
+        subject.attach(this);
+        
     }
 
     public void init()
@@ -110,5 +116,14 @@ public class WsShooter extends WsSubsystem implements IObserver{
                 angleFlag = !angleFlag;
             }
         }
+        if (subjectThatCaused.getType() == WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum)null))
+        {
+            
+        }
+        if (subjectThatCaused.getType() == WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum)null))
+        {
+            
+        }
+        
     }
 }
