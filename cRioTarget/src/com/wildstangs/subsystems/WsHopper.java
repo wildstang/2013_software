@@ -9,6 +9,7 @@ import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subjects.base.BooleanSubject;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import com.wildstangs.subjects.base.IObserver;
+import com.wildstangs.config.IntegerConfigFileParameter;
 
 
 
@@ -21,8 +22,7 @@ public class WsHopper extends WsSubsystem implements IObserver
 {
     private static final boolean kicker_default_value = false;
     private static final DoubleSolenoid.Value lift_default_value = DoubleSolenoid.Value.kReverse;
-    private static final int forwardCycles = 30;
-    private static final int reverseCycles = 8;
+    private int forwardCycles;
     private int cycle;
     
     private boolean kicker_value;
@@ -33,6 +33,8 @@ public class WsHopper extends WsSubsystem implements IObserver
     public WsHopper (String name)
     {
         super(name);
+        forwardCycles = (new IntegerConfigFileParameter(
+                this.getClass().getName(), "forwardCycles", 30)).getValue();
         init();
         
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
