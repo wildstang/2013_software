@@ -52,6 +52,19 @@ public class WsInputFacade {
             oiIn.update();
         }
     }
+    
+    public void updateOiDataAutonomous()
+    {
+        IInput oiIn;
+        for (int i = 0; i < oiInputs.size(); i++) {
+            oiIn = (IInput)(((DataElement) oiInputs.get(i)).getValue());
+            if (!(oiIn instanceof WsDriverJoystick || oiIn instanceof WsManipulatorJoystick))
+            {
+                oiIn.pullData();
+            }
+            oiIn.update();
+        }
+    }
 
     /**
      * Method to notify all input containers that a config update occurred.

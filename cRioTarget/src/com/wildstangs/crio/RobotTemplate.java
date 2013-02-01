@@ -68,7 +68,7 @@ public class RobotTemplate extends IterativeRobot {
     
     
     public void autonomousPeriodic() {
-        WsInputFacade.getInstance().updateOiData();
+        WsInputFacade.getInstance().updateOiDataAutonomous();
         WsInputFacade.getInstance().updateSensorData();
         WsAutonomousManager.getInstance().update();
         WsSubsystemContainer.getInstance().update();
