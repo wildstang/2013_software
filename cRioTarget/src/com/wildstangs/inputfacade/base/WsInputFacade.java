@@ -105,7 +105,8 @@ public class WsInputFacade {
      */
     public static final String DRIVER_JOYSTICK = "DriverJoystick";
     public static final String MANIPULATOR_JOYSTICK = "ManipulatorJoystick";
-    public static final String SHOOTER_SPEED_INPUT = "ShooterSpeedInput";
+    public static final String ENTER_WHEEL_SHOOTER_SPEED_INPUT = "EnterWheelShooterSpeedInput";
+    public static final String EXIT_WHEEL_SHOOTER_SPEED_INPUT = "ExitWheelShooterSpeedInput";
     
     /**
      * Constructor for the WsInputFacade.
@@ -118,6 +119,7 @@ public class WsInputFacade {
         oiInputs.add(new DataElement(DRIVER_JOYSTICK, new WsDriverJoystick()));
         oiInputs.add(new DataElement(MANIPULATOR_JOYSTICK, new WsManipulatorJoystick()));
         
-        oiInputs.add(new DataElement(SHOOTER_SPEED_INPUT, new WsAnalogInput(2)));
+        oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsAnalogInput(2)));
+        oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsAnalogInput(3))); //probably needs different value
     }
 }
