@@ -22,6 +22,7 @@ public class WsHopper extends WsSubsystem implements IObserver
 {
     private static final boolean kicker_default_value = false;
     private static final DoubleSolenoid.Value lift_default_value = DoubleSolenoid.Value.kReverse;
+    private IntegerConfigFileParameter forwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 30);
     private int forwardCycles;
     private int cycle;
     
@@ -33,8 +34,6 @@ public class WsHopper extends WsSubsystem implements IObserver
     public WsHopper (String name)
     {
         super(name);
-        forwardCycles = (new IntegerConfigFileParameter(
-                this.getClass().getName(), "forwardCycles", 30)).getValue();
         init();
         
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
@@ -46,6 +45,7 @@ public class WsHopper extends WsSubsystem implements IObserver
     
     public void init()
     {
+        forwardCycles = forwardCycleConfig.getValue();
         kicker_value = kicker_default_value;
         lift_value = lift_default_value;
         cycle = 0;
