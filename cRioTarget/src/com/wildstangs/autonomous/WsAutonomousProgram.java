@@ -37,7 +37,6 @@ public abstract class WsAutonomousProgram implements IStepContainer
 
     public void cleanup()
     {
-        Logger.getLogger().debug(this.toString(), "Cleanup", "The program was cleaned up.");
         for (int i = 0; i < programSteps.length; i++)
         {
             programSteps[i] = null;

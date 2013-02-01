@@ -28,9 +28,6 @@ public class WsAutonomousManager implements IObserver
     private WsAutonomousManager()
     {
         definePrograms();
-        programFinished = true;
-        programRunning = false;
-        runningProgram = programs[0];
         WsInputFacade.getInstance().getOiInput(WsInputFacade.AUTO_PROGRAM_SELECTOR).getSubject((ISubjectEnum)null).attach(this);
         WsInputFacade.getInstance().getOiInput(WsInputFacade.LOCK_IN_SWITCH).getSubject((ISubjectEnum)null).attach(this);
         selectorSwitch = 0;
@@ -44,21 +41,13 @@ public class WsAutonomousManager implements IObserver
         {
             runningProgram.cleanup();
             programFinished = false;
-            programs[0].initialize();
-            runningProgram = programs[0];
-            SmartDashboard.putString("Running Autonomous Program", runningProgram.toString());
+            lockedProgram = 0;
+            startCurrentProgram();
         }
-        if (programRunning)
+        runningProgram.update();
+        if (runningProgram.isFinished())
         {
-            runningProgram.update();
-            if (runningProgram.isFinished())
-            {
-                programFinished = true;
-            }
-        }
-        else
-        {
-            programs[0].update();
+            programFinished = true;
         }
     }
     
@@ -73,12 +62,14 @@ public class WsAutonomousManager implements IObserver
     
     public void clear()
     {
-        programFinished = true;
+        programFinished = false;
         programRunning = false;
-        runningProgram.cleanup();
+        if (runningProgram != null)
+        {
+            runningProgram.cleanup();
+        }
         runningProgram = programs[0];
         lockedProgram = 0;
-        currentProgram = 0;
         SmartDashboard.putString("Running Autonomous Program", "No Program Running");
         SmartDashboard.putString("Locked Autonomous Program", programs[lockedProgram].toString());
         SmartDashboard.putString("Current Autonomous Program", programs[currentProgram].toString());

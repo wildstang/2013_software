@@ -26,13 +26,11 @@ public class WsAutonomousStepSetThrottle extends WsAutonomousStep
     public void initialize()
     {
         finished = true;
-        Logger.getLogger().debug(toString(), "Checking if run", "It ran");
         WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(value));
     }
 
     public void update()
     {
-        
     }
 
 //    public int hashCode()
