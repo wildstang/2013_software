@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 package com.wildstangs.crio;
 
+import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
@@ -42,6 +43,23 @@ public class RobotTemplate extends IterativeRobot {
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
         WsSubsystemContainer.getInstance();
+        WsAutonomousManager.getInstance();
+    }
+
+    public void disabledInit()
+    {
+        WsAutonomousManager.getInstance().clear();
+    }
+
+    public void disabledPeriodic()
+    {
+        WsInputFacade.getInstance().updateOiData();
+    }
+    
+
+    public void autonomousInit()
+    {
+        WsAutonomousManager.getInstance().startCurrentProgram();
     }
     
     public void teleopInit()
@@ -62,7 +80,14 @@ public class RobotTemplate extends IterativeRobot {
     /**
      * This function is called periodically during autonomous
      */
+    
+    
     public void autonomousPeriodic() {
+        WsInputFacade.getInstance().updateOiDataAutonomous();
+        WsInputFacade.getInstance().updateSensorData();
+        WsAutonomousManager.getInstance().update();
+        WsSubsystemContainer.getInstance().update();
+        WsOutputFacade.getInstance().update();
         Watchdog.getInstance().feed();
     }
 
