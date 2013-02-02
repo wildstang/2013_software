@@ -13,6 +13,7 @@ import com.wildstangs.logger.Logger;
  */
 public class WsAutonomousStepDelay extends WsAutonomousStep
 /* This step delays testing for the specified number of cycles.
+ * Note: If used in a parallel step group, it insures that the group waits for at least the specified number of cycles, instead.
  */
 {
 

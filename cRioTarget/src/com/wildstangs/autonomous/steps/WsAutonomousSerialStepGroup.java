@@ -11,12 +11,12 @@ import com.wildstangs.logger.Logger;
  *
  * @author coder65535
  */
-public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements IStepContainer
+public abstract class WsAutonomousSerialStepGroup extends WsAutonomousStep implements IStepContainer
 {
     protected final WsAutonomousStep[] steps;
     protected int currentStep, errorCount;
     protected boolean finishedStep, lastStepError;
-    public WsAutonomousStepGroup(int stepCount)
+    public WsAutonomousSerialStepGroup(int stepCount)
     {
         steps = new WsAutonomousStep[stepCount];
     }
@@ -86,11 +86,11 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements 
     
     public void setNextStep(WsAutonomousStep newStep)
     {
-        if (steps[currentStep] instanceof WsAutonomousStepGroup)
+        if (steps[currentStep] instanceof WsAutonomousSerialStepGroup)
         {
-            if (((WsAutonomousStepGroup)steps[currentStep]).getNextStep() != null)
+            if (((WsAutonomousSerialStepGroup)steps[currentStep]).getNextStep() != null)
             {
-                ((WsAutonomousStepGroup)steps[currentStep]).setNextStep(newStep);
+                ((WsAutonomousSerialStepGroup)steps[currentStep]).setNextStep(newStep);
             }
             else
             {
@@ -121,6 +121,7 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements 
     {
         finished = true;
     }
+    
     protected final void failedStep(WsAutonomousStep step)
     {
         if (step.isFatal())
@@ -134,22 +135,24 @@ public abstract class WsAutonomousStepGroup extends WsAutonomousStep implements 
             handleError(step);
         }
     }
+    
     protected void fatalError(WsAutonomousStep step) //Separate method for easy overrides.
     {
         handleError(step);
     }
+    
     protected void handleError(WsAutonomousStep step) //Separate method for easy overrides.
     {
         pass = false;
         errorInfo = "";
-        Logger.getLogger().error("Substep " + currentStep + "(" + step.toString() + ") of autonomous step group "+this.toString(), "Auto Step", step.errorInfo);
+        Logger.getLogger().error("Substep " + currentStep + "(" + step.toString() + ") of serial autonomous step group "+this.toString(), "Auto Step", step.errorInfo);
     }
     
     public boolean lastStepHadError()
     {
-        if (steps[currentStep] instanceof WsAutonomousStepGroup)
+        if (steps[currentStep] instanceof WsAutonomousSerialStepGroup)
         {
-            return ((WsAutonomousStepGroup)steps[currentStep]).lastStepHadError();
+            return ((WsAutonomousSerialStepGroup)steps[currentStep]).lastStepHadError();
         }
         return lastStepError;
     }

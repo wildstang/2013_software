@@ -6,7 +6,7 @@
 package com.wildstangs.autonomous.steps.control;
 
 import com.wildstangs.autonomous.*;
-import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
+import com.wildstangs.autonomous.steps.WsAutonomousSerialStepGroup;
 
 /**
  *
@@ -14,7 +14,7 @@ import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
  */
 public class WsAutonomousStepFinishGroup extends WsAutonomousStep 
 {
-    
+    //Note: only works in serial step groups.
     public WsAutonomousStepFinishGroup()
     {
         //Do nothing, nothing to set up.
@@ -28,14 +28,14 @@ public class WsAutonomousStepFinishGroup extends WsAutonomousStep
     public void update()
     {
         boolean bottomOfTree = false;
-        WsAutonomousStepGroup group = null;
+        WsAutonomousSerialStepGroup group = null;
         IStepContainer container = WsAutonomousManager.getInstance().getRunningProgram();
         while (!bottomOfTree)
         {
             WsAutonomousStep currStep = container.getCurrentStep();
-            if (currStep instanceof WsAutonomousStepGroup)
+            if (currStep instanceof WsAutonomousSerialStepGroup)
             {
-                group = (WsAutonomousStepGroup)currStep;
+                group = (WsAutonomousSerialStepGroup)currStep;
                 container = group;
             }
             else
