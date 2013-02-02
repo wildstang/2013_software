@@ -68,8 +68,7 @@ public class WsSimulation {
 
         double pid_setpoint = 10;
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
-        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setLeftDriveDistancePidSetpoint(pid_setpoint);
-        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setRightDriveDistancePidSetpoint(pid_setpoint);
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setDriveDistancePidSetpoint(pid_setpoint);
         int right_encoder = 0;
         int left_encoder = 0;
         double left_drive_speed = 0.0;

@@ -4,13 +4,15 @@
  */
 package edu.wpi.first.wpilibj;
 
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+
 /**
  *
  * @author Nathan Walters
  */
 public class Encoder {
     int count;
-    public Encoder(int i, int j, int k) {
+    public Encoder(int i, int j, boolean t, EncodingType e) {
         //Do nothing
     }
     public int get() {
