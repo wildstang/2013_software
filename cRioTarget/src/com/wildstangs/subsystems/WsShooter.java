@@ -26,6 +26,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
     private double wheelEnterSetPoint = 0;
     private double wheelExitSetPoint = 0;
     private double previousTime = 0;
+    private double lowWheelSpeed, lowVictorSpeed;
     private boolean angleFlag = false; //could be true, not sure yet
     public WsShooter (String name) 
     {
@@ -51,6 +52,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum)null); 
         subject.attach(this);
         
+        lowWheelSpeed = lowerWheelSpeed.getValue();
+        lowVictorSpeed = lowerVictorSpeed.getValue();
     }
 
     public void init()
@@ -70,9 +73,9 @@ public class WsShooter extends WsSubsystem implements IObserver{
         WsVictor victorEnter = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER);
         WsVictor victorExit = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_EXIT);
         
-        if(speedEnter < lowerWheelSpeed.getValue())
+        if(speedEnter < lowWheelSpeed)
         {
-            victorEnter.set(null, Double.valueOf(lowerVictorSpeed.getValue()));
+            victorEnter.set(null, Double.valueOf(lowVictorSpeed));
             
         }
         else if(speedEnter < wheelEnterSetPoint)
@@ -84,9 +87,9 @@ public class WsShooter extends WsSubsystem implements IObserver{
             victorEnter.set(null, Double.valueOf(0.0));
         }
         
-        if(speedExit < lowerWheelSpeed.getValue())
+        if(speedExit < lowWheelSpeed)
         {
-            victorExit.set((IOutputEnum) null, Double.valueOf(lowerVictorSpeed.getValue()));
+            victorExit.set((IOutputEnum) null, Double.valueOf(lowVictorSpeed));
         }
         if(speedExit < wheelExitSetPoint)
         {
@@ -105,7 +108,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
 
     public void notifyConfigChange() 
     {
-        
+        lowWheelSpeed = lowerWheelSpeed.getValue();
+        lowVictorSpeed = lowerVictorSpeed.getValue();
     }
     
     public void setWheelEnterSetPoint(int setPoint)
