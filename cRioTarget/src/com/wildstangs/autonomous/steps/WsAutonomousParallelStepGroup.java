@@ -45,6 +45,10 @@ public class WsAutonomousParallelStepGroup extends WsAutonomousStep
                 steps.remove(i);
             }
         }
+        if (steps.size() == 0)
+        {
+            finished = true;
+        }
     }
     
         protected final void failedStep(WsAutonomousStep step, int i)
