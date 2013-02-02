@@ -365,9 +365,6 @@ public class WsPidController implements IPidController {
         double output = this.calcProportionalTerm()
                 + this.calcIntegralTerm()
                 + this.calcDerivativeTerm();
-        System.out.println(this.controllerName +" p term: " + this.p);
-        System.out.println(this.controllerName +" i term: " + this.i);
-        System.out.println(this.controllerName +" d term: " + this.d);
         System.out.println(this.controllerName + " output: " + output);
 
         // Handle Static Epsilon

@@ -10,15 +10,13 @@ import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.controller.base.WsPidController;
-import com.wildstangs.pid.inputs.WsDriveBasePidLeftInput;
-import com.wildstangs.pid.inputs.WsDriveBasePidRightInput;
-import com.wildstangs.pid.outputs.WsDriveBasePidLeftOutput;
-import com.wildstangs.pid.outputs.WsDriveBasePidRightOutput;
+import com.wildstangs.pid.inputs.WsDriveBaseDistancePidInput;
+import com.wildstangs.pid.outputs.WsDriveBaseDistancePidOutput;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
-import edu.wpi.first.wpilibj.CounterBase;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,12 +50,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static Gyro headingGyro;
     private static double leftEncoderValue;
     private static double rightEncoderValue;
-    private static WsPidController leftDriveDistancePid;
-    private static WsDriveBasePidLeftInput leftDriveDistancePidInput;
-    private static WsDriveBasePidLeftOutput leftDriveDistancePidOutput;
-    private static WsPidController rightDriveDistancePid;
-    private static WsDriveBasePidRightInput rightDriveDistancePidInput;
-    private static WsDriveBasePidRightOutput rightDriveDistancePidOutput;
+    private static WsPidController driveDistancePid;
+    private static WsDriveBaseDistancePidInput driveDistancePidInput;
+    private static WsDriveBaseDistancePidOutput driveDistancePidOutput;
     private static boolean distancePidEnabled = false;
     private static DoubleConfigFileParameter WHEEL_DIAMETER_config;
     private static DoubleConfigFileParameter TICKS_PER_ROTATION_config;    
@@ -82,11 +77,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         //Initialize the drive base encoders
         //@TODO: change the channels to the correct one
         //leftDriveEncoder = new Encoder(1, 2, true, CounterBase.EncodingType.k4X);
-        leftDriveEncoder = new Encoder(1, 1, 1);
+        leftDriveEncoder = new Encoder(2, 3, true, EncodingType.k4X);
         leftDriveEncoder.reset();
         leftDriveEncoder.start();
         //rightDriveEncoder = new Encoder(3, 4, false, CounterBase.EncodingType.k4X);
-        rightDriveEncoder = new Encoder(1, 1, 1);
+        rightDriveEncoder = new Encoder(4, 5, false, EncodingType.k4X);
         rightDriveEncoder.reset();
         rightDriveEncoder.start();
 
@@ -94,12 +89,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         //headingGyro = new Gyro(1);
 
         //Initialize the PIDs
-        leftDriveDistancePidInput = new WsDriveBasePidLeftInput();
-        leftDriveDistancePidOutput = new WsDriveBasePidLeftOutput();
-        rightDriveDistancePidInput = new WsDriveBasePidRightInput();
-        rightDriveDistancePidOutput = new WsDriveBasePidRightOutput();
-        leftDriveDistancePid = new WsPidController(leftDriveDistancePidInput, leftDriveDistancePidOutput, "WsDriveBaseLeftDistancePID");
-        rightDriveDistancePid = new WsPidController(rightDriveDistancePidInput, rightDriveDistancePidOutput, "WsDriveBaseRightDistancePID");
+        driveDistancePidInput = new WsDriveBaseDistancePidInput();
+        driveDistancePidOutput = new WsDriveBaseDistancePidOutput();
+        driveDistancePid = new WsPidController(driveDistancePidInput, driveDistancePidOutput, "WsDriveBaseDistancePID");
     }
 
     public void update() {
@@ -131,10 +123,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             //Set gear shift output
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, (shifterFlag ? Boolean.TRUE : Boolean.FALSE));
         } else {
-            leftDriveDistancePid.Enable();
-            rightDriveDistancePid.Enable();
-            leftDriveDistancePid.calcPid();
-            rightDriveDistancePid.calcPid();
+            driveDistancePid.Enable();
+            driveDistancePid.calcPid();
         }
     }
 
@@ -288,14 +278,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         return distance;
     }
 
-    public void setLeftDriveDistancePidSetpoint(double distance) {
-        leftDriveDistancePid.setSetPoint(distance);
-        leftDriveDistancePid.calcPid();
-    }
-
-    public void setRightDriveDistancePidSetpoint(double distance) {
-        rightDriveDistancePid.setSetPoint(distance);
-        rightDriveDistancePid.calcPid();
+    public void setDriveDistancePidSetpoint(double distance) {
+        driveDistancePid.setSetPoint(distance);
+        driveDistancePid.calcPid();
     }
 
     public void resetLeftEncoder() {
@@ -310,19 +295,15 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public void enableDistancePidControl() {
         distancePidEnabled = true;
-        leftDriveDistancePid.Enable();
-        rightDriveDistancePid.Enable();
+        driveDistancePid.Enable();
     }
 
     public void disableDistancePidControl() {
         distancePidEnabled = false;
-        leftDriveDistancePid.Disable();
-        rightDriveDistancePid.Disable();
     }
 
     public void resetDistancePid() {
-        leftDriveDistancePid.Reset();
-        rightDriveDistancePid.Reset();
+        driveDistancePid.Reset();
     }
 
     public void notifyConfigChange() {
