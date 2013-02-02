@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.wildstangs.autonomous.steps.control;
 
 import com.wildstangs.autonomous.*;
@@ -11,25 +10,21 @@ import com.wildstangs.autonomous.*;
  *
  * @author coder65535
  */
-public class WsAutonomousStepFinishGroupIfError extends WsAutonomousStep 
-{
+public class WsAutonomousStepFinishGroupIfError extends WsAutonomousStep {
     //Note: This step silently passes on the error status of the previous step.
     //(That is, if the previous step had an error, this step doesn't log an error, but WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError() will remain true.
-    public WsAutonomousStepFinishGroupIfError() 
-    {
+
+    public WsAutonomousStepFinishGroupIfError() {
         //Nothing to set.
     }
 
-    public void initialize()
-    {
+    public void initialize() {
         //All the work is done in update().
     }
 
-    public void update()
-    {
+    public void update() {
         finished = true;
-        if (WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError())
-        {
+        if (WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError()) {
             errorInfo = "";
             pass = false;
             WsAutonomousManager.getInstance().getRunningProgram().setNextStep(new WsAutonomousStepFinishGroup());
@@ -44,12 +39,9 @@ public class WsAutonomousStepFinishGroupIfError extends WsAutonomousStep
 //        }
 //        return false;
 //    }
-
-    public String toString()
-    {
+    public String toString() {
         return "Skips next step if last step had error";
     }
-
 //    public int hashCode()
 //    {
 //        int hash = 3;

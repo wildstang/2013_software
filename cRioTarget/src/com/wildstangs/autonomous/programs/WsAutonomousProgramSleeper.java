@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
@@ -16,19 +15,17 @@ import com.wildstangs.autonomous.steps.control.WsAutonomousStepStopAutonomous;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-public class WsAutonomousProgramSleeper extends WsAutonomousProgram
-{
-    public WsAutonomousProgramSleeper()
-    {
+public class WsAutonomousProgramSleeper extends WsAutonomousProgram {
+
+    public WsAutonomousProgramSleeper() {
         super(1);
     }
-    public void defineSteps()
-    {
+
+    public void defineSteps() {
         programSteps[0] = new WsAutonomousStepStopAutonomous();
     }
-    public String toString()
-    {
+
+    public String toString() {
         return "Sleeper";
     }
 }
-

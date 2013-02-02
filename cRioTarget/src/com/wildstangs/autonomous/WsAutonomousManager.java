@@ -4,10 +4,10 @@
  */
 package com.wildstangs.autonomous;
 
+import com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance;
 import com.wildstangs.autonomous.programs.WsAutonomousProgramForwardsTest;
 import com.wildstangs.autonomous.programs.WsAutonomousProgramSleeper;
 import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.logger.Logger;
 import com.wildstangs.subjects.base.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,8 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  * @author coder65535
  */
-public class WsAutonomousManager implements IObserver
-{
+public class WsAutonomousManager implements IObserver {
 
     private WsAutonomousProgram[] programs;
     private int currentProgram, lockedProgram;
@@ -25,45 +24,37 @@ public class WsAutonomousManager implements IObserver
     private boolean programFinished, programRunning, lockInSwitch;
     private static WsAutonomousManager instance = null;
 
-    private WsAutonomousManager()
-    {
+    private WsAutonomousManager() {
         definePrograms();
-        WsInputFacade.getInstance().getOiInput(WsInputFacade.AUTO_PROGRAM_SELECTOR).getSubject((ISubjectEnum)null).attach(this);
-        WsInputFacade.getInstance().getOiInput(WsInputFacade.LOCK_IN_SWITCH).getSubject((ISubjectEnum)null).attach(this);
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.AUTO_PROGRAM_SELECTOR).getSubject((ISubjectEnum) null).attach(this);
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.LOCK_IN_SWITCH).getSubject((ISubjectEnum) null).attach(this);
         selectorSwitch = 0;
         lockInSwitch = false;
     }
 
-    public void update()
-
-    {
-        if (programFinished)
-        {
+    public void update() {
+        if (programFinished) {
             runningProgram.cleanup();
             programFinished = false;
             lockedProgram = 0;
             startCurrentProgram();
         }
         runningProgram.update();
-        if (runningProgram.isFinished())
-        {
+        if (runningProgram.isFinished()) {
             programFinished = true;
         }
     }
-    
-    public void startCurrentProgram()
-    {
+
+    public void startCurrentProgram() {
         runningProgram = programs[lockedProgram];
         runningProgram.initialize();
         SmartDashboard.putString("Running Autonomous Program", runningProgram.toString());
     }
-    
-    public void clear()
-    {
+
+    public void clear() {
         programFinished = false;
         programRunning = false;
-        if (runningProgram != null)
-        {
+        if (runningProgram != null) {
             runningProgram.cleanup();
         }
         runningProgram = programs[0];
@@ -73,62 +64,49 @@ public class WsAutonomousManager implements IObserver
         SmartDashboard.putString("Current Autonomous Program", programs[currentProgram].toString());
     }
 
-    public WsAutonomousProgram getRunningProgram()
-    {
-        if (programRunning)
-        {
+    public WsAutonomousProgram getRunningProgram() {
+        if (programRunning) {
             return runningProgram;
-        }
-        else
-        {
-            return (WsAutonomousProgram)null;
+        } else {
+            return (WsAutonomousProgram) null;
         }
     }
 
-    public String getRunningProgramName()
-    {
+    public String getRunningProgramName() {
         return runningProgram.toString();
     }
-    
-    public String getSelectedProgramName()
-    {
+
+    public String getSelectedProgramName() {
         return programs[currentProgram].toString();
     }
-    
-    public String getLockedProgramName()
-    {
+
+    public String getLockedProgramName() {
         return programs[lockedProgram].toString();
     }
-    
-    public void acceptNotification(Subject cause)
-    {
-        if (cause instanceof DoubleSubject)
-        {
-            selectorSwitch = (float)((DoubleSubject)cause).getValue();
-            currentProgram = (int)(Math.floor((selectorSwitch/5.0)*programs.length));
+
+    public void acceptNotification(Subject cause) {
+        if (cause instanceof DoubleSubject) {
+            selectorSwitch = (float) ((DoubleSubject) cause).getValue();
+            currentProgram = (int) (Math.floor((selectorSwitch / 5.0) * programs.length));
             SmartDashboard.putString("Current Autonomous Program", programs[currentProgram].toString());
-        }
-        else if (cause instanceof BooleanSubject)
-        {
-            lockInSwitch = ((BooleanSubject)cause).getValue();
-            lockedProgram = lockInSwitch?currentProgram:0;
+        } else if (cause instanceof BooleanSubject) {
+            lockInSwitch = ((BooleanSubject) cause).getValue();
+            lockedProgram = lockInSwitch ? currentProgram : 0;
             SmartDashboard.putString("Locked Autonomous Program", programs[lockedProgram].toString());
         }
     }
-    
-    public static WsAutonomousManager getInstance()
-    {
-        if (WsAutonomousManager.instance == null)
-        {
+
+    public static WsAutonomousManager getInstance() {
+        if (WsAutonomousManager.instance == null) {
             WsAutonomousManager.instance = new WsAutonomousManager();
         }
         return WsAutonomousManager.instance;
     }
 
-    private void definePrograms()
-    {
-        programs = new WsAutonomousProgram[2];
+    private void definePrograms() {
+        programs = new WsAutonomousProgram[3];
         programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper.
         programs[1] = new WsAutonomousProgramForwardsTest();
+        programs[2] = new WsAutonomousProgramDriveDistance();
     }
 }

@@ -11,27 +11,22 @@ import com.wildstangs.logger.Logger;
  *
  * @author coder65535
  */
-public class WsAutonomousStepDelay extends WsAutonomousStep
-/* This step delays testing for the specified number of cycles.
- */
-{
+public class WsAutonomousStepDelay extends WsAutonomousStep /* This step delays testing for the specified number of cycles.
+ */ {
 
     private int count;
     protected final int originalCount;
 
-    public WsAutonomousStepDelay(int delay)
-    {
+    public WsAutonomousStepDelay(int delay) {
         count = delay - 1;
         originalCount = delay;
-        if (delay <= 0)
-        {
+        if (delay <= 0) {
             pass = false;
             errorInfo = "Negative delay";
         }
     }
-    
-    public WsAutonomousStepDelay()
-    {
+
+    public WsAutonomousStepDelay() {
         this(50);
     }
 
@@ -39,19 +34,16 @@ public class WsAutonomousStepDelay extends WsAutonomousStep
     {
     }
 
-    public void update()
-    {
+    public void update() {
         if (count-- <= 0) //Preventing stupid errors that could occur by passing a negative value into the constructor.
         {
             finished = true;
         }
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "Delay for " + originalCount + " frames";
     }
-
 //    public int hashCode()
 //    {
 //        int hash = 5;
@@ -71,5 +63,4 @@ public class WsAutonomousStepDelay extends WsAutonomousStep
 //        }
 //        return false;
 //    }
-
 }
