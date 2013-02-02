@@ -72,6 +72,7 @@ public class WsOutputFacade {
     public static final String SHIFTER = "shifter";
     public static final String LIFT = "lift";
     public static final String KICKER = "kicker";
+    public static final String FRISBIE_CONTROL = "FrisbieControl";
     
     
     /**
@@ -87,6 +88,6 @@ public class WsOutputFacade {
         outputs.add(new DataElement(SHIFTER, new WsSolenoid(SHIFTER, 1, 4)));
         outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 1, 1)));
         outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 2)));
-        
+        outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
     }
 }
