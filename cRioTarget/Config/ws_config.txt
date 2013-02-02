@@ -15,7 +15,8 @@ com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
 //Solenoids: Replace 'NAME' with whatever ame you send in
 com.wildstangs.outputfacade.outputs.WsSolenoid.NAME.shouldStartTrue=false
 
-
+//Subsystems
+com.wildstangs.subsystems.WsHopper.forwardCycles=30
 
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.p=1.0
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.i=0.0

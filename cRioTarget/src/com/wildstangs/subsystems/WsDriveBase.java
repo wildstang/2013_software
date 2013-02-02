@@ -59,7 +59,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public WsDriveBase(String name) {
         super(name);
-        
+        init(); 
         WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 4.0);
         TICKS_PER_ROTATION_config = new DoubleConfigFileParameter(this.getClass().getName(), "ticks_per_roation", 360.0);
 

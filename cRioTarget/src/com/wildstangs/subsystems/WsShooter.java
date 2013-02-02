@@ -11,6 +11,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
+import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -29,8 +30,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
     public WsShooter (String name) 
     {
         super(name);
-        encoderEnter = new Encoder(1, 1, 2, 2, false);
-        encoderExit = new Encoder(3, 3, 4, 4, false);
+        encoderEnter = new Encoder(1, 2, false, CounterBase.EncodingType.k2X);
+        encoderExit = new Encoder(3, 4, false, CounterBase.EncodingType.k2X);
         
         //Implement this later for testing
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);
