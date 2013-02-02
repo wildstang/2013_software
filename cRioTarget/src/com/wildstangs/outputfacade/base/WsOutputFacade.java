@@ -87,12 +87,12 @@ public class WsOutputFacade {
         //Add the facade data elements
         outputs.add(new DataElement(RIGHT_DRIVE_SPEED, new WsDriveSpeed(RIGHT_DRIVE_SPEED, 1, 2)));
         outputs.add(new DataElement(LEFT_DRIVE_SPEED, new WsDriveSpeed(LEFT_DRIVE_SPEED, 3, 4)));
-        outputs.add(new DataElement(SHIFTER, new WsSolenoid(SHIFTER, 1, 4)));
-        outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 1, 1)));
-        outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 2)));
+        outputs.add(new DataElement(SHIFTER, new WsSolenoid(SHIFTER, 1, 3)));
+        outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 6, 7)));
+        outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
-        outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 5))); //probably needs different value
+        outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 5)));
 
     }
 }

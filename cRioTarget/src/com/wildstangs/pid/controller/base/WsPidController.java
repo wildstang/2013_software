@@ -485,6 +485,10 @@ public class WsPidController implements IPidController {
         return clipped_input;
     }
     
+    public WsPidStateType getState() {
+        return this.currentState;
+    }
+    
     public void notifyConfigChange() {
         p = p_config.getValue();
         i =i_config.getValue();

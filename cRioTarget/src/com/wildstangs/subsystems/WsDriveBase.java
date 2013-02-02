@@ -10,6 +10,7 @@ import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.controller.base.WsPidController;
+import com.wildstangs.pid.controller.base.WsPidStateType;
 import com.wildstangs.pid.inputs.WsDriveBaseDistancePidInput;
 import com.wildstangs.pid.outputs.WsDriveBaseDistancePidOutput;
 import com.wildstangs.subjects.base.BooleanSubject;
@@ -313,6 +314,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public void resetDistancePid() {
         driveDistancePid.Reset();
+    }
+    
+    public WsPidStateType getDistancePidState() {
+        return driveDistancePid.getState();
     }
 
     public void notifyConfigChange() {

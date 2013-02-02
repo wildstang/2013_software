@@ -5,9 +5,9 @@
 package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
-import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
 import com.wildstangs.autonomous.steps.input.WsAutonomousStepEnableDriveDistancePid;
 import com.wildstangs.autonomous.steps.input.WsAutonomousStepSetDriveDistancePidSetpoint;
+import com.wildstangs.autonomous.steps.input.WsAutonomousStepWaitForDriveDistancePid;
 
 /**
  *
@@ -20,12 +20,13 @@ import com.wildstangs.autonomous.steps.input.WsAutonomousStepSetDriveDistancePid
 public class WsAutonomousProgramDriveDistance extends WsAutonomousProgram {
 
     public WsAutonomousProgramDriveDistance() {
-        super(2);
+        super(3);
     }
 
     public void defineSteps() {
-        programSteps[0] = new WsAutonomousStepEnableDriveDistancePid(0.0);
+        programSteps[0] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[1] = new WsAutonomousStepSetDriveDistancePidSetpoint(60.0);
+        programSteps[2] = new WsAutonomousStepWaitForDriveDistancePid();
     }
 
     public String toString() {
