@@ -7,6 +7,8 @@ import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonE
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
+import com.wildstangs.subsystems.base.WsSubsystemContainer;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 
 /**
@@ -40,6 +42,15 @@ public class WsFloorPickup extends Subsystem implements IObserver {
     public void update() {
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID_LEFT).set(null, Boolean.valueOf(solenoidState));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID_RIGHT).set(null, Boolean.valueOf(solenoidState));
+        if (motorState == true) {
+            if (solenoidState == false) {
+                if (((WsHopper) WsSubsystemContainer.getInstance()
+                        .getSubsystem(WsSubsystemContainer.WS_HOPPER)).
+                        get_LiftState() == DoubleSolenoid.Value.kReverse) {
+                    motorState = false;
+                }
+            }
+        }
     }
 
     protected void initDefaultCommand() {
