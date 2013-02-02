@@ -87,7 +87,10 @@ public class WsAutonomousManager implements IObserver {
     public void acceptNotification(Subject cause) {
         if (cause instanceof DoubleSubject) {
             selectorSwitch = (float) ((DoubleSubject) cause).getValue();
-            currentProgram = (int) (Math.floor((selectorSwitch / 5.0) * programs.length));
+            if (selectorSwitch >= 3.3) {
+                selectorSwitch = 3.3f;
+            }
+            currentProgram = (int) (Math.floor((selectorSwitch / 3.4) * programs.length));
             SmartDashboard.putString("Current Autonomous Program", programs[currentProgram].toString());
         } else if (cause instanceof BooleanSubject) {
             lockInSwitch = ((BooleanSubject) cause).getValue();
