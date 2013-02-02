@@ -1,6 +1,7 @@
 package com.wildstangs.inputfacade.inputs;
 
 import com.wildstangs.config.BooleanConfigFileParameter;
+import com.wildstangs.inputfacade.base.IInput;
 import com.wildstangs.inputfacade.base.IInputEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -11,7 +12,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
  *
  * @author Nathan
  */
-public class WsDigitalInput {
+public class WsDigitalInput implements IInput
+{
 
     BooleanSubject digitalValue;
     DigitalInput input;
