@@ -7,14 +7,15 @@ package com.wildstangs.simulation;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.logger.*;
 import com.wildstangs.logviewer.LogViewer;
+import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.subjects.base.Subject;
+import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
-import edu.wpi.first.wpilibj.DoubleSubjectGraph;
+import edu.wpi.first.wpilibj.*;
 
 /**
  *
@@ -40,6 +41,7 @@ public class WsSimulation {
         } catch (WsConfigFacadeException wscfe) {
             System.out.println(wscfe.toString());
         }
+        WsConfigFacade.getInstance().dumpConfigData();
 
         Logger logger = Logger.getLogger();
 
@@ -64,18 +66,41 @@ public class WsSimulation {
         subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null);
         DoubleSubjectGraph rightDriveSpeed = new DoubleSubjectGraph("Right Drive Speed", subject);
 
-        double i = 0;
+        double pid_setpoint = 10;
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setDriveDistancePidSetpoint(pid_setpoint);
+        int right_encoder = 0;
+        int left_encoder = 0;
+        double left_drive_speed = 0.0;
+        double right_drive_speed = 0.0;
 
         while (true) {
+            ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder()).set(left_encoder);
+            ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).set(right_encoder);
+            if (left_drive_speed > 0) {
+                left_encoder++;
+            } else {
+                left_encoder--;
+            }
+            if (right_drive_speed > 0) {
+                right_encoder++;
+            } else {
+                right_encoder--;
+            }
+
             //Update the Victor graphs
             leftDriveSpeed.update();
             rightDriveSpeed.update();
-            
+
             WsInputFacade.getInstance().updateOiData();
             WsInputFacade.getInstance().updateSensorData();
             WsSubsystemContainer.getInstance().update();
             WsOutputFacade.getInstance().update();
             WsSolenoidContainer.getInstance().update();
+
+            left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
+            right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
+
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {

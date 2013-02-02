@@ -18,3 +18,20 @@ com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
 com.wildstangs.outputfacade.outputs.WsSolenoid.NAME.shouldStartTrue=false
 
 
+
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.p=1.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.i=0.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.d=0.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.errorIncrement=1.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.errorEpsilon=1.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.staticEpsilon=0.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.maxIntegral=1.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.integralErrorThresh=-1.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.differentiatorBandLimit=1.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.maxOutput=1.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.minOutput=-1.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.maxInput=1000
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.minInput=-1000
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBastDistancePid.minOnTargetTime=0.2
+com.wildstangs.subsystems.WsDriveBase.wheel_diameter=4.0
+com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0

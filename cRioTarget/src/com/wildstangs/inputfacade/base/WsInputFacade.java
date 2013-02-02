@@ -5,8 +5,8 @@ import com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput;
 import com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystick;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystick;
-import edu.wpi.first.wpilibj.networktables2.util.List;
 import com.wildstangs.types.DataElement;
+import edu.wpi.first.wpilibj.networktables2.util.List;
 
 /**
  *

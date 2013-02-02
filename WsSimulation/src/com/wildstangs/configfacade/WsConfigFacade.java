@@ -4,6 +4,7 @@
  */
 package com.wildstangs.configfacade;
 
+
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
@@ -11,7 +12,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -157,7 +161,11 @@ public class WsConfigFacade {
     }
 
     public String dumpConfigData() {
-        return config.toString();
+        for (Enumeration e = config.keys(); e.hasMoreElements();) {
+            Object name = e.nextElement();
+            System.out.println((String)name + "=" + (String)config.get(name));
+        }
+        return null;
     }
 
     /**
