@@ -30,8 +30,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
     public WsShooter (String name) 
     {
         super(name);
-        encoderEnter = new Encoder(1, 2, false, CounterBase.EncodingType.k2X);
-        encoderExit = new Encoder(3, 4, false, CounterBase.EncodingType.k2X);
+        encoderEnter = new Encoder(10, 11, false, CounterBase.EncodingType.k2X);
+        encoderExit = new Encoder(12, 13, false, CounterBase.EncodingType.k2X);
         
         //Implement this later for testing
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);

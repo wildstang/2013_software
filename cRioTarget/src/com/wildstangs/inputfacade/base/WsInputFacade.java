@@ -142,7 +142,7 @@ public class WsInputFacade {
         oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(3))); //probably needs different value
         oiInputs.add(new DataElement(AUTO_PROGRAM_SELECTOR, new WsDSAnalogInput(2)));
         oiInputs.add(new DataElement(LOCK_IN_SWITCH, new WsDSDigitalInput(1)));
-        sensorInputs.add(new DataElement(LEFT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(2)));
-        sensorInputs.add(new DataElement(RIGHT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(3)));
+        sensorInputs.add(new DataElement(LEFT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(8)));
+        sensorInputs.add(new DataElement(RIGHT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(9)));
     }
 }
