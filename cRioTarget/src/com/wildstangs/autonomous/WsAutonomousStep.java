@@ -8,14 +8,12 @@ package com.wildstangs.autonomous;
  *
  * @author coder65535
  */
-public abstract class WsAutonomousStep
-{
+public abstract class WsAutonomousStep {
 
     protected boolean finished, pass, fatal;
     public String errorInfo;
 
-    public WsAutonomousStep()
-    {
+    public WsAutonomousStep() {
         //initialize variables
         finished = false; //A step can't finish before it starts.
         pass = true; //Most steps pass automatically, as they issue a command or check a value.
@@ -27,31 +25,24 @@ public abstract class WsAutonomousStep
 
     public abstract void update();
 
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return finished;//The abort flag means that the robot must halt immediately, thus the step is always finished when the abort flag is triggered.
     }
 
-    public boolean isPassed()
-    {
+    public boolean isPassed() {
         return pass;//The abort flag overrides the pass flag. The abort flag always means a fatal error occured.
     }
 
-    public boolean isFatal()
-    {
+    public boolean isFatal() {
         if (isPassed()) //No test can both return a fatal error and pass, this is a catch to prevent stupid errors.
         {
             return false;
-        }
-        else
-        {
+        } else {
             return fatal;//The abort flag overrides the pass flag. The abort flag always means a fatal error occured.
         }
     }
 
     public abstract String toString();
-
 //    public abstract int hashCode();
-
 //    public abstract boolean equals(Object o);
 }
