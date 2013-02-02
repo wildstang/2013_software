@@ -23,8 +23,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
             this.getClass().getName(), "LowerWheelSpeed", 0);
     private DoubleConfigFileParameter lowerVictorSpeed = new DoubleConfigFileParameter(
             this.getClass().getName(), "LowerVictorSpeed", 0);
-    private double wheelEnterSpeed = 0;
-    private double wheelExitSpeed = 0;
+    private double wheelEnterSetPoint = 0;
+    private double wheelExitSetPoint = 0;
     private double previousTime = 0;
     private boolean angleFlag = false; //could be true, not sure yet
     public WsShooter (String name) 
@@ -37,6 +37,14 @@ public class WsShooter extends WsSubsystem implements IObserver{
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+        subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
+        subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
+        subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON9);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum)null); 
         subject.attach(this);
@@ -53,9 +61,9 @@ public class WsShooter extends WsSubsystem implements IObserver{
     
     public void update() 
     {
-        double newTime = Timer.getFPGATimestamp();
-        double speedEnter = (60.0 / 1.0/*Replace with cycles per revolution*/) * encoderEnter.get() / (newTime - previousTime);
-        double speedExit = (60.0 / 1.0/*Replace with cycles per revolution*/) * encoderExit.get() / (newTime - previousTime);
+        double newTime = System.currentTimeMillis();
+        double speedEnter = (60000.0 / 50.0/*Replace with cycles per revolution*/) * encoderEnter.get() / (newTime - previousTime);
+        double speedExit = (60000.0 / 50.0/*Replace with cycles per revolution*/) * encoderExit.get() / (newTime - previousTime);
         
         previousTime = newTime;
         
@@ -65,10 +73,11 @@ public class WsShooter extends WsSubsystem implements IObserver{
         if(speedEnter < lowerWheelSpeed.getValue())
         {
             victorEnter.set(null, Double.valueOf(lowerVictorSpeed.getValue()));
+            
         }
-        else if(speedEnter < wheelEnterSpeed)
+        else if(speedEnter < wheelEnterSetPoint)
         {
-            victorEnter.set(null, Double.valueOf(1.0)); 
+            victorEnter.set(null, Double.valueOf(1.0));
         }
         else
         {
@@ -79,7 +88,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
         {
             victorExit.set((IOutputEnum) null, Double.valueOf(lowerVictorSpeed.getValue()));
         }
-        if(speedExit < wheelExitSpeed)
+        if(speedExit < wheelExitSetPoint)
         {
             victorExit.set(null, Double.valueOf(1.0));
         }
@@ -87,7 +96,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
         {
             victorExit.set(null, Double.valueOf(0.0));
         }
-        
+       System.out.println("Enter wheel set point: " + wheelEnterSetPoint);
+        System.out.println("Exit wheel set point: " + wheelExitSetPoint);
         //set shooter angle
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, (angleFlag ? Boolean.TRUE : Boolean.FALSE)); 
 
@@ -100,12 +110,12 @@ public class WsShooter extends WsSubsystem implements IObserver{
     
     public void setWheelEnterSetPoint(int setPoint)
     {
-        wheelEnterSpeed = setPoint;
+        wheelEnterSetPoint = setPoint;
     }
     
     public void setWheelExitSetPoint(int setPoint)
     {
-        wheelExitSpeed = setPoint;
+        wheelExitSetPoint = setPoint;
     }
 
     public void acceptNotification(Subject subjectThatCaused) 
@@ -115,6 +125,34 @@ public class WsShooter extends WsSubsystem implements IObserver{
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
                 angleFlag = !angleFlag;
+            }
+        }
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) 
+        {
+            if(((BooleanSubject)subjectThatCaused).getValue() == true)
+            {
+                wheelEnterSetPoint += 250;
+            }
+        }
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7) 
+        {
+            if(((BooleanSubject)subjectThatCaused).getValue() == true)
+            {
+                wheelExitSetPoint += 250;
+            }
+        }
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) 
+        {
+            if(((BooleanSubject)subjectThatCaused).getValue() == true)
+            {
+                wheelEnterSetPoint -= 250;
+            }
+        }
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON9) 
+        {
+            if(((BooleanSubject)subjectThatCaused).getValue() == true)
+            {
+                wheelExitSetPoint -= 250;
             }
         }
         if (subjectThatCaused.getType() == WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum)null))
@@ -127,4 +165,31 @@ public class WsShooter extends WsSubsystem implements IObserver{
         }
         
     }
+    
+     public Encoder getEnterEncoder() {
+        return encoderEnter;
+    }
+
+    public Encoder getExitEncoder() {
+        return encoderExit;
+    }
+
+    public Encoder getEnterEncoderValue() {
+        return encoderEnter;
+    }
+
+    public Encoder getExitEncoderValue() {
+        return encoderExit;
+    }
+    
+     public void resetEnterEncoder() {
+        encoderEnter.reset();
+        encoderEnter.start();
+    }
+
+    public void resetExitEncoder() {
+        encoderExit.reset();
+        encoderExit.start();
+    }
+
 }
