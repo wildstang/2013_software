@@ -20,7 +20,7 @@ public class WsInputFacade {
 
     /**
      * Method to get the instance of this singleton object.
-     *
+     *ö
      * @return The instance of WsInputFacade
      */
     public static WsInputFacade getInstance() {
