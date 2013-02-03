@@ -128,11 +128,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             //Set landing gear output
             SmartDashboard.putNumber("Throttle Value", throttleValue);
             SmartDashboard.putNumber("Heading Value", headingValue);
-            SmartDashboard.putBoolean("Shifter State", shifterFlag.equals(DoubleSolenoid.Value.kForward));
+            SmartDashboard.putBoolean("Shifter State", shifterFlag.equals(DoubleSolenoid.Value.kReverse));
             SmartDashboard.putBoolean("Anti-Turbo Flag", antiTurboFlag);
 
             //Set gear shift output
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, (shifterFlag));
+            WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(shifterFlag.value));
         } else {
             driveDistancePid.Enable();
             driveDistancePid.calcPid();

@@ -30,7 +30,7 @@ public class WsSubsystemContainer {
     {
         for(int c = 0; c < subsystem.size(); c++)
         {
-            ((WsSubsystem)(subsystem.get(c))).init();
+            ((WsSubsystem)(((DataElement) subsystem.get(c)).getValue())).init();
         }
     }
 
