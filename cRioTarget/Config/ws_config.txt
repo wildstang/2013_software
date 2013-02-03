@@ -20,9 +20,9 @@ com.wildstangs.outputfacade.outputs.WsSolenoid.NAME.shouldStartTrue=false
 //Subsystems
 com.wildstangs.subsystems.WsHopper.forwardCycles=30
 
-com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.p=0.125
-com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.i=0.0
-com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.d=0.0
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.p=0.01
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.i=0.002
+com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.d=0.05
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.errorIncrement=1.0
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.errorEpsilon=1.0
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.staticEpsilon=0.0
@@ -34,5 +34,5 @@ com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.minOut
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.maxInput=1000
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.minInput=-1000
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.minOnTargetTime=0.2
-com.wildstangs.subsystems.WsDriveBase.wheel_diameter=4.0
+com.wildstangs.subsystems.WsDriveBase.wheel_diameter=7.5
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
