@@ -20,19 +20,22 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 public class WsAutonomousStepRaiseHopper extends WsAutonomousStep
 {
 
-    public void initialize() 
+    public void initialize() {}
+
+    public void update() 
     {
         WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
         BooleanSubject button = (BooleanSubject)subject;
         
+        if(button.getValue() == true)
+        {
+            button.setValue(false);
+            finished = true;
+        }
+        
         if(subsystem.getLiftValueEquals(DoubleSolenoid.Value.kReverse))
             button.setValue(true);
-        finished = true;
-    }
-
-    public void update() 
-    {
     }
 
     public String toString() 
