@@ -11,11 +11,9 @@ import com.wildstangs.logger.Logger;
  *
  * @author coder65535
  */
-public class WsAutonomousStepDelay extends WsAutonomousStep
-/* This step delays testing for the specified number of cycles.
+public class WsAutonomousStepDelay extends WsAutonomousStep /* This step delays testing for the specified number of cycles.
  * Note: If used in a parallel step group, it insures that the group waits for at least the specified number of cycles, instead.
- */
-{
+ */ {
 
     private int count;
     protected final int originalCount;

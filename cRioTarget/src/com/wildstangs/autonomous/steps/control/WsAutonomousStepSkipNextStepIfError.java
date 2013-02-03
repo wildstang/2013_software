@@ -14,9 +14,8 @@ public class WsAutonomousStepSkipNextStepIfError extends WsAutonomousStep {
     //Note: This step silently passes on the error status of the previous step.
     //(That is, if the previous step had an error, this step doesn't log an error, but WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError() will remain true.
     //Also, it doesn't work in parallel step groups.
-   
-    public WsAutonomousStepSkipNextStepIfError()
-    {
+
+    public WsAutonomousStepSkipNextStepIfError() {
         //Nothing to set.
     }
 

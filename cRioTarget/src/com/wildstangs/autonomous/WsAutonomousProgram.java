@@ -76,18 +76,13 @@ public abstract class WsAutonomousProgram implements IStepContainer {
             return null;
         }
     }
-    
-    public void setNextStep(WsAutonomousStep newStep)
-    {
-        if (programSteps[currentStep] instanceof WsAutonomousSerialStepGroup)
-        {
-            if (((WsAutonomousSerialStepGroup)programSteps[currentStep]).getNextStep() != null)
-            {
-                ((WsAutonomousSerialStepGroup)programSteps[currentStep]).setNextStep(newStep);
-            }
-            else
-            {
-                programSteps[currentStep+1] = newStep;
+
+    public void setNextStep(WsAutonomousStep newStep) {
+        if (programSteps[currentStep] instanceof WsAutonomousSerialStepGroup) {
+            if (((WsAutonomousSerialStepGroup) programSteps[currentStep]).getNextStep() != null) {
+                ((WsAutonomousSerialStepGroup) programSteps[currentStep]).setNextStep(newStep);
+            } else {
+                programSteps[currentStep + 1] = newStep;
             }
         } else if (currentStep + 1 < programSteps.length) {
             programSteps[currentStep + 1] = newStep;
@@ -124,12 +119,10 @@ public abstract class WsAutonomousProgram implements IStepContainer {
     public boolean isFinished() {
         return finished;
     }
-    
-    public boolean lastStepHadError()
-    {
-        if (programSteps[currentStep] instanceof WsAutonomousSerialStepGroup)
-        {
-            return ((WsAutonomousSerialStepGroup)programSteps[currentStep]).lastStepHadError();
+
+    public boolean lastStepHadError() {
+        if (programSteps[currentStep] instanceof WsAutonomousSerialStepGroup) {
+            return ((WsAutonomousSerialStepGroup) programSteps[currentStep]).lastStepHadError();
         }
         return lastStepError;
     }

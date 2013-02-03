@@ -14,8 +14,8 @@ public class WsAutonomousStepFinishGroupIfError extends WsAutonomousStep {
     //Note: This step silently passes on the error status of the previous step.
     //(That is, if the previous step had an error, this step doesn't log an error, but WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError() will remain true.
     //Also, it only works in serial step groups.
-    public WsAutonomousStepFinishGroupIfError() 
-    {
+
+    public WsAutonomousStepFinishGroupIfError() {
         //Nothing to set.
     }
 

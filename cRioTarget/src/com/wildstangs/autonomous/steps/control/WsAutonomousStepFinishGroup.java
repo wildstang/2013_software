@@ -11,11 +11,10 @@ import com.wildstangs.autonomous.steps.WsAutonomousSerialStepGroup;
  *
  * @author coder65535
  */
-public class WsAutonomousStepFinishGroup extends WsAutonomousStep 
-{
+public class WsAutonomousStepFinishGroup extends WsAutonomousStep {
     //Note: only works in serial step groups.
-    public WsAutonomousStepFinishGroup()
-    {
+
+    public WsAutonomousStepFinishGroup() {
         //Do nothing, nothing to set up.
     }
 
@@ -29,9 +28,8 @@ public class WsAutonomousStepFinishGroup extends WsAutonomousStep
         IStepContainer container = WsAutonomousManager.getInstance().getRunningProgram();
         while (!bottomOfTree) {
             WsAutonomousStep currStep = container.getCurrentStep();
-            if (currStep instanceof WsAutonomousSerialStepGroup)
-            {
-                group = (WsAutonomousSerialStepGroup)currStep;
+            if (currStep instanceof WsAutonomousSerialStepGroup) {
+                group = (WsAutonomousSerialStepGroup) currStep;
                 container = group;
             } else {
                 bottomOfTree = true;
