@@ -68,9 +68,9 @@ public class WsHopper extends WsSubsystem implements IObserver
     {
     }
     
-    public void setLiftValue(DoubleSolenoid.Value value)
+    public boolean getLiftValueEquals(DoubleSolenoid.Value value)
     {
-        lift_value = value;
+        return lift_value.equals(value);
     }
     
     public boolean getKickerValue()
