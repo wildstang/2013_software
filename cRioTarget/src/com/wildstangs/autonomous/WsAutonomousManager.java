@@ -6,6 +6,7 @@ package com.wildstangs.autonomous;
 
 import com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance;
 import com.wildstangs.autonomous.programs.WsAutonomousProgramForwardsTest;
+import com.wildstangs.autonomous.programs.WsAutonomousProgramHopperTest;
 import com.wildstangs.autonomous.programs.WsAutonomousProgramSleeper;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.subjects.base.*;
@@ -104,9 +105,10 @@ public class WsAutonomousManager implements IObserver {
     }
 
     private void definePrograms() {
-        programs = new WsAutonomousProgram[3];
+        programs = new WsAutonomousProgram[4];
         programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper.
         programs[1] = new WsAutonomousProgramForwardsTest();
         programs[2] = new WsAutonomousProgramDriveDistance();
+        programs[3] = new WsAutonomousProgramHopperTest();
     }
 }
