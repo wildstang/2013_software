@@ -93,7 +93,6 @@ public class WsShooter extends WsSubsystem implements IObserver{
         //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
         wheelEnterSetPoint = ((enterKnobValue * (highWheelEnterTestSpeed - lowWheelEnterTestSpeed)) / 3.3)
                 + lowWheelEnterTestSpeed;
-        System.out.println("Knob: " + enterKnobValue);
         
         double exitKnobValue = ((DoubleSubject)WsInputFacade.getInstance()
                 .getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT)
@@ -104,9 +103,9 @@ public class WsShooter extends WsSubsystem implements IObserver{
         wheelExitSetPoint = ((enterKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
                 + lowWheelExitTestSpeed;
         
-        double newTime = System.currentTimeMillis();
-        double speedEnter = (60000.0 / 50.0/*Replace with cycles per revolution*/) * encoderEnter.get() / (newTime - previousTime);
-        double speedExit = (60000.0 / 50.0/*Replace with cycles per revolution*/) * encoderExit.get() / (newTime - previousTime);
+        double newTime = Timer.getFPGATimestamp();
+        double speedEnter = (60.0 / 50.0/*Replace with cycles per revolution*/) * encoderEnter.get() / (newTime - previousTime);
+        double speedExit = (60.0 / 50.0/*Replace with cycles per revolution*/) * encoderExit.get() / (newTime - previousTime);
         
         previousTime = newTime;
         
