@@ -14,6 +14,7 @@ public class WsAutonomousStepStopAutonomous extends WsAutonomousStep {
 
     public WsAutonomousStepStopAutonomous() {
         // Do nothing. This step does nothing, and never finishes, effectively halting autonomous operations.
+        // Note: If included in a parallel step group, it only halts operations after all other steps in the group finish.
     }
 
     public void initialize() {

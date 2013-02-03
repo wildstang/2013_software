@@ -1,6 +1,7 @@
 package com.wildstangs.config;
 
 import com.wildstangs.configfacade.WsConfigFacade;
+import com.wildstangs.logger.Logger;
 
 /**
  *
@@ -32,7 +33,9 @@ public class DoubleConfigFileParameter extends ConfigFileParameter {
         try {
             return Double.parseDouble(WsConfigFacade.getInstance().getConfigParamByName(fullName));
         } catch (Throwable e) {
+            Logger.getLogger().error(this.getClass().getName(), "getValue" , fullName + " parameter not found. Using default value.");
             return defaultValue;
+            
         }
     }
 }

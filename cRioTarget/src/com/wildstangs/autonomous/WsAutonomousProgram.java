@@ -4,7 +4,7 @@
  */
 package com.wildstangs.autonomous;
 
-import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
+import com.wildstangs.autonomous.steps.WsAutonomousSerialStepGroup;
 import com.wildstangs.logger.Logger;
 
 /**
@@ -78,9 +78,9 @@ public abstract class WsAutonomousProgram implements IStepContainer {
     }
 
     public void setNextStep(WsAutonomousStep newStep) {
-        if (programSteps[currentStep] instanceof WsAutonomousStepGroup) {
-            if (((WsAutonomousStepGroup) programSteps[currentStep]).getNextStep() != null) {
-                ((WsAutonomousStepGroup) programSteps[currentStep]).setNextStep(newStep);
+        if (programSteps[currentStep] instanceof WsAutonomousSerialStepGroup) {
+            if (((WsAutonomousSerialStepGroup) programSteps[currentStep]).getNextStep() != null) {
+                ((WsAutonomousSerialStepGroup) programSteps[currentStep]).setNextStep(newStep);
             } else {
                 programSteps[currentStep + 1] = newStep;
             }
@@ -121,8 +121,8 @@ public abstract class WsAutonomousProgram implements IStepContainer {
     }
 
     public boolean lastStepHadError() {
-        if (programSteps[currentStep] instanceof WsAutonomousStepGroup) {
-            return ((WsAutonomousStepGroup) programSteps[currentStep]).lastStepHadError();
+        if (programSteps[currentStep] instanceof WsAutonomousSerialStepGroup) {
+            return ((WsAutonomousSerialStepGroup) programSteps[currentStep]).lastStepHadError();
         }
         return lastStepError;
     }

@@ -1,5 +1,6 @@
 package com.wildstangs.outputfacade.base;
 
+import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsSolenoid;
 import com.wildstangs.outputfacade.outputs.WsDoubleSolenoid;
@@ -88,7 +89,15 @@ public class WsOutputFacade {
         //Add the facade data elements
         outputs.add(new DataElement(RIGHT_DRIVE_SPEED, new WsDriveSpeed(RIGHT_DRIVE_SPEED, 1, 2)));
         outputs.add(new DataElement(LEFT_DRIVE_SPEED, new WsDriveSpeed(LEFT_DRIVE_SPEED, 3, 4)));
-        outputs.add(new DataElement(SHIFTER, new WsSolenoid(SHIFTER, 1, 4)));
+        BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(this.getClass().getName(), "2012_Robot", false);;
+        if (outputsFor2012.getValue()){
+            //Shifter is actually a single solenoid on 4 but 2 is unused for faking it as a double
+            outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 1, 2, 4)));
+            
+        } else { 
+            outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
+            
+        }
         outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 6, 7)));
         outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));

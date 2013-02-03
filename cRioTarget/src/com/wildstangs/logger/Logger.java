@@ -19,9 +19,9 @@ public class Logger {
     boolean stdoutLoggingEnabled;
     double startupTime = System.currentTimeMillis();
     BooleanConfigFileParameter logToStdout = new BooleanConfigFileParameter(
-            this.getClass().getName(), "logToStdout", false);
+            this.getClass().getName(), "logToStdout", true);
     BooleanConfigFileParameter logToServer = new BooleanConfigFileParameter(
-            this.getClass().getName(), "logToServer", true);
+            this.getClass().getName(), "logToServer", false);
     StringConfigFileParameter configLogLevel = new StringConfigFileParameter(
             this.getClass().getName(), "logLevel", "OFF");
     StringConfigFileParameter logIp = new StringConfigFileParameter(
@@ -45,12 +45,14 @@ public class Logger {
     protected Logger() {
         logimpl = new LoggerImpl();
         
-        
-        if (!logimpl.openConnection(logIp.getValue(), logPort.getValue())) {
-            System.out.println("Unable to open Logger connection");
-        }
         remoteLoggingEnabled = logToServer.getValue();
         stdoutLoggingEnabled = logToStdout.getValue();
+        if (remoteLoggingEnabled) {
+            if (!logimpl.openConnection(logIp.getValue(), logPort.getValue())) {
+                System.out.println("Unable to open Logger connection");
+            }
+        }
+        
         logLevel = (Level.toLevel(configLogLevel.getValue(), Level.toLevel(logLevel))).toInt();
     }
     /**

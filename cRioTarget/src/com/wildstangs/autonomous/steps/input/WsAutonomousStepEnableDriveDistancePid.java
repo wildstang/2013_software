@@ -20,6 +20,7 @@ public class WsAutonomousStepEnableDriveDistancePid extends WsAutonomousStep {
     public void initialize() {
         finished = true;
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
+        System.out.println("Drive Distance pid is enabled");
     }
 
     public void update() {
