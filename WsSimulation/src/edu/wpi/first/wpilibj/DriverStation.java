@@ -46,6 +46,7 @@ public class DriverStation implements IInputOutput {
     private boolean m_userInTeleop = false;
     private boolean m_userInTest = false;
     private boolean m_newControlData;
+    private double[] analogValues = {0.0, 0.0, 0.0, 0.0};
 
     /**
      * Gets an instance of the DriverStation
@@ -143,7 +144,19 @@ public class DriverStation implements IInputOutput {
      * @return The analog voltage on the input.
      */
     public double getAnalogIn(final int channel) {
-                return 0.0;
+        if(channel < analogValues.length)
+        {
+            return analogValues[channel];
+        }
+        return 0.0;
+    }
+    
+    public void setAnalogIn(final int channel, final double value)
+    {
+        if(channel < analogValues.length)
+        {
+            analogValues[channel] = value;
+        }
     }
 
     /**
