@@ -30,6 +30,7 @@ public class RobotTemplate extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        System.out.println("RobotInit Start");
         try {
             WsConfigFacade.getInstance().setFileName("/ws_config.txt");
             WsConfigFacade.getInstance().readConfig();
@@ -39,11 +40,11 @@ public class RobotTemplate extends IterativeRobot {
         }
         WsSubsystemContainer.getInstance().init();
 
-        Logger.getLogger().always(this.getClass().getName(), "robotInit", "Startup");
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
         WsSubsystemContainer.getInstance();
         WsAutonomousManager.getInstance();
+        Logger.getLogger().always(this.getClass().getName(), "robotInit", "Startup Completed");
     }
 
     public void disabledInit() {
