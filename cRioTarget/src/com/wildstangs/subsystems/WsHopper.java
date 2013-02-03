@@ -10,7 +10,7 @@ import com.wildstangs.subjects.base.BooleanSubject;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.config.IntegerConfigFileParameter;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -53,6 +53,8 @@ public class WsHopper extends WsSubsystem implements IObserver
 
     public void update() 
     {
+        SmartDashboard.putBoolean("Kicker value", kicker_value);
+        SmartDashboard.putNumber("Lift Value", lift_value.value);
         cycle++;
         if(cycle >= forwardCycles)
         {
@@ -65,14 +67,25 @@ public class WsHopper extends WsSubsystem implements IObserver
     public void notifyConfigChange() 
     {
     }
-
+    
+    public void setLiftValue(DoubleSolenoid.Value value)
+    {
+        lift_value = value;
+    }
+    
+    public boolean getKickerValue()
+    {
+        return kicker_value;
+    }
+    
     public void acceptNotification(Subject subjectThatCaused) 
     {
         BooleanSubject button = (BooleanSubject)subjectThatCaused;
         
         if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON2)
         {
-            kicker_value = button.getValue();
+            if(button.getValue() == true)
+                kicker_value = true;
             if(lift_value.value == DoubleSolenoid.Value.kReverse_val)
             {
                 kicker_value = false;
