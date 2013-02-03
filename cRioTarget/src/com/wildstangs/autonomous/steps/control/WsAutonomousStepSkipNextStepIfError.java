@@ -13,8 +13,10 @@ import com.wildstangs.autonomous.*;
 public class WsAutonomousStepSkipNextStepIfError extends WsAutonomousStep {
     //Note: This step silently passes on the error status of the previous step.
     //(That is, if the previous step had an error, this step doesn't log an error, but WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError() will remain true.
-
-    public WsAutonomousStepSkipNextStepIfError() {
+    //Also, it doesn't work in parallel step groups.
+   
+    public WsAutonomousStepSkipNextStepIfError()
+    {
         //Nothing to set.
     }
 

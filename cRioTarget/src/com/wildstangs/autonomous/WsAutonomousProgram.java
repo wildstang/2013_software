@@ -4,7 +4,7 @@
  */
 package com.wildstangs.autonomous;
 
-import com.wildstangs.autonomous.steps.WsAutonomousStepGroup;
+import com.wildstangs.autonomous.steps.WsAutonomousSerialStepGroup;
 import com.wildstangs.logger.Logger;
 
 /**
@@ -76,13 +76,18 @@ public abstract class WsAutonomousProgram implements IStepContainer {
             return null;
         }
     }
-
-    public void setNextStep(WsAutonomousStep newStep) {
-        if (programSteps[currentStep] instanceof WsAutonomousStepGroup) {
-            if (((WsAutonomousStepGroup) programSteps[currentStep]).getNextStep() != null) {
-                ((WsAutonomousStepGroup) programSteps[currentStep]).setNextStep(newStep);
-            } else {
-                programSteps[currentStep + 1] = newStep;
+    
+    public void setNextStep(WsAutonomousStep newStep)
+    {
+        if (programSteps[currentStep] instanceof WsAutonomousSerialStepGroup)
+        {
+            if (((WsAutonomousSerialStepGroup)programSteps[currentStep]).getNextStep() != null)
+            {
+                ((WsAutonomousSerialStepGroup)programSteps[currentStep]).setNextStep(newStep);
+            }
+            else
+            {
+                programSteps[currentStep+1] = newStep;
             }
         } else if (currentStep + 1 < programSteps.length) {
             programSteps[currentStep + 1] = newStep;
@@ -119,10 +124,12 @@ public abstract class WsAutonomousProgram implements IStepContainer {
     public boolean isFinished() {
         return finished;
     }
-
-    public boolean lastStepHadError() {
-        if (programSteps[currentStep] instanceof WsAutonomousStepGroup) {
-            return ((WsAutonomousStepGroup) programSteps[currentStep]).lastStepHadError();
+    
+    public boolean lastStepHadError()
+    {
+        if (programSteps[currentStep] instanceof WsAutonomousSerialStepGroup)
+        {
+            return ((WsAutonomousSerialStepGroup)programSteps[currentStep]).lastStepHadError();
         }
         return lastStepError;
     }
