@@ -18,6 +18,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,7 +46,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
     private static boolean antiTurboFlag = false;
-    private static boolean shifterFlag = false;
+    private static DoubleSolenoid.Value shifterFlag = DoubleSolenoid.Value.kForward;
     private static boolean quickTurnFlag = false;
     private static Encoder leftDriveEncoder;
     private static Encoder rightDriveEncoder;
@@ -101,7 +102,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveBaseThrottleValue = 0.0;
         driveBaseHeadingValue = 0.0;
         antiTurboFlag = false;
-        shifterFlag = false;
+        shifterFlag = DoubleSolenoid.Value.kForward;
         quickTurnFlag = false;
         this.disableDistancePidControl();
         System.out.println("Drive Base init");
@@ -129,11 +130,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
             SmartDashboard.putNumber("Throttle Value", throttleValue);
             SmartDashboard.putNumber("Heading Value", headingValue);
-            SmartDashboard.putBoolean("Shifter State", shifterFlag);
+            SmartDashboard.putBoolean("Shifter State", shifterFlag.equals(DoubleSolenoid.Value.kReverse));
             SmartDashboard.putBoolean("Anti-Turbo Flag", antiTurboFlag);
 
             //Set gear shift output
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, (shifterFlag ? Boolean.TRUE : Boolean.FALSE));
+            WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(shifterFlag.value));
         } else {
             driveDistancePid.Enable();
             driveDistancePid.calcPid();
@@ -344,7 +345,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             antiTurboFlag = ((BooleanSubject) subjectThatCaused).getValue();
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON6) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                shifterFlag = !shifterFlag;
+                shifterFlag = shifterFlag.equals(DoubleSolenoid.Value.kForward) ?
+                        DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
             }
         }
     }
