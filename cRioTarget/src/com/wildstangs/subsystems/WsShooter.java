@@ -20,7 +20,21 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WsShooter extends WsSubsystem implements IObserver{
-
+    
+    public class Preset
+    {
+        public final int ENTER_WHEEL_SET_POINT;
+        public final int EXIT_WHEEL_SET_POINT;
+        public final boolean ANGLE;
+        
+        public Preset(int enterWheelSetPoint, int exitWheelSetPoint, boolean angle)
+        {
+            this.ENTER_WHEEL_SET_POINT = enterWheelSetPoint;
+            this.EXIT_WHEEL_SET_POINT = exitWheelSetPoint;
+            this.ANGLE = angle;
+        }
+    }
+    
     private Encoder encoderEnter, encoderExit;
     private DoubleConfigFileParameter lowerWheelSpeed = new DoubleConfigFileParameter(
         this.getClass().getName(), "LowerWheelSpeed", 0);
@@ -181,40 +195,28 @@ public class WsShooter extends WsSubsystem implements IObserver{
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                testingEnterKnob += .1;
-                if(testingEnterKnob > 3.3) testingEnterKnob = 3.3;
-                ((WsDSAnalogInput)WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT))
-                        .set((IInputEnum)null,Double.valueOf(testingEnterKnob));
+                wheelEnterSetPoint += 100;
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7) 
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                testingExitKnob += .1;
-                if(testingExitKnob > 3.3) testingExitKnob = 3.3;
-                ((WsDSAnalogInput)WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT))
-                        .set((IInputEnum)null,Double.valueOf(testingExitKnob));
+                wheelEnterSetPoint -= 100;
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) 
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                testingEnterKnob -= .1;
-                if(testingEnterKnob < 0.0) testingEnterKnob = 0.0;
-                ((WsDSAnalogInput)WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT))
-                        .set((IInputEnum)null, Double.valueOf(testingEnterKnob));
+                wheelExitSetPoint += 100;
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON9) 
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                testingExitKnob -= .1;
-                if(testingExitKnob < 0.0) testingExitKnob = 0.0;
-                ((WsDSAnalogInput)WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT))
-                        .set((IInputEnum)null,Double.valueOf(testingExitKnob));
+                wheelExitSetPoint -= 100;
             }
         }
     }
@@ -253,5 +255,12 @@ public class WsShooter extends WsSubsystem implements IObserver{
     public double getKnobExitValue()
     {
         return testingExitKnob;
+    }
+    
+    public void setPresetState(Preset preset)
+    {
+        this.wheelEnterSetPoint = preset.ENTER_WHEEL_SET_POINT;
+        this.wheelExitSetPoint = preset.EXIT_WHEEL_SET_POINT;
+        this.angleFlag = preset.ANGLE;
     }
 }
