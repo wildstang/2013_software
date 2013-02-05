@@ -12,7 +12,9 @@ import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.controller.base.WsPidController;
 import com.wildstangs.pid.controller.base.WsPidStateType;
 import com.wildstangs.pid.inputs.WsDriveBaseDistancePidInput;
+import com.wildstangs.pid.inputs.WsDriveBaseHeadingPidInput;
 import com.wildstangs.pid.outputs.WsDriveBaseDistancePidOutput;
+import com.wildstangs.pid.outputs.WsDriveBaseHeadingPidOutput;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
@@ -40,30 +42,35 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static final double WS_THROTTLE_ACCEL_FACTOR = 0.250;
     private static final double WS_HEADING_ACCEL_FACTOR = 0.500;
     private static double TICKS_PER_ROTATION = 360.0;
-    //Wheel diameter in inches
-    private static double WHEEL_DIAMETER = 4;
+    private static double WHEEL_DIAMETER = 7.5;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
+    private static double pidHeadingValue = 0.0;
     private static boolean antiTurboFlag = false;
     private static DoubleSolenoid.Value shifterFlag = DoubleSolenoid.Value.kForward;
     private static boolean quickTurnFlag = false;
     private static Encoder leftDriveEncoder;
     private static Encoder rightDriveEncoder;
-    private static Gyro headingGyro;
-    private static double leftEncoderValue;
-    private static double rightEncoderValue;
+    private static Gyro driveHeadingGyro;
+    private static WsPidController driveHeadingPid;
+    private static WsDriveBaseHeadingPidInput driveHeadingPidInput;
+    private static WsDriveBaseHeadingPidOutput driveHeadingPidOutput;
+    private static double gyroValue;
+    private static boolean driveHeadingPidEnabled = false;
     private static WsPidController driveDistancePid;
     private static WsDriveBaseDistancePidInput driveDistancePidInput;
     private static WsDriveBaseDistancePidOutput driveDistancePidOutput;
-    private static boolean distancePidEnabled = false;
+    private static double leftEncoderValue;
+    private static double rightEncoderValue;
+    private static boolean driveDistancePidEnabled = false;
     private static DoubleConfigFileParameter WHEEL_DIAMETER_config;
     private static DoubleConfigFileParameter TICKS_PER_ROTATION_config;
 
     public WsDriveBase(String name) {
         super(name);
 
-        WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 4.0);
+        WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 7.5);
         TICKS_PER_ROTATION_config = new DoubleConfigFileParameter(this.getClass().getName(), "ticks_per_rotation", 360.0);
 
         //Anti-Turbo button
@@ -85,12 +92,17 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         rightDriveEncoder.start();
 
         //Initialize the gyro
-        //headingGyro = new Gyro(1);
+        //@TODO: Get the correct port
+        driveHeadingGyro = new Gyro(1);
 
         //Initialize the PIDs
         driveDistancePidInput = new WsDriveBaseDistancePidInput();
         driveDistancePidOutput = new WsDriveBaseDistancePidOutput();
         driveDistancePid = new WsPidController(driveDistancePidInput, driveDistancePidOutput, "WsDriveBaseDistancePid");
+
+        driveHeadingPidInput = new WsDriveBaseHeadingPidInput();
+        driveHeadingPidOutput = new WsDriveBaseHeadingPidOutput();
+        driveHeadingPid = new WsPidController(driveHeadingPidInput, driveHeadingPidOutput, "WsDriveBaseHeadingPid");
         init();
     }
 
@@ -101,11 +113,12 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         shifterFlag = DoubleSolenoid.Value.kForward;
         quickTurnFlag = false;
         this.disableDistancePidControl();
+        this.disableHeadingPidControl();
         System.out.println("Drive Base init");
     }
 
     public void update() {
-        if (false == distancePidEnabled) {
+        if (false == driveDistancePidEnabled) {
 
             //Get the inputs for heading and throttle
             //Set headign and throttle values
@@ -304,15 +317,15 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void enableDistancePidControl() {
-        distancePidEnabled = true;
+        driveDistancePidEnabled = true;
         driveDistancePid.Enable();
     }
 
     public void disableDistancePidControl() {
-        distancePidEnabled = false;
+        driveDistancePidEnabled = false;
         driveDistancePid.Disable();
         this.resetDistancePid();
-        System.out.println("WsDriveBase: pid is disabled");
+        System.out.println("WsDriveBase: distance pid is disabled");
     }
 
     public void resetDistancePid() {
@@ -330,6 +343,49 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         System.out.println("Pid throttle set: " + pidThrottle);
     }
 
+    public Gyro getLeftGyro() {
+        return driveHeadingGyro;
+    }
+
+    public double getGyroAngle() {
+        return driveHeadingGyro.getAngle();
+    }
+
+    public void setDriveHEadingPidSetpoint(double distance) {
+        driveHeadingPid.setSetPoint(distance);
+        driveHeadingPid.calcPid();
+    }
+
+    public void resetGyro() {
+        driveHeadingGyro.reset();
+    }
+
+    public void enableHeadingPidControl() {
+        driveHeadingPidEnabled = true;
+        driveHeadingPid.Enable();
+    }
+
+    public void disableHeadingPidControl() {
+        driveHeadingPidEnabled = false;
+        driveHeadingPid.Disable();
+        this.resetHeadingPid();
+        System.out.println("WsDriveBase: heading pid is disabled");
+    }
+
+    public void resetHeadingPid() {
+        driveHeadingPid.Reset();
+        this.resetGyro();
+    }
+
+    public WsPidStateType getHeadingPidState() {
+        return driveHeadingPid.getState();
+    }
+
+    public void setPidHeadingValue(double pidHeading) {
+        this.pidHeadingValue = pidHeading;
+        System.out.println("Pid heading set: " + pidHeading);
+    }
+
     public void notifyConfigChange() {
         WHEEL_DIAMETER = WHEEL_DIAMETER_config.getValue();
         TICKS_PER_ROTATION = TICKS_PER_ROTATION_config.getValue();
@@ -341,8 +397,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             antiTurboFlag = ((BooleanSubject) subjectThatCaused).getValue();
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON6) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                shifterFlag = shifterFlag.equals(DoubleSolenoid.Value.kForward) ?
-                        DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
+                shifterFlag = shifterFlag.equals(DoubleSolenoid.Value.kForward)
+                        ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
             }
         }
     }
