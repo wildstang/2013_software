@@ -20,14 +20,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WsHopper extends WsSubsystem implements IObserver
 {
-    private static final boolean kicker_default_value = false;
-    private static final DoubleSolenoid.Value lift_default_value = DoubleSolenoid.Value.kReverse;
+    private static final boolean KICKER_DEFAULT_VALUE = false;
+    private static final DoubleSolenoid.Value LIFT_DEFAULT_VALUE = DoubleSolenoid.Value.kReverse;
     private IntegerConfigFileParameter forwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 30);
     private int forwardCycles;
     private int cycle;
     
-    private boolean kicker_value;
-    private DoubleSolenoid.Value lift_value;
+    private boolean kickerValue;
+    private DoubleSolenoid.Value liftValue;
     
     
     
@@ -46,22 +46,22 @@ public class WsHopper extends WsSubsystem implements IObserver
     public void init()
     {
         forwardCycles = forwardCycleConfig.getValue();
-        kicker_value = kicker_default_value;
-        lift_value = lift_default_value;
+        kickerValue = KICKER_DEFAULT_VALUE;
+        liftValue = LIFT_DEFAULT_VALUE;
         cycle = 0;
     }
 
     public void update() 
     {
-        SmartDashboard.putBoolean("Kicker value", kicker_value);
-        SmartDashboard.putNumber("Lift Value", lift_value.value);
+        SmartDashboard.putBoolean("Kicker value", kickerValue);
+        SmartDashboard.putNumber("Lift Value", liftValue.value);
         cycle++;
         if(cycle >= forwardCycles)
         {
-            kicker_value = false;
+            kickerValue = false;
         }
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kicker_value));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, new Integer(lift_value.value));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kickerValue));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, new Integer(liftValue.value));
     }
 
     public void notifyConfigChange() 
@@ -70,12 +70,12 @@ public class WsHopper extends WsSubsystem implements IObserver
     
     public boolean getLiftValueEquals(DoubleSolenoid.Value value)
     {
-        return lift_value.equals(value);
+        return liftValue.equals(value);
     }
     
     public boolean getKickerValue()
     {
-        return kicker_value;
+        return kickerValue;
     }
     
     public void acceptNotification(Subject subjectThatCaused) 
@@ -85,12 +85,12 @@ public class WsHopper extends WsSubsystem implements IObserver
         if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON2)
         {
             if(button.getValue() == true)
-                kicker_value = true;
-            if(lift_value.value == DoubleSolenoid.Value.kReverse_val)
+                kickerValue = true;
+            if(liftValue.value == DoubleSolenoid.Value.kReverse_val)
             {
-                kicker_value = false;
+                kickerValue = false;
             }
-            if(kicker_value == true && (button.getPreviousValue() == false))
+            if(kickerValue == true && (button.getPreviousValue() == false))
             {
                 cycle = 0;
             }
@@ -99,13 +99,13 @@ public class WsHopper extends WsSubsystem implements IObserver
         {
             if(button.getValue() == true && (button.getPreviousValue() == false))
             {
-                if(lift_value == DoubleSolenoid.Value.kReverse)
+                if(liftValue == DoubleSolenoid.Value.kReverse)
                 {
-                    lift_value = DoubleSolenoid.Value.kForward;
+                    liftValue = DoubleSolenoid.Value.kForward;
                 }
                 else
                 {
-                    lift_value = DoubleSolenoid.Value.kReverse;
+                    liftValue = DoubleSolenoid.Value.kReverse;
                 }
             }
         }

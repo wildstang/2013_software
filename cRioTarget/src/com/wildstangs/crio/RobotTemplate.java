@@ -38,11 +38,10 @@ public class RobotTemplate extends IterativeRobot {
         } catch (WsConfigFacadeException wscfe) {
             System.out.println(wscfe.toString());
         }
-        WsSubsystemContainer.getInstance().init();
 
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
-        WsSubsystemContainer.getInstance();
+        WsSubsystemContainer.getInstance().init();
         WsAutonomousManager.getInstance();
         Logger.getLogger().always(this.getClass().getName(), "robotInit", "Startup Completed");
     }

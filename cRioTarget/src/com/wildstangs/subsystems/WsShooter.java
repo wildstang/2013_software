@@ -79,8 +79,11 @@ public class WsShooter extends WsSubsystem implements IObserver{
 
     public void init()
     {
-        encoderEnter.start();
-        encoderExit.start();
+        resetEnterEncoder();
+        resetExitEncoder();
+        wheelEnterSetPoint = 0; 
+        wheelExitSetPoint = 0 ; 
+        angleFlag = false; 
     }
     
     public void update() 
