@@ -93,9 +93,11 @@ public class WsOutputFacade {
         if (outputsFor2012.getValue()){
             //Shifter is actually a single solenoid on 4 but 2 is unused for faking it as a double
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 1, 2, 4)));
+            outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 5)));
             
         } else { 
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
+            outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
             
         }
         outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 6, 7)));
@@ -103,7 +105,7 @@ public class WsOutputFacade {
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
         outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 8))); //probably needs different value
-        outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
+        
 
 
 
