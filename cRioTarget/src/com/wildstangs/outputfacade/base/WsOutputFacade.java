@@ -71,9 +71,9 @@ public class WsOutputFacade {
     //Key Values - Need to update for each new output element.
     public static final String RIGHT_DRIVE_SPEED = "RightDriveSpeed";
     public static final String LEFT_DRIVE_SPEED = "LeftDriveSpeed";
-    public static final String SHIFTER = "shifter";
-    public static final String LIFT = "lift";
-    public static final String KICKER = "kicker";
+    public static final String SHIFTER = "Shifter";
+    public static final String LIFT = "Lift";
+    public static final String KICKER = "Kicker";
     public static final String SHOOTER_VICTOR_ENTER = "ShooterVictorEnter";
     public static final String SHOOTER_VICTOR_EXIT = "ShooterVictorExit";
     public static final String SHOOTER_ANGLE = "ShooterAngle";
