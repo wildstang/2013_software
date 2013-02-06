@@ -15,6 +15,7 @@ import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.CounterBase;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,9 +26,9 @@ public class WsShooter extends WsSubsystem implements IObserver{
     {
         public final int ENTER_WHEEL_SET_POINT;
         public final int EXIT_WHEEL_SET_POINT;
-        public final boolean ANGLE;
+        public final DoubleSolenoid.Value ANGLE;
         
-        public Preset(int enterWheelSetPoint, int exitWheelSetPoint, boolean angle)
+        public Preset(int enterWheelSetPoint, int exitWheelSetPoint, DoubleSolenoid.Value angle)
         {
             this.ENTER_WHEEL_SET_POINT = enterWheelSetPoint;
             this.EXIT_WHEEL_SET_POINT = exitWheelSetPoint;
@@ -56,7 +57,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
     private double testingEnterKnob = 0.0;
     private double testingExitKnob = 0.0;
     private boolean testingCalled = false;
-    private boolean angleFlag = false; //could be true, not sure yet
+    private DoubleSolenoid.Value angleFlag = DoubleSolenoid.Value.kReverse;
     public WsShooter (String name) 
     {
         super(name);
@@ -97,7 +98,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
         resetExitEncoder();
         wheelEnterSetPoint = 0; 
         wheelExitSetPoint = 0 ; 
-        angleFlag = false; 
+        angleFlag = DoubleSolenoid.Value.kReverse; 
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, Boolean.FALSE);
     }
     
@@ -160,8 +161,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
         SmartDashboard.putNumber("EnterWheelSetPoint", wheelEnterSetPoint);
         SmartDashboard.putNumber("ExitWheelSetPoint", wheelExitSetPoint);
         //set shooter angle
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, (angleFlag ? Boolean.TRUE : Boolean.FALSE)); 
-
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(angleFlag.value));
     }
 
     public void notifyConfigChange() 
@@ -192,7 +192,14 @@ public class WsShooter extends WsSubsystem implements IObserver{
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                angleFlag = !angleFlag;
+                if(angleFlag == DoubleSolenoid.Value.kReverse)
+                {
+                    angleFlag = DoubleSolenoid.Value.kForward;
+                }
+                else
+                {
+                    angleFlag = DoubleSolenoid.Value.kReverse;
+                }
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) 

@@ -104,7 +104,7 @@ public class WsOutputFacade {
         outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
-        outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 8))); //probably needs different value
+        outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 1, 8))); //probably needs different value
         
 
 
