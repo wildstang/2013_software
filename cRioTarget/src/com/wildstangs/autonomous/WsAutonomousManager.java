@@ -4,10 +4,7 @@
  */
 package com.wildstangs.autonomous;
 
-import com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance;
-import com.wildstangs.autonomous.programs.WsAutonomousProgramForwardsTest;
-import com.wildstangs.autonomous.programs.WsAutonomousProgramHopperTest;
-import com.wildstangs.autonomous.programs.WsAutonomousProgramSleeper;
+import com.wildstangs.autonomous.programs.*;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.subjects.base.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -108,10 +105,11 @@ public class WsAutonomousManager implements IObserver {
     }
 
     private void definePrograms() {
-        programs = new WsAutonomousProgram[4];
+        programs = new WsAutonomousProgram[5];
         programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper.
         programs[1] = new WsAutonomousProgramForwardsTest();
         programs[2] = new WsAutonomousProgramDriveDistance();
         programs[3] = new WsAutonomousProgramHopperTest();
+        programs[4] = new WsAutonomousProgramTestParallel();
     }
 }

@@ -12,17 +12,26 @@ import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
  *
  * @author coder65535
  */
-public class WsAutonomousStepSetThrottle extends WsAutonomousStep {
+public class WsAutonomousStepDriveManual extends WsAutonomousStep {
 
-    double value;
+    private double throttle, heading;
+    public static final double KEEP_PREVIOUS_STATE = 2.0;
 
-    public WsAutonomousStepSetThrottle(double value) {
-        this.value = value;
+    public WsAutonomousStepDriveManual(double throttle, double heading) {
+        this.throttle = throttle;
+        this.heading = heading;
     }
 
     public void initialize() {
         finished = true;
-        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(value));
+        if (throttle != KEEP_PREVIOUS_STATE)
+        {
+            WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(Math.max(Math.min(throttle,1.0),-1.0)));
+        }
+        if (heading != KEEP_PREVIOUS_STATE)
+        {
+            WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(Math.max(Math.min(heading,1.0),-1.0)));
+        }
     }
 
     public void update() {
@@ -45,6 +54,6 @@ public class WsAutonomousStepSetThrottle extends WsAutonomousStep {
 //        return false;
 //    }
     public String toString() {
-        return "Set throttle to " + value;
+        return "Set throttle to " + throttle + " and heading to " + heading;
     }
 }

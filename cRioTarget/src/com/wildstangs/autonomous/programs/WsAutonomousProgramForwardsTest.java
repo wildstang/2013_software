@@ -6,7 +6,7 @@ package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
-import com.wildstangs.autonomous.steps.input.WsAutonomousStepSetThrottle;
+import com.wildstangs.autonomous.steps.input.WsAutonomousStepDriveManual;
 
 /**
  *
@@ -23,12 +23,12 @@ public class WsAutonomousProgramForwardsTest extends WsAutonomousProgram {
     }
 
     public void defineSteps() {
-        programSteps[0] = new WsAutonomousStepSetThrottle(1.0);
+        programSteps[0] = new WsAutonomousStepDriveManual(1.0, 0.0);
         programSteps[1] = new WsAutonomousStepDelay(500);
-        programSteps[2] = new WsAutonomousStepSetThrottle(0.0);
+        programSteps[2] = new WsAutonomousStepDriveManual(0.0, 0.0);
     }
 
     public String toString() {
-        return "Test by driving forwards for 1 second";
+        return "Test by driving forwards for 10 seconds";
     }
 }
