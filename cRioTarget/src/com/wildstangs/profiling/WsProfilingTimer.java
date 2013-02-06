@@ -14,29 +14,25 @@ public class WsProfilingTimer
     int iterations;
     
     String name;
-    Timer time;
     
     public WsProfilingTimer(String name, int iterations)
     {
         reset();
         this.iterations = iterations;
         this.name = name;
-        time = new Timer();
     }
     
     public void startTimingSection()
     {
-        runs++;
-        time.start();
-        startingTime = time.getFPGATimestamp();
+        startingTime = Timer.getFPGATimestamp();
     }
     public double endTimingSection()
     {
         double spentTime = 0;
-        time.stop();
-        endingTime = time.getFPGATimestamp();
+        endingTime = Timer.getFPGATimestamp();
         spentTime = endingTime - startingTime;
         
+        runs++;
         totalTime += spentTime;
         
         if(spentTime > maxTime)
@@ -49,12 +45,13 @@ public class WsProfilingTimer
             minTime = spentTime;
         }
                     
-        Logger.getLogger().debug(name, "Cycle Time", Double.toString(spentTime));
+//        Logger.getLogger().debug(name, "Cycle Time", Double.toString(spentTime));
         if(runs >= iterations)
         {
-            Logger.getLogger().debug(name, "Avg Time", Double.toString(totalTime / (double)runs));
-            Logger.getLogger().debug(name, "Max Time", Double.toString(maxTime));
-            Logger.getLogger().debug(name, "Min Time", Double.toString(minTime));
+            String reportText = " Avg Time: " + Double.toString(totalTime / (double)runs); 
+            reportText += " Max Time: " + Double.toString(maxTime); 
+            reportText += " Min Time: " + Double.toString(minTime); 
+            Logger.getLogger().debug(name, "Profile", reportText);
             reset();
         }
        return spentTime;

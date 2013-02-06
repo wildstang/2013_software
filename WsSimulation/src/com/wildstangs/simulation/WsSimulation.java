@@ -30,7 +30,8 @@ public class WsSimulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        WsProfilingTimer timer = new WsProfilingTimer("crap timer", 20);
+        WsProfilingTimer durationTimer = new WsProfilingTimer("Sim method duration", 50);
+        WsProfilingTimer periodTimer = new WsProfilingTimer("Sim method period", 50);
 
         //Instantiate the Facades and Containers
 
@@ -76,8 +77,12 @@ public class WsSimulation {
         int left_encoder = 0;
         double left_drive_speed = 0.0;
         double right_drive_speed = 0.0;
+        periodTimer.startTimingSection();
 
         while (true) {
+            periodTimer.endTimingSection();
+            periodTimer.startTimingSection();
+            durationTimer.startTimingSection();
             ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder()).set(left_encoder);
             ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).set(right_encoder);
             if (left_drive_speed > 0) {
@@ -103,13 +108,11 @@ public class WsSimulation {
 
             left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
             right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
-            
-            timer.startTimingSection();
+            durationTimer.endTimingSection();
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
             }
-            timer.endTimingSection();
 
         }
 

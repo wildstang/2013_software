@@ -3,6 +3,7 @@ package com.wildstangs.logger;
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.config.StringConfigFileParameter;
+import edu.wpi.first.wpilibj.Timer;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -22,6 +23,7 @@ public class Logger {
     int port = 17654;
     boolean remoteLoggingEnabled;
     boolean stdoutLoggingEnabled;
+    double initTime = 0.0; 
     BooleanConfigFileParameter logToStdout = new BooleanConfigFileParameter(
             this.getClass().getName(), "logToStdout", false);
     BooleanConfigFileParameter logToServer = new BooleanConfigFileParameter(
@@ -54,6 +56,7 @@ public class Logger {
             remoteLoggingEnabled = logToServer.getValue();
             stdoutLoggingEnabled = logToStdout.getValue();
             logLevel = (Level.toLevel(configLogLevel.getValue(), Level.toLevel(logLevel))).toInt();
+            initTime = Timer.getFPGATimestamp(); 
         } 
         catch(IOException e) {
             System.out.println("Unable to open Socket");
@@ -209,9 +212,9 @@ public class Logger {
         String logString;
         String builtString;
         int builtStringLen;
-        double currentTime = (System.currentTimeMillis()/ 1000);
+        double timeSinceInit = Timer.getFPGATimestamp() - initTime ;
         //need to construct an object array for java 1.3.
-        Object [] sArgs = new Object[]{new Long(++numEventsPosted), new Double(currentTime), l.toString(), c, id, message.toString()};
+        Object [] sArgs = new Object[]{new Long(++numEventsPosted), new Double(timeSinceInit), l.toString(), c, id, message.toString()};
         builtString = String.format("0x%04x|%017.6f|%s|%s|1|%s|%s", sArgs);
                 
        

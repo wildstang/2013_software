@@ -54,7 +54,7 @@ public class Timer {
      * @return Robot running time in seconds.
      */
     public static double getFPGATimestamp() {
-        return System.currentTimeMillis() / 1000;
+        return System.currentTimeMillis() / 1000.0;
     }
 
     /**
