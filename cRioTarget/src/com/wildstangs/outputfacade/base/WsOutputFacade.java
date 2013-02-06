@@ -1,12 +1,12 @@
 package com.wildstangs.outputfacade.base;
 
 import com.wildstangs.config.BooleanConfigFileParameter;
+import com.wildstangs.outputfacade.outputs.WsDoubleSolenoid;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsSolenoid;
-import com.wildstangs.outputfacade.outputs.WsDoubleSolenoid;
 import com.wildstangs.outputfacade.outputs.WsVictor;
-import edu.wpi.first.wpilibj.networktables2.util.List;
 import com.wildstangs.types.DataElement;
+import edu.wpi.first.wpilibj.networktables2.util.List;
 
 /**
  *
