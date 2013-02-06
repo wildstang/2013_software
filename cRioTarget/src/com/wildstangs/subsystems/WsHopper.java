@@ -111,6 +111,6 @@ public class WsHopper extends WsSubsystem implements IObserver
         }
     }
     public DoubleSolenoid.Value get_LiftState (){
-        return lift_value;     
+        return liftValue;     
     }
 }
