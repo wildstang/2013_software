@@ -340,7 +340,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public void setPidThrottleValue(double pidThrottle) {
         this.pidThrottleValue = pidThrottle;
-        System.out.println("Pid throttle set: " + pidThrottle);
+//        System.out.println("Pid throttle set: " + pidThrottle);
     }
 
     public Gyro getLeftGyro() {

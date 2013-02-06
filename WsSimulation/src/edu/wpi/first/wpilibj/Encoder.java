@@ -20,7 +20,7 @@ public class Encoder {
     }
     public void set(int count) {
         this.count = count;
-        System.out.println("Encoder count: " + count);
+//        System.out.println("Encoder count: " + count);
     }
     public void reset() {
         count = 0;

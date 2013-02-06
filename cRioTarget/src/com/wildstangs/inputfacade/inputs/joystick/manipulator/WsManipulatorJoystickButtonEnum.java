@@ -16,18 +16,18 @@ public class WsManipulatorJoystickButtonEnum implements IInputEnum {
         this.name = desc;
 
     }
-    public static final WsManipulatorJoystickButtonEnum BUTTON1 = new WsManipulatorJoystickButtonEnum(0, "BUTTON1");
-    public static final WsManipulatorJoystickButtonEnum BUTTON2 = new WsManipulatorJoystickButtonEnum(1, "BUTTON2");
-    public static final WsManipulatorJoystickButtonEnum BUTTON3 = new WsManipulatorJoystickButtonEnum(2, "BUTTON3");
-    public static final WsManipulatorJoystickButtonEnum BUTTON4 = new WsManipulatorJoystickButtonEnum(3, "BUTTON4");
-    public static final WsManipulatorJoystickButtonEnum BUTTON5 = new WsManipulatorJoystickButtonEnum(4, "BUTTON5");
-    public static final WsManipulatorJoystickButtonEnum BUTTON6 = new WsManipulatorJoystickButtonEnum(5, "BUTTON6");
-    public static final WsManipulatorJoystickButtonEnum BUTTON7 = new WsManipulatorJoystickButtonEnum(6, "BUTTON7");
-    public static final WsManipulatorJoystickButtonEnum BUTTON8 = new WsManipulatorJoystickButtonEnum(7, "BUTTON8");
-    public static final WsManipulatorJoystickButtonEnum BUTTON9 = new WsManipulatorJoystickButtonEnum(8, "BUTTON9");
-    public static final WsManipulatorJoystickButtonEnum BUTTON10 = new WsManipulatorJoystickButtonEnum(9, "BUTTON10");
-    public static final WsManipulatorJoystickButtonEnum BUTTON11 = new WsManipulatorJoystickButtonEnum(10, "BUTTON11");
-    public static final WsManipulatorJoystickButtonEnum BUTTON12 = new WsManipulatorJoystickButtonEnum(11, "BUTTON12");
+    public static final WsManipulatorJoystickButtonEnum BUTTON1 = new WsManipulatorJoystickButtonEnum(0, "M_BUTTON1");
+    public static final WsManipulatorJoystickButtonEnum BUTTON2 = new WsManipulatorJoystickButtonEnum(1, "M_BUTTON2");
+    public static final WsManipulatorJoystickButtonEnum BUTTON3 = new WsManipulatorJoystickButtonEnum(2, "M_BUTTON3");
+    public static final WsManipulatorJoystickButtonEnum BUTTON4 = new WsManipulatorJoystickButtonEnum(3, "M_BUTTON4");
+    public static final WsManipulatorJoystickButtonEnum BUTTON5 = new WsManipulatorJoystickButtonEnum(4, "M_BUTTON5");
+    public static final WsManipulatorJoystickButtonEnum BUTTON6 = new WsManipulatorJoystickButtonEnum(5, "M_BUTTON6");
+    public static final WsManipulatorJoystickButtonEnum BUTTON7 = new WsManipulatorJoystickButtonEnum(6, "M_BUTTON7");
+    public static final WsManipulatorJoystickButtonEnum BUTTON8 = new WsManipulatorJoystickButtonEnum(7, "M_BUTTON8");
+    public static final WsManipulatorJoystickButtonEnum BUTTON9 = new WsManipulatorJoystickButtonEnum(8, "M_BUTTON9");
+    public static final WsManipulatorJoystickButtonEnum BUTTON10 = new WsManipulatorJoystickButtonEnum(9, "M_BUTTON10");
+    public static final WsManipulatorJoystickButtonEnum BUTTON11 = new WsManipulatorJoystickButtonEnum(10, "M_BUTTON11");
+    public static final WsManipulatorJoystickButtonEnum BUTTON12 = new WsManipulatorJoystickButtonEnum(11, "M_BUTTON12");
 
     public String toString() {
         return name;

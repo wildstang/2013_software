@@ -25,6 +25,7 @@ public class WsHardwareJoystick implements IHardwareJoystick {
     private int wholeByteButtonIndex; 
             
     static int[] connectedDeviceProductIDs = {0,0}; 
+    static String[] connectedDevicePaths = {"",""}; 
     static int connectedJoysticks = 0 ; 
     
     private final double[] m_axis_values_from_usb;
@@ -59,24 +60,34 @@ public class WsHardwareJoystick implements IHardwareJoystick {
             for (HIDDeviceInfo hIDDeviceInfo : devices) {
                 int usage = hIDDeviceInfo.getUsage(); 
                 if ((usage == 4 ) || (usage == 5)){
+                    
                     if (connectedJoysticks !=0){
+                        System.out.println("Joystick found with productID " + hIDDeviceInfo.getProduct_id());
                         boolean alreadyUsed = false; 
                         for (int i = 0; i < connectedJoysticks; i++) {
                             if (connectedDeviceProductIDs[i] == hIDDeviceInfo.getProduct_id()){
-                                alreadyUsed = true; 
+                                if (connectedDevicePaths[i].equalsIgnoreCase(hIDDeviceInfo.getPath())){
+                                    alreadyUsed = true; 
+                                }
                                 break;
                             }
                         }
                         if (alreadyUsed){ 
                             //Use a different device
+                            hIDJoystickInfo = hIDDeviceInfo; 
+//                    System.out.println("Joystick found with usage " + usage);
+//                    System.out.println("Joystick found with device info " + hIDJoystickInfo);
+                    
                             continue;
                         }
                     }
                     hIDJoystickInfo = hIDDeviceInfo; 
-                    System.out.println("Joystick found with usage " + usage);
+//                    System.out.println("Joystick found with usage " + usage);
+//                    System.out.println("Joystick found with device info " + hIDJoystickInfo);
                     hIDJoystick = hIDJoystickInfo.open();
                     hIDJoystick.disableBlocking();
                     connectedDeviceProductIDs[connectedJoysticks] = hIDDeviceInfo.getProduct_id();
+                    connectedDevicePaths[connectedJoysticks]= hIDDeviceInfo.getPath();
                     connectedJoysticks++; 
                     switch (hIDJoystickInfo.getUsage()) {
                         case 4:

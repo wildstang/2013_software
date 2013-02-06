@@ -190,26 +190,26 @@ public class WsPidController implements IPidController {
         // Read the value of the process variable under control and limit it
         double current_pv = pidSource.pidRead();
         current_pv = this.limitInput(current_pv);
-        System.out.println(this.controllerName + " pid source value: " + current_pv);
+//        System.out.println(this.controllerName + " pid source value: " + current_pv);
 
         // Calculate the current error term
         currentError = setPoint - current_pv;
-        System.out.println(this.controllerName + " error: " + currentError);
-        System.out.println(this.controllerName + " errorSum: " + errorSum);
+//        System.out.println(this.controllerName + " error: " + currentError);
+//        System.out.println(this.controllerName + " errorSum: " + errorSum);
 
         //
         // Adjust our metrics depending on where the process variable is as compared
         //  to the set point.
         //
         if (currentState == WsPidStateType.WS_PID_DISABLED_STATE) {
-            System.out.println(this.controllerName + " is DISABLED");
+//            System.out.println(this.controllerName + " is DISABLED");
             // PID controller is disabled, nothing to do here...
 
             // Reset everything now.
             this.Reset();
             return;
         } else if (currentState == WsPidStateType.WS_PID_INITIALIZE_STATE) {
-            System.out.println(this.controllerName + " is INITIALIZE");
+//            System.out.println(this.controllerName + " is INITIALIZE");
             // Don't look at the D-term when we're just starting up
             previousError = currentError;
 
@@ -237,7 +237,7 @@ public class WsPidController implements IPidController {
             }
 
         } else if (currentState == WsPidStateType.WS_PID_BELOW_TARGET_STATE) {
-            System.out.println(this.controllerName + " is BELOW_TARGET");
+//            System.out.println(this.controllerName + " is BELOW_TARGET");
             //
             // In this case, we were above and we switched to below
             //
@@ -276,7 +276,7 @@ public class WsPidController implements IPidController {
             }
 
         } else if (currentState == WsPidStateType.WS_PID_ON_TARGET_STATE) {
-            System.out.println(this.controllerName + " is ON TARGET");
+//            System.out.println(this.controllerName + " is ON TARGET");
             errorSum = 0.0;
             allowStaticEpsilon = true;
 
@@ -299,7 +299,7 @@ public class WsPidController implements IPidController {
                 new_state = WsPidStateType.WS_PID_ON_TARGET_STATE;
             }
         } else if (currentState == WsPidStateType.WS_PID_STABILIZED_STATE) {
-            System.out.println(this.controllerName + " is STABILIZED");
+//            System.out.println(this.controllerName + " is STABILIZED");
             errorSum = 0.0;
             allowStaticEpsilon = true;
 
@@ -314,7 +314,7 @@ public class WsPidController implements IPidController {
             }
 
         } else if (currentState == WsPidStateType.WS_PID_ABOVE_TARGET_STATE) {
-            System.out.println(this.controllerName + " is ABOVE TARGET");
+//            System.out.println(this.controllerName + " is ABOVE TARGET");
             //
             // In this case, we were below and we just switched to above
             //
@@ -365,10 +365,10 @@ public class WsPidController implements IPidController {
         double output = this.calcProportionalTerm()
                 + this.calcIntegralTerm()
                 + this.calcDerivativeTerm();
-        System.out.println(this.controllerName + " p-term,: " + this.calcProportionalTerm());
-        System.out.println(this.controllerName + " i-term: " + this.calcIntegralTerm());
-        System.out.println(this.controllerName + " d-term: " + this.calcDerivativeTerm());
-        System.out.println(this.controllerName + " output: " + output);
+//        System.out.println(this.controllerName + " p-term,: " + this.calcProportionalTerm());
+//        System.out.println(this.controllerName + " i-term: " + this.calcIntegralTerm());
+//        System.out.println(this.controllerName + " d-term: " + this.calcDerivativeTerm());
+//        System.out.println(this.controllerName + " output: " + output);
 
         // Handle Static Epsilon
         if ((allowStaticEpsilon == true)
@@ -506,6 +506,6 @@ public class WsPidController implements IPidController {
         minOutput = minOutput_config.getValue();
         maxInput = maxInput_config.getValue();
         minInput = minInput_config.getValue();
-        System.out.println("WsPidController " + p);
+//        System.out.println("WsPidController " + p);
     }
 }

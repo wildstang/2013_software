@@ -29,7 +29,7 @@ public class WsIntake extends WsSubsystem implements IObserver
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON4);
         subject.attach(this);
         
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
         subject.attach(this);
     }
     
