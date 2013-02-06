@@ -10,6 +10,7 @@ import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.controller.base.WsPidController;
+import com.wildstangs.pid.controller.base.WsPidStateType;
 import com.wildstangs.pid.inputs.WsDriveBaseDistancePidInput;
 import com.wildstangs.pid.outputs.WsDriveBaseDistancePidOutput;
 import com.wildstangs.subjects.base.BooleanSubject;
@@ -17,6 +18,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,8 +44,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double WHEEL_DIAMETER = 4;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
+    private static double pidThrottleValue = 0.0;
     private static boolean antiTurboFlag = false;
-    private static boolean shifterFlag = false;
+    private static DoubleSolenoid.Value shifterFlag = DoubleSolenoid.Value.kForward;
     private static boolean quickTurnFlag = false;
     private static Encoder leftDriveEncoder;
     private static Encoder rightDriveEncoder;
@@ -55,20 +58,16 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static WsDriveBaseDistancePidOutput driveDistancePidOutput;
     private static boolean distancePidEnabled = false;
     private static DoubleConfigFileParameter WHEEL_DIAMETER_config;
-    private static DoubleConfigFileParameter TICKS_PER_ROTATION_config;    
+    private static DoubleConfigFileParameter TICKS_PER_ROTATION_config;
 
     public WsDriveBase(String name) {
         super(name);
-        init(); 
-        WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 4.0);
-        TICKS_PER_ROTATION_config = new DoubleConfigFileParameter(this.getClass().getName(), "ticks_per_roation", 360.0);
 
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickEnum.HEADING);
-        subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickEnum.THROTTLE);
-        subject.attach(this);
+        WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 4.0);
+        TICKS_PER_ROTATION_config = new DoubleConfigFileParameter(this.getClass().getName(), "ticks_per_rotation", 360.0);
+
         //Anti-Turbo button
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
         subject.attach(this);
         //Shifter Button
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON6);
@@ -91,16 +90,18 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         //Initialize the PIDs
         driveDistancePidInput = new WsDriveBaseDistancePidInput();
         driveDistancePidOutput = new WsDriveBaseDistancePidOutput();
-        driveDistancePid = new WsPidController(driveDistancePidInput, driveDistancePidOutput, "WsDriveBaseDistancePID");
+        driveDistancePid = new WsPidController(driveDistancePidInput, driveDistancePidOutput, "WsDriveBaseDistancePid");
+        init();
     }
-    
-    public void init()
-    {
+
+    public void init() {
         driveBaseThrottleValue = 0.0;
         driveBaseHeadingValue = 0.0;
         antiTurboFlag = false;
-        shifterFlag = false;
+        shifterFlag = DoubleSolenoid.Value.kForward;
         quickTurnFlag = false;
+        this.disableDistancePidControl();
+        System.out.println("Drive Base init");
     }
 
     public void update() {
@@ -123,17 +124,20 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             //Set the drive motor outputs
             updateDriveMotors();
 
-            //Set landing gear output
             SmartDashboard.putNumber("Throttle Value", throttleValue);
             SmartDashboard.putNumber("Heading Value", headingValue);
-            SmartDashboard.putBoolean("Shifter State", shifterFlag);
+            SmartDashboard.putBoolean("Shifter State", shifterFlag.equals(DoubleSolenoid.Value.kReverse));
             SmartDashboard.putBoolean("Anti-Turbo Flag", antiTurboFlag);
 
             //Set gear shift output
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, (shifterFlag ? Boolean.TRUE : Boolean.FALSE));
+            WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(shifterFlag.value));
         } else {
             driveDistancePid.Enable();
             driveDistancePid.calcPid();
+            setThrottleValue(pidThrottleValue);
+            setHeadingValue(0);
+            updateDriveMotors();
+            SmartDashboard.putNumber("PID Throttle Value", pidThrottleValue);
         }
     }
 
@@ -188,60 +192,57 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void updateDriveMotors() {
-        if (false == distancePidEnabled) {
-            double rightMotorSpeed = 0;
-            double leftMotorSpeed = 0;
-            double angularPower = 0.0;
-            if (Math.abs(driveBaseHeadingValue) > 0.05) {
-                angularPower = Math.abs(driveBaseThrottleValue) * driveBaseHeadingValue * WS_HEADING_SENSITIVITY;
-            }
-
-            rightMotorSpeed = driveBaseThrottleValue - angularPower;
-            leftMotorSpeed = driveBaseThrottleValue + angularPower;
-            if (true == quickTurnFlag) {
-                rightMotorSpeed = 0.0f;
-                leftMotorSpeed = 0.0f;
-                driveBaseThrottleValue = 0.0f;
-
-                // Quick turn does not take throttle into account
-                leftMotorSpeed += driveBaseHeadingValue;
-                rightMotorSpeed -= driveBaseHeadingValue;
-            } else {
-                if (driveBaseThrottleValue >= 0) {
-                    if (rightMotorSpeed < 0) {
-                        rightMotorSpeed = 0;
-                    }
-                    if (leftMotorSpeed < 0) {
-                        leftMotorSpeed = 0;
-                    }
-                } else {
-                    if (rightMotorSpeed >= 0) {
-                        rightMotorSpeed = 0;
-                    }
-                    if (leftMotorSpeed >= 0) {
-                        leftMotorSpeed = 0;
-                    }
-                }
-
-                if (rightMotorSpeed > WS_MAX_MOTOR_OUTPUT) {
-                    rightMotorSpeed = WS_MAX_MOTOR_OUTPUT;
-                }
-                if (leftMotorSpeed > WS_MAX_MOTOR_OUTPUT) {
-                    leftMotorSpeed = WS_MAX_MOTOR_OUTPUT;
-                }
-                if (rightMotorSpeed < WS_NEG_MAX_MOTOR_OUTPUT) {
-                    rightMotorSpeed = WS_NEG_MAX_MOTOR_OUTPUT;
-                }
-                if (leftMotorSpeed < WS_NEG_MAX_MOTOR_OUTPUT) {
-                    leftMotorSpeed = WS_NEG_MAX_MOTOR_OUTPUT;
-                }
-            }
-
-            //Update Output Facade.
-            (WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(leftMotorSpeed));
-            (WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(rightMotorSpeed));
-
+        double rightMotorSpeed = 0;
+        double leftMotorSpeed = 0;
+        double angularPower = 0.0;
+        if (Math.abs(driveBaseHeadingValue) > 0.05) {
+            angularPower = Math.abs(driveBaseThrottleValue) * driveBaseHeadingValue * WS_HEADING_SENSITIVITY;
         }
+
+        rightMotorSpeed = driveBaseThrottleValue - angularPower;
+        leftMotorSpeed = driveBaseThrottleValue + angularPower;
+        if (true == quickTurnFlag) {
+            rightMotorSpeed = 0.0f;
+            leftMotorSpeed = 0.0f;
+            driveBaseThrottleValue = 0.0f;
+
+            // Quick turn does not take throttle into account
+            leftMotorSpeed += driveBaseHeadingValue;
+            rightMotorSpeed -= driveBaseHeadingValue;
+        } else {
+            if (driveBaseThrottleValue >= 0) {
+                if (rightMotorSpeed < 0) {
+                    rightMotorSpeed = 0;
+                }
+                if (leftMotorSpeed < 0) {
+                    leftMotorSpeed = 0;
+                }
+            } else {
+                if (rightMotorSpeed >= 0) {
+                    rightMotorSpeed = 0;
+                }
+                if (leftMotorSpeed >= 0) {
+                    leftMotorSpeed = 0;
+                }
+            }
+
+            if (rightMotorSpeed > WS_MAX_MOTOR_OUTPUT) {
+                rightMotorSpeed = WS_MAX_MOTOR_OUTPUT;
+            }
+            if (leftMotorSpeed > WS_MAX_MOTOR_OUTPUT) {
+                leftMotorSpeed = WS_MAX_MOTOR_OUTPUT;
+            }
+            if (rightMotorSpeed < WS_NEG_MAX_MOTOR_OUTPUT) {
+                rightMotorSpeed = WS_NEG_MAX_MOTOR_OUTPUT;
+            }
+            if (leftMotorSpeed < WS_NEG_MAX_MOTOR_OUTPUT) {
+                leftMotorSpeed = WS_NEG_MAX_MOTOR_OUTPUT;
+            }
+        }
+
+        //Update Output Facade.
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(leftMotorSpeed));
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(rightMotorSpeed));
     }
 
     public void checkAutoQuickTurn() {
@@ -309,15 +310,30 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public void disableDistancePidControl() {
         distancePidEnabled = false;
+        driveDistancePid.Disable();
+        this.resetDistancePid();
+        System.out.println("WsDriveBase: pid is disabled");
     }
 
     public void resetDistancePid() {
         driveDistancePid.Reset();
+        this.resetLeftEncoder();
+        this.resetRightEncoder();
+    }
+
+    public WsPidStateType getDistancePidState() {
+        return driveDistancePid.getState();
+    }
+
+    public void setPidThrottleValue(double pidThrottle) {
+        this.pidThrottleValue = pidThrottle;
+        System.out.println("Pid throttle set: " + pidThrottle);
     }
 
     public void notifyConfigChange() {
         WHEEL_DIAMETER = WHEEL_DIAMETER_config.getValue();
         TICKS_PER_ROTATION = TICKS_PER_ROTATION_config.getValue();
+        driveDistancePid.notifyConfigChange();
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
@@ -325,7 +341,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             antiTurboFlag = ((BooleanSubject) subjectThatCaused).getValue();
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON6) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                shifterFlag = !shifterFlag;
+                shifterFlag = shifterFlag.equals(DoubleSolenoid.Value.kForward) ?
+                        DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
             }
         }
     }

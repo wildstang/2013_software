@@ -43,6 +43,8 @@ public interface IPidController {
     public void setDifferentiatorBandLimit(double band_limit);
 
     public double getDifferentiatorBandLimit();
+    
+    public WsPidStateType getState();
 
     // Behavioral methods
     public void resetErrorSum();

@@ -1,5 +1,6 @@
 package com.wildstangs.outputfacade.base;
 
+import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsSolenoid;
 import com.wildstangs.outputfacade.outputs.WsDoubleSolenoid;
@@ -70,13 +71,14 @@ public class WsOutputFacade {
     //Key Values - Need to update for each new output element.
     public static final String RIGHT_DRIVE_SPEED = "RightDriveSpeed";
     public static final String LEFT_DRIVE_SPEED = "LeftDriveSpeed";
-    public static final String SHIFTER = "shifter";
-    public static final String LIFT = "lift";
-    public static final String KICKER = "kicker";
+    public static final String SHIFTER = "Shifter";
+    public static final String LIFT = "Lift";
+    public static final String KICKER = "Kicker";
     public static final String SHOOTER_VICTOR_ENTER = "ShooterVictorEnter";
     public static final String SHOOTER_VICTOR_EXIT = "ShooterVictorExit";
     public static final String SHOOTER_ANGLE = "ShooterAngle";
-
+    public static final String FRISBIE_CONTROL = "FrisbieControl";
+    
     /**
      * Constructor for WsOutputFacade.
      *
@@ -87,12 +89,25 @@ public class WsOutputFacade {
         //Add the facade data elements
         outputs.add(new DataElement(RIGHT_DRIVE_SPEED, new WsDriveSpeed(RIGHT_DRIVE_SPEED, 1, 2)));
         outputs.add(new DataElement(LEFT_DRIVE_SPEED, new WsDriveSpeed(LEFT_DRIVE_SPEED, 3, 4)));
-        outputs.add(new DataElement(SHIFTER, new WsSolenoid(SHIFTER, 1, 4)));
-        outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 1, 1)));
-        outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 2)));
+        BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(this.getClass().getName(), "2012_Robot", false);;
+        if (outputsFor2012.getValue()){
+            //Shifter is actually a single solenoid on 4 but 2 is unused for faking it as a double
+            outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 1, 2, 4)));
+            outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 5)));
+            
+        } else { 
+            outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
+            outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
+            
+        }
+        outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 6, 7)));
+        outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
-        outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 5))); //probably needs different value
+        outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 8))); //probably needs different value
+        
+
+
 
     }
 }

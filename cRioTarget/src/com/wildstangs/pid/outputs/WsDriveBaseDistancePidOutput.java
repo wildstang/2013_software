@@ -7,6 +7,8 @@ package com.wildstangs.pid.outputs;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.outputs.base.IPidOutput;
+import com.wildstangs.subsystems.WsDriveBase;
+import com.wildstangs.subsystems.base.WsSubsystemContainer;
 
 /**
  *
@@ -19,7 +21,6 @@ public class WsDriveBaseDistancePidOutput implements IPidOutput {
     }
 
     public void pidWrite(double output) {
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).set((IOutputEnum)null, new Double(output));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).set((IOutputEnum)null, new Double(output));
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setPidThrottleValue(output);
     }
 }

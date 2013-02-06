@@ -28,9 +28,9 @@ public class WsSubsystemContainer {
     
     public void init()
     {
-        for(int c = 0; c < subsystem.size(); c++)
+        for(int i = 0; i < subsystem.size(); i++)
         {
-            ((WsSubsystem)(subsystem.get(c))).init();
+            ((WsSubsystem)(((DataElement) subsystem.get(i)).getValue())).init();
         }
     }
 

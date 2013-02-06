@@ -30,6 +30,7 @@ public class RobotTemplate extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        System.out.println("RobotInit Start");
         try {
             WsConfigFacade.getInstance().setFileName("/ws_config.txt");
             WsConfigFacade.getInstance().readConfig();
@@ -37,50 +38,37 @@ public class RobotTemplate extends IterativeRobot {
         } catch (WsConfigFacadeException wscfe) {
             System.out.println(wscfe.toString());
         }
-            WsSubsystemContainer.getInstance().init();
-        
-        Logger.getLogger().always(this.getClass().getName(), "robotInit", "Startup");
+
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
-        WsSubsystemContainer.getInstance();
+        WsSubsystemContainer.getInstance().init();
         WsAutonomousManager.getInstance();
+        Logger.getLogger().always(this.getClass().getName(), "robotInit", "Startup Completed");
     }
 
-    public void disabledInit()
-    {
+    public void disabledInit() {
         WsAutonomousManager.getInstance().clear();
-        try
-        {
+        try {
             WsConfigFacade.getInstance().readConfig();
-        }
-        catch(Throwable e)
-        {
+        } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
         WsSubsystemContainer.getInstance().init();
         WsConfigFacade.getInstance().dumpConfigData();
     }
 
-    public void disabledPeriodic()
-    {
+    public void disabledPeriodic() {
         WsInputFacade.getInstance().updateOiData();
     }
-    
 
-    public void autonomousInit()
-    {
-        WsAutonomousManager.getInstance().startCurrentProgram();
+    public void autonomousInit() {
         WsSubsystemContainer.getInstance().init();
+        WsAutonomousManager.getInstance().startCurrentProgram();
     }
-    
 
- 
-    
     /**
      * This function is called periodically during autonomous
      */
-    
-    
     public void autonomousPeriodic() {
         WsInputFacade.getInstance().updateOiDataAutonomous();
         WsInputFacade.getInstance().updateSensorData();
@@ -93,11 +81,10 @@ public class RobotTemplate extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
-    public void teleopInit()
-    {
+    public void teleopInit() {
         WsSubsystemContainer.getInstance().init();
     }
-    
+
     public void teleopPeriodic() {
         WsInputFacade.getInstance().updateOiData();
         WsInputFacade.getInstance().updateSensorData();
@@ -112,5 +99,4 @@ public class RobotTemplate extends IterativeRobot {
     public void testPeriodic() {
         Watchdog.getInstance().feed();
     }
-
 }

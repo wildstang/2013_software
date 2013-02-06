@@ -6,6 +6,7 @@ import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -28,6 +29,7 @@ public class WsDriveSpeed implements IOutput {
 
     public void set(IOutputEnum key, Object value) {
         motorSpeed.setValue(((Double) value).doubleValue());
+        SmartDashboard.putNumber(motorSpeed.getName() + "value: ", ((Double)value).doubleValue());
 
     }
 

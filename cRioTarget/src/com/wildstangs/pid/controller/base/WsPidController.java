@@ -365,6 +365,9 @@ public class WsPidController implements IPidController {
         double output = this.calcProportionalTerm()
                 + this.calcIntegralTerm()
                 + this.calcDerivativeTerm();
+        System.out.println(this.controllerName + " p-term,: " + this.calcProportionalTerm());
+        System.out.println(this.controllerName + " i-term: " + this.calcIntegralTerm());
+        System.out.println(this.controllerName + " d-term: " + this.calcDerivativeTerm());
         System.out.println(this.controllerName + " output: " + output);
 
         // Handle Static Epsilon
@@ -485,6 +488,10 @@ public class WsPidController implements IPidController {
         return clipped_input;
     }
     
+    public WsPidStateType getState() {
+        return this.currentState;
+    }
+    
     public void notifyConfigChange() {
         p = p_config.getValue();
         i =i_config.getValue();
@@ -499,5 +506,6 @@ public class WsPidController implements IPidController {
         minOutput = minOutput_config.getValue();
         maxInput = maxInput_config.getValue();
         minInput = minInput_config.getValue();
+        System.out.println("WsPidController " + p);
     }
 }
