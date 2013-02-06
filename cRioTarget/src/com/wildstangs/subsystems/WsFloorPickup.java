@@ -21,35 +21,54 @@ public class WsFloorPickup extends Subsystem implements IObserver {
 
     boolean solenoidState = false;
     boolean motorState = false;
+    double maxVictorSpeed;
     DoubleConfigFileParameter maxSpeed = new DoubleConfigFileParameter(
             this.getClass().getName(), "maxAccumulatorSpeed", 1.0);
 
     public WsFloorPickup(String name) {
         super(name);
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON6);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON4);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
         subject.attach(this);
 
-
+        maxVictorSpeed = maxSpeed.getValue();
     }
 
+    public void init()
+    {
+        solenoidState = false;
+        motorState = false;
+        
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID_LEFT).set(null, Boolean.valueOf(solenoidState));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID_RIGHT).set(null, Boolean.valueOf(solenoidState));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR).set(null, Double.valueOf(0.0));
+    }
+    
     public void notifyConfigChange() {
-        //Override when extending base class if config is needed.
+        maxVictorSpeed = maxSpeed.getValue();
     }
 
     public void update() {
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID_LEFT).set(null, Boolean.valueOf(solenoidState));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID_RIGHT).set(null, Boolean.valueOf(solenoidState));
-        if (motorState == true) {
-            if (solenoidState == false) {
-                if (((WsHopper) WsSubsystemContainer.getInstance()
-                        .getSubsystem(WsSubsystemContainer.WS_HOPPER)).
-                        get_LiftState() == DoubleSolenoid.Value.kReverse) {
-                    motorState = false;
-                }
-            }
+        
+        if (motorState == true && solenoidState == false && ((WsHopper) WsSubsystemContainer.getInstance()
+           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).get_LiftState() != DoubleSolenoid.Value.kReverse) 
+        {
+            motorState = false;
+        }
+        
+        if(motorState) 
+        {
+            WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)
+                    .set(null, Double.valueOf(maxVictorSpeed));
+        }
+        else
+        {
+            WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)
+                    .set(null, Double.valueOf(0.0));
         }
     }
 
@@ -57,9 +76,9 @@ public class WsFloorPickup extends Subsystem implements IObserver {
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON6) {
+        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON4) {
             solenoidState = !solenoidState;
-        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON7) {
+        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) {
             motorState = !motorState;
         }
     }
