@@ -78,8 +78,7 @@ public class WsOutputFacade {
     public static final String SHOOTER_VICTOR_EXIT = "ShooterVictorExit";
     public static final String SHOOTER_ANGLE = "ShooterAngle";
     public static final String FRISBIE_CONTROL = "FrisbieControl";
-    public static final String ACCUMULATOR_SOLENOID_LEFT = "AccumulatorSolenoidLeft";
-    public static final String ACCUMULATOR_SOLENOID_RIGHT = "AccumulatorSolenoidRight";
+    public static final String ACCUMULATOR_SOLENOID = "AccumulatorSolenoid";
     public static final String ACCUMULATOR_VICTOR = "AccumulatorVictor";
     public static final String FUNNELATOR_ROLLER = "FunnelatorRoller";    
     
@@ -99,21 +98,26 @@ public class WsOutputFacade {
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 1, 2, 4)));
             outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 5)));
             
+            outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
+            outputs.add(new DataElement(ACCUMULATOR_SOLENOID, new WsSolenoid(ACCUMULATOR_SOLENOID, 1, 2)));
+            outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
+            outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6))); 
+            
         } else { 
-            outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
+            outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
+            outputs.add(new DataElement(ACCUMULATOR_SOLENOID, new WsSolenoid(ACCUMULATOR_SOLENOID, 1, 2)));
             outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
+
+            outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
+            outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
+            outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6))); 
             
         }
-        outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 6, 7)));
-        outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
-        outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 5))); //probably needs different value
-        outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
-        outputs.add(new DataElement(ACCUMULATOR_SOLENOID_LEFT, new WsSolenoid(ACCUMULATOR_SOLENOID_LEFT, 1, 6)));
-        outputs.add(new DataElement(ACCUMULATOR_SOLENOID_RIGHT, new WsSolenoid(ACCUMULATOR_SOLENOID_RIGHT, 1, 7)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 7)));
         outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 8)));
+        
 
 
     }
