@@ -74,7 +74,7 @@ public class WsIntake extends WsSubsystem implements IObserver
         }
         else if(subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5)
         {
-            WsFloorPickup pickup = (WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
+            WsFloorPickup pickup = ((WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
             boolean up = pickup.isUp();
             if(up && button.getValue())
             {

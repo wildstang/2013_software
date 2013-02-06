@@ -81,6 +81,7 @@ public class WsOutputFacade {
     public static final String ACCUMULATOR_SOLENOID_LEFT = "AccumulatorSolenoidLeft";
     public static final String ACCUMULATOR_SOLENOID_RIGHT = "AccumulatorSolenoidRight";
     public static final String ACCUMULATOR_VICTOR = "AccumulatorVictor";
+    public static final String FUNNELATOR_ROLLER = "FunnelatorRoller";    
     
     /**
      * Constructor for WsOutputFacade.
@@ -112,6 +113,8 @@ public class WsOutputFacade {
         outputs.add(new DataElement(ACCUMULATOR_SOLENOID_LEFT, new WsSolenoid(ACCUMULATOR_SOLENOID_LEFT, 1, 6)));
         outputs.add(new DataElement(ACCUMULATOR_SOLENOID_RIGHT, new WsSolenoid(ACCUMULATOR_SOLENOID_RIGHT, 1, 7)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 7)));
+        outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 8)));
+
 
     }
 }

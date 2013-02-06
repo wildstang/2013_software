@@ -1,12 +1,12 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
+import com.wildstangs.subsystems.base.WsSubsystem;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  *
  * @author Adam
  */
-public class WsFloorPickup extends Subsystem implements IObserver {
+public class WsFloorPickup extends WsSubsystem implements IObserver {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
