@@ -30,6 +30,9 @@ public class WsAutonomousStepKick extends WsAutonomousStep
         WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         if(subsystem.getKickerValue() == false)
         {
+            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
+            BooleanSubject button = (BooleanSubject)subject;
+            button.setValue(false);
             finished = true;
         }
     }
