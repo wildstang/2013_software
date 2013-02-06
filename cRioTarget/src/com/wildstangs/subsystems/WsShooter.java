@@ -98,6 +98,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
         wheelEnterSetPoint = 0; 
         wheelExitSetPoint = 0 ; 
         angleFlag = false; 
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, Boolean.FALSE);
     }
     
     public void update() 
