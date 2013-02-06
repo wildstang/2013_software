@@ -109,7 +109,7 @@ public class Logger {
      * @param message The message to log.
      */
     public void debug(String c, String id, Object message) {
-        if (logLevel > Level.DEBUG_INT) {
+        if (logLevel < Level.DEBUG_INT) {
             return;
         }
         

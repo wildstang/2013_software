@@ -4,6 +4,7 @@
  */
 package com.wildstangs.simulation;
 
+import com.wildstangs.config.timer.WsTimer;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
@@ -29,6 +30,8 @@ public class WsSimulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        WsTimer timer = new WsTimer("crap timer", 20);
+
         //Instantiate the Facades and Containers
 
         //start the log viewer.
@@ -100,11 +103,13 @@ public class WsSimulation {
 
             left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
             right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
-
+            
+            timer.startTimingSection();
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
             }
+            timer.endTimingSection();
 
         }
 

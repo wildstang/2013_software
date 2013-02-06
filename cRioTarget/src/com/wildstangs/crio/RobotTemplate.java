@@ -13,6 +13,7 @@ import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
+import com.wildstangs.timer.WsTimer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Watchdog;
 
@@ -29,6 +30,7 @@ public class RobotTemplate extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+    
     public void robotInit() {
         System.out.println("RobotInit Start");
         try {
