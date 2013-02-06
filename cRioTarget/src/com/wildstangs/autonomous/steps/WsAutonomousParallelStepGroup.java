@@ -36,16 +36,17 @@ public class WsAutonomousParallelStepGroup extends WsAutonomousStep
         for (int i = 0; i < steps.size(); i++)
         {
             WsAutonomousStep step = (WsAutonomousStep)steps.get(i);
+            step.update();
             if (step.isFinished())
             {
                 if (!step.isPassed())
                 {
                     failedStep(step, i);
                 }
-                steps.remove(i);
+                steps.remove(step);
             }
         }
-        if (steps.size() == 0)
+        if (steps.isEmpty())
         {
             finished = true;
         }
