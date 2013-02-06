@@ -78,6 +78,7 @@ public class WsOutputFacade {
     public static final String SHOOTER_VICTOR_EXIT = "ShooterVictorExit";
     public static final String SHOOTER_ANGLE = "ShooterAngle";
     public static final String FRISBIE_CONTROL = "FrisbieControl";
+    public static final String FUNNELATOR_ROLLER = "FunnelatorRoller";
     
     /**
      * Constructor for WsOutputFacade.
@@ -105,9 +106,7 @@ public class WsOutputFacade {
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
         outputs.add(new DataElement(SHOOTER_ANGLE, new WsSolenoid(SHOOTER_ANGLE, 1, 8))); //probably needs different value
-        
-
-
+        outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 8)));
 
     }
 }
