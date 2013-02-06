@@ -15,12 +15,27 @@ import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.CounterBase;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WsShooter extends WsSubsystem implements IObserver{
-
+    
+    public class Preset
+    {
+        public final int ENTER_WHEEL_SET_POINT;
+        public final int EXIT_WHEEL_SET_POINT;
+        public final DoubleSolenoid.Value ANGLE;
+        
+        public Preset(int enterWheelSetPoint, int exitWheelSetPoint, DoubleSolenoid.Value angle)
+        {
+            this.ENTER_WHEEL_SET_POINT = enterWheelSetPoint;
+            this.EXIT_WHEEL_SET_POINT = exitWheelSetPoint;
+            this.ANGLE = angle;
+        }
+    }
+    
     private Encoder encoderEnter, encoderExit;
     private DoubleConfigFileParameter lowerWheelSpeed = new DoubleConfigFileParameter(
         this.getClass().getName(), "LowerWheelSpeed", 0);
@@ -42,7 +57,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
     private double testingEnterKnob = 0.0;
     private double testingExitKnob = 0.0;
     private boolean testingCalled = false;
-    private boolean angleFlag = false; //could be true, not sure yet
+    private DoubleSolenoid.Value angleFlag = DoubleSolenoid.Value.kReverse;
     public WsShooter (String name) 
     {
         super(name);
@@ -83,7 +98,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
         resetExitEncoder();
         wheelEnterSetPoint = 0; 
         wheelExitSetPoint = 0 ; 
-        angleFlag = false; 
+        angleFlag = DoubleSolenoid.Value.kReverse; 
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, Boolean.FALSE);
     }
     
     public void update() 
@@ -145,8 +161,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
         SmartDashboard.putNumber("EnterWheelSetPoint", wheelEnterSetPoint);
         SmartDashboard.putNumber("ExitWheelSetPoint", wheelExitSetPoint);
         //set shooter angle
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, (angleFlag ? Boolean.TRUE : Boolean.FALSE)); 
-
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(angleFlag.value));
     }
 
     public void notifyConfigChange() 
@@ -177,47 +192,42 @@ public class WsShooter extends WsSubsystem implements IObserver{
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                angleFlag = !angleFlag;
+                if(angleFlag == DoubleSolenoid.Value.kReverse)
+                {
+                    angleFlag = DoubleSolenoid.Value.kForward;
+                }
+                else
+                {
+                    angleFlag = DoubleSolenoid.Value.kReverse;
+                }
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) 
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                testingEnterKnob += .1;
-                if(testingEnterKnob > 3.3) testingEnterKnob = 3.3;
-                ((WsDSAnalogInput)WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT))
-                        .set((IInputEnum)null,Double.valueOf(testingEnterKnob));
+                wheelEnterSetPoint += 100;
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7) 
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                testingExitKnob += .1;
-                if(testingExitKnob > 3.3) testingExitKnob = 3.3;
-                ((WsDSAnalogInput)WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT))
-                        .set((IInputEnum)null,Double.valueOf(testingExitKnob));
+                wheelEnterSetPoint -= 100;
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) 
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                testingEnterKnob -= .1;
-                if(testingEnterKnob < 0.0) testingEnterKnob = 0.0;
-                ((WsDSAnalogInput)WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT))
-                        .set((IInputEnum)null, Double.valueOf(testingEnterKnob));
+                wheelExitSetPoint += 100;
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON9) 
         {
             if(((BooleanSubject)subjectThatCaused).getValue() == true)
             {
-                testingExitKnob -= .1;
-                if(testingExitKnob < 0.0) testingExitKnob = 0.0;
-                ((WsDSAnalogInput)WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT))
-                        .set((IInputEnum)null,Double.valueOf(testingExitKnob));
+                wheelExitSetPoint -= 100;
             }
         }
     }
@@ -256,5 +266,12 @@ public class WsShooter extends WsSubsystem implements IObserver{
     public double getKnobExitValue()
     {
         return testingExitKnob;
+    }
+    
+    public void setPresetState(Preset preset)
+    {
+        this.wheelEnterSetPoint = preset.ENTER_WHEEL_SET_POINT;
+        this.wheelExitSetPoint = preset.EXIT_WHEEL_SET_POINT;
+        this.angleFlag = preset.ANGLE;
     }
 }
