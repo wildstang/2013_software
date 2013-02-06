@@ -4,7 +4,6 @@
  */
 package com.wildstangs.simulation;
 
-import com.wildstangs.config.timer.WsTimer;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
@@ -13,6 +12,7 @@ import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
+import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
@@ -30,7 +30,7 @@ public class WsSimulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        WsTimer timer = new WsTimer("crap timer", 20);
+        WsProfilingTimer timer = new WsProfilingTimer("crap timer", 20);
 
         //Instantiate the Facades and Containers
 
