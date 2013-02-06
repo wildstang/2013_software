@@ -12,6 +12,7 @@ import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
+import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
@@ -29,6 +30,8 @@ public class WsSimulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        WsProfilingTimer timer = new WsProfilingTimer("crap timer", 20);
+
         //Instantiate the Facades and Containers
 
         //start the log viewer.
@@ -100,11 +103,13 @@ public class WsSimulation {
 
             left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
             right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
-
+            
+            timer.startTimingSection();
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
             }
+            timer.endTimingSection();
 
         }
 
