@@ -6,9 +6,9 @@ package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
-import com.wildstangs.autonomous.steps.input.WsAutonomousStepKick;
-import com.wildstangs.autonomous.steps.input.WsAutonomousStepLowerHopper;
-import com.wildstangs.autonomous.steps.input.WsAutonomousStepRaiseHopper;
+import com.wildstangs.autonomous.steps.hopper.WsAutonomousStepKick;
+import com.wildstangs.autonomous.steps.hopper.WsAutonomousStepLowerHopper;
+import com.wildstangs.autonomous.steps.hopper.WsAutonomousStepRaiseHopper;
 
 /**
  *

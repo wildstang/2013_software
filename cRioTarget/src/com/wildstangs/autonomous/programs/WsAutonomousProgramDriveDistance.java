@@ -5,9 +5,9 @@
 package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
-import com.wildstangs.autonomous.steps.input.WsAutonomousStepEnableDriveDistancePid;
-import com.wildstangs.autonomous.steps.input.WsAutonomousStepSetDriveDistancePidSetpoint;
-import com.wildstangs.autonomous.steps.input.WsAutonomousStepWaitForDriveDistancePid;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepEnableDriveDistancePid;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepSetDriveDistancePidSetpoint;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepWaitForDriveDistancePid;
 
 /**
  *

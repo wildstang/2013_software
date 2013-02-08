@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.wildstangs.autonomous.steps.input;
+package com.wildstangs.autonomous.steps.hopper;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
 import com.wildstangs.inputfacade.base.WsInputFacade;
@@ -17,27 +17,30 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  *
  * @author Batman
  */
-public class WsAutonomousStepLowerHopper extends WsAutonomousStep
+public class WsAutonomousStepRaiseHopper extends WsAutonomousStep
 {
 
-    public void initialize() 
+    public void initialize() {}
+
+    public void update() 
     {
         WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
         BooleanSubject button = (BooleanSubject)subject;
         
-        if(subsystem.getLiftValueEquals(DoubleSolenoid.Value.kForward))
+        if(button.getValue() == true)
+        {
+            button.setValue(false);
+            finished = true;
+        }
+        
+        if(subsystem.getLiftValueEquals(DoubleSolenoid.Value.kReverse))
             button.setValue(true);
-        finished = true;
-    }
-
-    public void update() 
-    {
     }
 
     public String toString() 
     {
-        return "Lowering the hopper.";
+        return "Raising the hopper to use the kicker.";
     }
     
 }

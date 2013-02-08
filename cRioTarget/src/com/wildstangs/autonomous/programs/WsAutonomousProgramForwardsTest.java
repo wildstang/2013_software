@@ -6,7 +6,7 @@ package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
-import com.wildstangs.autonomous.steps.input.WsAutonomousStepDriveManual;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepDriveManual;
 
 /**
  *

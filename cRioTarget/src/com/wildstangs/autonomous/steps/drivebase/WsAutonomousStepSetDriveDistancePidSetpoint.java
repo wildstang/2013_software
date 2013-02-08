@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.wildstangs.autonomous.steps.input;
+package com.wildstangs.autonomous.steps.drivebase;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
 import com.wildstangs.subsystems.WsDriveBase;
