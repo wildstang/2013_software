@@ -14,6 +14,7 @@ import com.wildstangs.logger.Logger;
  */
 public abstract class WsAutonomousSerialStepGroup extends WsAutonomousStep implements IStepContainer
 {
+    // A serial step group functions as a subprogram, so use it to group together related steps.
     protected final WsAutonomousStep[] steps;
     protected int currentStep, errorCount;
     protected boolean finishedStep, lastStepError;
@@ -22,13 +23,13 @@ public abstract class WsAutonomousSerialStepGroup extends WsAutonomousStep imple
         steps = new WsAutonomousStep[stepCount];
     }
 
-    protected abstract void defineSteps(WsAutonomousStep[] steps);
+    protected abstract void defineSteps();// Use this just like in WsAutonomousProgram, except the array is called "steps".
 
     public void initialize() {
         finishedStep = false;
         currentStep = 0;
         errorCount = 0;
-        defineSteps(steps);
+        defineSteps();
         steps[0].initialize();
     }
 

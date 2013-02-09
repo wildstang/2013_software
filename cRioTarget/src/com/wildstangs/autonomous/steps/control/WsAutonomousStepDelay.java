@@ -17,8 +17,10 @@ public class WsAutonomousStepDelay extends WsAutonomousStep /* This step delays 
 
     private int count;
     protected final int originalCount;
+    private static final int MS_PER_FRAME = 50;
 
-    public WsAutonomousStepDelay(int delay) {
+    public WsAutonomousStepDelay(int msDelay) {
+        int delay = (int)Math.ceil((double)msDelay/(double)MS_PER_FRAME);
         count = delay - 1;
         originalCount = delay;
         if (delay <= 0) {
@@ -28,7 +30,7 @@ public class WsAutonomousStepDelay extends WsAutonomousStep /* This step delays 
     }
 
     public WsAutonomousStepDelay() {
-        this(50);
+        this(1000);
     }
 
     public void initialize() // Do nothing, as the variables have been initialised in the constructor.
