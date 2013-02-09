@@ -1,15 +1,16 @@
 package com.wildstangs.subsystems;
 
-import com.wildstangs.subsystems.base.WsSubsystem;
+import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
-import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subjects.base.BooleanSubject;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import com.wildstangs.subjects.base.IObserver;
-import com.wildstangs.config.IntegerConfigFileParameter;
+import com.wildstangs.subjects.base.ISubjectEnum;
+import com.wildstangs.subjects.base.Subject;
+import com.wildstangs.subsystems.base.WsSubsystem;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -25,6 +26,7 @@ public class WsHopper extends WsSubsystem implements IObserver
     private IntegerConfigFileParameter forwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 30);
     private int forwardCycles;
     private int cycle;
+    private boolean upLimitSwitchValue = false, downLimitSwitchValue = false;
     
     private boolean kickerValue;
     private DoubleSolenoid.Value liftValue;
@@ -62,6 +64,14 @@ public class WsHopper extends WsSubsystem implements IObserver
         }
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kickerValue));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, new Integer(liftValue.value));
+        
+        upLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
+                             .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
+                             .getSubject(((ISubjectEnum)null))).getValue();
+        
+        downLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
+                               .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
+                               .getSubject(((ISubjectEnum)null))).getValue();
     }
 
     public void notifyConfigChange() 
@@ -112,5 +122,15 @@ public class WsHopper extends WsSubsystem implements IObserver
     }
     public DoubleSolenoid.Value get_LiftState (){
         return liftValue;     
+    }
+    
+    public boolean isDownLimitSwitchTriggered()
+    {
+        return downLimitSwitchValue;
+    }
+    
+    public boolean isUpLimitSwitchTriggered()
+    {
+        return upLimitSwitchValue;
     }
 }
