@@ -19,9 +19,8 @@ public class WsAutonomousStepMotorForward  extends WsAutonomousStep
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
         BooleanSubject forwardButton = (BooleanSubject) subject;
 
-        if (subsystem.getMotorBack() && subsystem.getMotorForward()) {
+        if (subsystem.getMotorForward() == false) 
             forwardButton.setValue(true);
-        }
 
     }
 

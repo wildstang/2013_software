@@ -20,7 +20,7 @@ public class WsAutonomousStepFloorPickupSetSolenoidState extends WsAutonomousSte
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON4);
         BooleanSubject backButton = (BooleanSubject)subject;
         
-        if(subsystem.getSolenoidState())
+        if(subsystem.getSolenoidState() == false)
             backButton.setValue(true);
     }
     public void update()
