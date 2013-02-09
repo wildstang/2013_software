@@ -22,6 +22,7 @@ public class WsAutonomousStepMotorBackward extends WsAutonomousStep
         
         if(subsystem.getMotorBack() == false)
             backButton.setValue(true);
+            finished = true;
     }
     public void update()
     {

@@ -21,6 +21,7 @@ public class WsAutonomousStepMotorForward  extends WsAutonomousStep
 
         if (subsystem.getMotorForward() == false) 
             forwardButton.setValue(true);
+            finished = true;
 
     }
 
