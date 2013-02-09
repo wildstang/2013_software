@@ -37,7 +37,7 @@ public class WsAutonomousStepLowerHopper extends WsAutonomousStep
 
     public String toString() 
     {
-        return "Lowering the hopper.";
+        return "Lower the hopper";
     }
     
 }

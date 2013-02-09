@@ -36,6 +36,6 @@ public class WsAutonomousStepSetShooterPreset extends WsAutonomousStep {
     }
 
     public String toString() {
-        return "Sets the Shooter to a given preset with a front and back flywheel setpoint and a shooter angle";
+        return "Set the Shooter to a given preset with a front and back flywheel setpoint and a shooter angle";
     }
 }

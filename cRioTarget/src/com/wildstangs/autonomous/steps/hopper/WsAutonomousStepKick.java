@@ -18,8 +18,10 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  */
 public class WsAutonomousStepKick extends WsAutonomousStep
 {
+    private boolean firstUpdate;
     public void initialize() 
     {
+        firstUpdate = true;
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
         BooleanSubject button = (BooleanSubject)subject;
         button.setValue(true);
@@ -27,19 +29,24 @@ public class WsAutonomousStepKick extends WsAutonomousStep
 
     public void update() 
     {
-        WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
-        if(subsystem.getKickerValue() == false)
+        if (!firstUpdate)
         {
-            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
-            BooleanSubject button = (BooleanSubject)subject;
-            button.setValue(false);
-            finished = true;
+            WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
+            if(subsystem.getKickerValue() == false)
+            {
+                Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
+                BooleanSubject button = (BooleanSubject)subject;
+                button.setValue(false);
+                finished = true;
+            }
+        } else {
+            firstUpdate = false;
         }
     }
 
     public String toString() 
     {
-        return "Extending the kicker for the given number of cycles";
+        return "Start the kicker cycle";
     }
     
 }
