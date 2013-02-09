@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WsShooter extends WsSubsystem implements IObserver{
     
-    public class Preset
+    public static class Preset
     {
         public final int ENTER_WHEEL_SET_POINT;
         public final int EXIT_WHEEL_SET_POINT;
