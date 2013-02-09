@@ -1,15 +1,15 @@
 package com.wildstangs.subsystems;
 
-import com.wildstangs.subsystems.base.WsSubsystem;
+import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
-import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subjects.base.BooleanSubject;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import com.wildstangs.subjects.base.IObserver;
-import com.wildstangs.config.IntegerConfigFileParameter;
+import com.wildstangs.subjects.base.Subject;
+import com.wildstangs.subsystems.base.WsSubsystem;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
