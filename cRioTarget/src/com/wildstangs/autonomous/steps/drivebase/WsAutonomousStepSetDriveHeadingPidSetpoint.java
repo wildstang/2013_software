@@ -12,14 +12,16 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Nathan Walters
  */
-public class WsAutonomousStepEnableDriveDistancePid extends WsAutonomousStep {
+public class WsAutonomousStepSetDriveHeadingPidSetpoint extends WsAutonomousStep {
 
-    public WsAutonomousStepEnableDriveDistancePid() {
+    double value;
+
+    public WsAutonomousStepSetDriveHeadingPidSetpoint(double value) {
+        this.value = value;
     }
 
     public void initialize() {
-        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
-        System.out.println("Drive Distance pid is enabled");
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setDriveDistancePidSetpoint(value);
         finished = true;
     }
 
@@ -27,6 +29,6 @@ public class WsAutonomousStepEnableDriveDistancePid extends WsAutonomousStep {
     }
 
     public String toString() {
-        return "Enable the drive distance PID";
+        return "Set the drive heading PID ssetpoint";
     }
 }

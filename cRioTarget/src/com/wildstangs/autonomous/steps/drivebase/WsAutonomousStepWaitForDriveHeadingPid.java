@@ -13,9 +13,9 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Nathan Walters
  */
-public class WsAutonomousStepWaitForDriveDistancePid extends WsAutonomousStep {
+public class WsAutonomousStepWaitForDriveHeadingPid extends WsAutonomousStep {
 
-    public WsAutonomousStepWaitForDriveDistancePid() {
+    public WsAutonomousStepWaitForDriveHeadingPid() {
     }
 
     public void initialize() {
@@ -23,9 +23,9 @@ public class WsAutonomousStepWaitForDriveDistancePid extends WsAutonomousStep {
     }
 
     public void update() {
-        WsPidStateType pidState = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getDistancePidState();
+        WsPidStateType pidState = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getHeadingPidState();
         if (pidState == WsPidStateType.WS_PID_STABILIZED_STATE) {
-            ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).disableDistancePidControl();
+            ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).disableHeadingPidControl();
             finished = true;
         } else {
             finished = false;
@@ -33,6 +33,6 @@ public class WsAutonomousStepWaitForDriveDistancePid extends WsAutonomousStep {
     }
 
     public String toString() {
-        return "Wait for the drive distance PID to stabilize";
+        return "Wait for the drive heading PID to stabilize";
     }
 }
