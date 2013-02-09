@@ -8,13 +8,14 @@ import com.wildstangs.subsystems.base.WsSubsystem;
  */
 public class WsLandingGear extends WsSubsystem {
 
-    public WsLandingGear(String name) {
+    public WsLandingGear (String name) {
         super(name);
-    }
+   }
 
-    public void init() {
+    public void init()
+    {
     }
-
+    
     public void update() {
     }
 
