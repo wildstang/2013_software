@@ -12,6 +12,7 @@ import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import com.wildstangs.timer.WsTimer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -32,6 +33,7 @@ public class RobotTemplate extends IterativeRobot {
      */
     
     public void robotInit() {
+        startupTimer.startTimingSection(); 
         System.out.println("RobotInit Start");
         try {
             WsConfigFacade.getInstance().setFileName("/ws_config.txt");
@@ -46,9 +48,16 @@ public class RobotTemplate extends IterativeRobot {
         WsSubsystemContainer.getInstance().init();
         WsAutonomousManager.getInstance();
         Logger.getLogger().always(this.getClass().getName(), "robotInit", "Startup Completed");
+        startupTimer.endTimingSection(); 
+
     }
+    WsProfilingTimer durationTimer = new WsProfilingTimer("Periodic method duration", 50);
+    WsProfilingTimer periodTimer = new WsProfilingTimer("Periodic method period", 50);
+    WsProfilingTimer startupTimer = new WsProfilingTimer("Startup duration", 1);
+    WsProfilingTimer initTimer = new WsProfilingTimer("Init duration", 1);
 
     public void disabledInit() {
+        initTimer.startTimingSection();
         WsAutonomousManager.getInstance().clear();
         try {
             WsConfigFacade.getInstance().readConfig();
@@ -56,7 +65,9 @@ public class RobotTemplate extends IterativeRobot {
             System.out.println(e.getMessage());
         }
         WsSubsystemContainer.getInstance().init();
-        WsConfigFacade.getInstance().dumpConfigData();
+        //WsConfigFacade.getInstance().dumpConfigData();
+        initTimer.endTimingSection();
+        Logger.getLogger().always(this.getClass().getName(), "disabledInit", "Disabled Init Complete");
     }
 
     public void disabledPeriodic() {
@@ -85,14 +96,19 @@ public class RobotTemplate extends IterativeRobot {
      */
     public void teleopInit() {
         WsSubsystemContainer.getInstance().init();
+        periodTimer.startTimingSection();
     }
 
     public void teleopPeriodic() {
+        periodTimer.endTimingSection();
+        periodTimer.startTimingSection();
+        durationTimer.startTimingSection();
         WsInputFacade.getInstance().updateOiData();
         WsInputFacade.getInstance().updateSensorData();
         WsSubsystemContainer.getInstance().update();
         WsOutputFacade.getInstance().update();
         Watchdog.getInstance().feed();
+        durationTimer.endTimingSection();
     }
 
     /**
