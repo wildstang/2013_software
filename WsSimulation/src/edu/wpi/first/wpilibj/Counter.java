@@ -360,6 +360,7 @@ public class Counter extends SensorBase implements CounterBase, LiveWindowSendab
      * the current value to zero.
      */
     public void reset() {
+        count = 0;
     }
 
     /**
