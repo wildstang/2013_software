@@ -81,7 +81,23 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
 
     protected void initDefaultCommand() {
     }
-
+    
+    public boolean getSolenoidState()
+    {
+        return solenoidState;
+    }
+    
+    public boolean getMotorBack()
+    {
+        return motorBack;
+    }
+    
+    public boolean getMotorForward()
+    {
+        return motorForward;
+    }
+    
+    
     public void acceptNotification(Subject subjectThatCaused) {
         if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON4) {
             solenoidState = !solenoidState;
