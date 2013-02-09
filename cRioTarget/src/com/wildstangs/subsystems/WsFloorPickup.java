@@ -82,11 +82,6 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     protected void initDefaultCommand() {
     }
     
-    public boolean getSolenoidState()
-    {
-        return solenoidState;
-    }
-    
     public boolean getMotorBack()
     {
         return motorBack;

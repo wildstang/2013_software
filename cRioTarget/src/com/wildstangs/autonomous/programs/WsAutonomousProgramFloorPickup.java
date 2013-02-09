@@ -17,22 +17,20 @@ public class WsAutonomousProgramFloorPickup extends WsAutonomousProgram
 {
     public WsAutonomousProgramFloorPickup()
     {
-        super(11);
+        super(10);
     }
     protected void defineSteps() 
     {
-        programSteps[0] = new WsAutonomousStepRaiseAccumulatorState();
-        programSteps[1] = new WsAutonomousStepDelay(2000);
-        programSteps[2] = new WsAutonomousStepLowerAccumulatorState();
-        programSteps[3] = new WsAutonomousStepLowerHopper();
-        programSteps[4] = new WsAutonomousStepMotorForward();
+        programSteps[0] = new WsAutonomousStepLowerAccumulatorState();
+        programSteps[1] = new WsAutonomousStepLowerHopper();
+        programSteps[2] = new WsAutonomousStepMotorForward();
+        programSteps[3] = new WsAutonomousStepDelay(2000);
+        programSteps[4] = new WsAutonomousStepMotorBackward();
+        programSteps[5] = new WsAutonomousStepMotorStop();
         programSteps[6] = new WsAutonomousStepDelay(2000);
-        programSteps[5] = new WsAutonomousStepMotorBackward();
-        programSteps[6] = new WsAutonomousStepMotorStop();
-        programSteps[7] = new WsAutonomousStepDelay(2000);
-        programSteps[8] = new WsAutonomousStepRaiseAccumulatorState();
-        programSteps[9] = new WsAutonomousStepDelay(2000);
-        programSteps[10] = new WsAutonomousStepLowerAccumulatorState();
+        programSteps[7] = new WsAutonomousStepRaiseAccumulatorState();
+        programSteps[8] = new WsAutonomousStepDelay(2000);
+        programSteps[9] = new WsAutonomousStepLowerAccumulatorState();
     }
 
     public String toString() 
