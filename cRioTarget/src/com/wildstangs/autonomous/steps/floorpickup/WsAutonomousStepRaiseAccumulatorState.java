@@ -12,19 +12,27 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepFloorPickupSetSolenoidState extends WsAutonomousStep 
+public class WsAutonomousStepRaiseAccumulatorState extends WsAutonomousStep 
 {
     public void initialize()
     {
         WsFloorPickup subsystem = (WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON4);
-        BooleanSubject backButton = (BooleanSubject)subject;
+        BooleanSubject button = (BooleanSubject)subject;
         
-        if(subsystem.getSolenoidState() == false)
-            backButton.setValue(true);
+        if(subsystem.getSolenoidState())
+            button.setValue(true);
     }
     public void update()
     {
+        WsFloorPickup subsystem = (WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
+        if(subsystem.getSolenoidState() == true)
+        {
+            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON4);
+            BooleanSubject button = (BooleanSubject)subject;
+            button.setValue(false);
+            finished = true;
+        }
         
     }
     public String toString()
