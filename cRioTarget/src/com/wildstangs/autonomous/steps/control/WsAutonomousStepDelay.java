@@ -17,7 +17,7 @@ public class WsAutonomousStepDelay extends WsAutonomousStep /* This step delays 
 
     private int count;
     protected final int originalCount;
-    private static final int MS_PER_FRAME = 50;
+    private static final int MS_PER_FRAME = 20;
 
     public WsAutonomousStepDelay(int msDelay) {
         int delay = (int)Math.ceil((double)msDelay/(double)MS_PER_FRAME);
