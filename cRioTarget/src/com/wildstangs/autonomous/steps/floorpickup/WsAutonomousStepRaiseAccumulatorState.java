@@ -37,7 +37,7 @@ public class WsAutonomousStepRaiseAccumulatorState extends WsAutonomousStep
     }
     public String toString()
     {
-        return "doing something with the solenoid";
+        return "Raise the Accumulator";
     }
     
 }

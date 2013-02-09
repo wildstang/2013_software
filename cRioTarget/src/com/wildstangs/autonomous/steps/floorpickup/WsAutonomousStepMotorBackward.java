@@ -12,7 +12,7 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepMotorBackward extends WsAutonomousStep 
+public class WsAutonomousStepMotorBackward extends WsAutonomousStep //TODO: rename to WsAutonomousStepInputMotorBackward
 {
     public void initialize()
     {
@@ -30,7 +30,7 @@ public class WsAutonomousStepMotorBackward extends WsAutonomousStep
     }
     public String toString()
     {
-        return "moving floor pickup motor backward";
+        return "Move floor pickup motor backward";
     }
     
 }

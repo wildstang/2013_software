@@ -21,7 +21,9 @@ public class WsAutonomousStepLowerAccumulatorState extends WsAutonomousStep
         BooleanSubject button = (BooleanSubject)subject;
         
         if(subsystem.getSolenoidState() == false)
+        {
             button.setValue(true);
+        }
     }
     public void update()
     {
@@ -36,7 +38,7 @@ public class WsAutonomousStepLowerAccumulatorState extends WsAutonomousStep
     }
     public String toString()
     {
-        return "doing something with the solenoid";
+        return "Lower the Accumulator";
     }
     
 }

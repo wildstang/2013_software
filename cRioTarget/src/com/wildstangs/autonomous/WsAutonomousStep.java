@@ -44,7 +44,7 @@ public abstract class WsAutonomousStep {
         }
     }
 
-    public abstract String toString();
+    public abstract String toString(); //Please use future tense (NOT present tense!) when naming steps.
 //    public abstract int hashCode();
 //    public abstract boolean equals(Object o);
 }

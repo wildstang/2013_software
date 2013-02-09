@@ -18,7 +18,6 @@ public class WsAutonomousStepWaitForShooter extends WsAutonomousStep {
     }
 
     public void initialize() {
-                finished = ((WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER)).isAtSpeed();
     }
 
     public void update() {

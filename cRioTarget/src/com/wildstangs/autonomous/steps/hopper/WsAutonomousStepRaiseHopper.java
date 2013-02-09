@@ -19,28 +19,41 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  */
 public class WsAutonomousStepRaiseHopper extends WsAutonomousStep
 {
-
-    public void initialize() {}
-
-    public void update() 
+    private boolean wait;
+    public void initialize() 
     {
+        wait = false;
         WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
         BooleanSubject button = (BooleanSubject)subject;
         
-        if(button.getValue() == true)
-        {
-            button.setValue(false);
-            finished = true;
-        }
-        
         if(subsystem.getLiftValueEquals(DoubleSolenoid.Value.kReverse))
+        {
             button.setValue(true);
+            wait = true;
+        }
+    }
+
+    public void update() 
+    {
+        if (!wait)
+        {
+            WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
+            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
+            BooleanSubject button = (BooleanSubject)subject;
+            if (button.getValue())
+            {
+                button.setValue(false);
+            }
+            finished = true;
+        } else {
+            wait = false;
+        }
     }
 
     public String toString() 
     {
-        return "Raising the hopper to use the kicker.";
+        return "Raise the hopper to use the kicker";
     }
     
 }

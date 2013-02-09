@@ -5,6 +5,7 @@
 package com.wildstangs.autonomous.steps.drivebase;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 
@@ -19,7 +20,7 @@ public class WsAutonomousStepEnableDriveDistancePid extends WsAutonomousStep {
 
     public void initialize() {
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
-        System.out.println("Drive Distance pid is enabled");
+        Logger.getLogger().info(this.toString(), "initialize", "Drive Distance pid is enabled");
         finished = true;
     }
 

@@ -27,8 +27,6 @@ public class WsAutonomousStepWaitForDriveDistancePid extends WsAutonomousStep {
         if (pidState == WsPidStateType.WS_PID_STABILIZED_STATE) {
             ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).disableDistancePidControl();
             finished = true;
-        } else {
-            finished = false;
         }
     }
 

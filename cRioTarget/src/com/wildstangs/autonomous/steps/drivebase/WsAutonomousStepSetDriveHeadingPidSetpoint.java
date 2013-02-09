@@ -29,6 +29,6 @@ public class WsAutonomousStepSetDriveHeadingPidSetpoint extends WsAutonomousStep
     }
 
     public String toString() {
-        return "Set the drive heading PID ssetpoint";
+        return "Set the drive heading PID ssetpoint to " + value;
     }
 }

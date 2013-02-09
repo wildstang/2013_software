@@ -27,8 +27,6 @@ public class WsAutonomousStepWaitForDriveHeadingPid extends WsAutonomousStep {
         if (pidState == WsPidStateType.WS_PID_STABILIZED_STATE) {
             ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).disableHeadingPidControl();
             finished = true;
-        } else {
-            finished = false;
         }
     }
 

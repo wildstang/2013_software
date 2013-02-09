@@ -29,6 +29,6 @@ public class WsAutonomousStepSetDriveDistancePidSetpoint extends WsAutonomousSte
     }
 
     public String toString() {
-        return "Set the drive distance PID setpoint";
+        return "Set the drive distance PID setpoint to " + value;
     }
 }

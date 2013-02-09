@@ -5,6 +5,7 @@
 package com.wildstangs.autonomous.steps.drivebase;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 
@@ -19,7 +20,7 @@ public class WsAutonomousStepEnableDriveHeadingPid extends WsAutonomousStep {
 
     public void initialize() {
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableHeadingPidControl();
-        System.out.println("Drive Heading pid is enabled");
+        Logger.getLogger().info(this.toString(), "initialize", "Drive Heading pid is enabled");
         finished = true;
     }
 
