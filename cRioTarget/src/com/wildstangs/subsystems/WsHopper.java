@@ -43,6 +43,12 @@ public class WsHopper extends WsSubsystem implements IObserver
         
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
         subject.attach(this);
+        
+        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum)null);
+        subject.attach(this);
+        
+        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).getSubject((ISubjectEnum)null);
+        subject.attach(this);
     }
     
     public void init()
@@ -64,14 +70,6 @@ public class WsHopper extends WsSubsystem implements IObserver
         }
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kickerValue));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, new Integer(liftValue.value));
-        
-        upLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
-                             .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
-                             .getSubject(((ISubjectEnum)null))).getValue();
-        
-        downLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
-                               .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
-                               .getSubject(((ISubjectEnum)null))).getValue();
     }
 
     public void notifyConfigChange() 
@@ -118,6 +116,22 @@ public class WsHopper extends WsSubsystem implements IObserver
                     liftValue = DoubleSolenoid.Value.kReverse;
                 }
             }
+        }
+        else if(subjectThatCaused.equals(WsInputFacade.getInstance().
+                getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).
+                getSubject((ISubjectEnum)null)))
+        {
+             downLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
+                      .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
+                      .getSubject(((ISubjectEnum)null))).getValue();
+        }
+        else if(subjectThatCaused.equals(WsInputFacade.getInstance().
+            getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).
+            getSubject((ISubjectEnum)null)))
+        {
+            upLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
+                     .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
+                     .getSubject(((ISubjectEnum)null))).getValue();
         }
     }
     public DoubleSolenoid.Value get_LiftState (){
