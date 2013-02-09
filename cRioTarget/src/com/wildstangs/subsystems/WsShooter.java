@@ -128,6 +128,9 @@ public class WsShooter extends WsSubsystem implements IObserver{
         double speedEnter = (60.0 / 50.0/*Replace with cycles per revolution*/) * counterEnter.get() / (newTime - previousTime);
         double speedExit = (60.0 / 50.0/*Replace with cycles per revolution*/) * counterExit.get() / (newTime - previousTime);
         
+        this.resetEnterCounter();
+        this.resetExitCounter();
+        
         previousTime = newTime;
         
         WsVictor victorEnter = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER);
