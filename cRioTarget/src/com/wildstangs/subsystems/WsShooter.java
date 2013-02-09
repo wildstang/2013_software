@@ -1,9 +1,7 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
-import com.wildstangs.inputfacade.base.IInputEnum;
 import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
@@ -14,9 +12,8 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
-import edu.wpi.first.wpilibj.CounterBase;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -36,7 +33,7 @@ public class WsShooter extends WsSubsystem implements IObserver{
         }
     }
     
-    private Encoder encoderEnter, encoderExit;
+    private Counter counterEnter, counterExit;
     private DoubleConfigFileParameter lowerWheelSpeed = new DoubleConfigFileParameter(
         this.getClass().getName(), "LowerWheelSpeed", 0);
     private DoubleConfigFileParameter lowerVictorSpeed = new DoubleConfigFileParameter(
@@ -61,8 +58,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
     public WsShooter (String name) 
     {
         super(name);
-        encoderEnter = new Encoder(10, 11, false, CounterBase.EncodingType.k2X);
-        encoderExit = new Encoder(12, 13, false, CounterBase.EncodingType.k2X);
+        counterEnter = new Counter(10);
+        counterExit = new Counter(11);
         
         //Implement this later for testing
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);
@@ -94,8 +91,8 @@ public class WsShooter extends WsSubsystem implements IObserver{
 
     public void init()
     {
-        resetEnterEncoder();
-        resetExitEncoder();
+        resetEnterCounter();
+        resetExitCounter();
         wheelEnterSetPoint = 0; 
         wheelExitSetPoint = 0 ; 
         angleFlag = DoubleSolenoid.Value.kReverse; 
@@ -104,27 +101,32 @@ public class WsShooter extends WsSubsystem implements IObserver{
     
     public void update() 
     {
-        double enterKnobValue = ((DoubleSubject)WsInputFacade.getInstance()
-                .getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT)
-                .getSubject((ISubjectEnum)null)).getValue();
-        
-        if(enterKnobValue > 3.3) enterKnobValue = 3.3;
-        //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
-        wheelEnterSetPoint = ((enterKnobValue * (highWheelEnterTestSpeed - lowWheelEnterTestSpeed)) / 3.3)
-                + lowWheelEnterTestSpeed;
-        
-        double exitKnobValue = ((DoubleSubject)WsInputFacade.getInstance()
-                .getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT)
-                .getSubject((ISubjectEnum)null)).getValue();
-        
-        if(exitKnobValue > 3.3) exitKnobValue = 3.3;
-        //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
-        wheelExitSetPoint = ((enterKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
-                + lowWheelExitTestSpeed;
+        if(((BooleanSubject)WsInputFacade.getInstance()
+                .getOiInput(WsInputFacade.SHOOTER_WHEEL_SPEED_OVERRIDE)
+                .getSubject((ISubjectEnum)null)).getValue())
+        {
+            double enterKnobValue = ((DoubleSubject)WsInputFacade.getInstance()
+                    .getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT)
+                    .getSubject((ISubjectEnum)null)).getValue();
+
+            if(enterKnobValue > 3.3) enterKnobValue = 3.3;
+            //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
+            wheelEnterSetPoint = ((enterKnobValue * (highWheelEnterTestSpeed - lowWheelEnterTestSpeed)) / 3.3)
+                    + lowWheelEnterTestSpeed;
+
+            double exitKnobValue = ((DoubleSubject)WsInputFacade.getInstance()
+                    .getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT)
+                    .getSubject((ISubjectEnum)null)).getValue();
+
+            if(exitKnobValue > 3.3) exitKnobValue = 3.3;
+            //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
+            wheelExitSetPoint = ((enterKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
+                    + lowWheelExitTestSpeed;
+        }
         
         double newTime = Timer.getFPGATimestamp();
-        double speedEnter = (60.0 / 50.0/*Replace with cycles per revolution*/) * encoderEnter.get() / (newTime - previousTime);
-        double speedExit = (60.0 / 50.0/*Replace with cycles per revolution*/) * encoderExit.get() / (newTime - previousTime);
+        double speedEnter = (60.0 / 50.0/*Replace with cycles per revolution*/) * counterEnter.get() / (newTime - previousTime);
+        double speedExit = (60.0 / 50.0/*Replace with cycles per revolution*/) * counterExit.get() / (newTime - previousTime);
         
         previousTime = newTime;
         
@@ -232,30 +234,30 @@ public class WsShooter extends WsSubsystem implements IObserver{
         }
     }
     
-     public Encoder getEnterEncoder() {
-        return encoderEnter;
+     public Counter getEnterCounter() {
+        return counterEnter;
     }
 
-    public Encoder getExitEncoder() {
-        return encoderExit;
+    public Counter getExitCounter() {
+        return counterExit;
     }
 
-    public Encoder getEnterEncoderValue() {
-        return encoderEnter;
+    public Counter getEnterCounterValue() {
+        return counterEnter;
     }
 
-    public Encoder getExitEncoderValue() {
-        return encoderExit;
+    public Counter getExitCounterValue() {
+        return counterExit;
     }
     
-     public void resetEnterEncoder() {
-        encoderEnter.reset();
-        encoderEnter.start();
+     public void resetEnterCounter() {
+        counterEnter.reset();
+        counterEnter.start();
     }
 
-    public void resetExitEncoder() {
-        encoderExit.reset();
-        encoderExit.start();
+    public void resetExitCounter() {
+        counterExit.reset();
+        counterExit.start();
     }
     
     public double getKnobEnterValue()
