@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.networktables2.util.List;
  */
 public class WsAutonomousParallelStepGroup extends WsAutonomousStep 
 {
+    //Parallel groups execute all contained steps in the same frame. Be careful!
+    //Note: a finished step is immediately removed from the list. update() is not called on any step that finishes.
     final List steps = new List();
     boolean initialized = false;
     public WsAutonomousParallelStepGroup()

@@ -17,20 +17,22 @@ public abstract class WsAutonomousStep {
         //initialize variables
         finished = false; //A step can't finish before it starts.
         pass = true; //Most steps pass automatically, as they issue a command or check a value.
-        fatal = false; //This is only used to "fail safe". Most steps don't need to interrupt the sub-program.
+        fatal = false; //This is only used to "fail safe". Most steps don't need to interrupt the autonomous program.
         errorInfo = "Passed";
     }
 
-    public abstract void initialize();
+    public abstract void initialize();//This method is called once, when the step is first run. Use this method to set up anything that is necessary for the step.
 
-    public abstract void update();
+    public abstract void update();//This method is called on the active step, once per call to RobotTemplate.autonomousPeriodic().
+                                  //Steps will continue to have this method called until they set finished to true.
+                                  //Note: this method is first called right after initialize(), with no delay in between.
 
     public boolean isFinished() {
-        return finished;//The abort flag means that the robot must halt immediately, thus the step is always finished when the abort flag is triggered.
+        return finished;
     }
 
     public boolean isPassed() {
-        return pass;//The abort flag overrides the pass flag. The abort flag always means a fatal error occured.
+        return pass;
     }
 
     public boolean isFatal() {
@@ -38,7 +40,7 @@ public abstract class WsAutonomousStep {
         {
             return false;
         } else {
-            return fatal;//The abort flag overrides the pass flag. The abort flag always means a fatal error occured.
+            return fatal;
         }
     }
 
