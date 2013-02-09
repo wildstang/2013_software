@@ -21,10 +21,10 @@ public class WsAutonomousStepStopIntake extends WsAutonomousStep
  
     public void initialize()
     {
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         BooleanSubject button = (BooleanSubject)subject;
         button.setValue(false);
-        finished = false;
+        finished = true;
     }
 
     public void update()
