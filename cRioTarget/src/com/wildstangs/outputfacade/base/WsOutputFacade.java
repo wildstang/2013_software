@@ -92,7 +92,7 @@ public class WsOutputFacade {
         //Add the facade data elements
         outputs.add(new DataElement(RIGHT_DRIVE_SPEED, new WsDriveSpeed(RIGHT_DRIVE_SPEED, 1, 2)));
         outputs.add(new DataElement(LEFT_DRIVE_SPEED, new WsDriveSpeed(LEFT_DRIVE_SPEED, 3, 4)));
-        BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(this.getClass().getName(), "2012_Robot", false);;
+        BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(this.getClass().getName(), "2012_Robot", false);
         if (outputsFor2012.getValue()){
             //Shifter is actually a single solenoid on 4 but 2 is unused for faking it as a double
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 1, 2, 4)));
@@ -102,6 +102,7 @@ public class WsOutputFacade {
             outputs.add(new DataElement(ACCUMULATOR_SOLENOID, new WsSolenoid(ACCUMULATOR_SOLENOID, 2, 7)));
             outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6))); 
+            outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 10)));
             
         } else { 
             outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
@@ -111,10 +112,10 @@ public class WsOutputFacade {
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
             outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6))); 
+            outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
             
         }
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
-        outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 7)));
         outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 8)));
         

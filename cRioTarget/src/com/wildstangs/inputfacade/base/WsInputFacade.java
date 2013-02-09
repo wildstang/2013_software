@@ -1,10 +1,12 @@
 package com.wildstangs.inputfacade.base;
 
+import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.inputfacade.inputs.WsDigitalInput;
 import com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput;
 import com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystick;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystick;
+import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.types.DataElement;
 import edu.wpi.first.wpilibj.networktables2.util.List;
 
@@ -139,6 +141,15 @@ public class WsInputFacade {
      */
     protected WsInputFacade() {
         //Add the facade data elements
+        BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(WsOutputFacade.getInstance().getClass().getName(), "2012_Robot", false);
+        if(outputsFor2012.getValue())
+        {
+            sensorInputs.add(new DataElement(RIGHT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(11))); 
+        }
+        else
+        {
+            sensorInputs.add(new DataElement(RIGHT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(9)));
+        }
         oiInputs.add(new DataElement(DRIVER_JOYSTICK, new WsDriverJoystick()));
         oiInputs.add(new DataElement(MANIPULATOR_JOYSTICK, new WsManipulatorJoystick()));        
         oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(4)));
@@ -147,7 +158,6 @@ public class WsInputFacade {
         oiInputs.add(new DataElement(AUTO_PROGRAM_SELECTOR, new WsDSAnalogInput(2)));
         oiInputs.add(new DataElement(LOCK_IN_SWITCH, new WsDSDigitalInput(1)));
         sensorInputs.add(new DataElement(LEFT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(8)));
-        sensorInputs.add(new DataElement(RIGHT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(9)));
         sensorInputs.add(new DataElement(HOPPER_DOWN_LIMIT_SWITCH, new WsDigitalInput(13)));
         sensorInputs.add(new DataElement(HOPPER_UP_LIMIT_SWITCH, new WsDigitalInput(12)));
     }
