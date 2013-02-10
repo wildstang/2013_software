@@ -4,6 +4,7 @@ import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
@@ -27,7 +28,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
 
     public WsFloorPickup(String name) {
         super(name);
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON4);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
         subject.attach(this);
         
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON3);
@@ -94,8 +95,10 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     
     
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON4) {
-            solenoidState = !solenoidState;
+        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) 
+        {
+            BooleanSubject button = (BooleanSubject)subjectThatCaused;
+            solenoidState = button.getValue();
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) {
             motorForward = !motorForward;
             motorBack = false;
