@@ -38,7 +38,7 @@ public class WsHopper extends WsSubsystem implements IObserver
         super(name);
         init();
         
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
         subject.attach(this);
         
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
@@ -90,7 +90,7 @@ public class WsHopper extends WsSubsystem implements IObserver
     {
         BooleanSubject button = (BooleanSubject)subjectThatCaused;
         
-        if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON2)
+        if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6)
         {
             if(button.getValue() == true)
                 kickerValue = true;
