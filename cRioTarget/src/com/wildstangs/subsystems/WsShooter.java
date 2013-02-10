@@ -241,11 +241,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 wheelEnterSetPoint -= 100;
             }
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) {
-            if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                wheelExitSetPoint += 100;
-            }
-        }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON9) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
                 wheelExitSetPoint -= 100;
