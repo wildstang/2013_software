@@ -32,7 +32,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
         subject.attach(this);
         
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
         subject.attach(this);
 
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
@@ -101,7 +101,8 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
             BooleanSubject button = (BooleanSubject)subjectThatCaused;
             solenoidState = button.getValue();
         } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
-            if(((Boolean) subjectThatCaused.getValueAsObject()) == Boolean.TRUE)
+            BooleanSubject button = (BooleanSubject)subjectThatCaused;
+            if(button.getValue())
             {
                 motorForward = true;
                 motorBack = false;
@@ -113,7 +114,8 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         }
         else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7)
         {
-            if(((Boolean) subjectThatCaused.getValueAsObject()) == Boolean.TRUE)
+            BooleanSubject button = (BooleanSubject)subjectThatCaused;
+            if(button.getValue())
             {
                 motorForward = false;
                 motorBack = true;

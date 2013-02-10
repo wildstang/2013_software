@@ -12,6 +12,7 @@ import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
+import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.WsDriveBase;
@@ -70,6 +71,12 @@ public class WsSimulation {
         subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null);
         DoubleSubjectGraph rightDriveSpeed = new DoubleSubjectGraph("Right Drive Speed", subject);
 
+        subject = ((WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)).getSubject(null);
+        DoubleSubjectGraph accumulatorSpeed = new DoubleSubjectGraph("Accumulator Speed", subject);
+        
+        subject = ((WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)).getSubject(null);
+        DoubleSubjectGraph funnelatorSpeed = new DoubleSubjectGraph("Funnelator Speed", subject);
+
         double pid_setpoint = 10;
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setDriveDistancePidSetpoint(pid_setpoint);
@@ -99,6 +106,8 @@ public class WsSimulation {
             //Update the Victor graphs
             leftDriveSpeed.update();
             rightDriveSpeed.update();
+            accumulatorSpeed.update(); 
+            funnelatorSpeed.update(); 
 
             WsInputFacade.getInstance().updateOiData();
             WsInputFacade.getInstance().updateSensorData();

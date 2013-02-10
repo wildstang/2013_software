@@ -195,7 +195,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("KnobEnterSetPoint", knobEnterSetPoint);
         SmartDashboard.putNumber("KnobExitSetPoint", knobExitSetPoint);
         //set shooter angle
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(angleFlag.value));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
     }
 
     public void notifyConfigChange() {

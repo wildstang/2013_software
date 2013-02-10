@@ -50,8 +50,8 @@ public class Victor implements ComponentListener, ActionListener {
      * @param channel The Digital Sidecar channel it should be connected to.
      */
     public Victor(int channel) {
-
-    }
+            
+        }
 
 	/**
      * Sets the value of the Victor using a value between -1.0 and +1.0.

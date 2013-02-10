@@ -12,6 +12,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  *
@@ -21,6 +22,8 @@ public class WsIntake extends WsSubsystem implements IObserver
 {
     private static final boolean controlValveDefaultState = false;
     boolean controlValveState;
+    boolean motorForward = false, motorBack = false;
+
     boolean overrideButtonState;
     public WsIntake (String name)
     {
@@ -40,6 +43,9 @@ public class WsIntake extends WsSubsystem implements IObserver
     {
         controlValveState = controlValveDefaultState;
         overrideButtonState = false;
+        motorForward = false;
+        motorBack = false;
+        
     }
 
     public void update() 
@@ -62,6 +68,31 @@ public class WsIntake extends WsSubsystem implements IObserver
         }
         
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.FRISBIE_CONTROL).set((IOutputEnum)null, new Boolean(controlValveState));
+        
+        
+        WsFloorPickup pickup = ((WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
+        boolean up = pickup.isUp();
+        if (motorForward == true && pickup.isUp() && ((WsHopper) WsSubsystemContainer.getInstance()
+           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).get_LiftState() != DoubleSolenoid.Value.kReverse) 
+        {
+            motorForward = false;
+        }
+        
+        if(motorForward) 
+        {
+            WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
+                    .set(null, Double.valueOf(1.0));
+        }
+        else if(motorBack)
+        {
+            WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
+                    .set(null, Double.valueOf(-1.0));
+        }
+        else
+        {
+            WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
+                    .set(null, Double.valueOf(0.0));
+        }
     }
 
     public void notifyConfigChange() 
@@ -75,22 +106,28 @@ public class WsIntake extends WsSubsystem implements IObserver
         {
             overrideButtonState = button.getValue();
         }
-        else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5)
-        {
-            WsFloorPickup pickup = ((WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
-            boolean up = pickup.isUp();
-            if(up && button.getValue())
+        else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
+            if(button.getValue())
             {
-                WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER).set((IOutputEnum)null, new Double(1.0));
+                motorForward = true;
+                motorBack = false;
             }
             else
             {
-                WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER).set((IOutputEnum)null, new Double(0));
+                motorForward = false;
             }
         }
         else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7)
         {
-                WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER).set((IOutputEnum)null, new Double(-1.0));
+            if(button.getValue())
+            {
+                motorForward = false;
+                motorBack = true;
+            }
+            else
+            {
+                motorBack = false;
+            }
         }
     }
 }
