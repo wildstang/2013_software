@@ -22,10 +22,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class WsHopper extends WsSubsystem implements IObserver
 {
     private static final boolean KICKER_DEFAULT_VALUE = false;
-    private static final DoubleSolenoid.Value LIFT_DEFAULT_VALUE = DoubleSolenoid.Value.kReverse;
-    private IntegerConfigFileParameter forwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 30);
+    private static final DoubleSolenoid.Value LIFT_DEFAULT_VALUE = DoubleSolenoid.Value.kForward;
+    private IntegerConfigFileParameter forwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 15);
+    private IntegerConfigFileParameter backwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 15);
+    private int backwardCycles;
     private int forwardCycles;
     private int cycle;
+    private boolean goingForward = false, goingBack = false;
     private boolean upLimitSwitchValue = false, downLimitSwitchValue = false;
     
     private boolean kickerValue;
@@ -54,22 +57,40 @@ public class WsHopper extends WsSubsystem implements IObserver
     public void init()
     {
         forwardCycles = forwardCycleConfig.getValue();
+        backwardCycles = backwardCycleConfig.getValue();
         kickerValue = KICKER_DEFAULT_VALUE;
         liftValue = LIFT_DEFAULT_VALUE;
         cycle = 0;
     }
 
     public void update() 
-    {
-        SmartDashboard.putBoolean("Kicker value", kickerValue);
-        SmartDashboard.putNumber("Lift Value", liftValue.value);
-        cycle++;
-        if(cycle >= forwardCycles)
+    {        
+        if(goingForward)
         {
-            kickerValue = false;
+            cycle++;
+            if(cycle >= forwardCycles)
+            {
+                goingForward = false;
+                goingBack = true;
+                kickerValue = false;
+                cycle = 0;
+            }
+        }
+        else if(goingBack)
+        {
+            cycle++;
+            if(cycle >= backwardCycles)
+            {
+                goingBack = false;
+                cycle = 0;
+            }
         }
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kickerValue));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, new Integer(liftValue.value));
+        
+        SmartDashboard.putBoolean("Kicker value", kickerValue);
+        SmartDashboard.putNumber("Lift Value", liftValue.value);
+        SmartDashboard.putBoolean("KickerReady", goingForward || goingBack);
     }
 
     public void notifyConfigChange() 
@@ -92,15 +113,14 @@ public class WsHopper extends WsSubsystem implements IObserver
         
         if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6)
         {
-            if(button.getValue() == true)
-                kickerValue = true;
-            if(liftValue.value == DoubleSolenoid.Value.kReverse_val)
+            if(button.getValue())
             {
-                kickerValue = false;
-            }
-            if(kickerValue == true && (button.getPreviousValue() == false))
-            {
-                cycle = 0;
+                if(!goingForward && !goingBack)
+                {
+                    goingForward = true;
+                    cycle = 0;
+                    kickerValue = true;
+                }
             }
         }
         else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8)
@@ -135,7 +155,7 @@ public class WsHopper extends WsSubsystem implements IObserver
         }
     }
     public DoubleSolenoid.Value get_LiftState (){
-        return liftValue;     
+        return liftValue;
     }
     
     public boolean isDownLimitSwitchTriggered()
@@ -146,5 +166,10 @@ public class WsHopper extends WsSubsystem implements IObserver
     public boolean isUpLimitSwitchTriggered()
     {
         return upLimitSwitchValue;
+    }
+    
+    public boolean isHopperUp()
+    {
+        return (liftValue == DoubleSolenoid.Value.kForward);
     }
 }

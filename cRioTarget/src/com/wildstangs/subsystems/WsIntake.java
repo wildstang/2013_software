@@ -73,7 +73,7 @@ public class WsIntake extends WsSubsystem implements IObserver
         WsFloorPickup pickup = ((WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
         boolean up = pickup.isUp();
         if (motorForward == true && pickup.isUp() && ((WsHopper) WsSubsystemContainer.getInstance()
-           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).get_LiftState() != DoubleSolenoid.Value.kReverse) 
+           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isHopperUp()) 
         {
             motorForward = false;
         }
