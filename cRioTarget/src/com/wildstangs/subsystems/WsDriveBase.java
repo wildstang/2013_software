@@ -74,7 +74,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         TICKS_PER_ROTATION_config = new DoubleConfigFileParameter(this.getClass().getName(), "ticks_per_rotation", 360.0);
 
         //Anti-Turbo button
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
         subject.attach(this);
         //Shifter Button
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON6);
@@ -393,7 +393,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON7) {
+        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON8) {
             antiTurboFlag = ((BooleanSubject) subjectThatCaused).getValue();
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON6) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
