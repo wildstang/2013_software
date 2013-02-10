@@ -78,7 +78,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         //Implement this later for testing
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
@@ -220,7 +220,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON2) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
                 if (angleFlag == DoubleSolenoid.Value.kReverse) {
                     angleFlag = DoubleSolenoid.Value.kForward;
