@@ -3,6 +3,7 @@ package com.wildstangs.subsystems;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
+import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
@@ -30,10 +31,10 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON4);
         subject.attach(this);
         
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON3);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
 
         maxVictorSpeed = maxSpeed.getValue();
@@ -96,14 +97,28 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     public void acceptNotification(Subject subjectThatCaused) {
         if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON4) {
             solenoidState = !solenoidState;
-        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) {
-            motorForward = !motorForward;
-            motorBack = false;
+        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
+            if(((Boolean) subjectThatCaused.getValueAsObject()) == Boolean.TRUE)
+            {
+                motorForward = true;
+                motorBack = false;
+            }
+            else
+            {
+                motorForward = false;
+            }
         }
-        else if(subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON3)
+        else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7)
         {
-            motorBack = !motorBack;
-            motorForward = false;
+            if(((Boolean) subjectThatCaused.getValueAsObject()) == Boolean.TRUE)
+            {
+                motorForward = false;
+                motorBack = true;
+            }
+            else
+            {
+                motorBack = false;
+            }
         }
     }
     public boolean isUp()

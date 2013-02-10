@@ -29,10 +29,10 @@ public class WsIntake extends WsSubsystem implements IObserver
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON4);
         subject.attach(this);
         
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
         
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON3);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
         subject.attach(this);
     }
     
@@ -75,7 +75,7 @@ public class WsIntake extends WsSubsystem implements IObserver
         {
             overrideButtonState = button.getValue();
         }
-        else if(subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5)
+        else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5)
         {
             WsFloorPickup pickup = ((WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
             boolean up = pickup.isUp();
@@ -88,7 +88,7 @@ public class WsIntake extends WsSubsystem implements IObserver
                 WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER).set((IOutputEnum)null, new Double(0));
             }
         }
-        else if(subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON3)
+        else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7)
         {
                 WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER).set((IOutputEnum)null, new Double(-1.0));
         }
