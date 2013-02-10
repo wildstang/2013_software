@@ -96,8 +96,10 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     
     
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON4) {
-            solenoidState = !solenoidState;
+        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) 
+        {
+            BooleanSubject button = (BooleanSubject)subjectThatCaused;
+            solenoidState = button.getValue();
         } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
             if(((Boolean) subjectThatCaused.getValueAsObject()) == Boolean.TRUE)
             {
