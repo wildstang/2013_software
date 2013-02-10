@@ -84,6 +84,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
         subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
+        subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON1);
@@ -232,7 +234,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 wheelEnterSetPoint += 100;
             }
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7) {
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON3) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
                 wheelEnterSetPoint -= 100;
             }
