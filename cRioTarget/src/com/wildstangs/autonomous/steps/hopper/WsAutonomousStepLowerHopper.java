@@ -23,7 +23,7 @@ public class WsAutonomousStepLowerHopper extends WsAutonomousStep
     public void initialize() 
     {
         WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         BooleanSubject button = (BooleanSubject)subject;
         
         if(subsystem.getLiftValueEquals(DoubleSolenoid.Value.kForward))
