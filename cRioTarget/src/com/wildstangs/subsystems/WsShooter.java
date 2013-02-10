@@ -13,6 +13,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
+import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -176,7 +177,12 @@ public class WsShooter extends WsSubsystem implements IObserver {
         } else {
             victorExit.set(null, Double.valueOf(0.0));
         }
-
+        if(((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
+                .isHopperUp() == false)
+        {
+            victorExit.set(null, Double.valueOf(0.0));
+            victorEnter.set(null, Double.valueOf(0.0));
+        }
         if (speedExit < wheelExitSetPoint + (wheelExitSetPoint * atSpeedTolerance)
                 && speedExit > wheelExitSetPoint - (wheelExitSetPoint * atSpeedTolerance)
                 && speedEnter < wheelEnterSetPoint + (wheelEnterSetPoint * atSpeedTolerance)
@@ -186,6 +192,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
             atSpeed = false;
         }
         
+        SmartDashboard.putNumber("EnterWheelSpeed", speedEnter);
+        SmartDashboard.putNumber("ExitWheelSpeed", speedExit);
         SmartDashboard.putNumber("EnterCounter", enterCounterCount);
         SmartDashboard.putNumber("ExitCounter", exitCounterCount);
         SmartDashboard.putNumber("ExitWheelVictor", ((Double) victorExit.get((IOutputEnum)null)).doubleValue());
