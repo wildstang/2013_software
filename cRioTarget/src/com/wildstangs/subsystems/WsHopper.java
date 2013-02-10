@@ -24,7 +24,7 @@ public class WsHopper extends WsSubsystem implements IObserver
     private static final boolean KICKER_DEFAULT_VALUE = false;
     private static final DoubleSolenoid.Value LIFT_DEFAULT_VALUE = DoubleSolenoid.Value.kForward;
     private IntegerConfigFileParameter forwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 15);
-    private IntegerConfigFileParameter backwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 15);
+    private IntegerConfigFileParameter backwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "backwardCycles", 15);
     private int backwardCycles;
     private int forwardCycles;
     private int cycle;
