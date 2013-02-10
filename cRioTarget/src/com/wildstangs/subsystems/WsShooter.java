@@ -41,11 +41,11 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private DoubleConfigFileParameter lowerWheelEnterTestSpeed = new DoubleConfigFileParameter(
             this.getClass().getName(), "LowerWheelEnterTestSpeed", 0);
     private DoubleConfigFileParameter upperWheelEnterTestSpeed = new DoubleConfigFileParameter(
-            this.getClass().getName(), "UpperWheelEnterTestSpeed", 6000);
+            this.getClass().getName(), "UpperWheelEnterTestSpeed", 9000);
     private DoubleConfigFileParameter LowerWheelExitTestSpeed = new DoubleConfigFileParameter(
             this.getClass().getName(), "LowerWheelExitTestSpeed", 0);
     private DoubleConfigFileParameter upperWheelExitTestSpeed = new DoubleConfigFileParameter(
-            this.getClass().getName(), "UpperWheelExitTestSpeed", 6000);
+            this.getClass().getName(), "UpperWheelExitTestSpeed", 9000);
     private DoubleConfigFileParameter atSpeedToleranceConfig = new DoubleConfigFileParameter(
             this.getClass().getName(), "AtSpeedTolerance", .05);
     private double wheelEnterSetPoint = 0;
@@ -146,8 +146,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         int enterCounterCount = counterEnter.get();
         int exitCounterCount = counterExit.get();
         double newTime = Timer.getFPGATimestamp();
-        double speedEnter = (60.0 / 50.0/*Replace with cycles per revolution*/) * counterEnter.get() / (newTime - previousTime);
-        double speedExit = (60.0 / 50.0/*Replace with cycles per revolution*/) * counterExit.get() / (newTime - previousTime);
+        double speedEnter = (60.0 / (128 * 3)) * counterEnter.get() / (newTime - previousTime);
+        double speedExit = (60.0 / (128 * 3)) * counterExit.get() / (newTime - previousTime);
         
         this.resetEnterCounter();
         this.resetExitCounter();
