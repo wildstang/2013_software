@@ -41,7 +41,7 @@ public class WsHopper extends WsSubsystem implements IObserver
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
         subject.attach(this);
         
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         subject.attach(this);
         
         subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum)null);
@@ -103,7 +103,7 @@ public class WsHopper extends WsSubsystem implements IObserver
                 cycle = 0;
             }
         }
-        else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON3)
+        else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8)
         {
             if(button.getValue() == true && (button.getPreviousValue() == false))
             {
