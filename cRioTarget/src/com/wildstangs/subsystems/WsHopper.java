@@ -10,6 +10,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
+import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -30,6 +31,7 @@ public class WsHopper extends WsSubsystem implements IObserver
     private int cycle;
     private boolean goingForward = false, goingBack = false;
     private boolean upLimitSwitchValue = false, downLimitSwitchValue = false;
+    private boolean kickerButtonPressed = false;
     
     private boolean kickerValue;
     private DoubleSolenoid.Value liftValue;
@@ -61,6 +63,7 @@ public class WsHopper extends WsSubsystem implements IObserver
         kickerValue = KICKER_DEFAULT_VALUE;
         liftValue = LIFT_DEFAULT_VALUE;
         cycle = 0;
+        kickerButtonPressed = false;
     }
 
     public void update() 
@@ -83,6 +86,11 @@ public class WsHopper extends WsSubsystem implements IObserver
             {
                 goingBack = false;
                 cycle = 0;
+                if(kickerButtonPressed && this.isHopperUp())
+                {
+                    goingForward = true;
+                    kickerValue = true;
+                }
             }
         }
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kickerValue));
@@ -113,9 +121,10 @@ public class WsHopper extends WsSubsystem implements IObserver
         
         if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6)
         {
+            kickerButtonPressed = button.getValue();
             if(button.getValue())
             {
-                if(!goingForward && !goingBack)
+                if(!goingForward && !goingBack && this.isHopperUp())
                 {
                     goingForward = true;
                     cycle = 0;
