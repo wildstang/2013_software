@@ -128,6 +128,7 @@ public class WsInputFacade {
     
     public static final String AUTO_PROGRAM_SELECTOR = "AutoProgramSelector";
     public static final String LOCK_IN_SWITCH = "LockInSwitch";
+    public static final String START_POSITION_SELECTOR = "StartPositionSelector";
     public static final String LEFT_FUNNELATOR_LIMIT_SWITCH = "LeftFunnelatorLimitSwitch";
     public static final String RIGHT_FUNNELATOR_LIMIT_SWITCH = "RightFunnelatorLimitSwitch";
     public static final String HOPPER_UP_LIMIT_SWITCH = "HopperUpLimitSwitch";
@@ -157,6 +158,7 @@ public class WsInputFacade {
         oiInputs.add(new DataElement(SHOOTER_WHEEL_SPEED_OVERRIDE, new WsDSDigitalInput(2)));
         oiInputs.add(new DataElement(AUTO_PROGRAM_SELECTOR, new WsDSAnalogInput(2)));
         oiInputs.add(new DataElement(LOCK_IN_SWITCH, new WsDSDigitalInput(1)));
+        oiInputs.add(new DataElement(START_POSITION_SELECTOR, new WsDSAnalogInput(1)));
         sensorInputs.add(new DataElement(LEFT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(8)));
         sensorInputs.add(new DataElement(HOPPER_DOWN_LIMIT_SWITCH, new WsDigitalInput(13)));
         sensorInputs.add(new DataElement(HOPPER_UP_LIMIT_SWITCH, new WsDigitalInput(12)));

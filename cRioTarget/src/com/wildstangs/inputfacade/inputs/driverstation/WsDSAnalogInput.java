@@ -21,7 +21,7 @@ public class WsDSAnalogInput implements IInput {
 
     //By giving the input number in the constructor we can make this generic for all digital inputs
     public WsDSAnalogInput(int channel) {
-        this.analogValue = new DoubleSubject("AnalogInput" + channel);
+        this.analogValue = new DoubleSubject("AnalogInput" + channel, WsDSAnalogInputEnum.getEnumFromValue(channel));
         this.channel = channel;
 
         analogValue.setValue(startState.getValue());
