@@ -28,7 +28,9 @@ import edu.wpi.first.wpilibj.*;
 public class WsSimulation {
 
     static String c = "WsSimulation";
-
+    
+    static boolean autonomousRun = true;
+    
     /**
      * @param args the command line arguments
      */
@@ -89,8 +91,11 @@ public class WsSimulation {
         double right_drive_speed = 0.0;
         periodTimer.startTimingSection();
         
-        WsAutonomousManager.getInstance().setProgram(1);
-        WsAutonomousManager.getInstance().startCurrentProgram();
+        if(autonomousRun)
+        {
+            WsAutonomousManager.getInstance().setProgram(1);
+            WsAutonomousManager.getInstance().startCurrentProgram();
+        }
         
         while (true) {
             periodTimer.endTimingSection();
@@ -115,9 +120,16 @@ public class WsSimulation {
             accumulatorSpeed.update(); 
             funnelatorSpeed.update(); 
 
-            //WsInputFacade.getInstance().updateOiData();
-            WsInputFacade.getInstance().updateOiDataAutonomous();
             WsInputFacade.getInstance().updateSensorData();
+            if(autonomousRun)
+            {
+                WsInputFacade.getInstance().updateOiDataAutonomous();
+                WsAutonomousManager.getInstance().update();
+            }
+            else
+            {
+                WsInputFacade.getInstance().updateOiData();
+            }
             WsSubsystemContainer.getInstance().update();
             WsOutputFacade.getInstance().update();
             WsSolenoidContainer.getInstance().update();
@@ -125,7 +137,6 @@ public class WsSimulation {
             left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
             right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
             
-            WsAutonomousManager.getInstance().update();
             
             durationTimer.endTimingSection();
             try {
