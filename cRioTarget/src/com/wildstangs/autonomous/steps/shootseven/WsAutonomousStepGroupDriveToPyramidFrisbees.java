@@ -6,7 +6,12 @@
 package com.wildstangs.autonomous.steps.shootseven;
 
 import com.wildstangs.autonomous.steps.WsAutonomousSerialStepGroup;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepDisableDriveDistancePid;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepDisableDriveHeadingPid;
 import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepEnableDriveDistancePid;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepEnableDriveHeadingPid;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepSetDriveHeadingPidSetpoint;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepWaitForDriveHeadingPid;
 import com.wildstangs.subsystems.WsShooter;
 /**
  *
@@ -19,7 +24,7 @@ public class WsAutonomousStepGroupDriveToPyramidFrisbees extends WsAutonomousSer
     
     public WsAutonomousStepGroupDriveToPyramidFrisbees(double startDrive, double angle, double secondDrive, WsShooter.Preset shooterPreset)
     {
-        super(3);
+        super(7);
         this.startDrive = startDrive;
         this.angle = angle;
         this.secondDrive = secondDrive;
@@ -29,6 +34,11 @@ public class WsAutonomousStepGroupDriveToPyramidFrisbees extends WsAutonomousSer
     {
         steps[0] = new WsAutonomousStepEnableDriveDistancePid();
         steps[1] = new WsAutonomousParallelStepGroupSetShooterAndDrive(startDrive, shooterPreset);
+        steps[2] = new WsAutonomousStepDisableDriveDistancePid();
+        steps[3] = new WsAutonomousStepEnableDriveHeadingPid();
+        steps[4] = new WsAutonomousStepSetDriveHeadingPidSetpoint(angle);
+        steps[5] = new WsAutonomousStepWaitForDriveHeadingPid();
+        steps[6] = new WsAutonomousStepDisableDriveHeadingPid();
     }
     public String toString()
     {

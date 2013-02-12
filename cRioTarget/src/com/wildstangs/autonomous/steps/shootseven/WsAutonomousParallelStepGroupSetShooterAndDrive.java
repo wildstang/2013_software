@@ -7,6 +7,7 @@ package com.wildstangs.autonomous.steps.shootseven;
 
 import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
 import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepSetDriveDistancePidSetpoint;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepWaitForDriveDistancePid;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
 import com.wildstangs.subsystems.WsShooter;
@@ -24,6 +25,7 @@ public class WsAutonomousParallelStepGroupSetShooterAndDrive extends WsAutonomou
         this.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(driveDist));
         this.addStep(new WsAutonomousStepSetShooterPreset(preset.ENTER_WHEEL_SET_POINT, preset.EXIT_WHEEL_SET_POINT, preset.ANGLE));
         this.addStep(new WsAutonomousStepWaitForShooter());
+        this.addStep(new WsAutonomousStepWaitForDriveDistancePid());
     }
     
     public String toString()
