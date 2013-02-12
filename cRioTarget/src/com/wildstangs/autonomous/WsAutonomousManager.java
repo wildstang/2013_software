@@ -33,6 +33,7 @@ public class WsAutonomousManager implements IObserver {
         lockInSwitch = false;
         positionSwitch = 0;
         currentPosition = WsAutonomousStartPositionEnum.UNKNOWN;
+        clear();
     }
 
     public void update() {
@@ -127,6 +128,16 @@ public class WsAutonomousManager implements IObserver {
             WsAutonomousManager.instance = new WsAutonomousManager();
         }
         return WsAutonomousManager.instance;
+    }
+    
+    public void setProgram(int index)
+    {
+        if(index >= programs.length)
+        {
+            index = 0;
+        }
+        currentProgram = index;
+        lockedProgram = currentProgram;
     }
 
     private void definePrograms() {
