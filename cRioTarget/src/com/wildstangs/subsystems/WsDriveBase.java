@@ -416,7 +416,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveHeadingPidEnabled = false;
         driveHeadingPid.disable();
         resetHeadingPid();
-        Logger.getLogger().debug(this.getClass().getName(), "disableDistancePidControl", "Distance PID is disabled");
+        Logger.getLogger().debug(this.getClass().getName(), "disableHeadingPidControl", "Heading PID is disabled");
     }
 
     public void resetHeadingPid() {
