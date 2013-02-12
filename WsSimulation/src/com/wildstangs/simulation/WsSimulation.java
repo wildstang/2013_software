@@ -9,6 +9,7 @@ import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.logger.*;
 import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputfacade.base.IOutputEnum;
@@ -68,9 +69,13 @@ public class WsSimulation {
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
         WsSubsystemContainer.getInstance();
-
+        
         Subject subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).getSubject(null);
         DoubleSubjectGraph leftDriveSpeed = new DoubleSubjectGraph("Left Drive Speed", subject);
+
+        
+        subject = ((WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK)).getSubject(WsDriverJoystickEnum.THROTTLE));
+        DoubleSubjectGraph driverThrottle = new DoubleSubjectGraph("Driver Throttle", subject);
 
         subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null);
         DoubleSubjectGraph rightDriveSpeed = new DoubleSubjectGraph("Right Drive Speed", subject);
@@ -89,7 +94,7 @@ public class WsSimulation {
         int left_encoder = 0;
         double left_drive_speed = 0.0;
         double right_drive_speed = 0.0;
-        periodTimer.startTimingSection();
+//        periodTimer.startTimingSection();
         
         if(autonomousRun)
         {
@@ -98,9 +103,9 @@ public class WsSimulation {
         }
         
         while (true) {
-            periodTimer.endTimingSection();
-            periodTimer.startTimingSection();
-            durationTimer.startTimingSection();
+//            periodTimer.endTimingSection();
+//            periodTimer.startTimingSection();
+//            durationTimer.startTimingSection();
             ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder()).set(left_encoder);
             ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).set(right_encoder);
             if (left_drive_speed > 0) {
@@ -119,6 +124,7 @@ public class WsSimulation {
             rightDriveSpeed.update();
             accumulatorSpeed.update(); 
             funnelatorSpeed.update(); 
+            driverThrottle.update(); 
 
             WsInputFacade.getInstance().updateSensorData();
             if(autonomousRun)

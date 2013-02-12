@@ -26,8 +26,6 @@ public class WsDriverJoystick implements IInput {
     final static int numberOfButtons = 12;
     BooleanSubject[] buttons;
     Joystick driverJoystick = null;
-    DoubleConfigFileParameter trim = new DoubleConfigFileParameter(this.getClass().getName(), "trim", 0.1);
-    double configExample;
 
     public Subject getSubject(ISubjectEnum subjectEnum) {
         if (subjectEnum == WsDriverJoystickEnum.THROTTLE) {
@@ -51,14 +49,12 @@ public class WsDriverJoystick implements IInput {
             buttons[i] = new BooleanSubject(WsDriverJoystickButtonEnum.getEnumFromIndex(i));
         }
 
-        configExample = trim.getValue();
     }
 
     public void set(IInputEnum key, Object value) {
         if (key == WsDriverJoystickEnum.THROTTLE) {
             throttle.setValue(value);
             // this serves no purpose but an example
-            configExample = ((Double) value).doubleValue() + trim.getValue();
         } else if (key == WsDriverJoystickEnum.HEADING) {
             heading.setValue(value);
         } else if (key instanceof WsDriverJoystickButtonEnum) {
@@ -102,6 +98,5 @@ public class WsDriverJoystick implements IInput {
     }
 
     public void notifyConfigChange() {
-        configExample = trim.getValue();
     }
 }
