@@ -4,6 +4,8 @@
  */
 package com.wildstangs.simulation;
 
+import com.wildstangs.autonomous.WsAutonomousManager;
+import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
@@ -77,15 +79,19 @@ public class WsSimulation {
         subject = ((WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)).getSubject(null);
         DoubleSubjectGraph funnelatorSpeed = new DoubleSubjectGraph("Funnelator Speed", subject);
 
-        double pid_setpoint = 10;
-        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
-        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setDriveDistancePidSetpoint(pid_setpoint);
+//        double pid_setpoint = 10;
+//        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
+//        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setDriveDistancePidSetpoint(pid_setpoint);
+        
         int right_encoder = 0;
         int left_encoder = 0;
         double left_drive_speed = 0.0;
         double right_drive_speed = 0.0;
         periodTimer.startTimingSection();
-
+        
+        WsAutonomousManager.getInstance().setProgram(1);
+        WsAutonomousManager.getInstance().startCurrentProgram();
+        
         while (true) {
             periodTimer.endTimingSection();
             periodTimer.startTimingSection();
@@ -109,7 +115,8 @@ public class WsSimulation {
             accumulatorSpeed.update(); 
             funnelatorSpeed.update(); 
 
-            WsInputFacade.getInstance().updateOiData();
+            //WsInputFacade.getInstance().updateOiData();
+            WsInputFacade.getInstance().updateOiDataAutonomous();
             WsInputFacade.getInstance().updateSensorData();
             WsSubsystemContainer.getInstance().update();
             WsOutputFacade.getInstance().update();
@@ -117,6 +124,9 @@ public class WsSimulation {
 
             left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
             right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
+            
+            WsAutonomousManager.getInstance().update();
+            
             durationTimer.endTimingSection();
             try {
                 Thread.sleep(20);

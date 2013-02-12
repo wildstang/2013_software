@@ -28,6 +28,7 @@ public class WsAutonomousManager implements IObserver {
         WsInputFacade.getInstance().getOiInput(WsInputFacade.LOCK_IN_SWITCH).getSubject((ISubjectEnum) null).attach(this);
         selectorSwitch = 0;
         lockInSwitch = false;
+        clear();
     }
 
     public void update() {
@@ -102,6 +103,16 @@ public class WsAutonomousManager implements IObserver {
             WsAutonomousManager.instance = new WsAutonomousManager();
         }
         return WsAutonomousManager.instance;
+    }
+    
+    public void setProgram(int index)
+    {
+        if(index >= programs.length)
+        {
+            index = 0;
+        }
+        currentProgram = index;
+        lockedProgram = currentProgram;
     }
 
     private void definePrograms() {
