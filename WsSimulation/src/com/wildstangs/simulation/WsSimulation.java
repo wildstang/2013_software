@@ -29,7 +29,7 @@ public class WsSimulation {
 
     static String c = "WsSimulation";
     
-    static boolean autonomousRun = true;
+    static boolean autonomousRun = false;
     
     /**
      * @param args the command line arguments
