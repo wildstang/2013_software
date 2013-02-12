@@ -59,7 +59,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
         
         if (motorForward == true && solenoidState == false && ((WsHopper) WsSubsystemContainer.getInstance()
-           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isHopperUp()) 
+           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isUpLimitSwitchTriggered()) 
         {
             motorForward = false;
         }

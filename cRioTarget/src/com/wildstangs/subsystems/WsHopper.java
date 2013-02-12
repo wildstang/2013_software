@@ -86,7 +86,7 @@ public class WsHopper extends WsSubsystem implements IObserver
             {
                 goingBack = false;
                 cycle = 0;
-                if(kickerButtonPressed && this.isHopperUp())
+                if(kickerButtonPressed && this.isUpLimitSwitchTriggered())
                 {
                     goingForward = true;
                     kickerValue = true;
@@ -124,7 +124,7 @@ public class WsHopper extends WsSubsystem implements IObserver
             kickerButtonPressed = button.getValue();
             if(button.getValue())
             {
-                if(!goingForward && !goingBack && this.isHopperUp())
+                if(!goingForward && !goingBack && this.isUpLimitSwitchTriggered())
                 {
                     goingForward = true;
                     cycle = 0;
@@ -151,7 +151,7 @@ public class WsHopper extends WsSubsystem implements IObserver
                 getSubject((ISubjectEnum)null)))
         {
              downLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
-                      .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
+                      .getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH)
                       .getSubject(((ISubjectEnum)null))).getValue();
         }
         else if(subjectThatCaused.equals(WsInputFacade.getInstance().

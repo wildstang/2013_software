@@ -3,7 +3,6 @@ package com.wildstangs.subsystems;
 import com.wildstangs.inputfacade.base.IInputEnum;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.WsDigitalInput;
-import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
@@ -12,7 +11,6 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  *
@@ -73,12 +71,13 @@ public class WsIntake extends WsSubsystem implements IObserver
         WsFloorPickup pickup = ((WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
         boolean up = pickup.isUp();
         if (motorForward == true && pickup.isUp() && ((WsHopper) WsSubsystemContainer.getInstance()
-           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isHopperUp()) 
+           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isUpLimitSwitchTriggered()) 
         {
             motorForward = false;
         }
         
-        if(motorForward) 
+        if(motorForward && ((WsHopper) WsSubsystemContainer.getInstance()
+           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isDownLimitSwitchTriggered()) 
         {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
                     .set(null, Double.valueOf(1.0));
