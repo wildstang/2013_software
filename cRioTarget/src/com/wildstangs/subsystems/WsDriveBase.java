@@ -7,6 +7,7 @@ import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.controller.base.WsPidController;
@@ -35,12 +36,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static final double MAX_NEG_INPUT_THROTTLE_VALUE = -1.0;
     private static final double MAX_INPUT_HEADING_VALUE = 1.0;
     private static final double MAX_NEG_INPUT_HEADING_VALUE = -1.0;
-    private static final double WS_HEADING_SENSITIVITY = 1.8;
-    private static final double WS_MAX_MOTOR_OUTPUT = 1.0;
-    private static final double WS_NEG_MAX_MOTOR_OUTPUT = -1.0;
-    private static final double WS_ANTI_TURBO_MAX_DEFLECTION = 0.500;
-    private static final double WS_THROTTLE_ACCEL_FACTOR = 0.250;
-    private static final double WS_HEADING_ACCEL_FACTOR = 0.500;
+    private static final double HEADING_SENSITIVITY = 1.8;
+    private static final double MAX_MOTOR_OUTPUT = 1.0;
+    private static final double NEG_MAX_MOTOR_OUTPUT = -1.0;
+    private static final double ANTI_TURBO_MAX_DEFLECTION = 0.500;
+    private static double THROTTLE_LOW_GEAR_ACCEL_FACTOR = 0.250;
+    private static double HEADING_LOW_GEAR_ACCEL_FACTOR = 0.500;
+    private static double THROTTLE_HIGH_GEAR_ACCEL_FACTOR = 0.125;
+    private static double HEADING_HIGH_GEAR_ACCEL_FACTOR = 0.250;
     private static double TICKS_PER_ROTATION = 360.0;
     private static double WHEEL_DIAMETER = 7.5;
     private static double driveBaseThrottleValue = 0.0;
@@ -48,7 +51,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double pidThrottleValue = 0.0;
     private static double pidHeadingValue = 0.0;
     private static boolean antiTurboFlag = false;
-    private static DoubleSolenoid.Value shifterFlag = DoubleSolenoid.Value.kForward;
+    private static DoubleSolenoid.Value shifterFlag = DoubleSolenoid.Value.kForward; //Default to low gear
     private static boolean quickTurnFlag = false;
     private static Encoder leftDriveEncoder;
     private static Encoder rightDriveEncoder;
@@ -66,12 +69,20 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static boolean driveDistancePidEnabled = false;
     private static DoubleConfigFileParameter WHEEL_DIAMETER_config;
     private static DoubleConfigFileParameter TICKS_PER_ROTATION_config;
+    private static DoubleConfigFileParameter THROTTLE_LOW_GEAR_ACCEL_FACTOR_config;
+    private static DoubleConfigFileParameter HEADING_LOW_GEAR_ACCEL_FACTOR_config;
+    private static DoubleConfigFileParameter THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config;
+    private static DoubleConfigFileParameter HEADING_HIGH_GEAR_ACCEL_FACTOR_config;
 
     public WsDriveBase(String name) {
         super(name);
 
         WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 7.5);
         TICKS_PER_ROTATION_config = new DoubleConfigFileParameter(this.getClass().getName(), "ticks_per_rotation", 360.0);
+        THROTTLE_LOW_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "throttle_low_gear_accel_factor", 0.250);
+        HEADING_LOW_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "heading_low_gear_accel_factor", 0.500);
+        THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "throttle_high_gear_accel_factor", 0.125);
+        HEADING_HIGH_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "heading_high_gear_accel_factor", 0.250);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -114,12 +125,35 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         quickTurnFlag = false;
         this.disableDistancePidControl();
         this.disableHeadingPidControl();
-        System.out.println("Drive Base init");
+        Logger.getLogger().always(this.getClass().getName(), "init", "Drive Base init");
     }
 
     public void update() {
-        if (false == driveDistancePidEnabled) {
-
+        if (true == driveDistancePidEnabled) {
+            //We are driving by distance under PID control
+            enableDistancePidControl();
+            driveDistancePid.calcPid();
+            setThrottleValue(pidThrottleValue);
+            setHeadingValue(0);
+            updateDriveMotors();
+            SmartDashboard.putNumber("PID Throttle Value", pidThrottleValue);
+        } else if (true == driveHeadingPidEnabled) {
+            //We are driving by heading under PID control
+            enableHeadingPidControl();
+            driveHeadingPid.calcPid();
+            quickTurnFlag = true;
+            setThrottleValue(0);
+            setHeadingValue(pidHeadingValue);
+            updateDriveMotors();
+            SmartDashboard.putNumber("PID Heading Value", pidHeadingValue);
+        } else if (true == driveDistancePidEnabled && true == driveHeadingPidEnabled) {
+            //This isn't good...
+            //Disable both the PIDs and tell the logger we have a problem
+            disableDistancePidControl();
+            disableHeadingPidControl();
+            Logger.getLogger().error(this.getClass().getName(), "update", "Both PIDS are enabled. Disabling both.");
+        } else if (false == driveDistancePidEnabled && false == driveHeadingPidEnabled) {
+            //We are in manual control
             //Get the inputs for heading and throttle
             //Set headign and throttle values
             double throttleValue = 0.0;
@@ -145,12 +179,6 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             //Set gear shift output
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(shifterFlag.value));
         } else {
-            driveDistancePid.Enable();
-            driveDistancePid.calcPid();
-            setThrottleValue(pidThrottleValue);
-            setHeadingValue(0);
-            updateDriveMotors();
-            SmartDashboard.putNumber("PID Throttle Value", pidThrottleValue);
         }
     }
 
@@ -159,18 +187,28 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         // Taking into account Anti-Turbo
         double new_throttle = tValue;
         if (true == antiTurboFlag) {
-            new_throttle *= WS_ANTI_TURBO_MAX_DEFLECTION;
+            new_throttle *= ANTI_TURBO_MAX_DEFLECTION;
 
-            if (new_throttle > WS_ANTI_TURBO_MAX_DEFLECTION) {
-                new_throttle = WS_ANTI_TURBO_MAX_DEFLECTION;
+            //Cap the throttle at the maximum deflection allowed for anti-turbo
+            if (new_throttle > ANTI_TURBO_MAX_DEFLECTION) {
+                new_throttle = ANTI_TURBO_MAX_DEFLECTION;
             }
-            if (new_throttle < -WS_ANTI_TURBO_MAX_DEFLECTION) {
-                new_throttle = -WS_ANTI_TURBO_MAX_DEFLECTION;
+            if (new_throttle < -ANTI_TURBO_MAX_DEFLECTION) {
+                new_throttle = -ANTI_TURBO_MAX_DEFLECTION;
             }
         }
 
-        //Setting throttle
-        driveBaseThrottleValue = driveBaseThrottleValue + (new_throttle - driveBaseThrottleValue) * WS_THROTTLE_ACCEL_FACTOR;
+        //Use the acceleration factor based on the current shifter state
+        if (shifterFlag == DoubleSolenoid.Value.kForward) {
+            //We are in low gear, use that acceleration factor
+            driveBaseThrottleValue = driveBaseThrottleValue + (new_throttle - driveBaseThrottleValue) * THROTTLE_LOW_GEAR_ACCEL_FACTOR;
+        } else if (shifterFlag == DoubleSolenoid.Value.kReverse) {
+            //We are in high gear, use that acceleration factor
+            driveBaseThrottleValue = driveBaseThrottleValue + (new_throttle - driveBaseThrottleValue) * THROTTLE_HIGH_GEAR_ACCEL_FACTOR;
+        } else {
+            //This is bad...
+            //If we get here we have a problem
+        }
 
         if (driveBaseThrottleValue > MAX_INPUT_THROTTLE_VALUE) {
             driveBaseThrottleValue = MAX_INPUT_THROTTLE_VALUE;
@@ -181,21 +219,31 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public void setHeadingValue(double hValue) {
 
-        // Taking into account Anti-Turbo
+        // Taking into account anti-turbo
         double new_heading = hValue;
         if (true == antiTurboFlag) {
-            new_heading *= WS_ANTI_TURBO_MAX_DEFLECTION;
+            new_heading *= ANTI_TURBO_MAX_DEFLECTION;
 
-            if (new_heading > WS_ANTI_TURBO_MAX_DEFLECTION) {
-                new_heading = WS_ANTI_TURBO_MAX_DEFLECTION;
+            //Cap the heading at the maximum deflection allowed for anti-turbo
+            if (new_heading > ANTI_TURBO_MAX_DEFLECTION) {
+                new_heading = ANTI_TURBO_MAX_DEFLECTION;
             }
-            if (new_heading < -WS_ANTI_TURBO_MAX_DEFLECTION) {
-                new_heading = -WS_ANTI_TURBO_MAX_DEFLECTION;
+            if (new_heading < -ANTI_TURBO_MAX_DEFLECTION) {
+                new_heading = -ANTI_TURBO_MAX_DEFLECTION;
             }
         }
 
-        //Setting heading
-        driveBaseHeadingValue = driveBaseHeadingValue + (new_heading - driveBaseHeadingValue) * WS_HEADING_ACCEL_FACTOR;
+        //Use the acceleration factor based on the current shifter state
+        if (shifterFlag == DoubleSolenoid.Value.kForward) {
+            //We are in low gear, use that acceleration factor
+            driveBaseHeadingValue = driveBaseHeadingValue + (new_heading - driveBaseHeadingValue) * HEADING_LOW_GEAR_ACCEL_FACTOR;
+        } else if (shifterFlag == DoubleSolenoid.Value.kReverse) {
+            //We are in high gear, use that acceleration factor
+            driveBaseHeadingValue = driveBaseHeadingValue + (new_heading - driveBaseHeadingValue) * HEADING_HIGH_GEAR_ACCEL_FACTOR;
+        } else {
+            //This is bad...
+            //If we get here we have a problem
+        }
 
         if (driveBaseHeadingValue > MAX_INPUT_HEADING_VALUE) {
             driveBaseHeadingValue = MAX_INPUT_HEADING_VALUE;
@@ -209,7 +257,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         double leftMotorSpeed = 0;
         double angularPower = 0.0;
         if (Math.abs(driveBaseHeadingValue) > 0.05) {
-            angularPower = Math.abs(driveBaseThrottleValue) * driveBaseHeadingValue * WS_HEADING_SENSITIVITY;
+            angularPower = Math.abs(driveBaseThrottleValue) * driveBaseHeadingValue * HEADING_SENSITIVITY;
         }
 
         rightMotorSpeed = driveBaseThrottleValue - angularPower;
@@ -239,17 +287,17 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 }
             }
 
-            if (rightMotorSpeed > WS_MAX_MOTOR_OUTPUT) {
-                rightMotorSpeed = WS_MAX_MOTOR_OUTPUT;
+            if (rightMotorSpeed > MAX_MOTOR_OUTPUT) {
+                rightMotorSpeed = MAX_MOTOR_OUTPUT;
             }
-            if (leftMotorSpeed > WS_MAX_MOTOR_OUTPUT) {
-                leftMotorSpeed = WS_MAX_MOTOR_OUTPUT;
+            if (leftMotorSpeed > MAX_MOTOR_OUTPUT) {
+                leftMotorSpeed = MAX_MOTOR_OUTPUT;
             }
-            if (rightMotorSpeed < WS_NEG_MAX_MOTOR_OUTPUT) {
-                rightMotorSpeed = WS_NEG_MAX_MOTOR_OUTPUT;
+            if (rightMotorSpeed < NEG_MAX_MOTOR_OUTPUT) {
+                rightMotorSpeed = NEG_MAX_MOTOR_OUTPUT;
             }
-            if (leftMotorSpeed < WS_NEG_MAX_MOTOR_OUTPUT) {
-                leftMotorSpeed = WS_NEG_MAX_MOTOR_OUTPUT;
+            if (leftMotorSpeed < NEG_MAX_MOTOR_OUTPUT) {
+                leftMotorSpeed = NEG_MAX_MOTOR_OUTPUT;
             }
         }
 
@@ -318,20 +366,20 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public void enableDistancePidControl() {
         driveDistancePidEnabled = true;
-        driveDistancePid.Enable();
+        driveDistancePid.enable();
     }
 
     public void disableDistancePidControl() {
         driveDistancePidEnabled = false;
-        driveDistancePid.Disable();
-        this.resetDistancePid();
-        System.out.println("WsDriveBase: distance pid is disabled");
+        driveDistancePid.disable();
+        resetDistancePid();
+        Logger.getLogger().debug(this.getClass().getName(), "disableDistancePidControl", "Distance PID is disabled");
     }
 
     public void resetDistancePid() {
-        driveDistancePid.Reset();
-        this.resetLeftEncoder();
-        this.resetRightEncoder();
+        driveDistancePid.reset();
+        resetLeftEncoder();
+        resetRightEncoder();
     }
 
     public WsPidStateType getDistancePidState() {
@@ -339,8 +387,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void setPidThrottleValue(double pidThrottle) {
-        this.pidThrottleValue = pidThrottle;
-//        System.out.println("Pid throttle set: " + pidThrottle);
+        pidThrottleValue = pidThrottle;
     }
 
     public Gyro getLeftGyro() {
@@ -351,7 +398,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         return driveHeadingGyro.getAngle();
     }
 
-    public void setDriveHEadingPidSetpoint(double distance) {
+    public void setDriveHeadingPidSetpoint(double distance) {
         driveHeadingPid.setSetPoint(distance);
         driveHeadingPid.calcPid();
     }
@@ -362,19 +409,19 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public void enableHeadingPidControl() {
         driveHeadingPidEnabled = true;
-        driveHeadingPid.Enable();
+        driveHeadingPid.enable();
     }
 
     public void disableHeadingPidControl() {
         driveHeadingPidEnabled = false;
-        driveHeadingPid.Disable();
-        this.resetHeadingPid();
-        System.out.println("WsDriveBase: heading pid is disabled");
+        driveHeadingPid.disable();
+        resetHeadingPid();
+        Logger.getLogger().debug(this.getClass().getName(), "disableDistancePidControl", "Distance PID is disabled");
     }
 
     public void resetHeadingPid() {
-        driveHeadingPid.Reset();
-        this.resetGyro();
+        driveHeadingPid.reset();
+        resetGyro();
     }
 
     public WsPidStateType getHeadingPidState() {
@@ -382,13 +429,17 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void setPidHeadingValue(double pidHeading) {
-        this.pidHeadingValue = pidHeading;
-        System.out.println("Pid heading set: " + pidHeading);
+        pidHeadingValue = pidHeading;
+        Logger.getLogger().debug(this.getClass().getName(), "setPidHeadingValue", "Heading PID value set: " + pidHeading);
     }
 
     public void notifyConfigChange() {
         WHEEL_DIAMETER = WHEEL_DIAMETER_config.getValue();
         TICKS_PER_ROTATION = TICKS_PER_ROTATION_config.getValue();
+        THROTTLE_LOW_GEAR_ACCEL_FACTOR = THROTTLE_LOW_GEAR_ACCEL_FACTOR_config.getValue();
+        HEADING_LOW_GEAR_ACCEL_FACTOR = HEADING_LOW_GEAR_ACCEL_FACTOR_config.getValue();
+        THROTTLE_HIGH_GEAR_ACCEL_FACTOR = THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config.getValue();
+        HEADING_HIGH_GEAR_ACCEL_FACTOR = HEADING_HIGH_GEAR_ACCEL_FACTOR_config.getValue();
         driveDistancePid.notifyConfigChange();
     }
 

@@ -97,6 +97,7 @@ public class WsConfigFacade {
     }
 
     public String dumpConfigData() {
+        System.out.println("Dumping config data...");
         for (int i = 0; i < config.size(); i++) {
             String name = ((String) ((DataElement) config.get(i)).getKey());
             String value = ((String) ((DataElement) config.get(i)).getValue().toString());

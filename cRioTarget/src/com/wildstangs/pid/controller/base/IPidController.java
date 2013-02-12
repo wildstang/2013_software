@@ -58,11 +58,11 @@ public interface IPidController {
     public boolean isEnabled();
 
     //WPI PIDController-like functionality
-    public void Enable();
+    public void enable();
 
-    public void Disable();
+    public void disable();
 
-    public void Reset();
+    public void reset();
 
     //GetError
     public double getError();
