@@ -38,8 +38,8 @@ com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.minOnT
 com.wildstangs.subsystems.WsDriveBase.wheel_diameter=7.5
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
-com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.250
-com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.250
+com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
+com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.125
 com.wildstangs.subsystems.WsDriveBase.heading_high_gear_accel_factor=0.250
 com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput.startState=0.0
 com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput.startState=0
