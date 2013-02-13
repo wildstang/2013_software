@@ -205,8 +205,8 @@ public class WsPidController implements IPidController {
 //            System.out.println(this.controllerName + " is DISABLED");
             // PID controller is disabled, nothing to do here...
 
-            // Reset everything now.
-            this.Reset();
+            // reset everything now.
+            this.reset();
             return;
         } else if (currentState == WsPidStateType.WS_PID_INITIALIZE_STATE) {
 //            System.out.println(this.controllerName + " is INITIALIZE");
@@ -402,18 +402,18 @@ public class WsPidController implements IPidController {
         return (WsPidStateType.WS_PID_DISABLED_STATE != currentState);
     }
 
-    public void Enable() {
+    public void enable() {
         if (currentState == WsPidStateType.WS_PID_DISABLED_STATE) {
             currentState = WsPidStateType.WS_PID_INITIALIZE_STATE;
         }
     }
 
-    public void Disable() {
-        this.Reset();
+    public void disable() {
+        this.reset();
         currentState = WsPidStateType.WS_PID_DISABLED_STATE;
     }
 
-    public void Reset() {
+    public void reset() {
         errorSum = 0.0;
         currentError = 0.0;
         previousError = 0.0;

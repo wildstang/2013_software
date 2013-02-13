@@ -4,18 +4,17 @@ com.wildstangs.logger.Logger.port=17654
 com.wildstangs.logger.Logger.logToServer=false
 com.wildstangs.logger.Logger.logToStdout=true
 com.wildstangs.logger.Logger.logLevel="ALL"
-com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.
+com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.0
 com.wildstangs.inputfacade.inputs.WsDigitalInput.startState=false
-com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystick.trim=0.1
 
 //2012 Robot Selection
 com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=false
 
 //Digital Outputs: Replace 'NAME' with whatever name you send in
-com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
+//com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
 
 //Solenoids: Replace 'NAME' with whatever ame you send in
-com.wildstangs.outputfacade.outputs.WsSolenoid.NAME.shouldStartTrue=false
+//com.wildstangs.outputfacade.outputs.WsSolenoid.NAME.shouldStartTrue=false
 
 //Subsystems
 com.wildstangs.subsystems.WsHopper.forwardCycles=15
@@ -37,17 +36,22 @@ com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.minInp
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.minOnTargetTime=0.2
 com.wildstangs.subsystems.WsDriveBase.wheel_diameter=7.5
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
+com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
+com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
+com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.125
+com.wildstangs.subsystems.WsDriveBase.heading_high_gear_accel_factor=0.250
 com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput.startState=0.0
 com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput.startState=0
 com.wildstangs.outputfacade.outputs.WsSolenoid.FrisbieControl.shouldStartTrue=false
 com.wildstangs.outputfacade.outputs.WsSolenoid.Kicker.shouldStartTrue=false
 com.wildstangs.outputfacade.outputs.WsSolenoid.AccumulatorSolenoid.shouldStartTrue=false
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
-com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=1.0
-com.wildstangs.subsystems.WsShooter.LowerVictorSpeed=0.0
+com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=1000
+com.wildstangs.subsystems.WsShooter.LowerVictorSpeed=0.5
 com.wildstangs.subsystems.WsShooter.LowerWheelEnterTestSpeed=0.0
 com.wildstangs.subsystems.WsShooter.LowerWheelExitTestSpeed=0.0
-com.wildstangs.subsystems.WsShooter.UpperWheelEnterTestSpeed=6000
-com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=6000
+com.wildstangs.subsystems.WsShooter.UpperWheelEnterTestSpeed=9000
+com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=9000
 com.wildstangs.subsystems.WsShooter.AtSpeedTolerance=0.05
+
 
