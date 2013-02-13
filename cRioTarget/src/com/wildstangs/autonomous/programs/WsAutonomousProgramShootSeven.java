@@ -5,6 +5,7 @@
 
 package com.wildstangs.autonomous.programs;
 
+import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
@@ -21,63 +22,63 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
 {
-    private DoubleConfigFileParameter toPyramidStartDrive = new DoubleConfigFileParameter(
-            this.getClass().getName(), "ToPyramidStartDrive", 60.5);
-    private DoubleConfigFileParameter toPyramidAngleTurn = new DoubleConfigFileParameter(
-            this.getClass().getName(), "ToPyramidAngleTurn", 90);
-    private DoubleConfigFileParameter toPyramidSecondDrive = new DoubleConfigFileParameter(
-            this.getClass().getName(), "ToPyramidSecondDrive", 60.5);
-    private DoubleConfigFileParameter toPyramidThirdDrive = new DoubleConfigFileParameter(
-            this.getClass().getName(), "ToPyramidThirdDrive", 60.5);
-    private DoubleConfigFileParameter toPyramidFourthDrive = new DoubleConfigFileParameter(
-            this.getClass().getName(), "ToPyramidFourthDrive", 60.5);
-    private DoubleConfigFileParameter toPyramidFifthDrive = new DoubleConfigFileParameter(
-            this.getClass().getName(), "ToPyramidFifthDrive", 60.5);
-    private IntegerConfigFileParameter toPyramidFirstEnterWheelSetPoint = new IntegerConfigFileParameter(
-            this.getClass().getName(), "ToPyramidEnterWheelSetPoint", 5000);
-    private IntegerConfigFileParameter toPyramidFirstExitWheelSetPoint = new IntegerConfigFileParameter(
-            this.getClass().getName(), "ToPyramidExitWheelSetPoint", 4500);
-    private BooleanConfigFileParameter toPyramidFirstShooterAngle = new BooleanConfigFileParameter(
-            this.getClass().getName(), "ToPyramidShooterAngle", false);
-    private IntegerConfigFileParameter toPyramidSecondEnterWheelSetPoint = new IntegerConfigFileParameter(
-            this.getClass().getName(), "ToPyramidEnterWheelSetPoint", 5000);
-    private IntegerConfigFileParameter toPyramidSecondExitWheelSetPoint = new IntegerConfigFileParameter(
-            this.getClass().getName(), "ToPyramidExitWheelSetPoint", 4500);
-    private BooleanConfigFileParameter toPyramidSecondShooterAngle = new BooleanConfigFileParameter(
-            this.getClass().getName(), "ToPyramidShooterAngle", false);
+    private DoubleConfigFileParameter StartDrive = new DoubleConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".StartDrive", 60.5);
+    private DoubleConfigFileParameter AngleTurn = new DoubleConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".AngleTurn", 90);
+    private DoubleConfigFileParameter SecondDrive = new DoubleConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondDrive", 60.5);
+    private DoubleConfigFileParameter ThirdDrive = new DoubleConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdDrive", 60.5);
+    private DoubleConfigFileParameter FourthDrive = new DoubleConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FourthDrive", 60.5);
+    private DoubleConfigFileParameter FifthDrive = new DoubleConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FifthDrive", 60.5);
+    private IntegerConfigFileParameter FirstEnterWheelSetPoint = new IntegerConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".EnterWheelSetPoint", 5000);
+    private IntegerConfigFileParameter FirstExitWheelSetPoint = new IntegerConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ExitWheelSetPoint", 4500);
+    private BooleanConfigFileParameter FirstShooterAngle = new BooleanConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ShooterAngle", false);
+    private IntegerConfigFileParameter SecondEnterWheelSetPoint = new IntegerConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".EnterWheelSetPoint", 5000);
+    private IntegerConfigFileParameter SecondExitWheelSetPoint = new IntegerConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ExitWheelSetPoint", 4500);
+    private BooleanConfigFileParameter SecondShooterAngle = new BooleanConfigFileParameter(
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ShooterAngle", false);
     private IntegerConfigFileParameter funnelatorLoadDelay = new IntegerConfigFileParameter(
-            this.getClass().getName(), "funnelatorLoadDelay", 2000);
+            this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".funnelatorLoadDelay", 2000);
     
-    private WsShooter.Preset toPyramidStartPreset, toPyramidSecondShooterPreset;
+    private WsShooter.Preset StartPreset, SecondShooterPreset;
     
     public WsAutonomousProgramShootSeven()
     {
         super(6);
-        toPyramidStartPreset = new WsShooter.Preset(toPyramidFirstEnterWheelSetPoint.getValue(),
-                toPyramidFirstExitWheelSetPoint.getValue(),
-                toPyramidFirstShooterAngle.getValue() ?
+        StartPreset = new WsShooter.Preset(FirstEnterWheelSetPoint.getValue(),
+                FirstExitWheelSetPoint.getValue(),
+                FirstShooterAngle.getValue() ?
                 DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
-        toPyramidSecondShooterPreset = new WsShooter.Preset(toPyramidSecondEnterWheelSetPoint.getValue(),
-                toPyramidSecondExitWheelSetPoint.getValue(),
-                toPyramidSecondShooterAngle.getValue() ?
+        SecondShooterPreset = new WsShooter.Preset(SecondEnterWheelSetPoint.getValue(),
+                SecondExitWheelSetPoint.getValue(),
+                SecondShooterAngle.getValue() ?
                 DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
     }
     public void defineSteps()
     {
-        programSteps[0] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[1] = new WsAutonomousStepEnableDriveDistancePid();
         WsAutonomousParallelStepGroup pg1 = new WsAutonomousParallelStepGroup();
-        programSteps[1] = pg1;
-        pg1.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(toPyramidStartDrive.getValue()));
-        pg1.addStep(new WsAutonomousStepSetShooterPreset(toPyramidStartPreset.ENTER_WHEEL_SET_POINT, toPyramidStartPreset.EXIT_WHEEL_SET_POINT, toPyramidStartPreset.ANGLE));
+        programSteps[0] = pg1;
+        pg1.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(StartDrive.getValue()));
+        pg1.addStep(new WsAutonomousStepSetShooterPreset(StartPreset.ENTER_WHEEL_SET_POINT, StartPreset.EXIT_WHEEL_SET_POINT, StartPreset.ANGLE));
         WsAutonomousParallelStepGroup pg2 = new WsAutonomousParallelStepGroup();
         programSteps[2] = pg2;
         pg2.addStep(new WsAutonomousStepWaitForShooter());
         pg2.addStep(new WsAutonomousStepWaitForDriveDistancePid());
-        programSteps[3] = new WsAutonomousStepEnableDriveHeadingPid();
-        programSteps[4] = new WsAutonomousStepSetDriveHeadingPidSetpoint(toPyramidAngleTurn.getValue());
+        programSteps[4] = new WsAutonomousStepEnableDriveHeadingPid();
+        programSteps[3] = new WsAutonomousStepSetDriveHeadingPidSetpoint(AngleTurn.getValue());
         programSteps[5] = new WsAutonomousStepWaitForDriveHeadingPid();
-        programSteps[6] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[7] = new WsAutonomousStepSetDriveDistancePidSetpoint(toPyramidSecondDrive.getValue());
+        programSteps[7] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[6] = new WsAutonomousStepSetDriveDistancePidSetpoint(SecondDrive.getValue());
         programSteps[8] = new WsAutonomousStepWaitForDriveDistancePid();
         
         programSteps[9] = new WsAutonomousStepMultikick(3);
@@ -86,8 +87,8 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         pg3.addStep(new WsAutonomousStepLowerHopper());
         pg3.addStep(new WsAutonomousStepLowerAccumulator());
         pg3.addStep(new WsAutonomousStepIntakeMotorBackwards());
-        programSteps[11] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[12] = new WsAutonomousStepSetDriveDistancePidSetpoint(toPyramidThirdDrive.getValue());
+        programSteps[12] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[11] = new WsAutonomousStepSetDriveDistancePidSetpoint(ThirdDrive.getValue());
         programSteps[13] = new WsAutonomousStepWaitForDriveDistancePid();
         programSteps[14] = new WsAutonomousStepIntakeMotorStop();
         programSteps[15] = new WsAutonomousStepRaiseAccumulator();
@@ -98,19 +99,19 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         pg4.addStep(new WsAutonomousStepLowerHopper());
         pg4.addStep(new WsAutonomousStepLowerAccumulator());
         pg4.addStep(new WsAutonomousStepIntakeMotorBackwards());
-        programSteps[19] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[20] = new WsAutonomousStepSetDriveDistancePidSetpoint(toPyramidFourthDrive.getValue());
+        programSteps[20] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[19] = new WsAutonomousStepSetDriveDistancePidSetpoint(FourthDrive.getValue());
         programSteps[21] = new WsAutonomousStepWaitForDriveDistancePid();
         programSteps[22] = new WsAutonomousStepIntakeMotorStop();
         programSteps[23] = new WsAutonomousStepRaiseAccumulator();
         programSteps[24] = new WsAutonomousStepIntakeMotorBackwards();
         programSteps[25] = new WsAutonomousStepDelay(funnelatorLoadDelay.getValue());
         programSteps[26] = new WsAutonomousStepRaiseHopper();
-        programSteps[27] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[28] = new WsAutonomousStepEnableDriveDistancePid();
         WsAutonomousParallelStepGroup pg5 = new WsAutonomousParallelStepGroup();
-        programSteps[28] = pg5;
-        pg5.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(toPyramidFifthDrive.getValue()));
-        pg5.addStep(new WsAutonomousStepSetShooterPreset(toPyramidSecondShooterPreset.ENTER_WHEEL_SET_POINT, toPyramidSecondShooterPreset.EXIT_WHEEL_SET_POINT, toPyramidSecondShooterPreset.ANGLE));
+        programSteps[27] = pg5;
+        pg5.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(FifthDrive.getValue()));
+        pg5.addStep(new WsAutonomousStepSetShooterPreset(SecondShooterPreset.ENTER_WHEEL_SET_POINT, SecondShooterPreset.EXIT_WHEEL_SET_POINT, SecondShooterPreset.ANGLE));
         WsAutonomousParallelStepGroup pg6 = new WsAutonomousParallelStepGroup();
         programSteps[29] = pg6;
         pg6.addStep(new WsAutonomousStepWaitForShooter());
