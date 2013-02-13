@@ -4,11 +4,11 @@ com.wildstangs.logger.Logger.port=17654
 com.wildstangs.logger.Logger.logToServer=false
 com.wildstangs.logger.Logger.logToStdout=true
 com.wildstangs.logger.Logger.logLevel="ALL"
-com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.0
+com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.
 com.wildstangs.inputfacade.inputs.WsDigitalInput.startState=false
 
 //2012 Robot Selection
-com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=false
+com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=true
 
 //Digital Outputs: Replace 'NAME' with whatever name you send in
 //com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
@@ -38,8 +38,9 @@ com.wildstangs.subsystems.WsDriveBase.wheel_diameter=7.5
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
-com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.125
+com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.01
 com.wildstangs.subsystems.WsDriveBase.heading_high_gear_accel_factor=0.250
+com.wildstangs.subsystems.WsDriveBase.max_high_gear_percent=0.800
 com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput.startState=0.0
 com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput.startState=0
 com.wildstangs.outputfacade.outputs.WsSolenoid.FrisbieControl.shouldStartTrue=false
