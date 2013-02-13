@@ -5,7 +5,6 @@
 package com.wildstangs.simulation;
 
 import com.wildstangs.autonomous.WsAutonomousManager;
-import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;

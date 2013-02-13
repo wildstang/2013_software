@@ -46,11 +46,13 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double HEADING_HIGH_GEAR_ACCEL_FACTOR = 0.250;
     private static double TICKS_PER_ROTATION = 360.0;
     private static double WHEEL_DIAMETER = 7.5;
+    private static double MAX_HIGH_GEAR_PERCENT = 0.80;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
     private static double pidHeadingValue = 0.0;
     private static boolean antiTurboFlag = false;
+    private static boolean turboFlag = false;
     private static DoubleSolenoid.Value shifterFlag = DoubleSolenoid.Value.kForward; //Default to low gear
     private static boolean quickTurnFlag = false;
     private static Encoder leftDriveEncoder;
@@ -73,6 +75,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter HEADING_LOW_GEAR_ACCEL_FACTOR_config;
     private static DoubleConfigFileParameter THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config;
     private static DoubleConfigFileParameter HEADING_HIGH_GEAR_ACCEL_FACTOR_config;
+    private static DoubleConfigFileParameter MAX_HIGH_GEAR_PERCENT_config;
 
     public WsDriveBase(String name) {
         super(name);
@@ -83,9 +86,13 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         HEADING_LOW_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "heading_low_gear_accel_factor", 0.500);
         THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "throttle_high_gear_accel_factor", 0.125);
         HEADING_HIGH_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "heading_high_gear_accel_factor", 0.250);
+        MAX_HIGH_GEAR_PERCENT_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_high_gear_percent", 0.80);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
+        subject.attach(this);
+        //Turbo button
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
         subject.attach(this);
         //Shifter Button
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON6);
@@ -121,6 +128,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveBaseThrottleValue = 0.0;
         driveBaseHeadingValue = 0.0;
         antiTurboFlag = false;
+        turboFlag = false;
         shifterFlag = DoubleSolenoid.Value.kForward;
         quickTurnFlag = false;
         this.disableDistancePidControl();
@@ -196,6 +204,24 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             if (new_throttle < -ANTI_TURBO_MAX_DEFLECTION) {
                 new_throttle = -ANTI_TURBO_MAX_DEFLECTION;
             }
+        }
+
+        if (shifterFlag == DoubleSolenoid.Value.kReverse) {
+            //We are in high gear, see if the turbo button is pressed
+            if (turboFlag == true) {
+                //We are in turbo mode, don't cap the output
+            } else {
+                //We aren't in turbo mode, cap the output at the max percent for high gear
+                if (new_throttle > MAX_MOTOR_OUTPUT * MAX_HIGH_GEAR_PERCENT) {
+                    new_throttle = MAX_MOTOR_OUTPUT * MAX_HIGH_GEAR_PERCENT;
+                }
+                if (new_throttle < NEG_MAX_MOTOR_OUTPUT * MAX_HIGH_GEAR_PERCENT) {
+                    new_throttle = NEG_MAX_MOTOR_OUTPUT * MAX_HIGH_GEAR_PERCENT;
+                }
+            }
+
+        } else {
+            //We are in low gear, don't modify the throttle
         }
 
         //Use the acceleration factor based on the current shifter state
@@ -440,7 +466,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         HEADING_LOW_GEAR_ACCEL_FACTOR = HEADING_LOW_GEAR_ACCEL_FACTOR_config.getValue();
         THROTTLE_HIGH_GEAR_ACCEL_FACTOR = THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config.getValue();
         HEADING_HIGH_GEAR_ACCEL_FACTOR = HEADING_HIGH_GEAR_ACCEL_FACTOR_config.getValue();
+        MAX_HIGH_GEAR_PERCENT = MAX_HIGH_GEAR_PERCENT_config.getValue();
         driveDistancePid.notifyConfigChange();
+        driveHeadingPid.notifyConfigChange();
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
@@ -451,6 +479,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 shifterFlag = shifterFlag.equals(DoubleSolenoid.Value.kForward)
                         ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
             }
+        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON7) {
+            turboFlag = ((BooleanSubject) subjectThatCaused).getValue();
         }
     }
 }
