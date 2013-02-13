@@ -65,17 +65,17 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
     }
     public void defineSteps()
     {
-        programSteps[1] = new WsAutonomousStepEnableDriveDistancePid();
         WsAutonomousParallelStepGroup pg1 = new WsAutonomousParallelStepGroup();
         programSteps[0] = pg1;
         pg1.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(StartDrive.getValue()));
         pg1.addStep(new WsAutonomousStepSetShooterPreset(StartPreset.ENTER_WHEEL_SET_POINT, StartPreset.EXIT_WHEEL_SET_POINT, StartPreset.ANGLE));
+        programSteps[1] = new WsAutonomousStepEnableDriveDistancePid();
         WsAutonomousParallelStepGroup pg2 = new WsAutonomousParallelStepGroup();
         programSteps[2] = pg2;
         pg2.addStep(new WsAutonomousStepWaitForShooter());
         pg2.addStep(new WsAutonomousStepWaitForDriveDistancePid());
-        programSteps[4] = new WsAutonomousStepEnableDriveHeadingPid();
         programSteps[3] = new WsAutonomousStepSetDriveHeadingPidSetpoint(AngleTurn.getValue());
+        programSteps[4] = new WsAutonomousStepEnableDriveHeadingPid();
         programSteps[5] = new WsAutonomousStepWaitForDriveHeadingPid();
         programSteps[7] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[6] = new WsAutonomousStepSetDriveDistancePidSetpoint(SecondDrive.getValue());
@@ -87,8 +87,8 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         pg3.addStep(new WsAutonomousStepLowerHopper());
         pg3.addStep(new WsAutonomousStepLowerAccumulator());
         pg3.addStep(new WsAutonomousStepIntakeMotorBackwards());
-        programSteps[12] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[11] = new WsAutonomousStepSetDriveDistancePidSetpoint(ThirdDrive.getValue());
+        programSteps[12] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[13] = new WsAutonomousStepWaitForDriveDistancePid();
         programSteps[14] = new WsAutonomousStepIntakeMotorStop();
         programSteps[15] = new WsAutonomousStepRaiseAccumulator();
@@ -99,19 +99,19 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         pg4.addStep(new WsAutonomousStepLowerHopper());
         pg4.addStep(new WsAutonomousStepLowerAccumulator());
         pg4.addStep(new WsAutonomousStepIntakeMotorBackwards());
-        programSteps[20] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[19] = new WsAutonomousStepSetDriveDistancePidSetpoint(FourthDrive.getValue());
+        programSteps[20] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[21] = new WsAutonomousStepWaitForDriveDistancePid();
         programSteps[22] = new WsAutonomousStepIntakeMotorStop();
         programSteps[23] = new WsAutonomousStepRaiseAccumulator();
         programSteps[24] = new WsAutonomousStepIntakeMotorBackwards();
         programSteps[25] = new WsAutonomousStepDelay(funnelatorLoadDelay.getValue());
         programSteps[26] = new WsAutonomousStepRaiseHopper();
-        programSteps[28] = new WsAutonomousStepEnableDriveDistancePid();
         WsAutonomousParallelStepGroup pg5 = new WsAutonomousParallelStepGroup();
         programSteps[27] = pg5;
         pg5.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(FifthDrive.getValue()));
         pg5.addStep(new WsAutonomousStepSetShooterPreset(SecondShooterPreset.ENTER_WHEEL_SET_POINT, SecondShooterPreset.EXIT_WHEEL_SET_POINT, SecondShooterPreset.ANGLE));
+        programSteps[28] = new WsAutonomousStepEnableDriveDistancePid();
         WsAutonomousParallelStepGroup pg6 = new WsAutonomousParallelStepGroup();
         programSteps[29] = pg6;
         pg6.addStep(new WsAutonomousStepWaitForShooter());
