@@ -76,7 +76,6 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config;
     private static DoubleConfigFileParameter HEADING_HIGH_GEAR_ACCEL_FACTOR_config;
     private static DoubleConfigFileParameter MAX_HIGH_GEAR_PERCENT_config;
-    
 
     public WsDriveBase(String name) {
         super(name);
@@ -210,11 +209,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         if (shifterFlag == DoubleSolenoid.Value.kReverse) {
             //We are in high gear, see if the turbo button is pressed
             if (turboFlag == true) {
-                //We are in tub=rbo mode, don't cap the output
+                //We are in turbo mode, don't cap the output
             } else {
                 //We aren't in turbo mode, cap the output at the max percent for high gear
                 if (new_throttle > MAX_MOTOR_OUTPUT * MAX_HIGH_GEAR_PERCENT) {
                     new_throttle = MAX_MOTOR_OUTPUT * MAX_HIGH_GEAR_PERCENT;
+                }
+                if (new_throttle < NEG_MAX_MOTOR_OUTPUT * MAX_HIGH_GEAR_PERCENT) {
+                    new_throttle = NEG_MAX_MOTOR_OUTPUT * MAX_HIGH_GEAR_PERCENT;
                 }
             }
 

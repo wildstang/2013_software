@@ -40,6 +40,7 @@ com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
 com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.01
 com.wildstangs.subsystems.WsDriveBase.heading_high_gear_accel_factor=0.250
+com.wildstangs.subsystems.WsDriveBase.max_high_gear_percent=0.800
 com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput.startState=0.0
 com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput.startState=0
 com.wildstangs.outputfacade.outputs.WsSolenoid.FrisbieControl.shouldStartTrue=false
