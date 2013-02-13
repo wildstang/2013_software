@@ -13,7 +13,6 @@ import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
-import com.wildstangs.autonomous.steps.shootseven.WsAutonomousStepGroupDriveToPyramidFrisbees;
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.config.IntegerConfigFileParameter;
@@ -65,9 +64,6 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
     }
     public void defineSteps()
     {
-        programSteps[0] = new WsAutonomousStepGroupDriveToPyramidFrisbees(toPyramidStartDrive.getValue()
-                , toPyramidAngleTurn.getValue(), toPyramidSecondDrive.getValue()
-                , toPyramidStartPreset);
         programSteps[0] = new WsAutonomousStepEnableDriveDistancePid();
         WsAutonomousParallelStepGroup pg1 = new WsAutonomousParallelStepGroup();
         programSteps[1] = pg1;
