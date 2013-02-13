@@ -92,7 +92,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
         subject.attach(this);
         //Turbo button
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
         subject.attach(this);
         //Shifter Button
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON6);
@@ -479,7 +479,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 shifterFlag = shifterFlag.equals(DoubleSolenoid.Value.kForward)
                         ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
             }
-        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) {
+        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON7) {
             turboFlag = ((BooleanSubject) subjectThatCaused).getValue();
         }
     }
