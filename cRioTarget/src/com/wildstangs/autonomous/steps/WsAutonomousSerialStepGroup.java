@@ -21,6 +21,7 @@ public abstract class WsAutonomousSerialStepGroup extends WsAutonomousStep imple
     public WsAutonomousSerialStepGroup(int stepCount)
     {
         steps = new WsAutonomousStep[stepCount];
+        defineSteps();
     }
 
     protected abstract void defineSteps();// Use this just like in WsAutonomousProgram, except the array is called "steps".
@@ -29,7 +30,6 @@ public abstract class WsAutonomousSerialStepGroup extends WsAutonomousStep imple
         finishedStep = false;
         currentStep = 0;
         errorCount = 0;
-        defineSteps();
         steps[0].initialize();
     }
 
