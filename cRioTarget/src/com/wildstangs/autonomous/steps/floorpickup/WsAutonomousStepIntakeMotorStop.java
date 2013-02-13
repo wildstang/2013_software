@@ -13,7 +13,7 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepMotorStop extends WsAutonomousStep
+public class WsAutonomousStepIntakeMotorStop extends WsAutonomousStep
 {
     public void initialize() {
         WsFloorPickup subsystem = (WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));

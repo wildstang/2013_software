@@ -12,7 +12,7 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepLowerAccumulatorState extends WsAutonomousStep 
+public class WsAutonomousStepLowerAccumulator extends WsAutonomousStep 
 {
     public void initialize()
     {
