@@ -4,9 +4,12 @@
  */
 package com.wildstangs.simulation;
 
+import com.wildstangs.autonomous.WsAutonomousManager;
+import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.logger.*;
 import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputfacade.base.IOutputEnum;
@@ -26,7 +29,9 @@ import edu.wpi.first.wpilibj.*;
 public class WsSimulation {
 
     static String c = "WsSimulation";
-
+    
+    static boolean autonomousRun = false;
+    
     /**
      * @param args the command line arguments
      */
@@ -64,9 +69,13 @@ public class WsSimulation {
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
         WsSubsystemContainer.getInstance();
-
+        
         Subject subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).getSubject(null);
         DoubleSubjectGraph leftDriveSpeed = new DoubleSubjectGraph("Left Drive Speed", subject);
+
+        
+        subject = ((WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK)).getSubject(WsDriverJoystickEnum.THROTTLE));
+        DoubleSubjectGraph driverThrottle = new DoubleSubjectGraph("Driver Throttle", subject);
 
         subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null);
         DoubleSubjectGraph rightDriveSpeed = new DoubleSubjectGraph("Right Drive Speed", subject);
@@ -77,19 +86,26 @@ public class WsSimulation {
         subject = ((WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)).getSubject(null);
         DoubleSubjectGraph funnelatorSpeed = new DoubleSubjectGraph("Funnelator Speed", subject);
 
-        double pid_setpoint = 10;
-        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
-        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setDriveDistancePidSetpoint(pid_setpoint);
+//        double pid_setpoint = 10;
+//        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).enableDistancePidControl();
+//        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setDriveDistancePidSetpoint(pid_setpoint);
+        
         int right_encoder = 0;
         int left_encoder = 0;
         double left_drive_speed = 0.0;
         double right_drive_speed = 0.0;
-        periodTimer.startTimingSection();
-
+//        periodTimer.startTimingSection();
+        
+        if(autonomousRun)
+        {
+            WsAutonomousManager.getInstance().setProgram(1);
+            WsAutonomousManager.getInstance().startCurrentProgram();
+        }
+        
         while (true) {
-            periodTimer.endTimingSection();
-            periodTimer.startTimingSection();
-            durationTimer.startTimingSection();
+//            periodTimer.endTimingSection();
+//            periodTimer.startTimingSection();
+//            durationTimer.startTimingSection();
             ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder()).set(left_encoder);
             ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).set(right_encoder);
             if (left_drive_speed > 0) {
@@ -108,15 +124,26 @@ public class WsSimulation {
             rightDriveSpeed.update();
             accumulatorSpeed.update(); 
             funnelatorSpeed.update(); 
+            driverThrottle.update(); 
 
-            WsInputFacade.getInstance().updateOiData();
             WsInputFacade.getInstance().updateSensorData();
+            if(autonomousRun)
+            {
+                WsInputFacade.getInstance().updateOiDataAutonomous();
+                WsAutonomousManager.getInstance().update();
+            }
+            else
+            {
+                WsInputFacade.getInstance().updateOiData();
+            }
             WsSubsystemContainer.getInstance().update();
             WsOutputFacade.getInstance().update();
             WsSolenoidContainer.getInstance().update();
 
             left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
             right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
+            
+            
             durationTimer.endTimingSection();
             try {
                 Thread.sleep(20);

@@ -180,8 +180,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             //Set the drive motor outputs
             updateDriveMotors();
 
-            SmartDashboard.putNumber("Throttle Value", throttleValue);
-            SmartDashboard.putNumber("Heading Value", headingValue);
+            SmartDashboard.putNumber("Throttle Value", driveBaseThrottleValue);
+            SmartDashboard.putNumber("Heading Value", driveBaseHeadingValue);
             SmartDashboard.putBoolean("Shifter State", shifterFlag.equals(DoubleSolenoid.Value.kReverse));
             SmartDashboard.putBoolean("Anti-Turbo Flag", antiTurboFlag);
 
