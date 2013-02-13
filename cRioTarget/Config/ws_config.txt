@@ -8,7 +8,7 @@ com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.
 com.wildstangs.inputfacade.inputs.WsDigitalInput.startState=false
 
 //2012 Robot Selection
-com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=true
+com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=false
 
 //Digital Outputs: Replace 'NAME' with whatever name you send in
 //com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
