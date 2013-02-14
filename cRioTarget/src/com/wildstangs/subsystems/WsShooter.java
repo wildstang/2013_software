@@ -91,10 +91,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON1);
-        subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON9);
-        subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
@@ -249,22 +245,14 @@ public class WsShooter extends WsSubsystem implements IObserver {
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON4) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
+                wheelEnterSetPoint += 100;
                 wheelExitSetPoint += 100;
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON3) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                wheelExitSetPoint -= 100;
-            }
-        }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON1) {
-            if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                wheelEnterSetPoint += 100;
-            }
-        }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON9) {
-            if (((BooleanSubject) subjectThatCaused).getValue() == true) {
                 wheelEnterSetPoint -= 100;
+                wheelExitSetPoint -= 100;
             }
         }
     }
