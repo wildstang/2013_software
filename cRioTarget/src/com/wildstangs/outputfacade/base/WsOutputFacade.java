@@ -3,6 +3,7 @@ package com.wildstangs.outputfacade.base;
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.outputfacade.outputs.WsDoubleSolenoid;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
+import com.wildstangs.outputfacade.outputs.WsServo;
 import com.wildstangs.outputfacade.outputs.WsSolenoid;
 import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.types.DataElement;
@@ -81,6 +82,7 @@ public class WsOutputFacade {
     public static final String ACCUMULATOR_SOLENOID = "AccumulatorSolenoid";
     public static final String ACCUMULATOR_VICTOR = "AccumulatorVictor";
     public static final String FUNNELATOR_ROLLER = "FunnelatorRoller";    
+    public static final String LOADING_RAMP = "LoadingRamp";
     
     /**
      * Constructor for WsOutputFacade.
@@ -104,7 +106,7 @@ public class WsOutputFacade {
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6))); 
             outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 10)));
             
-        } else { 
+        } else {
             outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
             outputs.add(new DataElement(ACCUMULATOR_SOLENOID, new WsSolenoid(ACCUMULATOR_SOLENOID, 1, 2)));
             outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
@@ -113,7 +115,7 @@ public class WsOutputFacade {
             outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6))); 
             outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
-            
+            outputs.add(new DataElement(LOADING_RAMP, new WsServo(LOADING_RAMP, 9)));
         }
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 7)));
