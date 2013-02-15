@@ -13,16 +13,18 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepMotorForward  extends WsAutonomousStep //TODO: rename to WsAutonomousStepInputMotorForward
+public class WsAutonomousStepIntakeMotorStop extends WsAutonomousStep
 {
     public void initialize() {
         WsFloorPickup subsystem = (WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
-        BooleanSubject forwardButton = (BooleanSubject) subject;
+        Subject forwardSubject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        Subject backSubject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
+        BooleanSubject forwardButton = (BooleanSubject) forwardSubject;
+        BooleanSubject backButton = (BooleanSubject) backSubject;
 
-        if (subsystem.getMotorForward() == false) 
-            forwardButton.setValue(true);
-            finished = true;
+        forwardButton.setValue(false);
+        backButton.setValue(false);
+        finished = true;
 
     }
 
@@ -30,6 +32,6 @@ public class WsAutonomousStepMotorForward  extends WsAutonomousStep //TODO: rena
     }
 
     public String toString() {
-        return "Move floor pickup motor forward";
+        return "turning off motors for floor pickup";
     }
 }

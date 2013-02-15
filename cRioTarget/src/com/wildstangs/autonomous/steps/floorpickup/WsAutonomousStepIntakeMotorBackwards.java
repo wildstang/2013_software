@@ -13,7 +13,7 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepMotorBackward extends WsAutonomousStep //TODO: rename to WsAutonomousStepInputMotorBackward
+public class WsAutonomousStepIntakeMotorBackwards extends WsAutonomousStep 
 {
     public void initialize()
     {
