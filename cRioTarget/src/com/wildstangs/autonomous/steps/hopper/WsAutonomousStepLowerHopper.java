@@ -19,20 +19,35 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  */
 public class WsAutonomousStepLowerHopper extends WsAutonomousStep
 {
-
+    private boolean wait= false;
     public void initialize() 
     {
         WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         BooleanSubject button = (BooleanSubject)subject;
         
-        if(subsystem.getLiftValueEquals(DoubleSolenoid.Value.kForward))
+        if(subsystem.isHopperUp())
+        {
             button.setValue(true);
-        finished = true;
+            wait = true;
+        }
     }
 
     public void update() 
     {
+        if (!wait)
+        {
+            WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
+            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
+            BooleanSubject button = (BooleanSubject)subject;
+            if (button.getValue())
+            {
+                button.setValue(false);
+            }
+            finished = true;
+        } else {
+            wait = false;
+        }
     }
 
     public String toString() 

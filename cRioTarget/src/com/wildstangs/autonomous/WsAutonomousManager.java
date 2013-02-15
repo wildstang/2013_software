@@ -7,6 +7,7 @@ package com.wildstangs.autonomous;
 import com.wildstangs.autonomous.programs.*;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInputEnum;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.subjects.base.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -53,6 +54,7 @@ public class WsAutonomousManager implements IObserver {
         runningProgram = programs[lockedProgram];
         runningProgram.initialize();
         SmartDashboard.putString("Running Autonomous Program", runningProgram.toString());
+        Logger.getLogger().always("Auton", "Running Autonomous Program", runningProgram.toString());
     }
 
     public void clear() {
@@ -103,7 +105,7 @@ public class WsAutonomousManager implements IObserver {
                 {
                     positionSwitch = 3.3f;
                 }
-                currentPosition = WsAutonomousStartPositionEnum.getEnumFromValue((int) (Math.floor((selectorSwitch / 3.4) * WsAutonomousStartPositionEnum.POSITION_COUNT)));
+                currentPosition = WsAutonomousStartPositionEnum.getEnumFromValue((int) (Math.floor((positionSwitch / 3.4) * WsAutonomousStartPositionEnum.POSITION_COUNT)));
                 SmartDashboard.putString("Current Start Position", currentPosition.toString());
             } 
             else if (cause.getType() == WsDSAnalogInputEnum.INPUT2)
@@ -139,15 +141,24 @@ public class WsAutonomousManager implements IObserver {
         currentProgram = index;
         lockedProgram = currentProgram;
     }
+    public void setPosition(int index)
+    {
+        if(index >= WsAutonomousStartPositionEnum.POSITION_COUNT)
+        {
+            index = 0;
+        }
+        currentPosition = WsAutonomousStartPositionEnum.getEnumFromValue(index);
+    }
 
     private void definePrograms() {
-        programs = new WsAutonomousProgram[7];
+        programs = new WsAutonomousProgram[8];
         programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper.
-        programs[1] = new WsAutonomousProgramForwardsTest();
+        programs[1] = new WsAutonomousProgramShootSeven();
         programs[2] = new WsAutonomousProgramDriveDistance();
         programs[3] = new WsAutonomousProgramHopperTest();
         programs[4] = new WsAutonomousProgramTestParallel();
         programs[5] = new WsAutonomousProgramTestIntake();
         programs[6] = new WsAutonomousProgramFloorPickup();
+        programs[7] = new WsAutonomousProgramForwardsTest();
     }
 }

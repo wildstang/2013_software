@@ -17,6 +17,7 @@ public class WsAutonomousStepMultikick extends WsAutonomousSerialStepGroup
     {
         super(count);
         this.count = count;
+        defineSteps();
     }
     public void defineSteps()
     {

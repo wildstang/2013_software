@@ -4,6 +4,7 @@ import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsVictor;
@@ -211,7 +212,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         } else {
             atSpeed = false;
         }
-        
+                
         SmartDashboard.putNumber("EnterWheelSpeed", speedEnter);
         SmartDashboard.putNumber("ExitWheelSpeed", speedExit);
         SmartDashboard.putNumber("EnterCounter", enterCounterCount);

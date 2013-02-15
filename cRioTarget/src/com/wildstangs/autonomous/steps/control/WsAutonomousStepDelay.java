@@ -16,13 +16,13 @@ public class WsAutonomousStepDelay extends WsAutonomousStep /* This step delays 
  */ {
 
     private int count;
-    protected final int originalCount;
+    protected final int msDelay;
     private static final int MS_PER_FRAME = 20;
 
     public WsAutonomousStepDelay(int msDelay) {
         int delay = (int)Math.ceil((double)msDelay/(double)MS_PER_FRAME);
         count = delay - 1;
-        originalCount = delay;
+        this.msDelay = msDelay;
         if (delay <= 0) {
             pass = false;
             errorInfo = "Negative delay";
@@ -45,7 +45,7 @@ public class WsAutonomousStepDelay extends WsAutonomousStep /* This step delays 
     }
 
     public String toString() {
-        return "Delay for " + originalCount + " frames";
+        return "Delay for " + msDelay + "  ms";
     }
 //    public int hashCode()
 //    {

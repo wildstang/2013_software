@@ -19,9 +19,14 @@ public class WsAutonomousParallelStepGroup extends WsAutonomousStep
     //Note: a finished step is immediately removed from the list. update() is not called on any step that finishes.
     final List steps = new List();
     boolean initialized = false;
+    String name = "";
     public WsAutonomousParallelStepGroup()
     {
-        
+        name = ""; 
+    }
+    public WsAutonomousParallelStepGroup(String name)
+    {
+        this.name = name; 
     }
 
     public void initialize()
@@ -91,6 +96,6 @@ public class WsAutonomousParallelStepGroup extends WsAutonomousStep
 
     public String toString()
     {
-        return "Parallel step group";
+        return "Parallel step group: " + name;
     }
 }

@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  */
 public class WsAutonomousStepRaiseHopper extends WsAutonomousStep
 {
-    private boolean wait;
+    private boolean wait = false;
     public void initialize() 
     {
         wait = false;
@@ -27,7 +27,7 @@ public class WsAutonomousStepRaiseHopper extends WsAutonomousStep
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         BooleanSubject button = (BooleanSubject)subject;
         
-        if(subsystem.getLiftValueEquals(DoubleSolenoid.Value.kReverse))
+        if(!subsystem.isHopperUp())
         {
             button.setValue(true);
             wait = true;

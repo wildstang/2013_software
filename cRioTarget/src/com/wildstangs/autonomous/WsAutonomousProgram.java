@@ -31,6 +31,7 @@ public abstract class WsAutonomousProgram implements IStepContainer {
         finished = false;
         lastStepError = false;
         programSteps[0].initialize();
+        Logger.getLogger().debug("Auton", "Step Starting", programSteps[0]);
     }
 
     public void cleanup() {
@@ -50,12 +51,14 @@ public abstract class WsAutonomousProgram implements IStepContainer {
                 finished = true;
                 return;
             } else {
+                Logger.getLogger().debug("Auton", "Step Start", programSteps[currentStep]);
                 programSteps[currentStep].initialize();
             }
         }
         WsAutonomousStep step = programSteps[currentStep]; //Prevent errors caused by mistyping.
         step.update();
         if (step.isFinished()) {
+            Logger.getLogger().debug("Auton", "Step Finished", step);
             finishedStep = true;
             if (!step.isPassed()) {
                 lastStepError = true;

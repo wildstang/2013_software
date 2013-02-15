@@ -484,4 +484,9 @@ public class Counter extends SensorBase implements CounterBase, LiveWindowSendab
     {
         count -= amt;
     }
+    
+    public void set(int amt)
+    {
+        count = amt;
+    }
 }
