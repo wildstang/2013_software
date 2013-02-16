@@ -11,6 +11,7 @@ import com.wildstangs.inputfacade.base.IInputEnum;
  * @author Nathan
  */
 public class WsManipulatorJoystickEnum implements IInputEnum {
+
     private int index;
     private String name;
 
@@ -19,8 +20,8 @@ public class WsManipulatorJoystickEnum implements IInputEnum {
         this.name = desc;
 
     }
-    public static final WsManipulatorJoystickEnum TURRET_ANGLE = new WsManipulatorJoystickEnum(0, "TURRET_ANGLE");
-    public static final WsManipulatorJoystickEnum TURRET_HEADING = new WsManipulatorJoystickEnum(1, "TURRET_HEADING");
+    public static final WsManipulatorJoystickEnum ENTER_FLYWHEEL_ADJUSTMENT = new WsManipulatorJoystickEnum(0, "ENTER_FLYWHEEL_ADJUSTMENT");
+    public static final WsManipulatorJoystickEnum EXIT_FLYWHEEL_ADJUSTMENT = new WsManipulatorJoystickEnum(1, "EXIT_FLYWHEEL_ADJUSTMENT");
     public static final WsManipulatorJoystickEnum D_PAD_UP_DOWN = new WsManipulatorJoystickEnum(2, "D_PAD_UP_DOWN");
     public static final WsManipulatorJoystickEnum D_PAD_LEFT_RIGHT = new WsManipulatorJoystickEnum(3, "D_PAD_LEFT_RIGHT");
 
