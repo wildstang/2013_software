@@ -41,19 +41,19 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private IntegerConfigFileParameter PresetTowerShooterExitSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetTowerShooterExitSpeed", 2200);
     private IntegerConfigFileParameter PresetTowerShooterAngle = new IntegerConfigFileParameter(
-            this.getClass().getName(), "PresetTowerShooterExitSpeed", 1);
+            this.getClass().getName(), "PresetTowerShooterAngle", 1);
     private IntegerConfigFileParameter PresetLongLowEnterSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetLongLowEnterSpeed", 4000);
     private IntegerConfigFileParameter PresetLongLowExitSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetLongLowExitSpeed", 4500);
     private IntegerConfigFileParameter PresetLongLowAngle = new IntegerConfigFileParameter(
-            this.getClass().getName(), "PresetTowerShooterExitSpeed", 0);
+            this.getClass().getName(), "PresetLongLowAngle", 0);
     private IntegerConfigFileParameter PresetShortHighEnterSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetShortHighEnterSpeed", 1700);
     private IntegerConfigFileParameter PresetShortHighExitSpeed = new IntegerConfigFileParameter(
-            this.getClass().getName(), "PresetShortHighEnterSpeed", 2300);
+            this.getClass().getName(), "PresetShortHighExitSpeed", 2300);
     private IntegerConfigFileParameter PresetShortHighAngle = new IntegerConfigFileParameter(
-            this.getClass().getName(), "PresetTowerShooterExitSpeed", 1);
+            this.getClass().getName(), "PresetShortHighAngle", 1);
     
     private Preset PresetTowerShooterStation = new Preset(PresetTowerShooterEnterSpeed.getValue(), 
             PresetTowerShooterExitSpeed.getValue(), translatePresetConfigAngle(PresetTowerShooterAngle.getValue()));
