@@ -6,6 +6,7 @@ import com.wildstangs.subsystems.WsFloorPickup;
 import com.wildstangs.subsystems.WsHopper;
 import com.wildstangs.subsystems.WsIntake;
 import com.wildstangs.subsystems.WsLandingGear;
+import com.wildstangs.subsystems.WsLoadingRamp;
 import com.wildstangs.subsystems.WsShooter;
 import com.wildstangs.types.DataElement;
 import edu.wpi.first.wpilibj.networktables2.util.List;
@@ -75,6 +76,7 @@ public class WsSubsystemContainer {
     public static final String WS_HOPPER = "WsHopper";
     public static final String WS_SHOOTER = "WsShooter";
     public static final String WS_LANDING_GEAR = "WsLandingGear";
+    public static final String WS_LOADING_RAMP = "WsLoadingRamp";
 
     /**
      * Constructor for the subsystem container.
@@ -90,5 +92,6 @@ public class WsSubsystemContainer {
         subsystem.add(new DataElement(WS_HOPPER, new WsHopper(WS_HOPPER)));
         subsystem.add(new DataElement(WS_SHOOTER, new WsShooter(WS_SHOOTER)));
         subsystem.add(new DataElement(WS_LANDING_GEAR, new WsLandingGear(WS_LANDING_GEAR)));
+        subsystem.add(new DataElement(WS_LOADING_RAMP, new WsLoadingRamp(WS_LOADING_RAMP)));
     }
 }

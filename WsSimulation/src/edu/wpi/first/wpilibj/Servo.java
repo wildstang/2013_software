@@ -57,8 +57,18 @@ public class Servo {
 	 */
 	public void set(double value) {
 		position = limit(value);
-		posLabel.setText("Position: " + position); 
+		posLabel.setText("Position: " + position);
+                frame.invalidate();
+                frame.validate();
 	}
+        
+        public void setAngle(double angle)
+        {
+            position = angle;
+            posLabel.setText("Position (degrees): " + position); 
+            frame.invalidate();
+            frame.validate();
+        }
 	
 	/**
 	 * Gets the position.
@@ -82,5 +92,4 @@ public class Servo {
 		}
 		return l;
 	}
-
 }
