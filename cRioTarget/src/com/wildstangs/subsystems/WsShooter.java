@@ -4,6 +4,7 @@ import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsVictor;
@@ -109,7 +110,11 @@ public class WsShooter extends WsSubsystem implements IObserver {
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
         subject.attach(this);
-
+        //flywheel Speed on Joysticks
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT);
+        subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT);
+        subject.attach(this);
         //Update the subsystem with config values
         lowWheelSpeed = lowerWheelSpeed.getValue();
         lowVictorSpeed = lowerVictorSpeed.getValue();
@@ -291,7 +296,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 wheelExitSetPoint = PresetShortHigh.ENTER_WHEEL_SET_POINT;
             }
         }
-        //end preset test code.
+        if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT){
+            
+        }
 
     }
 
