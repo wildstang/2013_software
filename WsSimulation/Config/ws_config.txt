@@ -75,7 +75,14 @@ com.wildstangs.subsystems.WsShooter.LowerWheelExitTestSpeed=0.0
 com.wildstangs.subsystems.WsShooter.UpperWheelEnterTestSpeed=9000
 com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=9000
 com.wildstangs.subsystems.WsShooter.AtSpeedTolerance=0.05
-
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed = 1600
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed = 2200
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed = 1
+com.wildstangs.subsystems.WsShooter.PresetLongLowEnterSpeed = 4000
+com.wildstangs.subsystems.WsShooter.PresetLongLowExitSpeed = 4500
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed = 1700
+com.wildstangs.subsystems.WsShooter.PresetShortHighEnterSpeed = 2300
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed = 1
 //   XX
 //    X              X
 //    X              X
