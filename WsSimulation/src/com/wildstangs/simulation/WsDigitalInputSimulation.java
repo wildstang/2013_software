@@ -152,5 +152,10 @@ public class WsDigitalInputSimulation
 
 
     }
+    public void set(boolean state)
+    {
+            inputState = state;
+
+    }
 }
 

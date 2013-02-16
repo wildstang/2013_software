@@ -17,6 +17,7 @@ import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.simulation.encoders.DriveBaseEncoders;
 import com.wildstangs.simulation.encoders.FlywheelEncoders;
+import com.wildstangs.simulation.hopper.HopperLimitSwitches;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.*;
@@ -98,6 +99,7 @@ public class WsSimulation {
         
         DriveBaseEncoders dbEncoders = new DriveBaseEncoders(); 
         FlywheelEncoders flywheelEncoders = new FlywheelEncoders(); 
+        HopperLimitSwitches limitSwitches = new HopperLimitSwitches(); 
 //        periodTimer.startTimingSection();
         
         logger.always(c, "sim_startup", "Simulation init done.");
@@ -138,6 +140,7 @@ public class WsSimulation {
 
             dbEncoders.update();
             flywheelEncoders.update(); 
+            limitSwitches.update();
             
 //            durationTimer.endTimingSection();
             try {
