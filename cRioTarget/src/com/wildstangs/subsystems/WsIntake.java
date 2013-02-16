@@ -29,10 +29,10 @@ public class WsIntake extends WsSubsystem implements IObserver
         
         
         //Funnelator override commented out, button 10 now used for loading ramp
-        //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
-        //subject.attach(this);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
+        subject.attach(this);
         
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
         
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
@@ -50,7 +50,7 @@ public class WsIntake extends WsSubsystem implements IObserver
 
     public void update() 
     {
-        // only close gate if both limit switches pressed and override button state is false
+        //only close gate if both limit switches pressed and override button state is false
         WsDigitalInput leftSwitch = (WsDigitalInput)(WsInputFacade.getInstance().getSensorInput(WsInputFacade.LEFT_FUNNELATOR_LIMIT_SWITCH));
         WsDigitalInput rightSwitch = (WsDigitalInput)(WsInputFacade.getInstance().getSensorInput(WsInputFacade.RIGHT_FUNNELATOR_LIMIT_SWITCH));
         
