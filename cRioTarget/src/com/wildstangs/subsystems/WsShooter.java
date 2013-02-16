@@ -199,7 +199,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
             victorEnter.set(null, Double.valueOf(1.0));
         }
         if(((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
-                .isHopperUp() == false)
+                .isUpLimitSwitchTriggered() == false)
         {
             victorExit.set(null, Double.valueOf(0.0));
             victorEnter.set(null, Double.valueOf(0.0));
