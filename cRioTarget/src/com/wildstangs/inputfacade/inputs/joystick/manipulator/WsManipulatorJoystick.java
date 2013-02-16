@@ -46,6 +46,8 @@ public class WsManipulatorJoystick implements IInput {
         dPadUpDown = new DoubleSubject(WsManipulatorJoystickEnum.D_PAD_UP_DOWN);
         dPadLeftRight = new DoubleSubject(WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT);
         manipulatorJoystick = (Joystick) new Joystick(2);
+        manipulatorJoystick.setAxisChannel(Joystick.AxisType.kTwist, 5);
+        manipulatorJoystick.setAxisChannel(Joystick.AxisType.kThrottle, 6);
 
         buttons = new BooleanSubject[numberOfButtons];
         for (int i = 0; i < buttons.length; i++) {
