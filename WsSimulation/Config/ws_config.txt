@@ -76,6 +76,11 @@ com.wildstangs.subsystems.WsShooter.UpperWheelEnterTestSpeed=9000
 com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=9000
 com.wildstangs.subsystems.WsShooter.AtSpeedTolerance=0.05
 
+//Loading Ramp
+com.wildstangs.subsystems.WsLoadingRamp.AngleUp=90.0
+com.wildstangs.subsystems.WsLoadingRamp.AngleDown=60.0
+
+
 //   XX
 //    X              X
 //    X              X
