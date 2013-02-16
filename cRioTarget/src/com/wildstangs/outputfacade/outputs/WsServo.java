@@ -51,9 +51,13 @@ public class WsServo implements IOutput {
     public void update() {
         this.position.updateValue();
         if(angleSet)
+        {
             this.servo.setAngle(this.position.getValue());
+        }
         else
+        {
             this.servo.set(this.position.getValue());
+        }
     }
 
     public void notifyConfigChange() {
