@@ -64,10 +64,12 @@ public class WsLoadingRamp extends WsSubsystem implements IObserver
         if(button.getValue())
         {
             angle = ANGLE_DOWN;
+            System.out.println("Angle is at " + angle);
         }
         else
         {
             angle = ANGLE_UP;
+            System.out.println("Angle is at " + angle);
         }   
     }
 }
