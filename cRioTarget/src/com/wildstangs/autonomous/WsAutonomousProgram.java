@@ -20,7 +20,7 @@ public abstract class WsAutonomousProgram implements IStepContainer {
     protected boolean finishedStep, finished, lastStepError;
 
     public WsAutonomousProgram(int size) {
-        programSteps = new WsAutonomousStep[size];//Remember: In the constructor for all programs, call super(x, this.getClass().getName()), where x is the number of steps.
+        programSteps = new WsAutonomousStep[size];//Remember: In the constructor for all programs, call super(x), where x is the number of steps.
     }
 
     protected abstract void defineSteps(); //Use this method to set the steps for this program. Programs execute the steps in the array programSteps serially.
