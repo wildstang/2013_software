@@ -84,21 +84,14 @@ public class WsShooter extends WsSubsystem implements IObserver {
         //Implement this later for testing
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
+        //Angle change button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
-        subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON4);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
         subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
-        subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
-        subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON1);
-        subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON9);
         subject.attach(this);
         //Test code for presets
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON11);
@@ -110,7 +103,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
         subject.attach(this);
-        //flywheel Speed on Joysticks
+        //Joystick axes used to adjust flywheel speeds
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT);
@@ -261,26 +254,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 }
             }
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON4) {
-            if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                wheelExitSetPoint += 100;
-            }
-        }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON3) {
-            if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                wheelExitSetPoint -= 100;
-            }
-        }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON1) {
-            if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                wheelEnterSetPoint += 100;
-            }
-        }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON9) {
-            if (((BooleanSubject) subjectThatCaused).getValue() == true) {
-                wheelEnterSetPoint -= 100;
-            }
-        }
         //test code to check presets
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON11) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
@@ -296,10 +269,28 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 wheelExitSetPoint = PresetShortHigh.ENTER_WHEEL_SET_POINT;
             }
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT){
-            
+        if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT) {
+            double currentValue = ((DoubleSubject) subjectThatCaused).getValue();
+            double previousValue = ((DoubleSubject) subjectThatCaused).getPreviousValue();
+            if (previousValue < 0.25 && currentValue > 0.25) {
+                //We transitioned from below to above the positive threshold, increase the speed by by 100
+                wheelEnterSetPoint += 100;
+            } else if (previousValue > -0.25 && currentValue < -0.25) {
+                //We transitioned from above to below the negative threshold, decrease the speed by 100
+                wheelEnterSetPoint -= 100;
+            }
         }
-
+        if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT) {
+            double currentValue = ((DoubleSubject) subjectThatCaused).getValue();
+            double previousValue = ((DoubleSubject) subjectThatCaused).getPreviousValue();
+            if (previousValue < 0.25 && currentValue > 0.25) {
+                //We transitioned from below to above the positive threshold, increase the speed by by 100
+                wheelExitSetPoint += 100;
+            } else if (previousValue > -0.25 && currentValue < -0.25) {
+                //We transitioned from above to below the negative threshold, decrease the speed by 100
+                wheelExitSetPoint -= 100;
+            }
+        }
     }
 
     public Counter getEnterCounter() {

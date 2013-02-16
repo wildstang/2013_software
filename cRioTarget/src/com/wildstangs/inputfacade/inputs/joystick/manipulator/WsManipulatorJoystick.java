@@ -3,7 +3,6 @@ package com.wildstangs.inputfacade.inputs.joystick.manipulator;
 import com.wildstangs.inputfacade.base.IInput;
 import com.wildstangs.inputfacade.base.IInputEnum;
 import com.wildstangs.inputfacade.inputs.joystick.IHardwareJoystick;
-import com.wildstangs.inputfacade.inputs.joystick.IJoystick;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -73,7 +72,7 @@ public class WsManipulatorJoystick implements IInput {
     public Object get(IInputEnum key) {
         if (key == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT) {
             return enterFlywheelAdjustment.getValueAsObject();
-        } else if (key == WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT)  {
+        } else if (key == WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT) {
             return exitFlywheelAdjustment.getValueAsObject();
         } else if (key == WsManipulatorJoystickEnum.D_PAD_UP_DOWN) {
             return dPadUpDown.getValueAsObject();
