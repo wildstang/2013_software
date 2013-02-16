@@ -53,7 +53,7 @@ com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minInpu
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minOnTargetTime=0.2
 
 //Drivebase 
-com.wildstangs.subsystems.WsDriveBase.wheel_diameter=7.5
+com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.0
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
@@ -66,6 +66,9 @@ com.wildstangs.outputfacade.outputs.WsSolenoid.FrisbieControl.shouldStartTrue=fa
 com.wildstangs.outputfacade.outputs.WsSolenoid.Kicker.shouldStartTrue=false
 com.wildstangs.outputfacade.outputs.WsSolenoid.AccumulatorSolenoid.shouldStartTrue=false
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
+com.wildstangs.subsystems.WsDriveBase.encoder_gear_ratio=7.5
+com.wildstangs.subsystems.WsShooter.enter_gear_ratio=3.0
+com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 
 //Shooter
 com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=1000

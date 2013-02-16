@@ -45,8 +45,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double THROTTLE_HIGH_GEAR_ACCEL_FACTOR = 0.125;
     private static double HEADING_HIGH_GEAR_ACCEL_FACTOR = 0.250;
     private static double TICKS_PER_ROTATION = 360.0;
-    private static double WHEEL_DIAMETER = 7.5;
+    private static double WHEEL_DIAMETER = 6;
     private static double MAX_HIGH_GEAR_PERCENT = 0.80;
+    private static double ENCODER_GEAR_RATIO = 7.5;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
@@ -57,6 +58,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static boolean quickTurnFlag = false;
     private static Encoder leftDriveEncoder;
     private static Encoder rightDriveEncoder;
+    private static double encoderGearRatio;
     private static Gyro driveHeadingGyro;
     private static WsPidController driveHeadingPid;
     private static WsDriveBaseHeadingPidInput driveHeadingPidInput;
@@ -76,17 +78,19 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config;
     private static DoubleConfigFileParameter HEADING_HIGH_GEAR_ACCEL_FACTOR_config;
     private static DoubleConfigFileParameter MAX_HIGH_GEAR_PERCENT_config;
+    private static DoubleConfigFileParameter ENCODER_GEAR_RATIO_config;
 
     public WsDriveBase(String name) {
         super(name);
 
-        WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 7.5);
+        WHEEL_DIAMETER_config = new DoubleConfigFileParameter(this.getClass().getName(), "wheel_diameter", 6);
         TICKS_PER_ROTATION_config = new DoubleConfigFileParameter(this.getClass().getName(), "ticks_per_rotation", 360.0);
         THROTTLE_LOW_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "throttle_low_gear_accel_factor", 0.250);
         HEADING_LOW_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "heading_low_gear_accel_factor", 0.500);
         THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "throttle_high_gear_accel_factor", 0.125);
         HEADING_HIGH_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "heading_high_gear_accel_factor", 0.250);
         MAX_HIGH_GEAR_PERCENT_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_high_gear_percent", 0.80);
+        ENCODER_GEAR_RATIO_config = new DoubleConfigFileParameter(this.getClass().getName(), "encoder_gear_ratio", 7.5);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -99,12 +103,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         subject.attach(this);
 
         //Initialize the drive base encoders
-        //@TODO: change the channels to the correct one
-        //leftDriveEncoder = new Encoder(1, 2, true, CounterBase.EncodingType.k4X);
         leftDriveEncoder = new Encoder(2, 3, true, EncodingType.k4X);
         leftDriveEncoder.reset();
         leftDriveEncoder.start();
-        //rightDriveEncoder = new Encoder(3, 4, false, CounterBase.EncodingType.k4X);
         rightDriveEncoder = new Encoder(4, 5, false, EncodingType.k4X);
         rightDriveEncoder.reset();
         rightDriveEncoder.start();
@@ -186,8 +187,13 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
             //Set gear shift output
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(shifterFlag.value));
+
+            SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
+            SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
         } else {
         }
+        SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
+        SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
     }
 
     public void setThrottleValue(double tValue) {
@@ -366,12 +372,27 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public double getLeftDistance() {
-        double distance = (leftDriveEncoder.get() / TICKS_PER_ROTATION) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
+        double distance = 0.0;
+        //We divide by 3 because the ratio of the wheel rotation to the encoder rotation is 3
+        if (DoubleSolenoid.Value.kForward == shifterFlag) {
+            //We are in low gear
+            distance = (leftDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
+        } else {
+            //We are in high gear
+            distance = (leftDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
+        }
         return distance;
     }
 
     public double getRightDistance() {
-        double distance = (rightDriveEncoder.get() / TICKS_PER_ROTATION) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
+        double distance = 0.0;
+        if (DoubleSolenoid.Value.kForward == shifterFlag) {
+            //We are in low gear
+            distance = (rightDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
+        } else {
+            //We are in high gear
+            distance = (rightDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
+        }
         return distance;
     }
 
@@ -467,6 +488,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         THROTTLE_HIGH_GEAR_ACCEL_FACTOR = THROTTLE_HIGH_GEAR_ACCEL_FACTOR_config.getValue();
         HEADING_HIGH_GEAR_ACCEL_FACTOR = HEADING_HIGH_GEAR_ACCEL_FACTOR_config.getValue();
         MAX_HIGH_GEAR_PERCENT = MAX_HIGH_GEAR_PERCENT_config.getValue();
+        ENCODER_GEAR_RATIO = ENCODER_GEAR_RATIO_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
     }

@@ -78,6 +78,12 @@ public class WsShooter extends WsSubsystem implements IObserver {
             this.getClass().getName(), "UpperWheelExitTestSpeed", 9000);
     private DoubleConfigFileParameter atSpeedToleranceConfig = new DoubleConfigFileParameter(
             this.getClass().getName(), "AtSpeedTolerance", .05);
+    private DoubleConfigFileParameter ENTER_GEAR_RATIO_config = new DoubleConfigFileParameter(
+            this.getClass().getName(), "enter_gear_ratio", 3.0);
+    private DoubleConfigFileParameter EXIT_GEAR_RATIO_config = new DoubleConfigFileParameter(
+            this.getClass().getName(), "exit_gear_ratio", 3.2);
+    private double ENTER_GEAR_RATIO = 3.0;
+    private double EXIT_GEAR_RATIO = 3.2;
     private double wheelEnterSetPoint = 0;
     private double wheelExitSetPoint = 0;
     private double previousTime = 0;
@@ -195,8 +201,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         int enterCounterCount = counterEnter.get();
         int exitCounterCount = counterExit.get();
         double newTime = Timer.getFPGATimestamp();
-        double speedEnter = (60.0 / (128 * 3)) * counterEnter.get() / (newTime - previousTime);
-        double speedExit = (60.0 / (128 * 3)) * counterExit.get() / (newTime - previousTime);
+        double speedEnter = (60.0 / (128 * ENTER_GEAR_RATIO)) * counterEnter.get() / (newTime - previousTime);
+        double speedExit = (60.0 / (128 * EXIT_GEAR_RATIO)) * counterExit.get() / (newTime - previousTime);
         
         this.resetEnterCounter();
         this.resetExitCounter();
@@ -269,6 +275,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
         highWheelExitTestSpeed = upperWheelExitTestSpeed.getValue();
 
         atSpeedTolerance = atSpeedToleranceConfig.getValue();
+        
+        ENTER_GEAR_RATIO = ENTER_GEAR_RATIO_config.getValue();
+        EXIT_GEAR_RATIO = EXIT_GEAR_RATIO_config.getValue();
     }
 
     public void setWheelEnterSetPoint(int setPoint) {
