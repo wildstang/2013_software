@@ -46,6 +46,10 @@ public class WsManipulatorJoystick implements IInput {
         dPadUpDown = new DoubleSubject(WsManipulatorJoystickEnum.D_PAD_UP_DOWN);
         dPadLeftRight = new DoubleSubject(WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT);
         manipulatorJoystick = (Joystick) new Joystick(2);
+        manipulatorJoystick.setAxisChannel(Joystick.AxisType.kX, 1);
+        manipulatorJoystick.setAxisChannel(Joystick.AxisType.kY, 2);
+        manipulatorJoystick.setAxisChannel(Joystick.AxisType.kZ, 4);
+//        manipulatorJoystick.setAxisChannel(Joystick.AxisType.k, 4);
         manipulatorJoystick.setAxisChannel(Joystick.AxisType.kTwist, 5);
         manipulatorJoystick.setAxisChannel(Joystick.AxisType.kThrottle, 6);
 
@@ -101,8 +105,8 @@ public class WsManipulatorJoystick implements IInput {
         if (manipulatorJoystick instanceof IHardwareJoystick) {
             ((IHardwareJoystick) manipulatorJoystick).pullData();
         }
-        enterFlywheelAdjustment.setValue(manipulatorJoystick.getThrottle());
-        exitFlywheelAdjustment.setValue(manipulatorJoystick.getY());
+        enterFlywheelAdjustment.setValue(manipulatorJoystick.getX());
+        exitFlywheelAdjustment.setValue(manipulatorJoystick.getZ());
         //Get data from the D-pad
         //We invert the values so up & left are 1, down & right are -1
         dPadUpDown.setValue(manipulatorJoystick.getThrottle() * -1);
@@ -110,6 +114,8 @@ public class WsManipulatorJoystick implements IInput {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setValue(manipulatorJoystick.getRawButton(i + 1));
         }
+        
+        System.out.println("X: "+  manipulatorJoystick.getX() + " Y: " + manipulatorJoystick.getY() + " Z:" + manipulatorJoystick.getZ() + " TH: " + manipulatorJoystick.getThrottle()+ " TW: " + manipulatorJoystick.getTwist());
     }
 
     public void notifyConfigChange() {

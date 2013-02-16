@@ -499,7 +499,7 @@ public class WsHardwareJoystick implements IHardwareJoystick {
      * @param axis The axis to look up the channel for.
      * @return The channel fr the axis.
      */
-    public int getAxisChannel(AxisType axis) {
+    public int getAxisChannel(Joystick.AxisType axis) {
         return m_axes_mapping[axis.value];
     }
 
@@ -509,7 +509,7 @@ public class WsHardwareJoystick implements IHardwareJoystick {
      * @param axis The axis to set the channel for.
      * @param channel The channel to set the axis to.
      */
-    public void setAxisChannel(AxisType axis, int channel) {
+    public void setAxisChannel(Joystick.AxisType axis, int channel) {
         m_axes_mapping[axis.value] = (byte) channel;
     }
     

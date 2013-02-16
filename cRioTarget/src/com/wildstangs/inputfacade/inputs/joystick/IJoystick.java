@@ -1,5 +1,7 @@
 package com.wildstangs.inputfacade.inputs.joystick;
 
+import edu.wpi.first.wpilibj.Joystick;
+
 /**
  *
  * @author Nathan
@@ -48,4 +50,13 @@ public interface IJoystick {
      * Note: -1 is left, 1 is right
      */
     double getTwist();
+    
+    public int getAxisChannel(Joystick.AxisType axis) ;
+    /**
+     * Set the channel associated with a specified axis.
+     *
+     * @param axis The axis to set the channel for.
+     * @param channel The channel to set the axis to.
+     */
+    public void setAxisChannel(Joystick.AxisType axis, int channel) ;
 }

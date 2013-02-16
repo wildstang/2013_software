@@ -18,6 +18,7 @@
 package com.wildstangs.joystick;
 
 import com.wildstangs.inputfacade.inputs.joystick.IJoystick;
+import edu.wpi.first.wpilibj.Joystick.AxisType; 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -126,6 +127,19 @@ public class OnscreenJoystick implements KeyListener, IJoystick {
         return 0;
     }
     
+    public int getAxisChannel(AxisType axis) {
+        return 0;
+    }
+
+    /**
+     * Set the channel associated with a specified axis.
+     *
+     * @param axis The axis to set the channel for.
+     * @param channel The channel to set the axis to.
+     */
+    public void setAxisChannel(AxisType axis, int channel) {
+    }
+    
     /**
      * The current state of the trigger on the Joystick.
      * @return True if the trigger is being pressed down, false if not.
@@ -160,6 +174,7 @@ public class OnscreenJoystick implements KeyListener, IJoystick {
         grid.repaint();
     }
     public void keyTyped(KeyEvent e) {}
+
 
     @SuppressWarnings("serial")
     class Grid extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener {
