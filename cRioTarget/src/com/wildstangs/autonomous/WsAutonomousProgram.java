@@ -5,6 +5,8 @@
 package com.wildstangs.autonomous;
 
 import com.wildstangs.autonomous.steps.WsAutonomousSerialStepGroup;
+import com.wildstangs.autonomous.steps.control.WsAutonomousStepStopAutonomous;
+import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.logger.Logger;
 
 /**
@@ -18,7 +20,7 @@ public abstract class WsAutonomousProgram implements IStepContainer {
     protected boolean finishedStep, finished, lastStepError;
 
     public WsAutonomousProgram(int size) {
-        programSteps = new WsAutonomousStep[size];//Remember: In the constructor for all programs, call super(x), where x is the number of steps.
+        programSteps = new WsAutonomousStep[size];//Remember: In the constructor for all programs, call super(x, this.getClass().getName()), where x is the number of steps.
     }
 
     protected abstract void defineSteps(); //Use this method to set the steps for this program. Programs execute the steps in the array programSteps serially.
@@ -26,6 +28,7 @@ public abstract class WsAutonomousProgram implements IStepContainer {
 
     public void initialize() {
         defineSteps();
+        setStopPosition();
         currentStep = 0;
         finishedStep = false;
         finished = false;
@@ -96,6 +99,22 @@ public abstract class WsAutonomousProgram implements IStepContainer {
     public void setStep(WsAutonomousStep newStep, int stepNumber) {
         if (currentStep != stepNumber && stepNumber >= 0 && stepNumber < programSteps.length) {
             programSteps[stepNumber] = newStep;
+        }
+    }
+    
+    protected void setStopPosition()
+    {
+        IntegerConfigFileParameter ForceStopAtStep = new IntegerConfigFileParameter(this.getClass().getName(), "ForceStopAtStep", 0);
+            if (ForceStopAtStep.getValue() != 0){ 
+            int forceStop = ForceStopAtStep.getValue() ; 
+            if ((forceStop <= programSteps.length) && (forceStop > 0) ){
+                programSteps[forceStop] = new WsAutonomousStepStopAutonomous(); 
+                Logger.getLogger().always("Auton", "Force Stop", "Program is forced to stop at Step " + forceStop );
+            }
+            else
+            {
+                Logger.getLogger().error("Auton", "Force Stop", "Force stop value is outside of bounds. (0 to " + (programSteps.length-1));
+            }
         }
     }
 

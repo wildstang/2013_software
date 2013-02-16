@@ -128,15 +128,6 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
             pg6.addStep(new WsAutonomousStepWaitForShooter());
             pg6.addStep(new WsAutonomousStepWaitForDriveDistancePid());
         programSteps[31] = new WsAutonomousStepMultikick(4);
-        
-        if (ForceStopAtStep.getValue() != 0){ 
-            int forceStop = ForceStopAtStep.getValue() ; 
-            if ((forceStop <= programSteps.length) && (forceStop > 0) ){
-                programSteps[forceStop] = new WsAutonomousStepStopAutonomous(); 
-                Logger.getLogger().always("Auton", "Force Stop", "Program is forced to stop at Step " + forceStop );
-            }
-        }
-        
     }
     
     public String toString()
