@@ -1,5 +1,6 @@
 package com.wildstangs.pid.controller.base;
 
+import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.pid.inputs.base.IPidInput;
 import com.wildstangs.pid.outputs.base.IPidOutput;
@@ -487,14 +488,14 @@ public class WsPidController implements IPidController {
 
         return clipped_input;
     }
-    
+
     public WsPidStateType getState() {
         return this.currentState;
     }
-    
+
     public void notifyConfigChange() {
         p = p_config.getValue();
-        i =i_config.getValue();
+        i = i_config.getValue();
         d = d_config.getValue();
         errorIncrement = errorIncrement_config.getValue();
         errorEpsilon = errorEpsilon_config.getValue();

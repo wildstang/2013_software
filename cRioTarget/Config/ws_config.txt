@@ -124,3 +124,7 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBa
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.SecondShooterAngle=false
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.FunnelatorLoadDelay=2000
+
+//Drive distance
+//Distance is in inches
+com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance.distance=100

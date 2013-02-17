@@ -48,11 +48,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double WHEEL_DIAMETER = 6;
     private static double MAX_HIGH_GEAR_PERCENT = 0.80;
     private static double ENCODER_GEAR_RATIO = 7.5;
+    private static double DEADBAND = 0.05;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
     private static double pidHeadingValue = 0.0;
     private static boolean antiTurboFlag = false;
+    private static boolean slowTurnLeftFlag = false;
+    private static boolean slowTurnRightFlag = false;
     private static boolean turboFlag = false;
     private static DoubleSolenoid.Value shifterFlag = DoubleSolenoid.Value.kForward; //Default to low gear
     private static boolean quickTurnFlag = false;
@@ -79,6 +82,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter HEADING_HIGH_GEAR_ACCEL_FACTOR_config;
     private static DoubleConfigFileParameter MAX_HIGH_GEAR_PERCENT_config;
     private static DoubleConfigFileParameter ENCODER_GEAR_RATIO_config;
+    private static DoubleConfigFileParameter DEADBAND_config;
 
     public WsDriveBase(String name) {
         super(name);
@@ -91,6 +95,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         HEADING_HIGH_GEAR_ACCEL_FACTOR_config = new DoubleConfigFileParameter(this.getClass().getName(), "heading_high_gear_accel_factor", 0.250);
         MAX_HIGH_GEAR_PERCENT_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_high_gear_percent", 0.80);
         ENCODER_GEAR_RATIO_config = new DoubleConfigFileParameter(this.getClass().getName(), "encoder_gear_ratio", 7.5);
+        DEADBAND_config = new DoubleConfigFileParameter(this.getClass().getName(), "deadband", 0.05);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -100,6 +105,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         subject.attach(this);
         //Shifter Button
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON6);
+        subject.attach(this);
+        //Left/right slow turn buttons
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON1);
+        subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON3);
         subject.attach(this);
 
         //Initialize the drive base encoders
@@ -187,13 +197,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
             //Set gear shift output
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(shifterFlag.value));
-
-            SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
-            SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
         } else {
         }
         SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
         SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
+        SmartDashboard.putNumber("Gyro angle", this.getGyroAngle());
     }
 
     public void setThrottleValue(double tValue) {
@@ -294,6 +302,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
         rightMotorSpeed = driveBaseThrottleValue - angularPower;
         leftMotorSpeed = driveBaseThrottleValue + angularPower;
+
         if (true == quickTurnFlag) {
             rightMotorSpeed = 0.0f;
             leftMotorSpeed = 0.0f;
@@ -319,6 +328,16 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 }
             }
 
+            if (true == slowTurnLeftFlag && false == slowTurnRightFlag) {
+                rightMotorSpeed = 0.14;
+                leftMotorSpeed = -0.19;
+            } else if (false == slowTurnLeftFlag && true == slowTurnRightFlag) {
+                rightMotorSpeed = -0.19;
+                leftMotorSpeed = 0.14;
+            } else {
+                //Palm smash! Do nothing.
+            }
+
             if (rightMotorSpeed > MAX_MOTOR_OUTPUT) {
                 rightMotorSpeed = MAX_MOTOR_OUTPUT;
             }
@@ -331,6 +350,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             if (leftMotorSpeed < NEG_MAX_MOTOR_OUTPUT) {
                 leftMotorSpeed = NEG_MAX_MOTOR_OUTPUT;
             }
+        }
+
+        //If we're within the deadband, zero out the throttle and heading
+        if ((leftMotorSpeed < DEADBAND && leftMotorSpeed > -DEADBAND) && (rightMotorSpeed < DEADBAND && rightMotorSpeed > -DEADBAND)) {
+            this.setHeadingValue(0.0);
+            this.setThrottleValue(0.0);
+            rightMotorSpeed = 0.0;
+            leftMotorSpeed = 0.0;
         }
 
         //Update Output Facade.
@@ -386,13 +413,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public double getRightDistance() {
         double distance = 0.0;
-        if (DoubleSolenoid.Value.kForward == shifterFlag) {
-            //We are in low gear
-            distance = (rightDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
-        } else {
-            //We are in high gear
-            distance = (rightDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
-        }
+        distance = (rightDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
+        SmartDashboard.putNumber("Right encoder count", this.getRightEncoderValue());
+        SmartDashboard.putNumber("Ticks per rotation", TICKS_PER_ROTATION);
+        SmartDashboard.putNumber("Encoder gear ratio", ENCODER_GEAR_RATIO);
+        SmartDashboard.putNumber("Wheel diameter", WHEEL_DIAMETER);
         return distance;
     }
 
@@ -489,6 +514,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         HEADING_HIGH_GEAR_ACCEL_FACTOR = HEADING_HIGH_GEAR_ACCEL_FACTOR_config.getValue();
         MAX_HIGH_GEAR_PERCENT = MAX_HIGH_GEAR_PERCENT_config.getValue();
         ENCODER_GEAR_RATIO = ENCODER_GEAR_RATIO_config.getValue();
+        DEADBAND = DEADBAND_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
     }
@@ -503,6 +529,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             }
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON7) {
             turboFlag = ((BooleanSubject) subjectThatCaused).getValue();
+        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON1) {
+            slowTurnLeftFlag = ((BooleanSubject) subjectThatCaused).getValue();
+        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON3) {
+            slowTurnRightFlag = ((BooleanSubject) subjectThatCaused).getValue();
         }
     }
 }
