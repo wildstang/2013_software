@@ -105,7 +105,8 @@ public class WsOutputFacade {
             outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6))); 
             outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 10)));
-            outputs.add(new DataElement(LOADING_RAMP, new WsServo(LOADING_RAMP, 9)));
+            outputs.add(new DataElement(LOADING_RAMP, new WsServo(LOADING_RAMP, 7)));
+            outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 8)));
             
         } else {
             outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
@@ -117,10 +118,10 @@ public class WsOutputFacade {
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6))); 
             outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
             outputs.add(new DataElement(LOADING_RAMP, new WsServo(LOADING_RAMP, 7)));
+            outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 10)));
         }
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 9)));
-        outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 10)));
         
 
 

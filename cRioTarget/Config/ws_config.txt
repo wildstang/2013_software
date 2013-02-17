@@ -67,8 +67,6 @@ com.wildstangs.outputfacade.outputs.WsSolenoid.Kicker.shouldStartTrue=false
 com.wildstangs.outputfacade.outputs.WsSolenoid.AccumulatorSolenoid.shouldStartTrue=false
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
 com.wildstangs.subsystems.WsDriveBase.encoder_gear_ratio=7.5
-com.wildstangs.subsystems.WsShooter.enter_gear_ratio=3.0
-com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 
 //Shooter
 com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=1000
@@ -78,6 +76,9 @@ com.wildstangs.subsystems.WsShooter.LowerWheelExitTestSpeed=0.0
 com.wildstangs.subsystems.WsShooter.UpperWheelEnterTestSpeed=9000
 com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=9000
 com.wildstangs.subsystems.WsShooter.AtSpeedTolerance=0.05
+com.wildstangs.subsystems.WsShooter.enter_gear_ratio=3.0
+com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
+
 
 //Shooter Presets
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed = 1600

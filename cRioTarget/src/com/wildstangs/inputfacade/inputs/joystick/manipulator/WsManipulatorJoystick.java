@@ -105,7 +105,7 @@ public class WsManipulatorJoystick implements IInput {
         if (manipulatorJoystick instanceof IHardwareJoystick) {
             ((IHardwareJoystick) manipulatorJoystick).pullData();
         }
-        enterFlywheelAdjustment.setValue(manipulatorJoystick.getX()* -1);
+        enterFlywheelAdjustment.setValue(manipulatorJoystick.getY()* -1);
         exitFlywheelAdjustment.setValue(manipulatorJoystick.getZ()* -1);
         //Get data from the D-pad
         //We invert the values so up & left are 1, down & right are -1
