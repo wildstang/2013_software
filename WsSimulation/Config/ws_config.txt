@@ -53,7 +53,7 @@ com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minInpu
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minOnTargetTime=0.2
 
 //Drivebase 
-com.wildstangs.subsystems.WsDriveBase.wheel_diameter=7.5
+com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.0
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
@@ -79,6 +79,7 @@ com.wildstangs.subsystems.WsShooter.AtSpeedTolerance=0.05
 com.wildstangs.subsystems.WsShooter.enter_gear_ratio=3.0
 com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 
+
 //Shooter Presets
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed = 1600
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed = 2200
@@ -91,8 +92,8 @@ com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed = 2300
 com.wildstangs.subsystems.WsShooter.PresetShortHighAngle = 1
 
 //Loading Ramp
-com.wildstangs.subsystems.WsLoadingRamp.AngleUp=90.0
-com.wildstangs.subsystems.WsLoadingRamp.AngleDown=60.0
+com.wildstangs.subsystems.WsLoadingRamp.AngleUp=76.5
+com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
 
 //   XX
 //    X              X
@@ -105,7 +106,7 @@ com.wildstangs.subsystems.WsLoadingRamp.AngleDown=60.0
 // XXX XXX   XX XX    XX    XXXXX  XXX XXX
 
 //ShootSeven
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=4
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.StartDrive=60.5
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.AngleTurn=60.5
@@ -123,3 +124,7 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBa
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.SecondShooterAngle=false
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.FunnelatorLoadDelay=2000
+
+//Drive distance
+//Distance is in inches
+com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance.distance=100
