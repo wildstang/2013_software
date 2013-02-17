@@ -94,6 +94,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private double atSpeedTolerance;
     private boolean testingCalled = false;
     private boolean atSpeed = false;
+    private boolean presetUnlock = false;
     private DoubleSolenoid.Value angleFlag = DoubleSolenoid.Value.kReverse;
 
     public WsShooter(String name) {
@@ -115,6 +116,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
+        subject.attach(this);
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON4);
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
@@ -163,6 +166,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         wheelEnterSetPoint = 0; 
         wheelExitSetPoint = 0 ; 
         angleFlag = DoubleSolenoid.Value.kReverse; 
+        presetUnlock = false;
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
     }
     
@@ -295,38 +299,48 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 }
             }
         }
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON4) {
+            BooleanSubject button = (BooleanSubject)subjectThatCaused;
+            presetUnlock = button.getValue();
+        }      
         if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.D_PAD_UP_DOWN) {
             dpadVal = ((DoubleSubject) subjectThatCaused).getValue();
-            if ( dpadVal == 1 ) {
+            if ( dpadVal == -1 && presetUnlock) {
                 Logger.getLogger().debug(this.getClass().getName(), "acceptNotification", 
                         "Set Long and Low Preset");
                 angleFlag = PresetLongLow.ANGLE;
                 wheelEnterSetPoint = PresetLongLow.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetLongLow.EXIT_WHEEL_SET_POINT;
+                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: Low");
             }
-            else if ( dpadVal == -1 ) {
+            else if ( dpadVal == 1 && presetUnlock) {
                 Logger.getLogger().debug(this.getClass().getName(), "acceptNotification", 
                         "Set Short and High Preset");
+                
                 angleFlag = PresetShortHigh.ANGLE;
                 wheelEnterSetPoint = PresetShortHigh.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetShortHigh.EXIT_WHEEL_SET_POINT;
+                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: High");
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT) {
             dpadVal = ((DoubleSubject) subjectThatCaused).getValue();
-            if ( dpadVal == -1 ) {
+            if ( dpadVal == -1 && presetUnlock) {
                 Logger.getLogger().debug(this.getClass().getName(), "acceptNotification", 
                         "Set Tower Shooter Station Preset");
                 angleFlag = PresetTowerShooterStation.ANGLE;
                 wheelEnterSetPoint = PresetTowerShooterStation.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetTowerShooterStation.EXIT_WHEEL_SET_POINT;
+                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: High");
             }
-            if (dpadVal == 1 ) {
+            if (dpadVal == 1 && presetUnlock) {
                 Logger.getLogger().debug(this.getClass().getName(), "acceptNotification", 
                         "Set Off Preset");
                 angleFlag = PresetOffLow.ANGLE;
                 wheelEnterSetPoint = PresetOffLow.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetOffLow.EXIT_WHEEL_SET_POINT;
+                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: Low");
+                
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT) {
