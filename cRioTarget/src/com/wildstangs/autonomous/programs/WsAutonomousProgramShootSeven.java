@@ -9,7 +9,6 @@ import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
-import com.wildstangs.autonomous.steps.control.WsAutonomousStepStopAutonomous;
 import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
@@ -18,7 +17,6 @@ import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.config.IntegerConfigFileParameter;
-import com.wildstangs.logger.Logger;
 import com.wildstangs.subsystems.WsShooter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
@@ -37,7 +35,8 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
     private IntegerConfigFileParameter SecondExitWheelSetPoint;
     private BooleanConfigFileParameter SecondShooterAngle;
     private IntegerConfigFileParameter FunnelatorLoadDelay;
-    private IntegerConfigFileParameter ForceStopAtStep;
+    private IntegerConfigFileParameter RaiseAccumulatorDelay;
+    private IntegerConfigFileParameter LowerAccumulatorDelay;
     
     private WsShooter.Preset startPreset, secondShooterPreset;
     
@@ -54,18 +53,19 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         SecondEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondEnterWheelSetPoint", 5000);
         SecondExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondExitWheelSetPoint", 4500);
         SecondShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondShooterAngle", false);
+        RaiseAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".RaiseAccumulatorDelay", 2000);
+        LowerAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".LowerAccumulatorDelay", 2000);
         FunnelatorLoadDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FunnelatorLoadDelay", 2000);
-        ForceStopAtStep = new IntegerConfigFileParameter(this.getClass().getName(), "ForceStopAtStep", 0);
 
         
         startPreset = new WsShooter.Preset(FirstEnterWheelSetPoint.getValue(),
                 FirstExitWheelSetPoint.getValue(),
                 FirstShooterAngle.getValue() ?
-                DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
+                DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
         secondShooterPreset = new WsShooter.Preset(SecondEnterWheelSetPoint.getValue(),
                 SecondExitWheelSetPoint.getValue(),
                 SecondShooterAngle.getValue() ?
-                DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
+                DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
     
     public WsAutonomousProgramShootSeven()
@@ -87,8 +87,8 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         programSteps[3] = new WsAutonomousStepSetDriveHeadingPidSetpoint(AngleTurn.getValue());
         programSteps[4] = new WsAutonomousStepEnableDriveHeadingPid();
         programSteps[5] = new WsAutonomousStepWaitForDriveHeadingPid();
-        programSteps[7] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[6] = new WsAutonomousStepSetDriveDistancePidSetpoint(SecondDrive.getValue());
+        programSteps[7] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[8] = new WsAutonomousStepWaitForDriveDistancePid();
         
         programSteps[9] = new WsAutonomousStepMultikick(3);
@@ -96,26 +96,32 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         programSteps[10] = pg3;
             pg3.addStep(new WsAutonomousStepLowerHopper());
             pg3.addStep(new WsAutonomousStepLowerAccumulator());
-            pg3.addStep(new WsAutonomousStepIntakeMotorBackwards());
-        programSteps[11] = new WsAutonomousStepSetDriveDistancePidSetpoint(ThirdDrive.getValue());
-        programSteps[12] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[13] = new WsAutonomousStepWaitForDriveDistancePid();
-        programSteps[14] = new WsAutonomousStepIntakeMotorStop();
-        programSteps[15] = new WsAutonomousStepRaiseAccumulator();
-        programSteps[16] = new WsAutonomousStepIntakeMotorBackwards();
-        programSteps[17] = new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue());
+            pg3.addStep(new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue()));
+        programSteps[11] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
+        programSteps[12] = new WsAutonomousStepSetDriveDistancePidSetpoint(ThirdDrive.getValue());
+        programSteps[13] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[14] = new WsAutonomousStepWaitForDriveDistancePid();
+        programSteps[15] = new WsAutonomousStepIntakeMotorStop();
+        WsAutonomousParallelStepGroup pg7 = new WsAutonomousParallelStepGroup("Raise accumulator and wait for it");
+        programSteps[16] = pg7;
+            pg7.addStep(new WsAutonomousStepRaiseAccumulator());
+            pg7.addStep(new WsAutonomousStepDelay(RaiseAccumulatorDelay.getValue()));
+        programSteps[17] = new WsAutonomousStepGroupIntakeTwoFrisbees(FunnelatorLoadDelay.getValue());
         WsAutonomousParallelStepGroup pg4 = new WsAutonomousParallelStepGroup("Set up for intake");
         programSteps[18] = pg4;
             pg4.addStep(new WsAutonomousStepLowerHopper());
             pg4.addStep(new WsAutonomousStepLowerAccumulator());
-            pg4.addStep(new WsAutonomousStepIntakeMotorBackwards());
-        programSteps[19] = new WsAutonomousStepSetDriveDistancePidSetpoint(FourthDrive.getValue());
-        programSteps[20] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[21] = new WsAutonomousStepWaitForDriveDistancePid();
-        programSteps[22] = new WsAutonomousStepIntakeMotorStop();
-        programSteps[23] = new WsAutonomousStepRaiseAccumulator();
-        programSteps[24] = new WsAutonomousStepIntakeMotorBackwards();
-        programSteps[25] = new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue());
+            pg4.addStep(new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue()));
+        programSteps[19] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
+        programSteps[20] = new WsAutonomousStepSetDriveDistancePidSetpoint(FourthDrive.getValue());
+        programSteps[21] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[22] = new WsAutonomousStepWaitForDriveDistancePid();
+        programSteps[23] = new WsAutonomousStepIntakeMotorStop();
+        WsAutonomousParallelStepGroup pg8 = new WsAutonomousParallelStepGroup("Raise accumulator and wait for it");
+        programSteps[24] = pg8;
+            pg8.addStep(new WsAutonomousStepRaiseAccumulator());
+            pg8.addStep(new WsAutonomousStepDelay(RaiseAccumulatorDelay.getValue()));
+        programSteps[25] = new WsAutonomousStepGroupIntakeTwoFrisbees(FunnelatorLoadDelay.getValue());
         programSteps[26] = new WsAutonomousStepIntakeMotorStop();
         programSteps[27] = new WsAutonomousStepRaiseHopper();
         WsAutonomousParallelStepGroup pg5 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");

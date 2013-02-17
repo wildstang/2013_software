@@ -49,6 +49,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double MAX_HIGH_GEAR_PERCENT = 0.80;
     private static double ENCODER_GEAR_RATIO = 7.5;
     private static double DEADBAND = 0.05;
+    private static double SLOW_TURN_FORWARD_SPEED;
+    private static double SLOW_TURN_BACKWARD_SPEED;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
@@ -83,6 +85,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter MAX_HIGH_GEAR_PERCENT_config;
     private static DoubleConfigFileParameter ENCODER_GEAR_RATIO_config;
     private static DoubleConfigFileParameter DEADBAND_config;
+    private static DoubleConfigFileParameter SLOW_TURN_FORWARD_SPEED_config;
+    private static DoubleConfigFileParameter SLOW_TURN_BACKWARD_SPEED_config;
 
     public WsDriveBase(String name) {
         super(name);
@@ -96,6 +100,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         MAX_HIGH_GEAR_PERCENT_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_high_gear_percent", 0.80);
         ENCODER_GEAR_RATIO_config = new DoubleConfigFileParameter(this.getClass().getName(), "encoder_gear_ratio", 7.5);
         DEADBAND_config = new DoubleConfigFileParameter(this.getClass().getName(), "deadband", 0.05);
+        SLOW_TURN_FORWARD_SPEED_config = new DoubleConfigFileParameter(this.getClass().getName(), "slow_turn_forward_speed", 0.16);
+        SLOW_TURN_BACKWARD_SPEED_config = new DoubleConfigFileParameter(this.getClass().getName(), "slow_turn_backward_speed", -0.19);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -329,11 +335,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             }
 
             if (true == slowTurnLeftFlag && false == slowTurnRightFlag) {
-                rightMotorSpeed = 0.14;
-                leftMotorSpeed = -0.19;
+                rightMotorSpeed = SLOW_TURN_FORWARD_SPEED;
+                leftMotorSpeed = SLOW_TURN_BACKWARD_SPEED;
             } else if (false == slowTurnLeftFlag && true == slowTurnRightFlag) {
-                rightMotorSpeed = -0.19;
-                leftMotorSpeed = 0.14;
+                rightMotorSpeed = SLOW_TURN_BACKWARD_SPEED;
+                leftMotorSpeed = SLOW_TURN_FORWARD_SPEED;
             } else {
                 //Palm smash! Do nothing.
             }
@@ -427,11 +433,13 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void resetLeftEncoder() {
+        this.leftEncoderValue = 0.0;
         leftDriveEncoder.reset();
         leftDriveEncoder.start();
     }
 
     public void resetRightEncoder() {
+        this.rightEncoderValue = 0.0;
         rightDriveEncoder.reset();
         rightDriveEncoder.start();
     }
@@ -501,7 +509,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void setPidHeadingValue(double pidHeading) {
-        pidHeadingValue = pidHeading;
+        //We have to reverse the heading to make it turn the right way
+        pidHeadingValue = -pidHeading;
         Logger.getLogger().debug(this.getClass().getName(), "setPidHeadingValue", "Heading PID value set: " + pidHeading);
     }
 
@@ -514,6 +523,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         HEADING_HIGH_GEAR_ACCEL_FACTOR = HEADING_HIGH_GEAR_ACCEL_FACTOR_config.getValue();
         MAX_HIGH_GEAR_PERCENT = MAX_HIGH_GEAR_PERCENT_config.getValue();
         ENCODER_GEAR_RATIO = ENCODER_GEAR_RATIO_config.getValue();
+        SLOW_TURN_FORWARD_SPEED = SLOW_TURN_FORWARD_SPEED_config.getValue();
+        SLOW_TURN_BACKWARD_SPEED = SLOW_TURN_BACKWARD_SPEED_config.getValue();
         DEADBAND = DEADBAND_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
@@ -529,9 +540,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             }
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON7) {
             turboFlag = ((BooleanSubject) subjectThatCaused).getValue();
-        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON1) {
-            slowTurnLeftFlag = ((BooleanSubject) subjectThatCaused).getValue();
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON3) {
+            slowTurnLeftFlag = ((BooleanSubject) subjectThatCaused).getValue();
+        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON1) {
             slowTurnRightFlag = ((BooleanSubject) subjectThatCaused).getValue();
         }
     }

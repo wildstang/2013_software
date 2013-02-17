@@ -23,17 +23,10 @@ public class WsAutonomousStepLowerAccumulator extends WsAutonomousStep
         if(subsystem.isUp()) {
             button.setValue(true);
         }
+        finished = true;
     }
     public void update()
     {
-        WsFloorPickup subsystem = (WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
-        if(!subsystem.isUp())
-        {
-            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
-            BooleanSubject button = (BooleanSubject)subject;
-            button.setValue(false);
-            finished = true;
-        }
     }
     public String toString()
     {

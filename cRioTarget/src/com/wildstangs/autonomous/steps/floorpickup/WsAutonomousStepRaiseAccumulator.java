@@ -20,19 +20,12 @@ public class WsAutonomousStepRaiseAccumulator extends WsAutonomousStep {
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
         BooleanSubject button = (BooleanSubject) subject;
         if (!subsystem.isUp()) {
-            button.setValue(true);
+            button.setValue(false);
         }
+        finished = true;
     }
 
     public void update() {
-        WsFloorPickup subsystem = (WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
-        if (subsystem.isUp() == true) {
-            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
-            BooleanSubject button = (BooleanSubject) subject;
-            button.setValue(false);
-            finished = true;
-        }
-
     }
     public String toString()
     {
