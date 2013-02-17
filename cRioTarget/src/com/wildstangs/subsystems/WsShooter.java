@@ -351,8 +351,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 wheelExitSetPoint -= 100;
             }
         }
-        
-        
     }
     
      public Counter getEnterCounter() {

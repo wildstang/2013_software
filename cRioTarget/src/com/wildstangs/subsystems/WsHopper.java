@@ -10,7 +10,6 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
-import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -99,6 +98,8 @@ public class WsHopper extends WsSubsystem implements IObserver
         SmartDashboard.putBoolean("Kicker value", kickerValue);
         SmartDashboard.putNumber("Lift Value", liftValue.value);
         SmartDashboard.putBoolean("KickerReady", goingForward || goingBack);
+        SmartDashboard.putBoolean("Up limit switch", upLimitSwitchValue);
+        SmartDashboard.putBoolean("Down limit switch", downLimitSwitchValue);
     }
 
     public void notifyConfigChange() 

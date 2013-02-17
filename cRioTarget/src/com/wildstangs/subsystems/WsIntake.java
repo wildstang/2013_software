@@ -11,6 +11,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -72,8 +73,8 @@ public class WsIntake extends WsSubsystem implements IObserver
         
         WsFloorPickup pickup = ((WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
         boolean up = pickup.isUp();
-        if (motorForward == true && pickup.isUp() && ((WsHopper) WsSubsystemContainer.getInstance()
-           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isUpLimitSwitchTriggered()) 
+        if (motorForward == true && pickup.isUp() && false == ((WsHopper) WsSubsystemContainer.getInstance()
+           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isDownLimitSwitchTriggered()) 
         {
             motorForward = false;
         }
@@ -83,16 +84,20 @@ public class WsIntake extends WsSubsystem implements IObserver
         {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
                     .set(null, Double.valueOf(1.0));
+            SmartDashboard.putNumber("Funnelator roller", 1.0);
         }
         else if(motorBack)
         {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
                     .set(null, Double.valueOf(-1.0));
+            SmartDashboard.putNumber("Funnelator roller", -1.0);
+
         }
         else
         {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
                     .set(null, Double.valueOf(0.0));
+            SmartDashboard.putNumber("Funnelator roller", 0.0);
         }
     }
 

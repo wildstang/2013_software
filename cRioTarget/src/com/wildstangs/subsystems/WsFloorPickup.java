@@ -11,6 +11,7 @@ import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -58,8 +59,8 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     public void update() {
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
         
-        if (motorForward == true && solenoidState == false && ((WsHopper) WsSubsystemContainer.getInstance()
-           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isUpLimitSwitchTriggered()) 
+        if (motorForward == true && solenoidState == false && (false == ((WsHopper) WsSubsystemContainer.getInstance()
+           .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isDownLimitSwitchTriggered())) 
         {
             motorForward = false;
         }
@@ -68,16 +69,21 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)
                     .set(null, Double.valueOf(maxVictorSpeed));
+            SmartDashboard.putNumber("Accumulator motor", maxVictorSpeed);
         }
         else if(motorBack)
         {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)
                     .set(null, Double.valueOf(-maxVictorSpeed));
+            SmartDashboard.putNumber("Accumulator motor", -maxVictorSpeed);
+
         }
         else
         {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)
                     .set(null, Double.valueOf(0.0));
+            SmartDashboard.putNumber("Accumulator motor", 0.0);
+
         }
     }
 

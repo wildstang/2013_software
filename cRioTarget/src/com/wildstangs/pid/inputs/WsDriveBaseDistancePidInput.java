@@ -22,7 +22,6 @@ public class WsDriveBaseDistancePidInput implements IPidInput {
         final_encoder_value = (/*left_encoder_value + */right_encoder_value)/* / 2*/;
         SmartDashboard.putNumber("Distance: ", final_encoder_value);
         return final_encoder_value;
-        
     }
     
 }

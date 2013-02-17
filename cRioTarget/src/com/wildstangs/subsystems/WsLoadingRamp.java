@@ -13,6 +13,7 @@ import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -51,6 +52,7 @@ public class WsLoadingRamp extends WsSubsystem implements IObserver
     {
         WsServo servo = (WsServo)(WsOutputFacade.getInstance().getOutput(WsOutputFacade.LOADING_RAMP));
         servo.setAngle(null, angle);
+        SmartDashboard.putNumber("Loading Ramp angle:", angle.doubleValue());
     }
     
     public void notifyConfigChange(){
