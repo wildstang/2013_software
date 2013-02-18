@@ -129,8 +129,8 @@ public class WsInputFacade {
     public static final String AUTO_PROGRAM_SELECTOR = "AutoProgramSelector";
     public static final String LOCK_IN_SWITCH = "LockInSwitch";
     public static final String START_POSITION_SELECTOR = "StartPositionSelector";
-    public static final String LEFT_FUNNELATOR_LIMIT_SWITCH = "LeftFunnelatorLimitSwitch";
-    public static final String RIGHT_FUNNELATOR_LIMIT_SWITCH = "RightFunnelatorLimitSwitch";
+    public static final String LEFT_ACCUMULATOR_LIMIT_SWITCH = "LeftAccumulatorLimitSwitch";
+    public static final String RIGHT_ACCUMULATOR_LIMIT_SWITCH = "RightAccumulatorLimitSwitch";
     public static final String HOPPER_UP_LIMIT_SWITCH = "HopperUpLimitSwitch";
     public static final String HOPPER_DOWN_LIMIT_SWITCH = "HopperDownLimitSwitch";
     
@@ -145,11 +145,11 @@ public class WsInputFacade {
         BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(WsOutputFacade.getInstance().getClass().getName(), "2012_Robot", false);
         if(outputsFor2012.getValue())
         {
-            sensorInputs.add(new DataElement(RIGHT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(11))); 
+            sensorInputs.add(new DataElement(RIGHT_ACCUMULATOR_LIMIT_SWITCH, new WsDigitalInput(11))); 
         }
         else
         {
-            sensorInputs.add(new DataElement(RIGHT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(9)));
+            sensorInputs.add(new DataElement(RIGHT_ACCUMULATOR_LIMIT_SWITCH, new WsDigitalInput(7)));
         }
         oiInputs.add(new DataElement(DRIVER_JOYSTICK, new WsDriverJoystick()));
         oiInputs.add(new DataElement(MANIPULATOR_JOYSTICK, new WsManipulatorJoystick()));        
@@ -159,7 +159,7 @@ public class WsInputFacade {
         oiInputs.add(new DataElement(AUTO_PROGRAM_SELECTOR, new WsDSAnalogInput(2)));
         oiInputs.add(new DataElement(LOCK_IN_SWITCH, new WsDSDigitalInput(1)));
         oiInputs.add(new DataElement(START_POSITION_SELECTOR, new WsDSAnalogInput(1)));
-        sensorInputs.add(new DataElement(LEFT_FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(8)));
+        sensorInputs.add(new DataElement(LEFT_ACCUMULATOR_LIMIT_SWITCH, new WsDigitalInput(6)));
         sensorInputs.add(new DataElement(HOPPER_DOWN_LIMIT_SWITCH, new WsDigitalInput(13)));
         sensorInputs.add(new DataElement(HOPPER_UP_LIMIT_SWITCH, new WsDigitalInput(12)));
     }
