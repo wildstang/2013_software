@@ -20,10 +20,6 @@ public class WsAutonomousStepNoOp extends WsAutonomousStep {
 
     public void initialize() {
         finished = true; //This step does nothing, and finishes immediately.
-        if (WsAutonomousManager.getInstance().getRunningProgram().lastStepHadError()) {
-            pass = false;
-            errorInfo = "";
-        }
     }
 
     public void update() {

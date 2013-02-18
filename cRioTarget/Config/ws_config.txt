@@ -109,13 +109,13 @@ com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
 // XXX XXX   XX XX    XX    XXXXX  XXX XXX
 
 //ShootSeven
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=17
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=28
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.StartDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.AngleTurn=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.SecondDrive=0.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.ThirdDrive=17.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.FourthDrive=60.5
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.ThirdDrive=28.0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.FourthDrive=100
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.FifthDrive=60.5
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.FirstEnterWheelSetPoint=2400
@@ -126,8 +126,8 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBa
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.SecondExitWheelSetPoint=4500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.SecondShooterAngle=false
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.FunnelatorLoadDelay=2000
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.RaiseAccumulatorDelay=2000
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.FunnelatorLoadDelay=1000
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.RaiseAccumulatorDelay=3000
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.LowerAccumulatorDelay=2000
 
 //Drive distance

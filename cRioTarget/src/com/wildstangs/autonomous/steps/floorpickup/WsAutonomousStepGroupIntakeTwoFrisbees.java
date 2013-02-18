@@ -18,6 +18,7 @@ public class WsAutonomousStepGroupIntakeTwoFrisbees extends WsAutonomousSerialSt
     {
         super(6);
         this.delay = delay;
+        this.defineSteps();
     }
     public void defineSteps()
     {
