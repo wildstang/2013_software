@@ -21,13 +21,13 @@ public class WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse extends WsA
     
     public WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse()
     {
-        Subject subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
-        subject.attach(this);
+        
     }
 
     public void initialize()
     {
-        
+        Subject subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        subject.attach(this);
     }
 
     public void update()
