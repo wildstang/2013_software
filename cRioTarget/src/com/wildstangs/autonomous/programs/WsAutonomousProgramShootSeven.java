@@ -8,8 +8,8 @@ package com.wildstangs.autonomous.programs;
 import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
+import com.wildstangs.autonomous.steps.WsAutonomousSerialStepContainer;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
-import com.wildstangs.autonomous.steps.control.WsAutonomousStepNoOp;
 import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
@@ -58,7 +58,6 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         LowerAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".LowerAccumulatorDelay", 2000);
         FunnelatorLoadDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FunnelatorLoadDelay", 2000);
 
-        
         startPreset = new WsShooter.Preset(FirstEnterWheelSetPoint.getValue(),
                 FirstExitWheelSetPoint.getValue(),
                 FirstShooterAngle.getValue() ?
@@ -86,55 +85,63 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         programSteps[2] = pg2;
             pg2.addStep(new WsAutonomousStepWaitForShooter());
             pg2.addStep(new WsAutonomousStepWaitForDriveDistancePid());
-        programSteps[3] = new WsAutonomousStepNoOp();
-        programSteps[4] = new WsAutonomousStepNoOp();
-        programSteps[5] = new WsAutonomousStepNoOp();
-        programSteps[6] = new WsAutonomousStepSetDriveDistancePidSetpoint(SecondDrive.getValue());
-        programSteps[7] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[8] = new WsAutonomousStepWaitForDriveDistancePid();
+        programSteps[3] = new WsAutonomousStepSetDriveDistancePidSetpoint(SecondDrive.getValue());
+        programSteps[4] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[5] = new WsAutonomousStepWaitForDriveDistancePid();
         
-        programSteps[9] = new WsAutonomousStepMultikick(3);
-        WsAutonomousParallelStepGroup pg3 = new WsAutonomousParallelStepGroup("Set up for intake");
-        programSteps[10] = pg3;
-            pg3.addStep(new WsAutonomousStepLowerHopper());
-            pg3.addStep(new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue()));
-        programSteps[11] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
-        programSteps[12] = new WsAutonomousStepSetDriveDistancePidSetpoint(ThirdDrive.getValue());
-        programSteps[13] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[14] = new WsAutonomousStepWaitForDriveDistancePid();
-        programSteps[15] = new WsAutonomousStepIntakeMotorStop();
+        programSteps[6] = new WsAutonomousStepMultikick(3);
+        programSteps[7] = new WsAutonomousStepLowerHopper();
+        programSteps[8] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
+        programSteps[9] = new WsAutonomousStepSetDriveDistancePidSetpoint(ThirdDrive.getValue());
+        programSteps[10] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[11] = new WsAutonomousStepWaitForDriveDistancePid();
+        programSteps[12] = new WsAutonomousStepIntakeMotorStop();
         WsAutonomousParallelStepGroup pg7 = new WsAutonomousParallelStepGroup("Raise accumulator and wait for it");
-        programSteps[16] = pg7;
+        programSteps[13] = pg7;
             pg7.addStep(new WsAutonomousStepRaiseAccumulator());
-            pg7.addStep(new WsAutonomousStepDelay(RaiseAccumulatorDelay.getValue()));
-        programSteps[17] = new WsAutonomousStepGroupIntakeTwoFrisbees(FunnelatorLoadDelay.getValue());
+            pg7.addStep(new WsAutonomousStepWaitForAccumulatorUp());
+        WsAutonomousSerialStepContainer ssc1 = new WsAutonomousSerialStepContainer("Intake two frisbees");
+        programSteps[14] = ssc1;
+            ssc1.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
+            ssc1.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
+            ssc1.addStep(new WsAutonomousStepOverrideFunnelatorButtonOn());
+            ssc1.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
+            ssc1.addStep(new WsAutonomousStepOverrideFunnelatorButtonOff());
+            ssc1.addStep(new WsAutonomousStepIntakeMotorStop());
         WsAutonomousParallelStepGroup pg4 = new WsAutonomousParallelStepGroup("Set up for intake");
-        programSteps[18] = pg4;
+        programSteps[15] = pg4;
             pg4.addStep(new WsAutonomousStepLowerHopper());
             pg4.addStep(new WsAutonomousStepLowerAccumulator());
             pg4.addStep(new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue()));
-        programSteps[19] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
-        programSteps[20] = new WsAutonomousStepSetDriveDistancePidSetpoint(FourthDrive.getValue());
-        programSteps[21] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[22] = new WsAutonomousStepWaitForDriveDistancePid();
-        programSteps[23] = new WsAutonomousStepIntakeMotorStop();
+        programSteps[16] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
+        programSteps[17] = new WsAutonomousStepSetDriveDistancePidSetpoint(FourthDrive.getValue());
+        programSteps[18] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[19] = new WsAutonomousStepWaitForDriveDistancePid();
+        programSteps[20] = new WsAutonomousStepIntakeMotorStop();
         WsAutonomousParallelStepGroup pg8 = new WsAutonomousParallelStepGroup("Raise accumulator and wait for it");
-        programSteps[24] = pg8;
+        programSteps[21] = pg8;
             pg8.addStep(new WsAutonomousStepRaiseAccumulator());
-            pg8.addStep(new WsAutonomousStepDelay(RaiseAccumulatorDelay.getValue()));
-        programSteps[25] = new WsAutonomousStepGroupIntakeTwoFrisbees(FunnelatorLoadDelay.getValue());
-        programSteps[26] = new WsAutonomousStepIntakeMotorStop();
-        programSteps[27] = new WsAutonomousStepRaiseHopper();
+            pg8.addStep(new WsAutonomousStepWaitForAccumulatorUp());
+        WsAutonomousSerialStepContainer ssc2 = new WsAutonomousSerialStepContainer("Intake two frisbees");
+        programSteps[22] = ssc2;
+            ssc2.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
+            ssc2.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
+            ssc2.addStep(new WsAutonomousStepOverrideFunnelatorButtonOn());
+            ssc2.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
+            ssc2.addStep(new WsAutonomousStepOverrideFunnelatorButtonOff());
+            ssc2.addStep(new WsAutonomousStepIntakeMotorStop());
+        programSteps[23] = new WsAutonomousStepIntakeMotorStop();
+        programSteps[24] = new WsAutonomousStepRaiseHopper();
         WsAutonomousParallelStepGroup pg5 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
-        programSteps[28] = pg5;
+        programSteps[25] = pg5;
             pg5.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(FifthDrive.getValue()));
             pg5.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, secondShooterPreset.ANGLE));
-        programSteps[29] = new WsAutonomousStepEnableDriveDistancePid();
+        programSteps[26] = new WsAutonomousStepEnableDriveDistancePid();
         WsAutonomousParallelStepGroup pg6 = new WsAutonomousParallelStepGroup("5 Wait for shooter and drive");
-        programSteps[30] = pg6;
+        programSteps[27] = pg6;
             pg6.addStep(new WsAutonomousStepWaitForShooter());
             pg6.addStep(new WsAutonomousStepWaitForDriveDistancePid());
-        programSteps[31] = new WsAutonomousStepMultikick(4);
+        programSteps[28] = new WsAutonomousStepMultikick(4);
     }
     
     public String toString()
