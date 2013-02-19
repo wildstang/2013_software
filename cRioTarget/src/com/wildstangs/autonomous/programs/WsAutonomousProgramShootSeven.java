@@ -143,7 +143,6 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
                 pfa2.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
                 pfa2.addStep(ssc2_5);
             ssc2.addStep(pfa2);
-            ssc2.addStep(new WsAutonomousStepIntakeMotorStop());
         programSteps[23] = new WsAutonomousStepIntakeMotorStop();
         programSteps[24] = new WsAutonomousStepRaiseHopper();
         WsAutonomousParallelStepGroup pg5 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
