@@ -43,7 +43,8 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         subject.attach(this);
         
         subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
-
+        subject.attach(this);
+        
         maxVictorSpeed = maxSpeed.getValue();
     }
 
@@ -64,7 +65,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     public void update() {
         WsDigitalInput upSwitch = (WsDigitalInput)(WsInputFacade.getInstance().getSensorInput(WsInputFacade.ACCUMULATOR_UP_LIMIT_SWITCH));
         boolean switchState = ((Boolean)(upSwitch.get((IInputEnum)null))).booleanValue();
-        SmartDashboard.putBoolean("Accumulator Up Limit Switch", motorBack);
+        SmartDashboard.putBoolean("Accumulator Up Limit Switch", switchState);
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
         
         if (motorForward == true && solenoidState == false && (false == ((WsHopper) WsSubsystemContainer.getInstance()
@@ -146,6 +147,6 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     }
     public boolean isUp()
     {
-        return !solenoidState;
+        return accumulatorUpLimitSwitch;
     }
 }

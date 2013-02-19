@@ -134,7 +134,7 @@ public class WsInputFacade {
     public static final String FUNNELATOR_LIMIT_SWITCH = "FunnelatorLimitSwitch";
     public static final String HOPPER_UP_LIMIT_SWITCH = "HopperUpLimitSwitch";
     public static final String HOPPER_DOWN_LIMIT_SWITCH = "HopperDownLimitSwitch";
-    public static final String ACCUMULATOR_UP_LIMIT_SWITCH = "HopperUpLimitSwitch";
+    public static final String ACCUMULATOR_UP_LIMIT_SWITCH = "AccumulatorUpLimitSwitch";
     
     /**
      * Constructor for the WsInputFacade.
