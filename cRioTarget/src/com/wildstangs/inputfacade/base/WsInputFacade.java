@@ -134,6 +134,7 @@ public class WsInputFacade {
     public static final String FUNNELATOR_LIMIT_SWITCH = "FunnelatorLimitSwitch";
     public static final String HOPPER_UP_LIMIT_SWITCH = "HopperUpLimitSwitch";
     public static final String HOPPER_DOWN_LIMIT_SWITCH = "HopperDownLimitSwitch";
+    public static final String ACCUMULATOR_UP_LIMIT_SWITCH = "HopperUpLimitSwitch";
     
     /**
      * Constructor for the WsInputFacade.
@@ -164,5 +165,6 @@ public class WsInputFacade {
         sensorInputs.add(new DataElement(HOPPER_DOWN_LIMIT_SWITCH, new WsDigitalInput(13)));
         sensorInputs.add(new DataElement(HOPPER_UP_LIMIT_SWITCH, new WsDigitalInput(12)));
         sensorInputs.add(new DataElement(FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(9)));
+        sensorInputs.add(new DataElement(ACCUMULATOR_UP_LIMIT_SWITCH, new WsDigitalInput(8)));
     }
 }
