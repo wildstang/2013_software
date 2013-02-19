@@ -14,10 +14,10 @@ import com.wildstangs.subjects.base.ISubjectEnum;
  *
  * @author Joey
  */
-public class WsAutonomousStepWaitForAccumulatorLeftAndRightLimitSwithches extends WsAutonomousStep 
+public class WsAutonomousStepWaitForAccumulatorLeftAndRightLimitSwitches extends WsAutonomousStep 
 {
     
-    public WsAutonomousStepWaitForAccumulatorLeftAndRightLimitSwithches()
+    public WsAutonomousStepWaitForAccumulatorLeftAndRightLimitSwitches()
     {
         
     }

@@ -38,6 +38,7 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
     private IntegerConfigFileParameter FunnelatorLoadDelay;
     private IntegerConfigFileParameter RaiseAccumulatorDelay;
     private IntegerConfigFileParameter LowerAccumulatorDelay;
+    private IntegerConfigFileParameter ThirdFrisbeeDelay;
     
     private WsShooter.Preset startPreset, secondShooterPreset;
     
@@ -57,6 +58,7 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         RaiseAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".RaiseAccumulatorDelay", 2000);
         LowerAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".LowerAccumulatorDelay", 2000);
         FunnelatorLoadDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FunnelatorLoadDelay", 2000);
+        ThirdFrisbeeDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdFrisbeeDelay", 100);
 
         startPreset = new WsShooter.Preset(FirstEnterWheelSetPoint.getValue(),
                 FirstExitWheelSetPoint.getValue(),
@@ -89,7 +91,11 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         programSteps[4] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[5] = new WsAutonomousStepWaitForDriveDistancePid();
         
-        programSteps[6] = new WsAutonomousStepMultikick(3);
+        programSteps[6] = new WsAutonomousStepMultikick(2);
+        WsAutonomousSerialStepContainer ssc0 = new WsAutonomousSerialStepContainer("Delay then kick another frisbee");
+        programSteps[7] = ssc0;
+            ssc0.addStep(new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue()));
+            ssc0.addStep(new WsAutonomousStepMultikick(1));
         programSteps[7] = new WsAutonomousStepLowerHopper();
         programSteps[8] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
         programSteps[9] = new WsAutonomousStepSetDriveDistancePidSetpoint(ThirdDrive.getValue());
