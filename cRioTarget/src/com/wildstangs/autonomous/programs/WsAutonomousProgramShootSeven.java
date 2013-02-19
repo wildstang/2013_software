@@ -91,9 +91,9 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         programSteps[4] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[5] = new WsAutonomousStepWaitForDriveDistancePid();
         
-        programSteps[6] = new WsAutonomousStepMultikick(2);
-        WsAutonomousSerialStepContainer ssc0 = new WsAutonomousSerialStepContainer("Delay then kick another frisbee");
-        programSteps[7] = ssc0;
+        WsAutonomousSerialStepContainer ssc0 = new WsAutonomousSerialStepContainer("Kick twice, delay, then kick again");
+        programSteps[6] = ssc0;
+            ssc0.addStep(new WsAutonomousStepMultikick(2));
             ssc0.addStep(new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue()));
             ssc0.addStep(new WsAutonomousStepMultikick(1));
         programSteps[7] = new WsAutonomousStepLowerHopper();
