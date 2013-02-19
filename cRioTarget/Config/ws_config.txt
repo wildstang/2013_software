@@ -109,7 +109,7 @@ com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
 // XXX XXX   XX XX    XX    XXXXX  XXX XXX
 
 //ShootSeven
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=28
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=24
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.StartDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackLeft.AngleTurn=0.0
