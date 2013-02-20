@@ -19,59 +19,52 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  * @author User
  */
-public class WsLoadingRamp extends WsSubsystem implements IObserver
-{
+public class WsLoadingRamp extends WsSubsystem implements IObserver {
+
     private Double angle;
-    
     private static Double ANGLE_UP = new Double(90.0);
     private static Double ANGLE_DOWN = new Double(60.0);
     private DoubleConfigFileParameter AngleUp = new DoubleConfigFileParameter(
             this.getClass().getName(), "AngleUp", 0);
     private DoubleConfigFileParameter AngleDown = new DoubleConfigFileParameter(
             this.getClass().getName(), "AngleDown", 0);
-    
-    public WsLoadingRamp(String name)
-    {
+
+    public WsLoadingRamp(String name) {
         super(name);
-        
+
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
         subject.attach(this);
-        
+
         init();
-        
+
         ANGLE_UP = new Double(AngleUp.getValue());
         ANGLE_DOWN = new Double(AngleDown.getValue());
     }
-    
-    public void init()
-    {
+
+    public void init() {
         angle = ANGLE_UP;
     }
-    
-    public void update()
-    {
-        WsServo servo = (WsServo)(WsOutputFacade.getInstance().getOutput(WsOutputFacade.LOADING_RAMP));
+
+    public void update() {
+        WsServo servo = (WsServo) (WsOutputFacade.getInstance().getOutput(WsOutputFacade.LOADING_RAMP));
         servo.setAngle(null, angle);
         SmartDashboard.putNumber("Loading Ramp angle:", angle.doubleValue());
     }
-    
-    public void notifyConfigChange(){
+
+    public void notifyConfigChange() {
         ANGLE_UP = new Double(AngleUp.getValue());
         ANGLE_DOWN = new Double(AngleDown.getValue());
     }
-    
+
     public void acceptNotification(Subject subjectThatCaused) {
-        BooleanSubject button = (BooleanSubject)subjectThatCaused;
-        
-        if(button.getValue())
-        {
+        BooleanSubject button = (BooleanSubject) subjectThatCaused;
+
+        if (button.getValue()) {
             angle = ANGLE_DOWN;
             System.out.println("Angle is at " + angle);
-        }
-        else
-        {
+        } else {
             angle = ANGLE_UP;
             System.out.println("Angle is at " + angle);
-        }   
+        }
     }
 }

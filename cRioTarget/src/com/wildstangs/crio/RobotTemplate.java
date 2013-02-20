@@ -31,9 +31,8 @@ public class RobotTemplate extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
-    
     public void robotInit() {
-        startupTimer.startTimingSection(); 
+        startupTimer.startTimingSection();
         System.out.println("RobotInit Start");
         try {
             WsConfigFacade.getInstance().setFileName("/ws_config.txt");
@@ -48,7 +47,7 @@ public class RobotTemplate extends IterativeRobot {
         WsSubsystemContainer.getInstance().init();
         WsAutonomousManager.getInstance();
         Logger.getLogger().always(this.getClass().getName(), "robotInit", "Startup Completed");
-        startupTimer.endTimingSection(); 
+        startupTimer.endTimingSection();
 
     }
     WsProfilingTimer durationTimer = new WsProfilingTimer("Periodic method duration", 50);

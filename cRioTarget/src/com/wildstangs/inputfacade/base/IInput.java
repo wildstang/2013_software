@@ -2,7 +2,6 @@ package com.wildstangs.inputfacade.base;
 
 import com.wildstangs.subjects.base.IObservable;
 
-
 /**
  *
  * @author Nathan

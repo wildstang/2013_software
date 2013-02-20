@@ -9,5 +9,6 @@ package com.wildstangs.inputfacade.inputs.joystick;
  * @author Nathan
  */
 public interface IHardwareJoystick extends IJoystick {
-    public void pullData(); 
+
+    public void pullData();
 }

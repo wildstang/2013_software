@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.networktables2.util.List;
  * @author Nathan
  */
 public class WsConfigFacade {
-    static String myClassName = "WsConfigFacade";
 
+    static String myClassName = "WsConfigFacade";
     private static WsConfigFacade instance = null;
     private static String configFileName = "/ws_config.txt";
     private static List config = new List();

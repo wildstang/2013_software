@@ -8,7 +8,6 @@ public class ConfigFileParameter {
 
     String className;
     String paramName;
-    
 
     /**
      * A generic config file parameter
@@ -38,7 +37,7 @@ public class ConfigFileParameter {
     public String getParamName() {
         return paramName;
     }
-    
+
     /**
      * Retrieve the full parameter name with the class and parameter name
      * concatenated.

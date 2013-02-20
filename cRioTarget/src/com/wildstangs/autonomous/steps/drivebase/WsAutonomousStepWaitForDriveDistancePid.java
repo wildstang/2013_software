@@ -19,7 +19,6 @@ public class WsAutonomousStepWaitForDriveDistancePid extends WsAutonomousStep {
     }
 
     public void initialize() {
-        
     }
 
     public void update() {

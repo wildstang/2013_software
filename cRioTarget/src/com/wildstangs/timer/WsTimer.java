@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class WsTimer {
     //For sake of brevity, we will use a Timer object from WPILib
+
     private Timer timer;
 
     // Create a new timer object and reset the time to zero. The timer is initially not running and
@@ -16,7 +17,7 @@ public class WsTimer {
         timer = new Timer();
         timer.reset();
     }
-    
+
     public double getFPGATimestamp() {
         return Timer.getFPGATimestamp();
     }
@@ -36,10 +37,10 @@ public class WsTimer {
     public synchronized void stop() {
         timer.stop();
     }
-    
+
     // Returns true if the given period, in seconds, has elapsed
     public synchronized boolean hasPeriodPassed(double period) {
-        if(timer.get() < period * 1000000 ) {
+        if (timer.get() < period * 1000000) {
             return true;
         } else {
             return false;

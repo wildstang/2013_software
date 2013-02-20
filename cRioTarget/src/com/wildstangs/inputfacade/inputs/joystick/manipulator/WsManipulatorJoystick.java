@@ -105,8 +105,8 @@ public class WsManipulatorJoystick implements IInput {
         if (manipulatorJoystick instanceof IHardwareJoystick) {
             ((IHardwareJoystick) manipulatorJoystick).pullData();
         }
-        enterFlywheelAdjustment.setValue(manipulatorJoystick.getY()* -1);
-        exitFlywheelAdjustment.setValue(manipulatorJoystick.getZ()* -1);
+        enterFlywheelAdjustment.setValue(manipulatorJoystick.getY() * -1);
+        exitFlywheelAdjustment.setValue(manipulatorJoystick.getZ() * -1);
         //Get data from the D-pad
         //We invert the values so up & left are 1, down & right are -1
         dPadUpDown.setValue(manipulatorJoystick.getThrottle() * -1);
@@ -114,7 +114,7 @@ public class WsManipulatorJoystick implements IInput {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setValue(manipulatorJoystick.getRawButton(i + 1));
         }
-        
+
         //System.out.println("X: "+  manipulatorJoystick.getX() + " Y: " + manipulatorJoystick.getY() + " Z:" + manipulatorJoystick.getZ() + " TH: " + manipulatorJoystick.getThrottle()+ " TW: " + manipulatorJoystick.getTwist());
     }
 

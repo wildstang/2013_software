@@ -6,6 +6,7 @@ package com.wildstangs.pid.controller.base;
  */
 public interface IPidController {
     // Accessor methods
+
     public double getP();
 
     public double getI();
@@ -43,7 +44,7 @@ public interface IPidController {
     public void setDifferentiatorBandLimit(double band_limit);
 
     public double getDifferentiatorBandLimit();
-    
+
     public WsPidStateType getState();
 
     // Behavioral methods

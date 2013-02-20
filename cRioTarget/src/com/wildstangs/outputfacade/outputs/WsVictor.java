@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Victor;
  * @author Nathan
  */
 public class WsVictor implements IOutput {
+
     DoubleSubject motorSpeed;
     Victor victor;
 

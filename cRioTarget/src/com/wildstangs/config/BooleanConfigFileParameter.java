@@ -12,11 +12,12 @@ import com.wildstangs.logger.Logger;
  * @author Nathan
  */
 public class BooleanConfigFileParameter extends ConfigFileParameter {
+
     boolean defaultValue;
 
     /**
      * Creates a boolean config file parameter.
-     * 
+     *
      * @param cName The name of the class
      * @param pName The name of the parameter
      * @param defValue a default value to use.
@@ -26,12 +27,12 @@ public class BooleanConfigFileParameter extends ConfigFileParameter {
         super(cName, pName);
         defaultValue = defValue;
     }
-    
- /**
-  * Retrieve the config file parameter.
-  * 
-  * @return the config file parameter value. 
-  */
+
+    /**
+     * Retrieve the config file parameter.
+     *
+     * @return the config file parameter value.
+     */
     public boolean getValue() {
         String fullName = getFullParamName();
         String val;
@@ -39,12 +40,11 @@ public class BooleanConfigFileParameter extends ConfigFileParameter {
             val = WsConfigFacade.getInstance().getConfigParamByName(fullName);
             if (val.equals("true") || val.equals("True") || val.equals("TRUE")) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } catch (Throwable e) {
-            Logger.getLogger().error(this.getClass().getName(), "getValue" , fullName + " parameter not found. Using default value.");
+            Logger.getLogger().error(this.getClass().getName(), "getValue", fullName + " parameter not found. Using default value.");
             return defaultValue;
         }
     }

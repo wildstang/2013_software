@@ -13,14 +13,12 @@ import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 /**
  *
  * @author Liam Fruzyna
  */
+public class WsHopper extends WsSubsystem implements IObserver {
 
-public class WsHopper extends WsSubsystem implements IObserver
-{
     private static final boolean KICKER_DEFAULT_VALUE = false;
     private static final DoubleSolenoid.Value LIFT_DEFAULT_VALUE = DoubleSolenoid.Value.kForward;
     private IntegerConfigFileParameter forwardCycleConfig = new IntegerConfigFileParameter(this.getClass().getName(), "forwardCycles", 15);
@@ -31,32 +29,27 @@ public class WsHopper extends WsSubsystem implements IObserver
     private boolean goingForward = false, goingBack = false;
     private boolean upLimitSwitchValue = false, downLimitSwitchValue = false;
     private boolean kickerButtonPressed = false;
-    
     private boolean kickerValue;
     private DoubleSolenoid.Value liftValue;
-    
-    
-    
-    public WsHopper (String name)
-    {
+
+    public WsHopper(String name) {
         super(name);
         init();
-        
+
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
         subject.attach(this);
-        
+
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         subject.attach(this);
-        
-        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum)null);
+
+        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
-        
-        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).getSubject((ISubjectEnum)null);
+
+        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
     }
-    
-    public void init()
-    {
+
+    public void init() {
         forwardCycles = forwardCycleConfig.getValue();
         backwardCycles = backwardCycleConfig.getValue();
         kickerValue = KICKER_DEFAULT_VALUE;
@@ -65,36 +58,29 @@ public class WsHopper extends WsSubsystem implements IObserver
         kickerButtonPressed = false;
     }
 
-    public void update() 
-    {        
-        if(goingForward)
-        {
+    public void update() {
+        if (goingForward) {
             cycle++;
-            if(cycle >= forwardCycles)
-            {
+            if (cycle >= forwardCycles) {
                 goingForward = false;
                 goingBack = true;
                 kickerValue = false;
                 cycle = 0;
             }
-        }
-        else if(goingBack)
-        {
+        } else if (goingBack) {
             cycle++;
-            if(cycle >= backwardCycles)
-            {
+            if (cycle >= backwardCycles) {
                 goingBack = false;
                 cycle = 0;
-                if(kickerButtonPressed && this.isUpLimitSwitchTriggered())
-                {
+                if (kickerButtonPressed && this.isUpLimitSwitchTriggered()) {
                     goingForward = true;
                     kickerValue = true;
                 }
             }
         }
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum)null, new Boolean(kickerValue));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum)null, new Integer(liftValue.value));
-        
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
+
         SmartDashboard.putBoolean("Kicker value", kickerValue);
         SmartDashboard.putNumber("Lift Value", liftValue.value);
         SmartDashboard.putBoolean("KickerReady", goingForward || goingBack);
@@ -102,84 +88,65 @@ public class WsHopper extends WsSubsystem implements IObserver
         SmartDashboard.putBoolean("Down limit switch", downLimitSwitchValue);
     }
 
-    public void notifyConfigChange() 
-    {
+    public void notifyConfigChange() {
     }
-    
-    public boolean getLiftValueEquals(DoubleSolenoid.Value value)
-    {
+
+    public boolean getLiftValueEquals(DoubleSolenoid.Value value) {
         return liftValue.equals(value);
     }
-    
-    public boolean getKickerValue()
-    {
+
+    public boolean getKickerValue() {
         return kickerValue;
     }
-    
-    public void acceptNotification(Subject subjectThatCaused) 
-    {
-        BooleanSubject button = (BooleanSubject)subjectThatCaused;
-        
-        if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6)
-        {
+
+    public void acceptNotification(Subject subjectThatCaused) {
+        BooleanSubject button = (BooleanSubject) subjectThatCaused;
+
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
             kickerButtonPressed = button.getValue();
-            if(button.getValue())
-            {
-                if(!goingForward && !goingBack && this.isUpLimitSwitchTriggered())
-                {
+            if (button.getValue()) {
+                if (!goingForward && !goingBack && this.isUpLimitSwitchTriggered()) {
                     goingForward = true;
                     cycle = 0;
                     kickerValue = true;
                 }
             }
-        }
-        else if(subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8)
-        {
-            if(button.getValue() == true && (button.getPreviousValue() == false))
-            {
-                if(liftValue == DoubleSolenoid.Value.kReverse)
-                {
+        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) {
+            if (button.getValue() == true && (button.getPreviousValue() == false)) {
+                if (liftValue == DoubleSolenoid.Value.kReverse) {
                     liftValue = DoubleSolenoid.Value.kForward;
-                }
-                else
-                {
+                } else {
                     liftValue = DoubleSolenoid.Value.kReverse;
                 }
             }
-        }
-        else if(subjectThatCaused.equals(WsInputFacade.getInstance().
+        } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
                 getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).
-                getSubject((ISubjectEnum)null)))
-        {
-             downLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
-                      .getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH)
-                      .getSubject(((ISubjectEnum)null))).getValue();
-        }
-        else if(subjectThatCaused.equals(WsInputFacade.getInstance().
-            getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).
-            getSubject((ISubjectEnum)null)))
-        {
-            upLimitSwitchValue = ((BooleanSubject)WsInputFacade.getInstance()
-                     .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
-                     .getSubject(((ISubjectEnum)null))).getValue();
+                getSubject((ISubjectEnum) null))) {
+            downLimitSwitchValue = ((BooleanSubject) WsInputFacade.getInstance()
+                    .getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH)
+                    .getSubject(((ISubjectEnum) null))).getValue();
+        } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
+                getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).
+                getSubject((ISubjectEnum) null))) {
+            upLimitSwitchValue = ((BooleanSubject) WsInputFacade.getInstance()
+                    .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
+                    .getSubject(((ISubjectEnum) null))).getValue();
         }
     }
-    public DoubleSolenoid.Value get_LiftState (){
+
+    public DoubleSolenoid.Value get_LiftState() {
         return liftValue;
     }
-    
-    public boolean isDownLimitSwitchTriggered()
-    {
+
+    public boolean isDownLimitSwitchTriggered() {
         return downLimitSwitchValue;
     }
-    
-    public boolean isUpLimitSwitchTriggered()
-    {
+
+    public boolean isUpLimitSwitchTriggered() {
         return upLimitSwitchValue;
     }
-    
-    public boolean isHopperUp()
-    {
+
+    public boolean isHopperUp() {
         return (liftValue == DoubleSolenoid.Value.kForward);
     }
 }

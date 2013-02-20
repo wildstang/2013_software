@@ -12,8 +12,8 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepIntakeMotorPushFrisbeesOut  extends WsAutonomousStep 
-{
+public class WsAutonomousStepIntakeMotorPushFrisbeesOut extends WsAutonomousStep {
+
     public void initialize() {
         WsFloorPickup subsystem = (WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);

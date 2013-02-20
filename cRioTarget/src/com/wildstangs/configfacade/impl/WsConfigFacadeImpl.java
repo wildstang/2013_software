@@ -19,6 +19,7 @@ import javax.microedition.io.Connector;
  * @author Nathan
  */
 public final class WsConfigFacadeImpl {
+
     static String myClassName = "WsConfigFacadeImpl";
 
     private WsConfigFacadeImpl() {
@@ -103,7 +104,7 @@ public final class WsConfigFacadeImpl {
         FileConnection fc;
         String path = "file://";
         path += filename;
-        
+
         try {
             fc = (FileConnection) Connector.open(path, Connector.READ_WRITE);
             if (fc.exists()) {

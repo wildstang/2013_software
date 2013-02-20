@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.Compressor;
 public class WsCompressor extends WsSubsystem {
 
     Compressor compressor;
-    public WsCompressor (String name, int pressureSwitchSlot, int pressureSwitchChannel, int compresssorRelaySlot, int compressorRelayChannel) {
+
+    public WsCompressor(String name, int pressureSwitchSlot, int pressureSwitchChannel, int compresssorRelaySlot, int compressorRelayChannel) {
         super(name);
         compressor = new Compressor(pressureSwitchSlot, pressureSwitchChannel, compresssorRelaySlot, compressorRelayChannel);
         compressor.start();
     }
-    
-    public void init()
-    {
+
+    public void init() {
     }
 
     public void update() {

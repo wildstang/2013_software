@@ -1,6 +1,5 @@
 package com.wildstangs.subjects.base;
 
-
 import edu.wpi.first.wpilibj.networktables2.util.List;
 
 /**

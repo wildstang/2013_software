@@ -29,7 +29,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         public final int ENTER_WHEEL_SET_POINT;
         public final int EXIT_WHEEL_SET_POINT;
         public final DoubleSolenoid.Value ANGLE;
-        
+
         public Preset(int enterWheelSetPoint, int exitWheelSetPoint, DoubleSolenoid.Value angle) {
             this.ENTER_WHEEL_SET_POINT = enterWheelSetPoint;
             this.EXIT_WHEEL_SET_POINT = exitWheelSetPoint;
@@ -54,15 +54,13 @@ public class WsShooter extends WsSubsystem implements IObserver {
             this.getClass().getName(), "PresetShortHighExitSpeed", 2300);
     private IntegerConfigFileParameter PresetShortHighAngle = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetShortHighAngle", 1);
-    
-    private Preset PresetTowerShooterStation = new Preset(PresetTowerShooterEnterSpeed.getValue(), 
+    private Preset PresetTowerShooterStation = new Preset(PresetTowerShooterEnterSpeed.getValue(),
             PresetTowerShooterExitSpeed.getValue(), translatePresetConfigAngle(PresetTowerShooterAngle.getValue()));
     private Preset PresetLongLow = new Preset(PresetLongLowEnterSpeed.getValue(),
             PresetLongLowExitSpeed.getValue(), translatePresetConfigAngle(PresetLongLowAngle.getValue()));
     private Preset PresetShortHigh = new Preset(PresetShortHighEnterSpeed.getValue(),
             PresetShortHighExitSpeed.getValue(), translatePresetConfigAngle(PresetShortHighAngle.getValue()));
-    private Preset PresetOffLow = new Preset(0,0, DoubleSolenoid.Value.kReverse);
-    
+    private Preset PresetOffLow = new Preset(0, 0, DoubleSolenoid.Value.kReverse);
     private Counter counterEnter, counterExit;
     private DoubleConfigFileParameter lowerWheelSpeed = new DoubleConfigFileParameter(
             this.getClass().getName(), "LowerWheelSpeed", 0);
@@ -100,18 +98,15 @@ public class WsShooter extends WsSubsystem implements IObserver {
     public WsShooter(String name) {
         super(name);
         BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(WsOutputFacade.getInstance().getClass().getName(), "2012_Robot", false);
-        if(outputsFor2012.getValue())
-        {
+        if (outputsFor2012.getValue()) {
             counterEnter = new Counter(9);
             counterExit = new Counter(10);
-        }
-        else
-        {
+        } else {
             counterEnter = new Counter(10);
             counterExit = new Counter(11);
         }
-        
-        
+
+
         //Implement this later for testing
         //Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
@@ -153,47 +148,47 @@ public class WsShooter extends WsSubsystem implements IObserver {
     public DoubleSolenoid.Value translatePresetConfigAngle(int configVal) {
         if (configVal > 0) {
             return DoubleSolenoid.Value.kForward;
-        }
-        else {
+        } else {
             return DoubleSolenoid.Value.kReverse;
         }
     }
-    
-    public void init()
-    {
+
+    public void init() {
         resetEnterCounter();
         resetExitCounter();
-        wheelEnterSetPoint = 0; 
-        wheelExitSetPoint = 0 ; 
-        angleFlag = DoubleSolenoid.Value.kReverse; 
+        wheelEnterSetPoint = 0;
+        wheelExitSetPoint = 0;
+        angleFlag = DoubleSolenoid.Value.kReverse;
         presetUnlock = false;
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
     }
-    
-    public void update() 
-    {
-         double enterKnobValue = ((DoubleSubject)WsInputFacade.getInstance()
-               .getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT)
-               .getSubject((ISubjectEnum)null)).getValue();
 
-         if(enterKnobValue > 3.3) enterKnobValue = 3.3;
-         //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
-         double knobEnterSetPoint = ((enterKnobValue * (highWheelEnterTestSpeed - lowWheelEnterTestSpeed)) / 3.3)
-                    + lowWheelEnterTestSpeed;
-         
-         double exitKnobValue = ((DoubleSubject)WsInputFacade.getInstance()
-                    .getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT)
-                    .getSubject((ISubjectEnum)null)).getValue();
+    public void update() {
+        double enterKnobValue = ((DoubleSubject) WsInputFacade.getInstance()
+                .getOiInput(WsInputFacade.ENTER_WHEEL_SHOOTER_SPEED_INPUT)
+                .getSubject((ISubjectEnum) null)).getValue();
 
-          if(exitKnobValue > 3.3) exitKnobValue = 3.3;
-          //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
-          double knobExitSetPoint = ((enterKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
-                    + lowWheelExitTestSpeed;
-         
-        if(((BooleanSubject)WsInputFacade.getInstance()
+        if (enterKnobValue > 3.3) {
+            enterKnobValue = 3.3;
+        }
+        //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
+        double knobEnterSetPoint = ((enterKnobValue * (highWheelEnterTestSpeed - lowWheelEnterTestSpeed)) / 3.3)
+                + lowWheelEnterTestSpeed;
+
+        double exitKnobValue = ((DoubleSubject) WsInputFacade.getInstance()
+                .getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT)
+                .getSubject((ISubjectEnum) null)).getValue();
+
+        if (exitKnobValue > 3.3) {
+            exitKnobValue = 3.3;
+        }
+        //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
+        double knobExitSetPoint = ((enterKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
+                + lowWheelExitTestSpeed;
+
+        if (((BooleanSubject) WsInputFacade.getInstance()
                 .getOiInput(WsInputFacade.SHOOTER_WHEEL_SPEED_OVERRIDE)
-                .getSubject((ISubjectEnum)null)).getValue())
-        {
+                .getSubject((ISubjectEnum) null)).getValue()) {
             wheelEnterSetPoint = knobEnterSetPoint;
 
             wheelExitSetPoint = knobExitSetPoint;
@@ -203,10 +198,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
         double newTime = Timer.getFPGATimestamp();
         double speedEnter = (60.0 / (128 * ENTER_GEAR_RATIO)) * counterEnter.get() / (newTime - previousTime);
         double speedExit = (60.0 / (128 * EXIT_GEAR_RATIO)) * counterExit.get() / (newTime - previousTime);
-        
+
         this.resetEnterCounter();
         this.resetExitCounter();
-        
+
         previousTime = newTime;
 
         WsVictor victorEnter = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER);
@@ -223,21 +218,18 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
         if (((speedExit < lowWheelSpeed) && (speedExit < wheelExitSetPoint))) {
             victorExit.set((IOutputEnum) null, Double.valueOf(lowVictorSpeed));
-        }
-        else if (speedExit < wheelExitSetPoint) {
+        } else if (speedExit < wheelExitSetPoint) {
             victorExit.set(null, Double.valueOf(1.0));
         } else {
             victorExit.set(null, Double.valueOf(0.0));
         }
-        if(((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
-            .getKickerValue() == true)
-        {
+        if (((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
+                .getKickerValue() == true) {
             victorExit.set(null, Double.valueOf(1.0));
             victorEnter.set(null, Double.valueOf(1.0));
         }
-        if(((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
-                .isHopperUp() == false)
-        {
+        if (((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
+                .isHopperUp() == false) {
             victorExit.set(null, Double.valueOf(0.0));
             victorEnter.set(null, Double.valueOf(0.0));
         }
@@ -249,13 +241,13 @@ public class WsShooter extends WsSubsystem implements IObserver {
         } else {
             atSpeed = false;
         }
-        
+
         SmartDashboard.putNumber("EnterWheelSpeed", speedEnter);
         SmartDashboard.putNumber("ExitWheelSpeed", speedExit);
         SmartDashboard.putNumber("EnterCounter", enterCounterCount);
         SmartDashboard.putNumber("ExitCounter", exitCounterCount);
-        SmartDashboard.putNumber("ExitWheelVictor", ((Double) victorExit.get((IOutputEnum)null)).doubleValue());
-        SmartDashboard.putNumber("EnterWheelVictor", ((Double) victorEnter.get((IOutputEnum)null)).doubleValue());
+        SmartDashboard.putNumber("ExitWheelVictor", ((Double) victorExit.get((IOutputEnum) null)).doubleValue());
+        SmartDashboard.putNumber("EnterWheelVictor", ((Double) victorEnter.get((IOutputEnum) null)).doubleValue());
         SmartDashboard.putNumber("EnterWheelSetPoint", wheelEnterSetPoint);
         SmartDashboard.putNumber("ExitWheelSetPoint", wheelExitSetPoint);
         SmartDashboard.putNumber("KnobEnterSetPoint", knobEnterSetPoint);
@@ -275,7 +267,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         highWheelExitTestSpeed = upperWheelExitTestSpeed.getValue();
 
         atSpeedTolerance = atSpeedToleranceConfig.getValue();
-        
+
         ENTER_GEAR_RATIO = ENTER_GEAR_RATIO_config.getValue();
         EXIT_GEAR_RATIO = EXIT_GEAR_RATIO_config.getValue();
     }
@@ -300,23 +292,22 @@ public class WsShooter extends WsSubsystem implements IObserver {
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON4) {
-            BooleanSubject button = (BooleanSubject)subjectThatCaused;
+            BooleanSubject button = (BooleanSubject) subjectThatCaused;
             presetUnlock = button.getValue();
-        }      
+        }
         if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.D_PAD_UP_DOWN) {
             dpadVal = ((DoubleSubject) subjectThatCaused).getValue();
-            if ( dpadVal == -1 && presetUnlock) {
-                Logger.getLogger().debug(this.getClass().getName(), "acceptNotification", 
+            if (dpadVal == -1 && presetUnlock) {
+                Logger.getLogger().debug(this.getClass().getName(), "acceptNotification",
                         "Set Long and Low Preset");
                 angleFlag = PresetLongLow.ANGLE;
                 wheelEnterSetPoint = PresetLongLow.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetLongLow.EXIT_WHEEL_SET_POINT;
                 SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: Low");
-            }
-            else if ( dpadVal == 1 && presetUnlock) {
-                Logger.getLogger().debug(this.getClass().getName(), "acceptNotification", 
+            } else if (dpadVal == 1 && presetUnlock) {
+                Logger.getLogger().debug(this.getClass().getName(), "acceptNotification",
                         "Set Short and High Preset");
-                
+
                 angleFlag = PresetShortHigh.ANGLE;
                 wheelEnterSetPoint = PresetShortHigh.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetShortHigh.EXIT_WHEEL_SET_POINT;
@@ -325,8 +316,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT) {
             dpadVal = ((DoubleSubject) subjectThatCaused).getValue();
-            if ( dpadVal == -1 && presetUnlock) {
-                Logger.getLogger().debug(this.getClass().getName(), "acceptNotification", 
+            if (dpadVal == -1 && presetUnlock) {
+                Logger.getLogger().debug(this.getClass().getName(), "acceptNotification",
                         "Set Tower Shooter Station Preset");
                 angleFlag = PresetTowerShooterStation.ANGLE;
                 wheelEnterSetPoint = PresetTowerShooterStation.ENTER_WHEEL_SET_POINT;
@@ -334,13 +325,13 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: High");
             }
             if (dpadVal == 1 && presetUnlock) {
-                Logger.getLogger().debug(this.getClass().getName(), "acceptNotification", 
+                Logger.getLogger().debug(this.getClass().getName(), "acceptNotification",
                         "Set Off Preset");
                 angleFlag = PresetOffLow.ANGLE;
                 wheelEnterSetPoint = PresetOffLow.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetOffLow.EXIT_WHEEL_SET_POINT;
                 SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: Low");
-                
+
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT) {
@@ -366,8 +357,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
             }
         }
     }
-    
-     public Counter getEnterCounter() {
+
+    public Counter getEnterCounter() {
         return counterEnter;
     }
 
@@ -382,8 +373,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
     public Counter getExitCounterValue() {
         return counterExit;
     }
-    
-     public void resetEnterCounter() {
+
+    public void resetEnterCounter() {
         counterEnter.reset();
         counterEnter.start();
     }

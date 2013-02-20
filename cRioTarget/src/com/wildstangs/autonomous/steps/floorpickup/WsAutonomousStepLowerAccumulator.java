@@ -12,25 +12,23 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepLowerAccumulator extends WsAutonomousStep 
-{
-    public void initialize()
-    {
-        WsFloorPickup subsystem = (WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
+public class WsAutonomousStepLowerAccumulator extends WsAutonomousStep {
+
+    public void initialize() {
+        WsFloorPickup subsystem = (WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
-        BooleanSubject button = (BooleanSubject)subject;
-        
-        if(subsystem.isUp()) {
+        BooleanSubject button = (BooleanSubject) subject;
+
+        if (subsystem.isUp()) {
             button.setValue(true);
         }
         finished = true;
     }
-    public void update()
-    {
+
+    public void update() {
     }
-    public String toString()
-    {
+
+    public String toString() {
         return "Lower the Accumulator";
     }
-    
 }

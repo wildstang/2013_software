@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousManager;
@@ -23,8 +22,8 @@ import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.subsystems.WsShooter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
-{
+public class WsAutonomousProgramShootSeven extends WsAutonomousProgram {
+
     private DoubleConfigFileParameter StartDrive;
     private DoubleConfigFileParameter AngleTurn;
     private DoubleConfigFileParameter SecondDrive;
@@ -41,10 +40,9 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
     private IntegerConfigFileParameter RaiseAccumulatorDelay;
     private IntegerConfigFileParameter LowerAccumulatorDelay;
     private IntegerConfigFileParameter ThirdFrisbeeDelay;
-    
     private WsShooter.Preset startPreset, secondShooterPreset;
-    
-    private void defineConfigValues(){ 
+
+    private void defineConfigValues() {
         StartDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".StartDrive", 60.5);
         AngleTurn = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".AngleTurn", 90);
         SecondDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondDrive", 60.5);
@@ -64,20 +62,19 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
 
         startPreset = new WsShooter.Preset(FirstEnterWheelSetPoint.getValue(),
                 FirstExitWheelSetPoint.getValue(),
-                FirstShooterAngle.getValue() ?
-                DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+                FirstShooterAngle.getValue()
+                ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
         secondShooterPreset = new WsShooter.Preset(SecondEnterWheelSetPoint.getValue(),
                 SecondExitWheelSetPoint.getValue(),
-                SecondShooterAngle.getValue() ?
-                DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+                SecondShooterAngle.getValue()
+                ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
-    
-    public WsAutonomousProgramShootSeven()
-    {
+
+    public WsAutonomousProgramShootSeven() {
         super(32);
     }
-    public void defineSteps()
-    {
+
+    public void defineSteps() {
         defineConfigValues();
         WsAutonomousParallelStepGroup pg1 = new WsAutonomousParallelStepGroup("Drive and Set shooter");
         programSteps[0] = pg1;
@@ -92,7 +89,6 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         programSteps[3] = new WsAutonomousStepSetDriveDistancePidSetpoint(SecondDrive.getValue());
         programSteps[4] = new WsAutonomousStepEnableDriveDistancePid();
         programSteps[5] = new WsAutonomousStepWaitForDriveDistancePid();
-        
         WsAutonomousSerialStepContainer ssc0 = new WsAutonomousSerialStepContainer("Kick twice, delay, then kick again");
         programSteps[6] = ssc0;
             ssc0.addStep(new WsAutonomousStepMultikick(2));
@@ -110,11 +106,11 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
             pg7.addStep(new WsAutonomousStepWaitForAccumulatorUp());
         WsAutonomousSerialStepContainer ssc1 = new WsAutonomousSerialStepContainer("Intake two frisbees");
         programSteps[14] = ssc1;
-            ssc1.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
-                WsAutonomousParallelFinishedOnAnyStepGroup pfa1 = new WsAutonomousParallelFinishedOnAnyStepGroup("Time out or take in a frisbee 1");
-                    WsAutonomousSerialStepContainer ssc1_5 = new WsAutonomousSerialStepContainer("Two frisbees on limit switch 2");
-                    ssc1_5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
-                    ssc1_5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
+        ssc1.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
+        WsAutonomousParallelFinishedOnAnyStepGroup pfa1 = new WsAutonomousParallelFinishedOnAnyStepGroup("Time out or take in a frisbee 1");
+        WsAutonomousSerialStepContainer ssc1_5 = new WsAutonomousSerialStepContainer("Two frisbees on limit switch 2");
+            ssc1_5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
+            ssc1_5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
                 pfa1.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
                 pfa1.addStep(ssc1_5);
             ssc1.addStep(pfa1);
@@ -136,10 +132,10 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
         WsAutonomousSerialStepContainer ssc2 = new WsAutonomousSerialStepContainer("Intake two frisbees");
         programSteps[22] = ssc2;
             ssc2.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
-                WsAutonomousParallelFinishedOnAnyStepGroup pfa2 = new WsAutonomousParallelFinishedOnAnyStepGroup("Time out or take in a frisbee 1");
-                    WsAutonomousSerialStepContainer ssc2_5 = new WsAutonomousSerialStepContainer("Two frisbees on limit switch 2");
-                    ssc2_5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
-                    ssc2_5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
+            WsAutonomousParallelFinishedOnAnyStepGroup pfa2 = new WsAutonomousParallelFinishedOnAnyStepGroup("Time out or take in a frisbee 1");
+            WsAutonomousSerialStepContainer ssc2_5 = new WsAutonomousSerialStepContainer("Two frisbees on limit switch 2");
+            ssc2_5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
+            ssc2_5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
                 pfa2.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
                 pfa2.addStep(ssc2_5);
             ssc2.addStep(pfa2);
@@ -156,10 +152,8 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram
             pg6.addStep(new WsAutonomousStepWaitForDriveDistancePid());
         programSteps[28] = new WsAutonomousStepMultikick(4);
     }
-    
-    public String toString()
-    {
+
+    public String toString() {
         return "Shooting Seven Frisbees";
     }
 }
-
