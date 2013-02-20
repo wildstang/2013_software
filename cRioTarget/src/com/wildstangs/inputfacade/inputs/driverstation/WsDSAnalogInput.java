@@ -29,16 +29,13 @@ public class WsDSAnalogInput implements IInput {
 
     public void set(IInputEnum key, Object value) {
         double d = 0.0;
-        if(value instanceof Boolean)
-        {
+        if (value instanceof Boolean) {
             boolean b = ((Boolean) value).booleanValue();
             d = 0;
             if (b) {
                 d = 1;
             }
-        }
-        else
-        {
+        } else {
             d = ((Double) value).doubleValue();
         }
         analogValue.setValue(d);

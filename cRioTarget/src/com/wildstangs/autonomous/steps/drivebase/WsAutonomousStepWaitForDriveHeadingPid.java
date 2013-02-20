@@ -19,7 +19,6 @@ public class WsAutonomousStepWaitForDriveHeadingPid extends WsAutonomousStep {
     }
 
     public void initialize() {
-        
     }
 
     public void update() {

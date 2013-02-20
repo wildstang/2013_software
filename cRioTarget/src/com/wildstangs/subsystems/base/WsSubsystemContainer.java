@@ -26,12 +26,10 @@ public class WsSubsystemContainer {
         }
         return WsSubsystemContainer.instance;
     }
-    
-    public void init()
-    {
-        for(int i = 0; i < subsystem.size(); i++)
-        {
-            ((WsSubsystem)(((DataElement) subsystem.get(i)).getValue())).init();
+
+    public void init() {
+        for (int i = 0; i < subsystem.size(); i++) {
+            ((WsSubsystem) (((DataElement) subsystem.get(i)).getValue())).init();
         }
     }
 
@@ -44,10 +42,10 @@ public class WsSubsystemContainer {
     public WsSubsystem getSubsystem(String key) {
         for (int i = 0; i < subsystem.size(); i++) {
             if ((((DataElement) subsystem.get(i)).getKey()).equals(key)) {
-                return (WsSubsystem)(((DataElement) subsystem.get(i)).getValue());
+                return (WsSubsystem) (((DataElement) subsystem.get(i)).getValue());
             }
         }
-        return (WsSubsystem)null;
+        return (WsSubsystem) null;
     }
 
     /**
@@ -55,7 +53,7 @@ public class WsSubsystemContainer {
      */
     public void update() {
         for (int i = 0; i < subsystem.size(); i++) {
-            ((WsSubsystem)(((DataElement) subsystem.get(i)).getValue())).update();
+            ((WsSubsystem) (((DataElement) subsystem.get(i)).getValue())).update();
         }
     }
 
@@ -65,7 +63,7 @@ public class WsSubsystemContainer {
      */
     public void notifyConfigChange() {
         for (int i = 0; i < subsystem.size(); i++) {
-            ((WsSubsystem)(((DataElement) subsystem.get(i)).getValue())).notifyConfigChange();
+            ((WsSubsystem) (((DataElement) subsystem.get(i)).getValue())).notifyConfigChange();
         }
     }
     //Subsystem keys - must add a new key for each subsystem.

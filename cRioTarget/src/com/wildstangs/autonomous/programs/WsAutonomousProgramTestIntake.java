@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
@@ -11,23 +10,19 @@ import com.wildstangs.autonomous.steps.intake.WsAutonomousStepStartIntake;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepStopIntake;
 
 //@author Joshua Gustafson
+public class WsAutonomousProgramTestIntake extends WsAutonomousProgram {
 
-public class WsAutonomousProgramTestIntake extends WsAutonomousProgram
-{
-    public WsAutonomousProgramTestIntake()
-    {
+    public WsAutonomousProgramTestIntake() {
         super(3);
     }
-    public void defineSteps()
-    {
+
+    public void defineSteps() {
         programSteps[0] = new WsAutonomousStepStartIntake();
         programSteps[1] = new WsAutonomousStepDelay();
-        programSteps[2] = new WsAutonomousStepStopIntake();     
+        programSteps[2] = new WsAutonomousStepStopIntake();
     }
-    
-    public String toString()
-    {
+
+    public String toString() {
         return "Start Funnalator motor for a second, then stop";
     }
 }
-

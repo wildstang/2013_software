@@ -27,8 +27,8 @@ public class WsAutonomousStepRaiseAccumulator extends WsAutonomousStep {
 
     public void update() {
     }
-    public String toString()
-    {
+
+    public String toString() {
         return "Raise the Accumulator";
     }
 }

@@ -1,6 +1,5 @@
 package com.wildstangs.types;
 
-
 /**
  *
  * @author Nathan
@@ -9,7 +8,6 @@ public class DataElement {
 
     private String dkey;
     private Object dvalue;
-    
 
     /**
      * A generic dataElement

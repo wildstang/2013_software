@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Nathan
  */
 public class WsDriveBaseDistancePidInput implements IPidInput {
-    
+
     public WsDriveBaseDistancePidInput() {
         //Nothing to do here
     }
@@ -23,5 +23,4 @@ public class WsDriveBaseDistancePidInput implements IPidInput {
         SmartDashboard.putNumber("Distance: ", final_encoder_value);
         return final_encoder_value;
     }
-    
 }

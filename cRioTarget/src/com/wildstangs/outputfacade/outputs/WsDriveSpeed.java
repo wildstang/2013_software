@@ -29,7 +29,7 @@ public class WsDriveSpeed implements IOutput {
 
     public void set(IOutputEnum key, Object value) {
         motorSpeed.setValue(((Double) value).doubleValue());
-        SmartDashboard.putNumber(motorSpeed.getName() + "value: ", ((Double)value).doubleValue());
+        SmartDashboard.putNumber(motorSpeed.getName() + "value: ", ((Double) value).doubleValue());
 
     }
 

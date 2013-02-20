@@ -2,10 +2,10 @@ package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
-import com.wildstangs.autonomous.steps.floorpickup.WsAutonomousStepLowerAccumulator;
 import com.wildstangs.autonomous.steps.floorpickup.WsAutonomousStepIntakeMotorPullFrisbeesIn;
 import com.wildstangs.autonomous.steps.floorpickup.WsAutonomousStepIntakeMotorPushFrisbeesOut;
 import com.wildstangs.autonomous.steps.floorpickup.WsAutonomousStepIntakeMotorStop;
+import com.wildstangs.autonomous.steps.floorpickup.WsAutonomousStepLowerAccumulator;
 import com.wildstangs.autonomous.steps.floorpickup.WsAutonomousStepRaiseAccumulator;
 import com.wildstangs.autonomous.steps.hopper.WsAutonomousStepLowerHopper;
 
@@ -13,14 +13,13 @@ import com.wildstangs.autonomous.steps.hopper.WsAutonomousStepLowerHopper;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousProgramFloorPickup extends WsAutonomousProgram
-{
-    public WsAutonomousProgramFloorPickup()
-    {
+public class WsAutonomousProgramFloorPickup extends WsAutonomousProgram {
+
+    public WsAutonomousProgramFloorPickup() {
         super(10);
     }
-    protected void defineSteps() 
-    {
+
+    protected void defineSteps() {
         programSteps[0] = new WsAutonomousStepLowerAccumulator();
         programSteps[1] = new WsAutonomousStepLowerHopper();
         programSteps[2] = new WsAutonomousStepIntakeMotorPushFrisbeesOut();
@@ -33,9 +32,7 @@ public class WsAutonomousProgramFloorPickup extends WsAutonomousProgram
         programSteps[9] = new WsAutonomousStepLowerAccumulator();
     }
 
-    public String toString() 
-    {
+    public String toString() {
         return "Raise Accumulator, Lower Accumulator & Hopper, Move motor forward then backward, Raise Accumulator, and lower it";
     }
-    
 }

@@ -14,14 +14,13 @@ import com.wildstangs.autonomous.steps.hopper.WsAutonomousStepRaiseHopper;
  *
  * @author Batman
  */
-public class WsAutonomousProgramHopperTest extends WsAutonomousProgram
-{
-    public WsAutonomousProgramHopperTest()
-    {
+public class WsAutonomousProgramHopperTest extends WsAutonomousProgram {
+
+    public WsAutonomousProgramHopperTest() {
         super(5);
     }
-    protected void defineSteps() 
-    {
+
+    protected void defineSteps() {
         programSteps[0] = new WsAutonomousStepRaiseHopper();
         programSteps[1] = new WsAutonomousStepDelay(50);
         programSteps[2] = new WsAutonomousStepKick();
@@ -29,9 +28,7 @@ public class WsAutonomousProgramHopperTest extends WsAutonomousProgram
         programSteps[4] = new WsAutonomousStepLowerHopper();
     }
 
-    public String toString() 
-    {
+    public String toString() {
         return "Raise the lift, kick the kicker, and lower the lift.";
     }
-    
 }

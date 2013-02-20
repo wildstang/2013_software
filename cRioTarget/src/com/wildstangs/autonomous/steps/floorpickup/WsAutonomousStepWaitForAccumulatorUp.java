@@ -19,7 +19,6 @@ public class WsAutonomousStepWaitForAccumulatorUp extends WsAutonomousStep {
     }
 
     public void initialize() {
-        
     }
 
     public void update() {

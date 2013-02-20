@@ -17,32 +17,28 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  *
  * @author Batman
  */
-public class WsAutonomousStepRaiseHopper extends WsAutonomousStep
-{
+public class WsAutonomousStepRaiseHopper extends WsAutonomousStep {
+
     private boolean wait = false;
-    public void initialize() 
-    {
+
+    public void initialize() {
         wait = false;
-        WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
+        WsHopper subsystem = (WsHopper) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
-        BooleanSubject button = (BooleanSubject)subject;
-        
-        if(!subsystem.isHopperUp())
-        {
+        BooleanSubject button = (BooleanSubject) subject;
+
+        if (!subsystem.isHopperUp()) {
             button.setValue(true);
             wait = true;
         }
     }
 
-    public void update() 
-    {
-        if (!wait)
-        {
-            WsHopper subsystem = (WsHopper)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
+    public void update() {
+        if (!wait) {
+            WsHopper subsystem = (WsHopper) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
             Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
-            BooleanSubject button = (BooleanSubject)subject;
-            if (button.getValue())
-            {
+            BooleanSubject button = (BooleanSubject) subject;
+            if (button.getValue()) {
                 button.setValue(false);
             }
             finished = true;
@@ -51,9 +47,7 @@ public class WsAutonomousStepRaiseHopper extends WsAutonomousStep
         }
     }
 
-    public String toString() 
-    {
+    public String toString() {
         return "Raise the hopper to use the kicker";
     }
-    
 }

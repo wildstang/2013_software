@@ -13,26 +13,23 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
  *
  * @author Liam Fruzyna
  */
-public class WsAutonomousStepIntakeMotorPullFrisbeesIn extends WsAutonomousStep 
-{
-    public void initialize()
-    {
-        WsFloorPickup subsystem = (WsFloorPickup)(WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
+public class WsAutonomousStepIntakeMotorPullFrisbeesIn extends WsAutonomousStep {
+
+    public void initialize() {
+        WsFloorPickup subsystem = (WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
-        BooleanSubject backButton = (BooleanSubject)subject;
-        
-        if(subsystem.getMotorBack() == false) {
+        BooleanSubject backButton = (BooleanSubject) subject;
+
+        if (subsystem.getMotorBack() == false) {
             backButton.setValue(true);
         }
         finished = true;
     }
-    public void update()
-    {
-        
+
+    public void update() {
     }
-    public String toString()
-    {
+
+    public String toString() {
         return "Set motors to pull frisbees in";
     }
-    
 }

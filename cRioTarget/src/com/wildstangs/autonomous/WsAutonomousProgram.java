@@ -24,7 +24,7 @@ public abstract class WsAutonomousProgram implements IStepContainer {
     }
 
     protected abstract void defineSteps(); //Use this method to set the steps for this program. Programs execute the steps in the array programSteps serially.
-                                           //Remember to clear everything before all of your steps are finished, because once they are, it immediately drops into Sleeper.
+    //Remember to clear everything before all of your steps are finished, because once they are, it immediately drops into Sleeper.
 
     public void initialize() {
         defineSteps();
@@ -101,19 +101,16 @@ public abstract class WsAutonomousProgram implements IStepContainer {
             programSteps[stepNumber] = newStep;
         }
     }
-    
-    protected void setStopPosition()
-    {
+
+    protected void setStopPosition() {
         IntegerConfigFileParameter ForceStopAtStep = new IntegerConfigFileParameter(this.getClass().getName(), "ForceStopAtStep", 0);
-            if (ForceStopAtStep.getValue() != 0){ 
-            int forceStop = ForceStopAtStep.getValue() ; 
-            if ((forceStop <= programSteps.length) && (forceStop > 0) ){
-                programSteps[forceStop] = new WsAutonomousStepStopAutonomous(); 
-                Logger.getLogger().always("Auton", "Force Stop", "Program is forced to stop at Step " + forceStop );
-            }
-            else
-            {
-                Logger.getLogger().error("Auton", "Force Stop", "Force stop value is outside of bounds. (0 to " + (programSteps.length-1));
+        if (ForceStopAtStep.getValue() != 0) {
+            int forceStop = ForceStopAtStep.getValue();
+            if ((forceStop <= programSteps.length) && (forceStop > 0)) {
+                programSteps[forceStop] = new WsAutonomousStepStopAutonomous();
+                Logger.getLogger().always("Auton", "Force Stop", "Program is forced to stop at Step " + forceStop);
+            } else {
+                Logger.getLogger().error("Auton", "Force Stop", "Force stop value is outside of bounds. (0 to " + (programSteps.length - 1));
             }
         }
     }

@@ -19,7 +19,7 @@ import com.wildstangs.config.DoubleConfigFileParameter;
  * and open the template in the editor.
  */
 public class WsAutonomousProgramDriveHeading extends WsAutonomousProgram {
-    
+
     private DoubleConfigFileParameter angle;
 
     public WsAutonomousProgramDriveHeading() {

@@ -19,24 +19,21 @@ public class WsServo implements IOutput {
 
     Servo servo;
     DoubleSubject position;
-    
     private boolean angleSet;
-    
-    public WsServo(String name, int channel)
-    {
+
+    public WsServo(String name, int channel) {
         this.position = new DoubleSubject(name);
         this.servo = new Servo(channel);
         angleSet = false;
     }
-    
+
     public void set(IOutputEnum key, Object value) {
-        position.setValue(((Double)value).doubleValue());
+        position.setValue(((Double) value).doubleValue());
         angleSet = false;
     }
-    
-    public void setAngle(IOutputEnum key, Object value)
-    {
-        position.setValue(((Double)value).doubleValue());
+
+    public void setAngle(IOutputEnum key, Object value) {
+        position.setValue(((Double) value).doubleValue());
         angleSet = true;
     }
 
@@ -50,12 +47,9 @@ public class WsServo implements IOutput {
 
     public void update() {
         this.position.updateValue();
-        if(angleSet)
-        {
+        if (angleSet) {
             this.servo.setAngle(this.position.getValue());
-        }
-        else
-        {
+        } else {
             this.servo.set(this.position.getValue());
         }
     }

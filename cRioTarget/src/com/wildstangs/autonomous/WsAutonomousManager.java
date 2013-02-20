@@ -90,29 +90,23 @@ public class WsAutonomousManager implements IObserver {
     public String getLockedProgramName() {
         return programs[lockedProgram].toString();
     }
-    
-    public WsAutonomousStartPositionEnum getStartPosition()
-    {
+
+    public WsAutonomousStartPositionEnum getStartPosition() {
         return currentPosition;
     }
 
     public void acceptNotification(Subject cause) {
         if (cause instanceof DoubleSubject) {
-            if (cause.getType() == WsDSAnalogInputEnum.INPUT1)
-            {
+            if (cause.getType() == WsDSAnalogInputEnum.INPUT1) {
                 positionSwitch = (float) ((DoubleSubject) cause).getValue();
-                if (positionSwitch >= 3.3) 
-                {
+                if (positionSwitch >= 3.3) {
                     positionSwitch = 3.3f;
                 }
                 currentPosition = WsAutonomousStartPositionEnum.getEnumFromValue((int) (Math.floor((positionSwitch / 3.4) * WsAutonomousStartPositionEnum.POSITION_COUNT)));
                 SmartDashboard.putString("Current Start Position", currentPosition.toString());
-            } 
-            else if (cause.getType() == WsDSAnalogInputEnum.INPUT2)
-            {
+            } else if (cause.getType() == WsDSAnalogInputEnum.INPUT2) {
                 selectorSwitch = (float) ((DoubleSubject) cause).getValue();
-                if (selectorSwitch >= 3.3) 
-                {
+                if (selectorSwitch >= 3.3) {
                     selectorSwitch = 3.3f;
                 }
                 currentProgram = (int) (Math.floor((selectorSwitch / 3.4) * programs.length));
@@ -131,20 +125,17 @@ public class WsAutonomousManager implements IObserver {
         }
         return WsAutonomousManager.instance;
     }
-    
-    public void setProgram(int index)
-    {
-        if(index >= programs.length)
-        {
+
+    public void setProgram(int index) {
+        if (index >= programs.length) {
             index = 0;
         }
         currentProgram = index;
         lockedProgram = currentProgram;
     }
-    public void setPosition(int index)
-    {
-        if(index >= WsAutonomousStartPositionEnum.POSITION_COUNT)
-        {
+
+    public void setPosition(int index) {
+        if (index >= WsAutonomousStartPositionEnum.POSITION_COUNT) {
             index = 0;
         }
         currentPosition = WsAutonomousStartPositionEnum.getEnumFromValue(index);
@@ -162,6 +153,6 @@ public class WsAutonomousManager implements IObserver {
         programs[7] = new WsAutonomousProgramForwardsTest();
         programs[8] = new WsAutonomousProgramDriveHeading();
         programs[9] = new WsAutonomousProgramTestSerial();
-        
+
     }
 }
