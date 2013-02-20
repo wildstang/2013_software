@@ -104,7 +104,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             solenoidState = button.getValue();
-            //Latch the accumulator button states if we just brought the accumulator up
+            //Latch the accumulator switch states if we just brought the accumulator up
             if (false == button.getValue()) {
                 ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE)).latchAccumulatorSwitches();
             }
