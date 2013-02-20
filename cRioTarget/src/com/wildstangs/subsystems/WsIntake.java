@@ -29,7 +29,6 @@ public class WsIntake extends WsSubsystem implements IObserver {
     public WsIntake(String name) {
         super(name);
 
-        //Funnelator override commented out, button 10 now used for loading ramp
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
         subject.attach(this);
 
