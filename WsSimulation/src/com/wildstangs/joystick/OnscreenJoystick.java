@@ -100,7 +100,7 @@ public class OnscreenJoystick implements KeyListener, IJoystick {
      * @return The X value of the Joystick, ranges from -1.0 to +1.0.
      */
     public double getX() {
-        return x;
+        return -x;
     }
 
     /**
@@ -108,7 +108,7 @@ public class OnscreenJoystick implements KeyListener, IJoystick {
      * @return The Y value of the Joystick, ranges from -1.0 to +1.0.
      */
     public double getY() {
-        return y;
+        return -y;
     }
     
     /**

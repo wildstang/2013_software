@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -205,11 +206,56 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHIFTER).set(null, new Integer(shifterFlag.value));
         } else {
         }
+        
+        updateSpeedAndAccelerationCalculations(); 
         SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
         SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
         SmartDashboard.putNumber("Gyro angle", this.getGyroAngle());
     }
 
+    private double totalPosition = 0.0; 
+    private double previousPositionSinceLastReset = 0.0; 
+    private double previousTime = 0.0; 
+    private double previousVelocity = 0.0; 
+    private double currentVelocity = 0.0; 
+    private double currentAcceleration = 0.0; 
+    
+    private void updateSpeedAndAccelerationCalculations() {
+        double newTime = Timer.getFPGATimestamp();
+        double leftDistance = this.getLeftDistance();
+        double rightDistance = this.getRightDistance();
+        double deltaPosition = ((leftDistance + rightDistance)/2.0 - previousPositionSinceLastReset); 
+        double deltaTime = (newTime - previousTime); 
+        //Do velocity in ft/sec
+        currentVelocity= (deltaPosition / deltaTime )/12.0 ;
+        currentAcceleration = ((currentVelocity - previousVelocity) / deltaTime); 
+        SmartDashboard.putNumber("Velocity: ", this.currentVelocity);
+        SmartDashboard.putNumber("Accel: ", this.currentAcceleration);
+
+        totalPosition += deltaPosition; 
+        if ( Math.abs(deltaPosition) > 0.005 ){
+            Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
+        }
+        previousPositionSinceLastReset += deltaPosition; 
+        previousTime = newTime; 
+        previousVelocity = currentVelocity; 
+        
+        
+    }
+    public void resetKinematics(){ 
+        previousPositionSinceLastReset = 0.0; 
+        previousVelocity = 0.0; 
+        currentVelocity = 0.0; 
+        currentAcceleration = 0.0; 
+    }
+    
+    public double getAcceleration(){ 
+     return currentAcceleration;    
+    }
+    public double getVelocity(){ 
+     return currentVelocity;    
+    }
+    
     public void setThrottleValue(double tValue) {
 
         // Taking into account Anti-Turbo
@@ -460,6 +506,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveDistancePid.reset();
         resetLeftEncoder();
         resetRightEncoder();
+        resetKinematics();
     }
 
     public WsPidStateType getDistancePidState() {

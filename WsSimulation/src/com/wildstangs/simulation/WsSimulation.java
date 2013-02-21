@@ -106,7 +106,7 @@ public class WsSimulation {
         if(autonomousRun)
         {
             WsAutonomousManager.getInstance().setPosition(2);
-            WsAutonomousManager.getInstance().setProgram(1);
+            WsAutonomousManager.getInstance().setProgram(2);
             WsAutonomousManager.getInstance().startCurrentProgram();
         }
         
@@ -124,6 +124,8 @@ public class WsSimulation {
             enterSpeed.update();
             exitSpeed.update();
 
+            //Update the encoders
+            dbEncoders.update();
             WsInputFacade.getInstance().updateSensorData();
             if(autonomousRun)
             {
@@ -138,7 +140,6 @@ public class WsSimulation {
             WsOutputFacade.getInstance().update();
             WsSolenoidContainer.getInstance().update();
 
-            dbEncoders.update();
             flywheelEncoders.update(); 
             limitSwitches.update();
             
