@@ -449,7 +449,7 @@ public class WsPidController implements IPidController {
         return i_term;
     }
 
-    private double calcDerivativeTerm() {
+    protected double calcDerivativeTerm() {
         double d_term = d * (currentError - previousError);
 
         // Band-limit the differential term

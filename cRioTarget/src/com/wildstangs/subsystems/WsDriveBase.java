@@ -12,10 +12,13 @@ import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.controller.base.WsPidController;
 import com.wildstangs.pid.controller.base.WsPidStateType;
+import com.wildstangs.pid.controller.base.WsSpeedPidController;
 import com.wildstangs.pid.inputs.WsDriveBaseDistancePidInput;
 import com.wildstangs.pid.inputs.WsDriveBaseHeadingPidInput;
+import com.wildstangs.pid.inputs.WsDriveBaseSpeedPidInput;
 import com.wildstangs.pid.outputs.WsDriveBaseDistancePidOutput;
 import com.wildstangs.pid.outputs.WsDriveBaseHeadingPidOutput;
+import com.wildstangs.pid.outputs.WsDriveBaseSpeedPidOutput;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
@@ -56,6 +59,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
     private static double pidHeadingValue = 0.0;
+    private static double pidSpeedValue = 0.0;
     private static boolean antiTurboFlag = false;
     private static boolean slowTurnLeftFlag = false;
     private static boolean slowTurnRightFlag = false;
@@ -71,6 +75,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static WsDriveBaseHeadingPidOutput driveHeadingPidOutput;
     private static double gyroValue;
     private static boolean driveHeadingPidEnabled = false;
+    private static boolean driveSpeedPidEnabled = false;
+    private static WsSpeedPidController driveSpeedPid;
+    private static WsDriveBaseSpeedPidInput driveSpeedPidInput;
+    private static WsDriveBaseSpeedPidOutput driveSpeedPidOutput;
+    
     private static WsPidController driveDistancePid;
     private static WsDriveBaseDistancePidInput driveDistancePidInput;
     private static WsDriveBaseDistancePidOutput driveDistancePidOutput;
@@ -139,6 +148,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveHeadingPidInput = new WsDriveBaseHeadingPidInput();
         driveHeadingPidOutput = new WsDriveBaseHeadingPidOutput();
         driveHeadingPid = new WsPidController(driveHeadingPidInput, driveHeadingPidOutput, "WsDriveBaseHeadingPid");
+        
+        driveSpeedPidInput = new WsDriveBaseSpeedPidInput();
+        driveSpeedPidOutput = new WsDriveBaseSpeedPidOutput();
+        driveSpeedPid = new WsSpeedPidController(driveHeadingPidInput, driveHeadingPidOutput, "WsDriveBaseHeadingPid");
         init();
     }
 
@@ -560,6 +573,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         pidHeadingValue = -pidHeading;
         Logger.getLogger().debug(this.getClass().getName(), "setPidHeadingValue", "Heading PID value set: " + pidHeading);
     }
+    public void setPidSpeedValue(double pidSpeed) {
+        //Add the feed forward velocity and acceleration
+        
+        pidSpeedValue = pidSpeed;
+    }
 
     public void notifyConfigChange() {
         WHEEL_DIAMETER = WHEEL_DIAMETER_config.getValue();
@@ -575,6 +593,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         DEADBAND = DEADBAND_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
+        driveSpeedPid.notifyConfigChange();
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
