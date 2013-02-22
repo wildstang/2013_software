@@ -11,6 +11,7 @@ import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.logger.*;
 import com.wildstangs.logviewer.LogViewer;
+import com.wildstangs.motionprofile.ContinuousAccelFilter;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsVictor;
@@ -101,6 +102,29 @@ public class WsSimulation {
         FlywheelEncoders flywheelEncoders = new FlywheelEncoders(); 
         HopperLimitSwitches limitSwitches = new HopperLimitSwitches(); 
 //        periodTimer.startTimingSection();
+        
+        ContinuousAccelFilter accelFilter = new ContinuousAccelFilter(0, 0, 0);
+        double distance_to_go = 60.5;
+        double currentProfileX =0.0; 
+        double currentProfileV =0.0; 
+        double currentProfileA =0.0; 
+        for (int i = 0; i < 60; i++) {
+            //Update measured values 
+            
+            //Update PID using profile velocity as setpoint and measured velocity as PID input 
+            
+            //Update system to get feed forward terms
+            double distance_left = distance_to_go - currentProfileX;
+            logger.debug(c, "AccelFilter", "distance_left: " + distance_left + " p: " + accelFilter.getCurrPos()+ " v: " + accelFilter.getCurrVel() + " a: " + accelFilter.getCurrAcc() );
+            accelFilter.calculateSystem(distance_left , currentProfileV, 0, 600, 102, 0.020);
+            currentProfileX = accelFilter.getCurrPos();
+            currentProfileV = accelFilter.getCurrVel();
+            currentProfileA = accelFilter.getCurrAcc();
+            
+            //Update motor output with PID output and feed forward velocity and acceleration 
+            
+        }
+        
         
         logger.always(c, "sim_startup", "Simulation init done.");
         if(autonomousRun)
