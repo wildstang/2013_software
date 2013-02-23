@@ -16,6 +16,18 @@ public class ContinuousAccelFilter {
     //	m_currentA=m_straightFilter->GetCurrAcc();
     // 	m_currentV=m_straightFilter->GetCurrVel();
     // 	m_currentX=m_straightFilter->GetCurrPos();
+
+    public double getCurrPos() {
+        return currPos;
+    }
+
+    public double getCurrVel() {
+        return currVel;
+    }
+
+    public double getCurrAcc() {
+        return currAcc;
+    }
     
     
     public ContinuousAccelFilter(double currPos , double currVel , double currAcc) {

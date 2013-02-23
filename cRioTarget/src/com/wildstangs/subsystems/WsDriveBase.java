@@ -8,6 +8,7 @@ import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.logger.Logger;
+import com.wildstangs.motionprofile.ContinuousAccelFilter;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.pid.controller.base.WsPidController;
@@ -75,10 +76,29 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static WsDriveBaseHeadingPidOutput driveHeadingPidOutput;
     private static double gyroValue;
     private static boolean driveHeadingPidEnabled = false;
-    private static boolean driveSpeedPidEnabled = false;
+    
     private static WsSpeedPidController driveSpeedPid;
     private static WsDriveBaseSpeedPidInput driveSpeedPidInput;
     private static WsDriveBaseSpeedPidOutput driveSpeedPidOutput;
+    private static ContinuousAccelFilter continuousAccelerationFilter;
+    //Set low gear top speed to 8.5 ft/ second = 102 inches / second = 2.04 inches/ 20 ms 
+    private static final double MAX_SPEED_INCHES_LOWGEAR = 102.0; 
+    private double goal_velocity = 0.0; 
+    private double distance_to_move = 0.0; 
+    private double distance_remaining  = 0.0; 
+    private boolean motionProfileActive = false; 
+    private double currentProfileX =0.0; 
+    private double currentProfileV =0.0; 
+    private double currentProfileA =0.0; 
+    private static double FEED_FORWARD_VELOCITY_CONSTANT = 1.00; 
+    private static double FEED_FORWARD_ACCELERATION_CONSTANT = 0.00018; 
+    private double totalPosition = 0.0; 
+    private double previousPositionSinceLastReset = 0.0; 
+    private double previousTime = 0.0; 
+    private double previousVelocity = 0.0; 
+    private double currentVelocity = 0.0; 
+    private double currentAcceleration = 0.0; 
+     
     
     private static WsPidController driveDistancePid;
     private static WsDriveBaseDistancePidInput driveDistancePidInput;
@@ -97,6 +117,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter DEADBAND_config;
     private static DoubleConfigFileParameter SLOW_TURN_FORWARD_SPEED_config;
     private static DoubleConfigFileParameter SLOW_TURN_BACKWARD_SPEED_config;
+    private static DoubleConfigFileParameter FEED_FORWARD_VELOCITY_CONSTANT_config;
+    private static DoubleConfigFileParameter FEED_FORWARD_ACCELERATION_CONSTANT_config;
 
     public WsDriveBase(String name) {
         super(name);
@@ -112,6 +134,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         DEADBAND_config = new DoubleConfigFileParameter(this.getClass().getName(), "deadband", 0.05);
         SLOW_TURN_FORWARD_SPEED_config = new DoubleConfigFileParameter(this.getClass().getName(), "slow_turn_forward_speed", 0.16);
         SLOW_TURN_BACKWARD_SPEED_config = new DoubleConfigFileParameter(this.getClass().getName(), "slow_turn_backward_speed", -0.19);
+        FEED_FORWARD_VELOCITY_CONSTANT_config = new DoubleConfigFileParameter(this.getClass().getName(), "feed_forward_velocity_constant", 1.00);
+        FEED_FORWARD_ACCELERATION_CONSTANT_config = new DoubleConfigFileParameter(this.getClass().getName(), "feed_forward_acceleration_constant", 0.00018);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -151,7 +175,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         
         driveSpeedPidInput = new WsDriveBaseSpeedPidInput();
         driveSpeedPidOutput = new WsDriveBaseSpeedPidOutput();
-        driveSpeedPid = new WsSpeedPidController(driveHeadingPidInput, driveHeadingPidOutput, "WsDriveBaseHeadingPid");
+        driveSpeedPid = new WsSpeedPidController(driveSpeedPidInput, driveSpeedPidOutput, "WsDriveBaseSpeedPid");
+        continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0); 
         init();
     }
 
@@ -166,9 +191,36 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         this.disableHeadingPidControl();
         Logger.getLogger().always(this.getClass().getName(), "init", "Drive Base init");
     }
-
+   
     public void update() {
-        if (true == driveDistancePidEnabled) {
+        updateSpeedAndAccelerationCalculations(); 
+        if (true == motionProfileActive ){
+            
+            //Update PID using profile velocity as setpoint and measured velocity as PID input 
+            enableSpeedPidControl();
+            setDriveSpeedPidSetpoint(continuousAccelerationFilter.getCurrVel());
+            //Update system to get feed forward terms
+            distance_remaining = this.distance_to_move - currentProfileX;
+            Logger.getLogger().debug(this.getClass().getName(), "AccelFilter", "distance_left: " + distance_remaining + " p: " + continuousAccelerationFilter.getCurrPos()+ " v: " + continuousAccelerationFilter.getCurrVel() + " a: " + continuousAccelerationFilter.getCurrAcc() );
+            continuousAccelerationFilter.calculateSystem(distance_remaining , currentProfileV, goal_velocity, 600, 102, 0.020);
+            currentProfileX = continuousAccelerationFilter.getCurrPos();
+            currentProfileV = continuousAccelerationFilter.getCurrVel();
+            currentProfileA = continuousAccelerationFilter.getCurrAcc();
+            
+            //Update motor output with PID output and feed forward velocity and acceleration 
+            double throttleValue = this.pidSpeedValue 
+                                    + FEED_FORWARD_VELOCITY_CONSTANT*(continuousAccelerationFilter.getCurrVel()/ MAX_SPEED_INCHES_LOWGEAR )
+                                    + FEED_FORWARD_ACCELERATION_CONSTANT*continuousAccelerationFilter.getCurrAcc(); 
+            
+            //Update the throttle value outside the function so that the acceleration factor is not applied. 
+            driveBaseThrottleValue = throttleValue; 
+            if (driveBaseThrottleValue > MAX_INPUT_THROTTLE_VALUE) {
+                driveBaseThrottleValue = MAX_INPUT_THROTTLE_VALUE;
+            } else if (driveBaseThrottleValue < MAX_NEG_INPUT_THROTTLE_VALUE) {
+                driveBaseThrottleValue = MAX_NEG_INPUT_THROTTLE_VALUE;
+            }
+            updateDriveMotors();
+        } else if (true == driveDistancePidEnabled) {
             //We are driving by distance under PID control
             enableDistancePidControl();
             driveDistancePid.calcPid();
@@ -220,18 +272,12 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         } else {
         }
         
-        updateSpeedAndAccelerationCalculations(); 
+        
         SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
         SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
         SmartDashboard.putNumber("Gyro angle", this.getGyroAngle());
     }
 
-    private double totalPosition = 0.0; 
-    private double previousPositionSinceLastReset = 0.0; 
-    private double previousTime = 0.0; 
-    private double previousVelocity = 0.0; 
-    private double currentVelocity = 0.0; 
-    private double currentAcceleration = 0.0; 
     
     private void updateSpeedAndAccelerationCalculations() {
         double newTime = Timer.getFPGATimestamp();
@@ -239,11 +285,13 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         double rightDistance = this.getRightDistance();
         double deltaPosition = ((leftDistance + rightDistance)/2.0 - previousPositionSinceLastReset); 
         double deltaTime = (newTime - previousTime); 
-        //Do velocity in ft/sec
-        currentVelocity= (deltaPosition / deltaTime )/12.0 ;
+        //Do velocity internally in in/sec
+        currentVelocity= (deltaPosition / deltaTime ) ;
         currentAcceleration = ((currentVelocity - previousVelocity) / deltaTime); 
-        SmartDashboard.putNumber("Velocity: ", this.currentVelocity);
-        SmartDashboard.putNumber("Accel: ", this.currentAcceleration);
+        
+        //Output velocity in ft/sec
+        SmartDashboard.putNumber("Velocity: ", this.currentVelocity/12.0);
+        SmartDashboard.putNumber("Accel: ", this.currentAcceleration/144.0);
 
         totalPosition += deltaPosition; 
         if ( Math.abs(deltaPosition) > 0.005 ){
@@ -260,6 +308,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         previousVelocity = 0.0; 
         currentVelocity = 0.0; 
         currentAcceleration = 0.0; 
+    }
+    
+    public double getDistanceRemaining(){
+        return this.distance_remaining; 
     }
     
     public double getAcceleration(){ 
@@ -490,6 +542,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveDistancePid.setSetPoint(distance);
         driveDistancePid.calcPid();
     }
+    public void setDriveSpeedPidSetpoint(double speed) {
+        driveSpeedPid.setSetPoint(speed);
+        driveSpeedPid.calcPid();
+    }
 
     public void resetLeftEncoder() {
         this.leftEncoderValue = 0.0;
@@ -563,6 +619,35 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveHeadingPid.reset();
         resetGyro();
     }
+    public void enableSpeedPidControl() {
+        driveSpeedPid.enable();
+    }
+
+    public void disableSpeedPidControl() {
+        driveSpeedPid.disable();
+        resetSpeedPid();
+        Logger.getLogger().debug(this.getClass().getName(), "disableSpeedPidControl", "Speed PID is disabled");
+    }
+
+    public void resetSpeedPid() {
+        driveSpeedPid.reset();
+    }
+    
+    public void startStraightMoveWithMotionProfile(double distance, double goal_velocity){
+        this.distance_to_move = distance; 
+        this.distance_remaining = distance;
+        this.goal_velocity = goal_velocity; 
+        motionProfileActive = true; 
+    }
+    
+    public void stopStraightMoveWithMotionProfile(){
+        disableSpeedPidControl(); 
+        continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
+        this.distance_to_move = 0.0; 
+        this.distance_remaining = 0.0; 
+        this.goal_velocity = 0.0;
+        motionProfileActive =false; 
+    }
 
     public WsPidStateType getHeadingPidState() {
         return driveHeadingPid.getState();
@@ -590,6 +675,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         ENCODER_GEAR_RATIO = ENCODER_GEAR_RATIO_config.getValue();
         SLOW_TURN_FORWARD_SPEED = SLOW_TURN_FORWARD_SPEED_config.getValue();
         SLOW_TURN_BACKWARD_SPEED = SLOW_TURN_BACKWARD_SPEED_config.getValue();
+        FEED_FORWARD_VELOCITY_CONSTANT = FEED_FORWARD_VELOCITY_CONSTANT_config.getValue();
+        FEED_FORWARD_ACCELERATION_CONSTANT = FEED_FORWARD_ACCELERATION_CONSTANT_config.getValue();
         DEADBAND = DEADBAND_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
@@ -611,5 +698,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON1) {
             slowTurnRightFlag = ((BooleanSubject) subjectThatCaused).getValue();
         }
+    }
+    
+    public double getSpeedError (){ 
+        return driveSpeedPid.getError(); 
     }
 }
