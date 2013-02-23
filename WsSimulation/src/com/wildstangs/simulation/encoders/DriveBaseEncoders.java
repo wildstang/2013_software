@@ -29,9 +29,9 @@ public class DriveBaseEncoders {
     //Following are inches per 20 ms
     private static final double VICTOR_BRAKES_EFFECT_DECELERATION = ((50.0/2000)*20);; 
     //Say it takes two seconds to get to top speed
-    private static final double ACCELERATION_PER_FRAME = ((MAX_SPEED_INCHES/2000)*20); 
+    private static final double ACCELERATION_PER_FRAME = 600.0; 
 
-    private static final boolean doModelWithCappedAcceleration = true; 
+    private static final boolean doModelWithCappedAcceleration = false; 
         DoubleGraph actual_left_speed;
         DoubleGraph actual_right_speed;
         DoubleGraph left_distance;
@@ -156,8 +156,8 @@ public class DriveBaseEncoders {
 
         actual_left_speed.updateWithValue(actual_left_drive_speed, MAX_SPEED_INCHES); 
         actual_right_speed.updateWithValue(actual_right_drive_speed, MAX_SPEED_INCHES); 
-        measuredVelocity.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getVelocity(), ((MAX_SPEED_INCHES * 50)/12.0) );
-        measuredAccel.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getAcceleration(), ((ACCELERATION_PER_FRAME *50*50/12.0)));
+        measuredVelocity.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getVelocity(), ((MAX_SPEED_INCHES * 50)) );
+        measuredAccel.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getAcceleration(), ((ACCELERATION_PER_FRAME *50*50)));
         
         left_distance.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftDistance(), 100); 
         right_distance.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightDistance(), 100);
