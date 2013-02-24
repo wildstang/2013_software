@@ -40,20 +40,20 @@ public class WsShooter extends WsSubsystem implements IObserver {
             this.getClass().getName(), "PresetTowerShooterEnterSpeed", 1600);
     private IntegerConfigFileParameter PresetTowerShooterExitSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetTowerShooterExitSpeed", 2200);
-    private IntegerConfigFileParameter PresetTowerShooterAngle = new IntegerConfigFileParameter(
-            this.getClass().getName(), "PresetTowerShooterAngle", 1);
+    private BooleanConfigFileParameter PresetTowerShooterAngle = new BooleanConfigFileParameter(
+            this.getClass().getName(), "PresetTowerShooterAngle", true);
     private IntegerConfigFileParameter PresetLongLowEnterSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetLongLowEnterSpeed", 4000);
     private IntegerConfigFileParameter PresetLongLowExitSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetLongLowExitSpeed", 4500);
-    private IntegerConfigFileParameter PresetLongLowAngle = new IntegerConfigFileParameter(
-            this.getClass().getName(), "PresetLongLowAngle", 0);
+    private BooleanConfigFileParameter PresetLongLowAngle = new BooleanConfigFileParameter(
+            this.getClass().getName(), "PresetLongLowAngle", false);
     private IntegerConfigFileParameter PresetShortHighEnterSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetShortHighEnterSpeed", 1700);
     private IntegerConfigFileParameter PresetShortHighExitSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetShortHighExitSpeed", 2300);
-    private IntegerConfigFileParameter PresetShortHighAngle = new IntegerConfigFileParameter(
-            this.getClass().getName(), "PresetShortHighAngle", 1);
+    private BooleanConfigFileParameter PresetShortHighAngle = new BooleanConfigFileParameter(
+            this.getClass().getName(), "PresetShortHighAngle", true);
     private Preset PresetTowerShooterStation = new Preset(PresetTowerShooterEnterSpeed.getValue(),
             PresetTowerShooterExitSpeed.getValue(), translatePresetConfigAngle(PresetTowerShooterAngle.getValue()));
     private Preset PresetLongLow = new Preset(PresetLongLowEnterSpeed.getValue(),
@@ -145,8 +145,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         atSpeedTolerance = atSpeedToleranceConfig.getValue();
     }
 
-    public DoubleSolenoid.Value translatePresetConfigAngle(int configVal) {
-        if (configVal > 0) {
+    public DoubleSolenoid.Value translatePresetConfigAngle(boolean configVal) {
+        if (configVal == true) {
             return DoubleSolenoid.Value.kForward;
         } else {
             return DoubleSolenoid.Value.kReverse;
