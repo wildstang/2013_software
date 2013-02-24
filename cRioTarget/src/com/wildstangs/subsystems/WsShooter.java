@@ -152,7 +152,17 @@ public class WsShooter extends WsSubsystem implements IObserver {
             return DoubleSolenoid.Value.kReverse;
         }
     }
-
+    
+    public String angleToString (DoubleSolenoid.Value angle) {
+        if (angle == DoubleSolenoid.Value.kForward) {
+            return "Up";       
+        } else if (angle == DoubleSolenoid.Value.kReverse) {
+            return "Down";
+        } else {
+            return "Unknown";
+        }
+    } 
+    
     public void init() {
         resetEnterCounter();
         resetExitCounter();
@@ -303,7 +313,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 angleFlag = PresetLongLow.ANGLE;
                 wheelEnterSetPoint = PresetLongLow.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetLongLow.EXIT_WHEEL_SET_POINT;
-                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: Low");
+                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: " + angleToString(angleFlag));
             } else if (dpadVal == 1 && presetUnlock) {
                 Logger.getLogger().debug(this.getClass().getName(), "acceptNotification",
                         "Set Short and High Preset");
@@ -311,7 +321,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 angleFlag = PresetShortHigh.ANGLE;
                 wheelEnterSetPoint = PresetShortHigh.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetShortHigh.EXIT_WHEEL_SET_POINT;
-                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: High");
+                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: " + angleToString(angleFlag));
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT) {
@@ -322,7 +332,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 angleFlag = PresetTowerShooterStation.ANGLE;
                 wheelEnterSetPoint = PresetTowerShooterStation.ENTER_WHEEL_SET_POINT;
                 wheelExitSetPoint = PresetTowerShooterStation.EXIT_WHEEL_SET_POINT;
-                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: High");
+                SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: " + angleToString(angleFlag));
             }
             if (dpadVal == 1 && presetUnlock) {
                 Logger.getLogger().debug(this.getClass().getName(), "acceptNotification",
