@@ -53,17 +53,17 @@ com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minInpu
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minOnTargetTime=0.1
 
 //Speed PID
-com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.p=0.01
-com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.i=0.002
-com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.d=0.05
+com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.p=0.001
+com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.i=0.0
+com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.d=0.00
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.errorIncrement=1.0
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.errorEpsilon=1.0
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.staticEpsilon=0.0
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.maxIntegral=1.0
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.integralErrorThresh=-1.0
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.differentiatorBandLimit=1.0
-com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.maxOutput=1.0
-com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.minOutput=-1.0
+com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.maxOutput=0.2
+com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.minOutput=-0.2
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.maxInput=1000
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.minInput=-1000
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.minOnTargetTime=0.1
@@ -87,7 +87,7 @@ com.wildstangs.subsystems.WsDriveBase.encoder_gear_ratio=7.5
 com.wildstangs.subsystems.WsDriveBase.slow_turn_forward_speed=0.22
 com.wildstangs.subsystems.WsDriveBase.slow_turn_backward_speed=-0.19
 com.wildstangs.subsystems.WsDriveBase.deadband=0.10
-com.wildstangs.subsystems.WsDriveBase.feed_forward_velocity_constant=1.00
+com.wildstangs.subsystems.WsDriveBase.feed_forward_velocity_constant=1.1
 com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.00018
 
 
@@ -129,14 +129,14 @@ com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
 // XXX XXX   XX XX    XX    XXXXX  XXX XXX
 
 //ShootSeven
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=24
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=0
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.StartDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.AngleTurn=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.SecondDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.ThirdDrive=17.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FourthDrive=60.5
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FifthDrive=60.5
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FifthDrive=-60.5
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.ThirdFrisbeeDelay=100
 

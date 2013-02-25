@@ -85,6 +85,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static final double MAX_SPEED_INCHES_LOWGEAR = 102.0; 
     private double goal_velocity = 0.0; 
     private double distance_to_move = 0.0; 
+    private double distance_moved = 0.0; 
     private double distance_remaining  = 0.0; 
     private boolean motionProfileActive = false; 
     private double currentProfileX =0.0; 
@@ -94,6 +95,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double FEED_FORWARD_ACCELERATION_CONSTANT = 0.00018; 
     private double totalPosition = 0.0; 
     private double previousPositionSinceLastReset = 0.0; 
+    private double deltaPosition = 0.0; 
+    private double deltaPosError = 0.0; 
+    private double deltaProfilePosition = 0.0; 
     private double previousTime = 0.0; 
     private double previousVelocity = 0.0; 
     private double currentVelocity = 0.0; 
@@ -200,18 +204,25 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             enableSpeedPidControl();
             setDriveSpeedPidSetpoint(continuousAccelerationFilter.getCurrVel());
             //Update system to get feed forward terms
-            distance_remaining = this.distance_to_move - currentProfileX;
+            deltaPosError = this.deltaPosition - (deltaProfilePosition); 
+//            distance_remaining = this.distance_to_move - currentProfileX;
+            distance_moved += this.deltaPosition; 
+            distance_remaining = this.distance_to_move - distance_moved;
             Logger.getLogger().debug(this.getClass().getName(), "AccelFilter", "distance_left: " + distance_remaining + " p: " + continuousAccelerationFilter.getCurrPos()+ " v: " + continuousAccelerationFilter.getCurrVel() + " a: " + continuousAccelerationFilter.getCurrAcc() );
             continuousAccelerationFilter.calculateSystem(distance_remaining , currentProfileV, goal_velocity, 600, 102, 0.020);
+            deltaProfilePosition = continuousAccelerationFilter.getCurrPos() - currentProfileX ;  
             currentProfileX = continuousAccelerationFilter.getCurrPos();
             currentProfileV = continuousAccelerationFilter.getCurrVel();
             currentProfileA = continuousAccelerationFilter.getCurrAcc();
-            
+            SmartDashboard.putNumber("Speed PID Error", driveSpeedPid.getError());
+            SmartDashboard.putNumber("Speed PID Output", this.pidSpeedValue);
+            SmartDashboard.putNumber("Distance Error", this.deltaPosError);
             //Update motor output with PID output and feed forward velocity and acceleration 
             double throttleValue = this.pidSpeedValue 
                                     + FEED_FORWARD_VELOCITY_CONSTANT*(continuousAccelerationFilter.getCurrVel()/ MAX_SPEED_INCHES_LOWGEAR )
                                     + FEED_FORWARD_ACCELERATION_CONSTANT*continuousAccelerationFilter.getCurrAcc(); 
             
+            SmartDashboard.putNumber("Motion Profile Throttle", throttleValue);
             //Update the throttle value outside the function so that the acceleration factor is not applied. 
             driveBaseThrottleValue = throttleValue; 
             if (driveBaseThrottleValue > MAX_INPUT_THROTTLE_VALUE) {
@@ -283,7 +294,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         double newTime = Timer.getFPGATimestamp();
         double leftDistance = this.getLeftDistance();
         double rightDistance = this.getRightDistance();
-        double deltaPosition = ((leftDistance + rightDistance)/2.0 - previousPositionSinceLastReset); 
+        this.deltaPosition = ((leftDistance + rightDistance)/2.0 - previousPositionSinceLastReset); 
         double deltaTime = (newTime - previousTime); 
         //Do velocity internally in in/sec
         currentVelocity= (deltaPosition / deltaTime ) ;
@@ -295,7 +306,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
         totalPosition += deltaPosition; 
         if ( Math.abs(deltaPosition) > 0.005 ){
-            Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
+            Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + "dpp:" + deltaProfilePosition +  " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
         }
         previousPositionSinceLastReset += deltaPosition; 
         previousTime = newTime; 
@@ -539,6 +550,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void setDriveDistancePidSetpoint(double distance) {
+        resetLeftEncoder();
+        resetRightEncoder();
+        resetKinematics();
         driveDistancePid.setSetPoint(distance);
         driveDistancePid.calcPid();
     }
@@ -635,6 +649,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     
     public void startStraightMoveWithMotionProfile(double distance, double goal_velocity){
         this.distance_to_move = distance; 
+        this.distance_moved = 0.0; 
         this.distance_remaining = distance;
         this.goal_velocity = goal_velocity; 
         motionProfileActive = true; 
@@ -643,6 +658,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     public void stopStraightMoveWithMotionProfile(){
         disableSpeedPidControl(); 
         continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
+        currentProfileX = 0 ; 
         this.distance_to_move = 0.0; 
         this.distance_remaining = 0.0; 
         this.goal_velocity = 0.0;
@@ -662,6 +678,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         //Add the feed forward velocity and acceleration
         
         pidSpeedValue = pidSpeed;
+    }
+    public double getPidSpeedValue() {
+        //Add the feed forward velocity and acceleration
+        
+        return pidSpeedValue;
     }
 
     public void notifyConfigChange() {
@@ -702,5 +723,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     
     public double getSpeedError (){ 
         return driveSpeedPid.getError(); 
+    }
+    public double getDeltaPosError (){ 
+        return deltaPosError;
     }
 }

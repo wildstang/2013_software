@@ -29,15 +29,18 @@ public class DriveBaseEncoders {
     //Following are inches per 20 ms
     private static final double VICTOR_BRAKES_EFFECT_DECELERATION = ((50.0/2000)*20);; 
     //Say it takes two seconds to get to top speed
-    private static final double ACCELERATION_PER_FRAME = 600.0; 
+    private static final double ACCELERATION_PER_FRAME = (600.0/1000*20); 
 
-    private static final boolean doModelWithCappedAcceleration = false; 
+    private static final boolean doModelWithCappedAcceleration = true; 
         DoubleGraph actual_left_speed;
         DoubleGraph actual_right_speed;
         DoubleGraph left_distance;
         DoubleGraph right_distance ;
         DoubleGraph measuredVelocity ;
         DoubleGraph measuredAccel ;
+        DoubleGraph speedPIDError ;
+        DoubleGraph speedPIDValue ;
+        DoubleGraph distanceError ;
         
     public DriveBaseEncoders() {
         
@@ -52,18 +55,23 @@ public class DriveBaseEncoders {
         right_distance = new DoubleGraph("Right Distance", 1130,400); 
         measuredVelocity = new DoubleGraph("Measured Velocity", 1430,0); 
         measuredAccel = new DoubleGraph("Measured Accel", 1430,400); 
+        speedPIDError = new DoubleGraph("Speed PID Error", 0,200); 
+        speedPIDValue = new DoubleGraph("Speed PID Value", 0,600); 
+        distanceError = new DoubleGraph("Distance Error", 410,800); 
         
         //Create graphs for 
     }
     public void update (){ 
         desired_left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
         desired_right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
-
+        double percentagePower = desired_left_drive_speed;
         //Convert victor -1 to 1 to -2.04 inches per 20 ms to 2.04
         desired_left_drive_speed *= MAX_SPEED_INCHES;
         desired_right_drive_speed *= MAX_SPEED_INCHES;
-        
-        if (doModelWithCappedAcceleration){
+        double previousLeftSpeed = actual_left_drive_speed; 
+        double previousRightSpeed = actual_right_drive_speed; 
+         
+       if (doModelWithCappedAcceleration){
             
             double diff = desired_left_drive_speed - actual_left_drive_speed; 
             //Handle brakes
@@ -85,10 +93,16 @@ public class DriveBaseEncoders {
                 if (actual_left_drive_speed > MAX_SPEED_INCHES){
                     actual_left_drive_speed = MAX_SPEED_INCHES; 
                 }
+                if (actual_left_drive_speed > desired_left_drive_speed){
+                    actual_left_drive_speed = desired_left_drive_speed; 
+                }
             } else if (diff < -0.05  ){
                 actual_left_drive_speed -= ACCELERATION_PER_FRAME; 
                 if (actual_left_drive_speed < (-1*MAX_SPEED_INCHES)){
                     actual_left_drive_speed = (-1*MAX_SPEED_INCHES); 
+                }
+                if (actual_left_drive_speed < desired_left_drive_speed){
+                    actual_left_drive_speed = desired_left_drive_speed; 
                 }
             } else {
             }
@@ -114,10 +128,16 @@ public class DriveBaseEncoders {
                 if (actual_right_drive_speed > MAX_SPEED_INCHES){
                     actual_right_drive_speed = MAX_SPEED_INCHES; 
                 }
+                if (actual_right_drive_speed > desired_right_drive_speed){
+                    actual_right_drive_speed = desired_right_drive_speed; 
+                }
             } else if (diffRight < -0.05  ){
                 actual_right_drive_speed -= ACCELERATION_PER_FRAME; 
                 if (actual_right_drive_speed< (-1*MAX_SPEED_INCHES)){
                     actual_right_drive_speed = (-1*MAX_SPEED_INCHES); 
+                }
+                if (actual_right_drive_speed < desired_right_drive_speed){
+                    actual_right_drive_speed = desired_right_drive_speed; 
                 }
             } else {
             }
@@ -133,17 +153,21 @@ public class DriveBaseEncoders {
         int left_encoder = ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder()).get(); 
         int right_encoder = ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).get(); 
         //Compensate for variable period
-        int left_encoder_increment = 0 ; 
-        int right_encoder_increment = 0; 
+        int left_encoder_velocity_increment = 0 ; 
+        int right_encoder_velocity_increment = 0; 
+        int left_encoder_acc_increment = 0 ; 
+        int right_encoder_acc_increment = 0; 
         double currTime = Timer.getFPGATimestamp(); 
         double deltaTime = currTime - previousTime; 
         if (Math.abs(actual_right_drive_speed) > 0.001){
-            right_encoder_increment = (int)Math.ceil((actual_right_drive_speed *ENCODER_TICKS_PER_INCH * deltaTime) / 0.020);
-            right_encoder+= right_encoder_increment;
+            right_encoder_velocity_increment = (int)Math.ceil((previousRightSpeed *ENCODER_TICKS_PER_INCH * deltaTime) / 0.020);
+            right_encoder_acc_increment = (int)Math.ceil(((actual_right_drive_speed - previousRightSpeed) *ENCODER_TICKS_PER_INCH * deltaTime) / 0.020 / 2);
+            right_encoder+= right_encoder_velocity_increment + right_encoder_acc_increment;
         }
         if (Math.abs(actual_left_drive_speed) > 0.001){
-            left_encoder_increment = (int)Math.ceil((actual_left_drive_speed *ENCODER_TICKS_PER_INCH * deltaTime) / 0.020);
-            left_encoder+= left_encoder_increment;
+            left_encoder_velocity_increment = (int)Math.ceil((previousLeftSpeed *ENCODER_TICKS_PER_INCH * deltaTime) / 0.020);
+            left_encoder_acc_increment = (int)Math.ceil(((actual_left_drive_speed - previousLeftSpeed) *ENCODER_TICKS_PER_INCH * deltaTime) / 0.020 / 2);
+            left_encoder+= left_encoder_velocity_increment + left_encoder_acc_increment;
         }
         previousTime = currTime; 
         
@@ -151,13 +175,18 @@ public class DriveBaseEncoders {
         ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).set(right_encoder);
 
         if (Math.abs(actual_left_drive_speed) > 0.01){
-            Logger.getLogger().debug(this.getClass().getName(), "KinematicsSimulation", "lDS: " + actual_left_drive_speed + " rDS: " + actual_right_drive_speed + " dle: " + left_encoder_increment + " dre: " + right_encoder_increment);
+            Logger.getLogger().debug(this.getClass().getName(), "KinematicsSimulation", "lDS: " + actual_left_drive_speed + " %: " + percentagePower + " rDS: " + actual_right_drive_speed + " dle: " + left_encoder_velocity_increment + " dre: " + right_encoder_velocity_increment);
+            WsDriveBase db = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE));
+            Logger.getLogger().debug(this.getClass().getName(), "SpeedPid", "value: " + db.getPidSpeedValue() + " error: " + db.getSpeedError() + " posError: " + db.getDeltaPosError() + " \n ");
         }
 
         actual_left_speed.updateWithValue(actual_left_drive_speed, MAX_SPEED_INCHES); 
         actual_right_speed.updateWithValue(actual_right_drive_speed, MAX_SPEED_INCHES); 
         measuredVelocity.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getVelocity(), ((MAX_SPEED_INCHES * 50)) );
-        measuredAccel.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getAcceleration(), ((ACCELERATION_PER_FRAME *50*50)));
+        measuredAccel.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getAcceleration(), ((ACCELERATION_PER_FRAME *50)));
+        speedPIDError.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getSpeedError(), 50.0);
+        speedPIDValue.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getPidSpeedValue(), 0.75);
+        distanceError.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getDeltaPosError(), 4);
         
         left_distance.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftDistance(), 100); 
         right_distance.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightDistance(), 100);

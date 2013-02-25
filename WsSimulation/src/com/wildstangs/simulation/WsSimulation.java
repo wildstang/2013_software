@@ -11,7 +11,6 @@ import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.logger.*;
 import com.wildstangs.logviewer.LogViewer;
-import com.wildstangs.motionprofile.ContinuousAccelFilter;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsVictor;
@@ -101,36 +100,37 @@ public class WsSimulation {
         DriveBaseEncoders dbEncoders = new DriveBaseEncoders(); 
         FlywheelEncoders flywheelEncoders = new FlywheelEncoders(); 
         HopperLimitSwitches limitSwitches = new HopperLimitSwitches(); 
+        AccumulatorLimitSwitch aclimitSwitches = new AccumulatorLimitSwitch(); 
 //        periodTimer.startTimingSection();
         
-        ContinuousAccelFilter accelFilter = new ContinuousAccelFilter(0, 0, 0);
-        double distance_to_go = 60.5;
-        double currentProfileX =0.0; 
-        double currentProfileV =0.0; 
-        double currentProfileA =0.0; 
-        for (int i = 0; i < 60; i++) {
-            //Update measured values 
-            
-            //Update PID using profile velocity as setpoint and measured velocity as PID input 
-            
-            //Update system to get feed forward terms
-            double distance_left = distance_to_go - currentProfileX;
-            logger.debug(c, "AccelFilter", "distance_left: " + distance_left + " p: " + accelFilter.getCurrPos()+ " v: " + accelFilter.getCurrVel() + " a: " + accelFilter.getCurrAcc() );
-            accelFilter.calculateSystem(distance_left , currentProfileV, 0, 600, 102, 0.020);
-            currentProfileX = accelFilter.getCurrPos();
-            currentProfileV = accelFilter.getCurrVel();
-            currentProfileA = accelFilter.getCurrAcc();
-            
-            //Update motor output with PID output and feed forward velocity and acceleration 
-            
-        }
+//        ContinuousAccelFilter accelFilter = new ContinuousAccelFilter(0, 0, 0);
+//        double distance_to_go = 60.5;
+//        double currentProfileX =0.0; 
+//        double currentProfileV =0.0; 
+//        double currentProfileA =0.0; 
+//        for (int i = 0; i < 60; i++) {
+//            //Update measured values 
+//            
+//            //Update PID using profile velocity as setpoint and measured velocity as PID input 
+//            
+//            //Update system to get feed forward terms
+//            double distance_left = distance_to_go - currentProfileX;
+//            logger.debug(c, "AccelFilter", "distance_left: " + distance_left + " p: " + accelFilter.getCurrPos()+ " v: " + accelFilter.getCurrVel() + " a: " + accelFilter.getCurrAcc() );
+//            accelFilter.calculateSystem(distance_left , currentProfileV, 0, 600, 102, 0.020);
+//            currentProfileX = accelFilter.getCurrPos();
+//            currentProfileV = accelFilter.getCurrVel();
+//            currentProfileA = accelFilter.getCurrAcc();
+//            
+//            //Update motor output with PID output and feed forward velocity and acceleration 
+//            
+//        }
         
         
         logger.always(c, "sim_startup", "Simulation init done.");
         if(autonomousRun)
         {
-            WsAutonomousManager.getInstance().setPosition(2);
-            WsAutonomousManager.getInstance().setProgram(3);
+            WsAutonomousManager.getInstance().setPosition(4);
+            WsAutonomousManager.getInstance().setProgram(1);
             WsAutonomousManager.getInstance().startCurrentProgram();
         }
         
@@ -138,35 +138,38 @@ public class WsSimulation {
 //            periodTimer.endTimingSection();
 //            periodTimer.startTimingSection();
 //            durationTimer.startTimingSection();
+            if (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper")){
+                
+                //Update the Victor graphs
+                leftDriveSpeed.update();
+                rightDriveSpeed.update();
+                accumulatorSpeed.update(); 
+                funnelatorSpeed.update(); 
+                driverThrottle.update(); 
+                enterSpeed.update();
+                exitSpeed.update();
 
-            //Update the Victor graphs
-            leftDriveSpeed.update();
-            rightDriveSpeed.update();
-            accumulatorSpeed.update(); 
-            funnelatorSpeed.update(); 
-            driverThrottle.update(); 
-            enterSpeed.update();
-            exitSpeed.update();
+                //Update the encoders
+                dbEncoders.update();
+                WsInputFacade.getInstance().updateSensorData();
+                if(autonomousRun)
+                {
+                    WsInputFacade.getInstance().updateOiDataAutonomous();
+                    WsAutonomousManager.getInstance().update();
+                }
+                else
+                {
+                    WsInputFacade.getInstance().updateOiData();
+                }
+                WsSubsystemContainer.getInstance().update();
+                WsOutputFacade.getInstance().update();
+                WsSolenoidContainer.getInstance().update();
 
-            //Update the encoders
-            dbEncoders.update();
-            WsInputFacade.getInstance().updateSensorData();
-            if(autonomousRun)
-            {
-                WsInputFacade.getInstance().updateOiDataAutonomous();
-                WsAutonomousManager.getInstance().update();
+                flywheelEncoders.update(); 
+                limitSwitches.update();
+                aclimitSwitches.update();
             }
-            else
-            {
-                WsInputFacade.getInstance().updateOiData();
-            }
-            WsSubsystemContainer.getInstance().update();
-            WsOutputFacade.getInstance().update();
-            WsSolenoidContainer.getInstance().update();
 
-            flywheelEncoders.update(); 
-            limitSwitches.update();
-            
 //            durationTimer.endTimingSection();
             try {
                 Thread.sleep(20);

@@ -424,6 +424,9 @@ public class WsPidController implements IPidController {
     public double getError() {
         return currentError;
     }
+    public double getPreviousError() {
+        return previousError;
+    }
 
     private double calcProportionalTerm() {
         double p_term = p * currentError;
