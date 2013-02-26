@@ -424,6 +424,9 @@ public class WsPidController implements IPidController {
     public double getError() {
         return currentError;
     }
+    public double getPreviousError() {
+        return previousError;
+    }
 
     private double calcProportionalTerm() {
         double p_term = p * currentError;
@@ -449,7 +452,7 @@ public class WsPidController implements IPidController {
         return i_term;
     }
 
-    private double calcDerivativeTerm() {
+    protected double calcDerivativeTerm() {
         double d_term = d * (currentError - previousError);
 
         // Band-limit the differential term

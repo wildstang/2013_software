@@ -12,7 +12,7 @@ public class WsAutonomousStartPositionEnum {
 
     private int index;
     private String description, configName;
-    public static final int POSITION_COUNT = 3;//Remember to change when defining new positions.
+    public static final int POSITION_COUNT = 5;//Remember to change when defining new positions.
 
     public WsAutonomousStartPositionEnum(int index, String configName, String description) {
         this.configName = configName;
