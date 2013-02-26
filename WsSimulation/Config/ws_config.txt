@@ -130,6 +130,7 @@ com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
 
 //ShootSeven
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=0
+com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=0
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.StartDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.AngleTurn=0.0
