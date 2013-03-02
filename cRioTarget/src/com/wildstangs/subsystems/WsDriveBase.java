@@ -56,6 +56,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double DEADBAND = 0.05;
     private static double SLOW_TURN_FORWARD_SPEED;
     private static double SLOW_TURN_BACKWARD_SPEED;
+    private static double MAX_ACCELERATION_DRIVE_PROFILE = 600.0;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
@@ -82,7 +83,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static WsDriveBaseSpeedPidOutput driveSpeedPidOutput;
     private static ContinuousAccelFilter continuousAccelerationFilter;
     //Set low gear top speed to 8.5 ft/ second = 102 inches / second = 2.04 inches/ 20 ms 
-    private static final double MAX_SPEED_INCHES_LOWGEAR = 102.0; 
+    private static double MAX_SPEED_INCHES_LOWGEAR = 90.0; 
     private double goal_velocity = 0.0; 
     private double distance_to_move = 0.0; 
     private double distance_moved = 0.0; 
@@ -96,6 +97,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private double totalPosition = 0.0; 
     private double previousPositionSinceLastReset = 0.0; 
     private double deltaPosition = 0.0; 
+    private double deltaTime = 0.0; 
     private double deltaPosError = 0.0; 
     private double deltaProfilePosition = 0.0; 
     private double previousTime = 0.0; 
@@ -123,6 +125,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter SLOW_TURN_BACKWARD_SPEED_config;
     private static DoubleConfigFileParameter FEED_FORWARD_VELOCITY_CONSTANT_config;
     private static DoubleConfigFileParameter FEED_FORWARD_ACCELERATION_CONSTANT_config;
+    private static DoubleConfigFileParameter MAX_ACCELERATION_DRIVE_PROFILE_config;
+    private static DoubleConfigFileParameter MAX_SPEED_INCHES_LOWGEAR_config;
 
     public WsDriveBase(String name) {
         super(name);
@@ -140,6 +144,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         SLOW_TURN_BACKWARD_SPEED_config = new DoubleConfigFileParameter(this.getClass().getName(), "slow_turn_backward_speed", -0.19);
         FEED_FORWARD_VELOCITY_CONSTANT_config = new DoubleConfigFileParameter(this.getClass().getName(), "feed_forward_velocity_constant", 1.00);
         FEED_FORWARD_ACCELERATION_CONSTANT_config = new DoubleConfigFileParameter(this.getClass().getName(), "feed_forward_acceleration_constant", 0.00018);
+        MAX_ACCELERATION_DRIVE_PROFILE_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_acceleration_drive_profile", 600.0);
+        MAX_SPEED_INCHES_LOWGEAR_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_speed_inches_lowgear", 90.0);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -193,6 +199,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         quickTurnFlag = false;
         this.disableDistancePidControl();
         this.disableHeadingPidControl();
+        motionProfileActive = false; 
+        previousTime =  Timer.getFPGATimestamp(); 
+        currentProfileX = 0.0; 
+        continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
         Logger.getLogger().always(this.getClass().getName(), "init", "Drive Base init");
     }
    
@@ -207,9 +217,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             deltaPosError = this.deltaPosition - (deltaProfilePosition); 
 //            distance_remaining = this.distance_to_move - currentProfileX;
             distance_moved += this.deltaPosition; 
-            distance_remaining = this.distance_to_move - distance_moved;
+            distance_remaining = this.distance_to_move - currentProfileX;
             Logger.getLogger().debug(this.getClass().getName(), "AccelFilter", "distance_left: " + distance_remaining + " p: " + continuousAccelerationFilter.getCurrPos()+ " v: " + continuousAccelerationFilter.getCurrVel() + " a: " + continuousAccelerationFilter.getCurrAcc() );
-            continuousAccelerationFilter.calculateSystem(distance_remaining , currentProfileV, goal_velocity, 600, 102, 0.020);
+            continuousAccelerationFilter.calculateSystem(distance_remaining , currentProfileV, goal_velocity, MAX_ACCELERATION_DRIVE_PROFILE, MAX_SPEED_INCHES_LOWGEAR, deltaTime);
             deltaProfilePosition = continuousAccelerationFilter.getCurrPos() - currentProfileX ;  
             currentProfileX = continuousAccelerationFilter.getCurrPos();
             currentProfileV = continuousAccelerationFilter.getCurrVel();
@@ -286,6 +296,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         
         SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
         SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
+        SmartDashboard.putNumber("Right Distance: ", this.getRightDistance());
         SmartDashboard.putNumber("Gyro angle", this.getGyroAngle());
     }
 
@@ -294,8 +305,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         double newTime = Timer.getFPGATimestamp();
         double leftDistance = this.getLeftDistance();
         double rightDistance = this.getRightDistance();
-        this.deltaPosition = ((leftDistance + rightDistance)/2.0 - previousPositionSinceLastReset); 
-        double deltaTime = (newTime - previousTime); 
+//        this.deltaPosition = ((leftDistance + rightDistance)/2.0 - previousPositionSinceLastReset); 
+        this.deltaPosition = (rightDistance - previousPositionSinceLastReset); 
+        this.deltaTime = (newTime - previousTime); 
         //Do velocity internally in in/sec
         currentVelocity= (deltaPosition / deltaTime ) ;
         currentAcceleration = ((currentVelocity - previousVelocity) / deltaTime); 
@@ -542,10 +554,6 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     public double getRightDistance() {
         double distance = 0.0;
         distance = (rightDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
-        SmartDashboard.putNumber("Right encoder count", this.getRightEncoderValue());
-        SmartDashboard.putNumber("Ticks per rotation", TICKS_PER_ROTATION);
-        SmartDashboard.putNumber("Encoder gear ratio", ENCODER_GEAR_RATIO);
-        SmartDashboard.putNumber("Wheel diameter", WHEEL_DIAMETER);
         return distance;
     }
 
@@ -698,6 +706,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         SLOW_TURN_BACKWARD_SPEED = SLOW_TURN_BACKWARD_SPEED_config.getValue();
         FEED_FORWARD_VELOCITY_CONSTANT = FEED_FORWARD_VELOCITY_CONSTANT_config.getValue();
         FEED_FORWARD_ACCELERATION_CONSTANT = FEED_FORWARD_ACCELERATION_CONSTANT_config.getValue();
+        MAX_ACCELERATION_DRIVE_PROFILE = MAX_ACCELERATION_DRIVE_PROFILE_config.getValue();
+        MAX_SPEED_INCHES_LOWGEAR = MAX_SPEED_INCHES_LOWGEAR_config.getValue();
         DEADBAND = DEADBAND_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
