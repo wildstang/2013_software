@@ -66,7 +66,7 @@ public class Level {
             return defaultLevel;
         } 
             
-        String s = sLevel.toUpperCase();
+        String s = sLevel.toUpperCase().replace('"', ' ').trim();
         
         if (s.equals ("ALWAYS")) { return Level.ALWAYS; }
         if (s.equals ("OFF")) { return OFF; }

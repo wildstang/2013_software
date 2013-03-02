@@ -45,6 +45,7 @@ public class RobotTemplate extends IterativeRobot {
         WsInputFacade.getInstance();
         WsOutputFacade.getInstance();
         WsSubsystemContainer.getInstance().init();
+        Logger.getLogger().readConfig();
         WsAutonomousManager.getInstance();
         Logger.getLogger().always(this.getClass().getName(), "robotInit", "Startup Completed");
         startupTimer.endTimingSection();
@@ -64,9 +65,11 @@ public class RobotTemplate extends IterativeRobot {
             System.out.println(e.getMessage());
         }
         WsSubsystemContainer.getInstance().init();
+        Logger.getLogger().readConfig();
         //WsConfigFacade.getInstance().dumpConfigData();
         initTimer.endTimingSection();
         Logger.getLogger().always(this.getClass().getName(), "disabledInit", "Disabled Init Complete");
+        
     }
 
     public void disabledPeriodic() {
@@ -75,6 +78,7 @@ public class RobotTemplate extends IterativeRobot {
 
     public void autonomousInit() {
         WsSubsystemContainer.getInstance().init();
+        Logger.getLogger().readConfig();
         WsAutonomousManager.getInstance().startCurrentProgram();
     }
 
@@ -95,6 +99,7 @@ public class RobotTemplate extends IterativeRobot {
      */
     public void teleopInit() {
         WsSubsystemContainer.getInstance().init();
+        Logger.getLogger().readConfig();
         periodTimer.startTimingSection();
     }
 
