@@ -144,7 +144,8 @@ public class WsIntake extends WsSubsystem implements IObserver {
         useTimeDelay = useDelay.getValue();
     }
 
-    public boolean getFunnelatorLimitSwitch() {
+    public boolean getFunnelatorLimitSwitch() 
+    {
         return funnelatorLimitSwitch;
     }
 
