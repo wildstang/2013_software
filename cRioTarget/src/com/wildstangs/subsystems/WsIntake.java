@@ -1,5 +1,6 @@
 package com.wildstangs.subsystems;
 
+import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
@@ -22,6 +23,8 @@ public class WsIntake extends WsSubsystem implements IObserver {
 
     private DoubleConfigFileParameter switchDelay = new DoubleConfigFileParameter(
             this.getClass().getName(), "FunnelatorSwitchDelay", 15.0);
+    private BooleanConfigFileParameter useDelay = new BooleanConfigFileParameter(
+            this.getClass().getName(), "UseTimeDelay", true);
     
     private double switchDelayTime;
     private boolean useTimeDelay = true;
@@ -58,6 +61,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
         subject.attach(this);
         
         switchDelayTime = switchDelay.getValue();
+        useTimeDelay = useDelay.getValue();
     }
 
     public void init() {
@@ -75,7 +79,10 @@ public class WsIntake extends WsSubsystem implements IObserver {
             //Once the right limit switch has transitioned to false, it is safe to let the second frisbee through
             if (false == leftAccumulatorLimitSwitch) {
                 counting = true;
-                countTo = Timer.getFPGATimestamp() + switchDelayTime;
+                if(useTimeDelay)
+                {
+                    countTo = Timer.getFPGATimestamp() + switchDelayTime;
+                }
             } //Otherwise if the right switch is still true, leave up the finger for now
             else {
                 controlValveState = true;
@@ -116,7 +123,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
             SmartDashboard.putNumber("Funnelator roller", 0.0);
         }
         
-        if(counting)
+        if(useTimeDelay && counting)
         {
             if(Timer.getFPGATimestamp() >= countTo)
             {
@@ -131,7 +138,10 @@ public class WsIntake extends WsSubsystem implements IObserver {
         SmartDashboard.putBoolean("FunnelatorLimitSwitch: ", funnelatorLimitSwitch);
     }
 
-    public void notifyConfigChange() {
+    public void notifyConfigChange() 
+    {
+        switchDelayTime = switchDelay.getValue();
+        useTimeDelay = useDelay.getValue();
     }
 
     public boolean getFunnelatorLimitSwitch() {
@@ -184,7 +194,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
             funnelatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
             if(funnelatorLimitSwitch == false)
             {
-                if(counting)
+                if(!useTimeDelay && counting)
                 {
                     //Unlatch the button states and bring down the funnelator finger
                     latchAccumulatorSwitches = false;
