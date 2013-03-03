@@ -93,9 +93,6 @@ com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.00216
 //com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.0
 com.wildstangs.subsystems.WsDriveBase.max_acceleration_drive_profile=200.0
 com.wildstangs.subsystems.WsDriveBase.max_speed_inches_lowgear=94.0
-//velocity in in/sec
-com.wildstangs.subsystems.WsDriveBase.deceleration_velocity_threshold=84.0
-com.wildstangs.subsystems.WsDriveBase.deceleration_motor_speed=0.3
 
 //Shooter
 com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=1000
