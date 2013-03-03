@@ -75,10 +75,12 @@ public class Logger {
     }
 
     public void readConfig() {
-        if (logimpl.updateConfig(logIp.getValue(), logPort.getValue())) {
-            System.out.println("Unable to update Logger config.");
-        }
         remoteLoggingEnabled = logToServer.getValue();
+        if (remoteLoggingEnabled) {
+            if (logimpl.updateConfig(logIp.getValue(), logPort.getValue())) {
+                System.out.println("Unable to update Logger config.");
+            }
+        }
         stdoutLoggingEnabled = logToStdout.getValue();
         logLevel = (Level.toLevel(configLogLevel.getValue(), Level.toLevel(logLevel))).toInt();
     }
