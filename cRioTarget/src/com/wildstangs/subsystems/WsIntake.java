@@ -76,7 +76,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
     public void update() {
         //If this is true, the driver just brought the accumulator up and we have locked the switch states
         if (true == latchAccumulatorSwitches) {
-            //Once the right limit switch has transitioned to false, it is safe to let the second frisbee through
+            //Once the left limit switch has transitioned to false, it is safe to let the second frisbee through
             if (false == leftAccumulatorLimitSwitch) {
                 counting = true;
                 if(useTimeDelay)
