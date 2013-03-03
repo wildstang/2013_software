@@ -499,9 +499,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         
         //If our throttle is within the zero deadband and our velocity is above the threshold,
         //use deceleration to slow us down
-        if(Math.abs(driveBaseThrottleValue) < DEADBAND && Math.abs(currentProfileV) > DECELERATION_VELOCITY_THRESHOLD) {
+        if(Math.abs(driveBaseThrottleValue) < DEADBAND && Math.abs(currentVelocity) > DECELERATION_VELOCITY_THRESHOLD) {
             //We are above the velocity threshold, apply a small inverse motor speed to decelerate
-            if (currentProfileV > 0) {
+            if (currentVelocity > 0) {
                 //We are moving forward, apply a negative motor value
                 rightMotorSpeed = -DECELERATION_MOTOR_SPEED;
                 leftMotorSpeed = -DECELERATION_MOTOR_SPEED;
@@ -510,7 +510,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 rightMotorSpeed = DECELERATION_MOTOR_SPEED;
                 leftMotorSpeed = DECELERATION_MOTOR_SPEED;
             }
-        } else if (Math.abs(driveBaseThrottleValue) < DEADBAND && Math.abs(currentProfileV) < DECELERATION_VELOCITY_THRESHOLD) {
+        } else if (Math.abs(driveBaseThrottleValue) < DEADBAND && Math.abs(currentVelocity) < DECELERATION_VELOCITY_THRESHOLD) {
             //We are below the velocity threshold, zero the motor values to brake
             rightMotorSpeed = 0.0;
             leftMotorSpeed = 0.0;
