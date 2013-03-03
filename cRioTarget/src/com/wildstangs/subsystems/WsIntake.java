@@ -1,5 +1,7 @@
 package com.wildstangs.subsystems;
 
+import com.wildstangs.config.BooleanConfigFileParameter;
+import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
@@ -10,6 +12,7 @@ import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -18,13 +21,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class WsIntake extends WsSubsystem implements IObserver {
 
+    private DoubleConfigFileParameter switchDelay = new DoubleConfigFileParameter(
+            this.getClass().getName(), "FingerDelayFromAccumulatorSwitch", 15.0);
+    private BooleanConfigFileParameter useDelay = new BooleanConfigFileParameter(
+            this.getClass().getName(), "UseTimeDelay", true);
+    
+    private double switchDelayTime;
+    private boolean useTimeDelay = true;
+    
     private static final boolean controlValveDefaultState = false;
-    boolean controlValveState;
-    boolean motorForward = false, motorBack = false;
-    boolean rightAccumulatorLimitSwitch = false, leftAccumulatorLimitSwitch = false,
+    private boolean controlValveState;
+    private boolean motorForward = false, motorBack = false;
+    private boolean rightAccumulatorLimitSwitch = false, leftAccumulatorLimitSwitch = false,
             funnelatorLimitSwitch = false;
-    boolean latchAccumulatorSwitches = false;
-    boolean overrideButtonState;
+    private boolean latchAccumulatorSwitches = false;
+    private boolean overrideButtonState;
+    private boolean counting = false;
+    private double countTo = 0;
 
     public WsIntake(String name) {
         super(name);
@@ -46,6 +59,9 @@ public class WsIntake extends WsSubsystem implements IObserver {
 
         subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
+        
+        switchDelayTime = switchDelay.getValue();
+        useTimeDelay = useDelay.getValue();
     }
 
     public void init() {
@@ -53,16 +69,21 @@ public class WsIntake extends WsSubsystem implements IObserver {
         overrideButtonState = false;
         motorForward = false;
         motorBack = false;
+        countTo = 0;
+        counting = false;
     }
 
     public void update() {
         //If this is true, the driver just brought the accumulator up and we have locked the switch states
         if (true == latchAccumulatorSwitches) {
             //Once the left limit switch has transitioned to false, it is safe to let the second frisbee through
-            if (false == leftAccumulatorLimitSwitch) {
-                //Unlatch the button states and bring down the funnelator finger
-                latchAccumulatorSwitches = false;
-                controlValveState = false;
+            if (false == leftAccumulatorLimitSwitch) 
+            {
+                if(useTimeDelay)
+                {
+                    counting = true;
+                    countTo = Timer.getFPGATimestamp() + switchDelayTime;
+                }
             } //Otherwise if the right switch is still true, leave up the finger for now
             else {
                 controlValveState = true;
@@ -102,16 +123,31 @@ public class WsIntake extends WsSubsystem implements IObserver {
                     .set(null, Double.valueOf(0.0));
             SmartDashboard.putNumber("Funnelator roller", 0.0);
         }
-
+        
+        if(useTimeDelay && counting)
+        {
+            if(Timer.getFPGATimestamp() >= countTo)
+            {
+                //Unlatch the button states and bring down the funnelator finger
+                latchAccumulatorSwitches = false;
+                controlValveState = false;
+                counting = false;
+            }
+        }
+        
         SmartDashboard.putBoolean("RightAccumulatorLimitSwitch: ", rightAccumulatorLimitSwitch);
         SmartDashboard.putBoolean("LeftAccumulatorLimitSwitch: ", leftAccumulatorLimitSwitch);
         SmartDashboard.putBoolean("FunnelatorLimitSwitch: ", funnelatorLimitSwitch);
     }
 
-    public void notifyConfigChange() {
+    public void notifyConfigChange() 
+    {
+        switchDelayTime = switchDelay.getValue();
+        useTimeDelay = useDelay.getValue();
     }
 
-    public boolean getFunnelatorLimitSwitch() {
+    public boolean getFunnelatorLimitSwitch() 
+    {
         return funnelatorLimitSwitch;
     }
 
@@ -159,6 +195,15 @@ public class WsIntake extends WsSubsystem implements IObserver {
         } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
                 getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null))) {
             funnelatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
+            if(funnelatorLimitSwitch == false)
+            {
+                if(!useTimeDelay && controlValveState)
+                {
+                    //Unlatch the button states and bring down the funnelator finger
+                    latchAccumulatorSwitches = false;
+                    controlValveState = false;
+                }
+            }
         }
     }
 }
