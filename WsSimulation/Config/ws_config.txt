@@ -76,7 +76,7 @@ com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.210
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
-com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.125
+com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.750
 com.wildstangs.subsystems.WsDriveBase.heading_high_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.max_high_gear_percent=0.800
 com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput.startState=0.0
@@ -86,14 +86,17 @@ com.wildstangs.outputfacade.outputs.WsSolenoid.Kicker.shouldStartTrue=false
 com.wildstangs.outputfacade.outputs.WsSolenoid.AccumulatorSolenoid.shouldStartTrue=false
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
 com.wildstangs.subsystems.WsDriveBase.encoder_gear_ratio=6.0
-com.wildstangs.subsystems.WsDriveBase.slow_turn_forward_speed=0.22
-com.wildstangs.subsystems.WsDriveBase.slow_turn_backward_speed=-0.19
+com.wildstangs.subsystems.WsDriveBase.slow_turn_forward_speed=0.30
+com.wildstangs.subsystems.WsDriveBase.slow_turn_backward_speed=-0.26
 com.wildstangs.subsystems.WsDriveBase.deadband=0.10
 com.wildstangs.subsystems.WsDriveBase.feed_forward_velocity_constant=1.0
 com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.00216
 //com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.0
 com.wildstangs.subsystems.WsDriveBase.max_acceleration_drive_profile=200.0
 com.wildstangs.subsystems.WsDriveBase.max_speed_inches_lowgear=94.0
+//Velocity is in ft/sec
+com.wildstangs.subsystems.WsDriveBase.deceleration_velocity_threshold=48.0
+com.wildstangs.subsystems.WsDriveBase.deceleration_motor_speed=0.3
 
 //Shooter
 com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=1000
