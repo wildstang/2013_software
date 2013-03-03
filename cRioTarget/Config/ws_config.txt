@@ -3,7 +3,7 @@ com.wildstangs.logger.Logger.logIp=10.1.11.22
 com.wildstangs.logger.Logger.port=17654
 com.wildstangs.logger.Logger.logToServer=false
 com.wildstangs.logger.Logger.logToStdout=true
-com.wildstangs.logger.Logger.logLevel="ALL"
+com.wildstangs.logger.Logger.logLevel="OFF"
 com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.
 com.wildstangs.inputfacade.inputs.WsDigitalInput.startState=false
 
@@ -53,7 +53,7 @@ com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minInpu
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minOnTargetTime=0.1
 
 //Speed PID
-com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.p=0.001
+com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.p=0.000
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.i=0.0
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.d=0.00
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.errorIncrement=1.0
@@ -70,7 +70,7 @@ com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.minO
 
 
 //Drivebase 
-com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.0
+com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.210
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
@@ -83,13 +83,15 @@ com.wildstangs.outputfacade.outputs.WsSolenoid.FrisbieControl.shouldStartTrue=fa
 com.wildstangs.outputfacade.outputs.WsSolenoid.Kicker.shouldStartTrue=false
 com.wildstangs.outputfacade.outputs.WsSolenoid.AccumulatorSolenoid.shouldStartTrue=false
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
-com.wildstangs.subsystems.WsDriveBase.encoder_gear_ratio=7.5
+com.wildstangs.subsystems.WsDriveBase.encoder_gear_ratio=6.0
 com.wildstangs.subsystems.WsDriveBase.slow_turn_forward_speed=0.22
 com.wildstangs.subsystems.WsDriveBase.slow_turn_backward_speed=-0.19
 com.wildstangs.subsystems.WsDriveBase.deadband=0.10
-com.wildstangs.subsystems.WsDriveBase.feed_forward_velocity_constant=1.1
-com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.00018
-
+com.wildstangs.subsystems.WsDriveBase.feed_forward_velocity_constant=1.0
+com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.00216
+//com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.0
+com.wildstangs.subsystems.WsDriveBase.max_acceleration_drive_profile=200.0
+com.wildstangs.subsystems.WsDriveBase.max_speed_inches_lowgear=94.0
 
 //Shooter
 com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=1000
@@ -106,13 +108,13 @@ com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 //Shooter Presets
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed=1600
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed=2200
-com.wildstangs.subsystems.WsShooter.PresetTowerShooterAngle=true
-com.wildstangs.subsystems.WsShooter.PresetLongLowEnterSpeed=4000
-com.wildstangs.subsystems.WsShooter.PresetLongLowExitSpeed=4500
-com.wildstangs.subsystems.WsShooter.PresetLongLowAngle=false
-com.wildstangs.subsystems.WsShooter.PresetShortHighEnterSpeed=1700
-com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed=2300
-com.wildstangs.subsystems.WsShooter.PresetShortHighAngle=true
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterAngle=1
+com.wildstangs.subsystems.WsShooter.PresetLongLowEnterSpeed=3000
+com.wildstangs.subsystems.WsShooter.PresetLongLowExitSpeed=3000
+com.wildstangs.subsystems.WsShooter.PresetLongLowAngle=0
+com.wildstangs.subsystems.WsShooter.PresetShortHighEnterSpeed=2500
+com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed=2500
+com.wildstangs.subsystems.WsShooter.PresetShortHighAngle=1
 
 //Loading Ramp
 com.wildstangs.subsystems.WsLoadingRamp.AngleUp=76.5
@@ -129,14 +131,13 @@ com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
 // XXX XXX   XX XX    XX    XXXXX  XXX XXX
 
 //ShootSeven
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=0
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=3
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=28
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.StartDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.AngleTurn=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.SecondDrive=0.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.ThirdDrive=17.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FourthDrive=60.5
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.ThirdDrive=40.0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FourthDrive=110.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FifthDrive=-60.5
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.ThirdFrisbeeDelay=100
@@ -149,8 +150,8 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBa
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.SecondExitWheelSetPoint=4500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.SecondShooterAngle=false
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FunnelatorLoadDelay=2000
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.RaiseAccumulatorDelay=2000
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FunnelatorLoadDelay=1000
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.RaiseAccumulatorDelay=3000
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.LowerAccumulatorDelay=2000
 
 //Drive distance
@@ -158,6 +159,7 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBa
 com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance.distance=100
 
 //Drive Distance Motion Profile
+com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=3
 com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.distance=100
 
 //Drive heading
