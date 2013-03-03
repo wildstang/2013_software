@@ -107,15 +107,15 @@ com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 
 
 //Shooter Presets
-com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed=1600
-com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed=2200
-com.wildstangs.subsystems.WsShooter.PresetTowerShooterAngle=1
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed=2000
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed=2000
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterAngle=true
 com.wildstangs.subsystems.WsShooter.PresetLongLowEnterSpeed=3000
 com.wildstangs.subsystems.WsShooter.PresetLongLowExitSpeed=3000
-com.wildstangs.subsystems.WsShooter.PresetLongLowAngle=0
+com.wildstangs.subsystems.WsShooter.PresetLongLowAngle=false
 com.wildstangs.subsystems.WsShooter.PresetShortHighEnterSpeed=2500
 com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed=2500
-com.wildstangs.subsystems.WsShooter.PresetShortHighAngle=1
+com.wildstangs.subsystems.WsShooter.PresetShortHighAngle=true
 
 //Loading Ramp
 com.wildstangs.subsystems.WsLoadingRamp.AngleUp=76.5
