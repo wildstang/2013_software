@@ -280,6 +280,13 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
         ENTER_GEAR_RATIO = ENTER_GEAR_RATIO_config.getValue();
         EXIT_GEAR_RATIO = EXIT_GEAR_RATIO_config.getValue();
+        
+        PresetTowerShooterStation = new Preset(PresetTowerShooterEnterSpeed.getValue(),
+            PresetTowerShooterExitSpeed.getValue(), translatePresetConfigAngle(PresetTowerShooterAngle.getValue()));
+        PresetLongLow = new Preset(PresetLongLowEnterSpeed.getValue(),
+            PresetLongLowExitSpeed.getValue(), translatePresetConfigAngle(PresetLongLowAngle.getValue()));
+        PresetShortHigh = new Preset(PresetShortHighEnterSpeed.getValue(),
+            PresetShortHighExitSpeed.getValue(), translatePresetConfigAngle(PresetShortHighAngle.getValue()));
     }
 
     public void setWheelEnterSetPoint(int setPoint) {
