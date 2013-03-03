@@ -510,7 +510,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 rightMotorSpeed = DECELERATION_MOTOR_SPEED;
                 leftMotorSpeed = DECELERATION_MOTOR_SPEED;
             }
-        } else if (Math.abs(driveBaseThrottleValue) < DEADBAND && Math.abs(currentVelocity) < DECELERATION_VELOCITY_THRESHOLD) {
+        } else if (Math.abs(driveBaseThrottleValue) < DEADBAND && Math.abs(currentVelocity) <= DECELERATION_VELOCITY_THRESHOLD) {
             //We are below the velocity threshold, zero the motor values to brake
             rightMotorSpeed = 0.0;
             leftMotorSpeed = 0.0;
