@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class WsIntake extends WsSubsystem implements IObserver {
 
     private DoubleConfigFileParameter switchDelay = new DoubleConfigFileParameter(
-            this.getClass().getName(), "FunnelatorSwitchDelay", 15.0);
+            this.getClass().getName(), "FingerDelayFromAccumulatorSwitch", 15.0);
     private BooleanConfigFileParameter useDelay = new BooleanConfigFileParameter(
             this.getClass().getName(), "UseTimeDelay", true);
     
@@ -195,7 +195,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
             funnelatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
             if(funnelatorLimitSwitch == false)
             {
-                if(!useTimeDelay && counting)
+                if(!useTimeDelay && controlValveState)
                 {
                     //Unlatch the button states and bring down the funnelator finger
                     latchAccumulatorSwitches = false;
