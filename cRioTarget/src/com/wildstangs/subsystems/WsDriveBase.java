@@ -104,7 +104,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private double previousVelocity = 0.0; 
     private double currentVelocity = 0.0; 
     private double currentAcceleration = 0.0; 
-     
+    private double DECELERATION_VELOCITY_THRESHOLD = 48; //Velocity in in/sec
+    private double DECELERATION_MOTOR_SPEED = 0.3;
     
     private static WsPidController driveDistancePid;
     private static WsDriveBaseDistancePidInput driveDistancePidInput;
@@ -127,6 +128,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter FEED_FORWARD_ACCELERATION_CONSTANT_config;
     private static DoubleConfigFileParameter MAX_ACCELERATION_DRIVE_PROFILE_config;
     private static DoubleConfigFileParameter MAX_SPEED_INCHES_LOWGEAR_config;
+    private static DoubleConfigFileParameter DECELERATION_VELOCITY_THRESHOLD_config;
+    private static DoubleConfigFileParameter DECELERATION_MOTOR_SPEED_config;
 
     public WsDriveBase(String name) {
         super(name);
@@ -146,6 +149,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         FEED_FORWARD_ACCELERATION_CONSTANT_config = new DoubleConfigFileParameter(this.getClass().getName(), "feed_forward_acceleration_constant", 0.00018);
         MAX_ACCELERATION_DRIVE_PROFILE_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_acceleration_drive_profile", 600.0);
         MAX_SPEED_INCHES_LOWGEAR_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_speed_inches_lowgear", 90.0);
+        DECELERATION_VELOCITY_THRESHOLD_config = new DoubleConfigFileParameter(this.getClass().getName(), "deceleration_velocity_threshold", 48.0);
+        DECELERATION_MOTOR_SPEED_config = new DoubleConfigFileParameter(this.getClass().getName(), "deceleration_motor_speed", 0.3);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -491,6 +496,25 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 leftMotorSpeed = NEG_MAX_MOTOR_OUTPUT;
             }
         }
+        
+        //If our throttle is within the zero deadband and our velocity is above the threshold,
+        //use deceleration to slow us down
+        if(Math.abs(driveBaseThrottleValue) < DEADBAND && Math.abs(currentVelocity) > DECELERATION_VELOCITY_THRESHOLD) {
+            //We are above the velocity threshold, apply a small inverse motor speed to decelerate
+            if (currentVelocity > 0) {
+                //We are moving forward, apply a negative motor value
+                rightMotorSpeed = -DECELERATION_MOTOR_SPEED;
+                leftMotorSpeed = -DECELERATION_MOTOR_SPEED;
+            } else {
+                //We are moving backward, apply a positive motor value
+                rightMotorSpeed = DECELERATION_MOTOR_SPEED;
+                leftMotorSpeed = DECELERATION_MOTOR_SPEED;
+            }
+        } else if (Math.abs(driveBaseThrottleValue) < DEADBAND && Math.abs(currentVelocity) <= DECELERATION_VELOCITY_THRESHOLD) {
+            //We are below the velocity threshold, zero the motor values to brake
+            rightMotorSpeed = 0.0;
+            leftMotorSpeed = 0.0;
+        }
 
         //If we're within the deadband, zero out the throttle and heading
         if ((leftMotorSpeed < DEADBAND && leftMotorSpeed > -DEADBAND) && (rightMotorSpeed < DEADBAND && rightMotorSpeed > -DEADBAND)) {
@@ -709,6 +733,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         MAX_ACCELERATION_DRIVE_PROFILE = MAX_ACCELERATION_DRIVE_PROFILE_config.getValue();
         MAX_SPEED_INCHES_LOWGEAR = MAX_SPEED_INCHES_LOWGEAR_config.getValue();
         DEADBAND = DEADBAND_config.getValue();
+        DECELERATION_VELOCITY_THRESHOLD = DECELERATION_VELOCITY_THRESHOLD_config.getValue();
+        DECELERATION_MOTOR_SPEED = DECELERATION_MOTOR_SPEED_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
         driveSpeedPid.notifyConfigChange();
