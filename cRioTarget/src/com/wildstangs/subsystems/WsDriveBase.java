@@ -237,7 +237,13 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                                     + FEED_FORWARD_VELOCITY_CONSTANT*(continuousAccelerationFilter.getCurrVel()/ MAX_SPEED_INCHES_LOWGEAR )
                                     + FEED_FORWARD_ACCELERATION_CONSTANT*continuousAccelerationFilter.getCurrAcc(); 
             
-            SmartDashboard.putNumber("Motion Profile Throttle", throttleValue);
+            if (((currentProfileV < DECELERATION_VELOCITY_THRESHOLD) && (currentProfileV > 0) && (currentProfileA < 0 )) ||
+               ((currentProfileV > -DECELERATION_VELOCITY_THRESHOLD) && (currentProfileV < 0) && (currentProfileA > 0 )))
+            
+            {
+                throttleValue =0.0; 
+            }
+            
             //Update the throttle value outside the function so that the acceleration factor is not applied. 
             driveBaseThrottleValue = throttleValue; 
             if (driveBaseThrottleValue > MAX_INPUT_THROTTLE_VALUE) {
@@ -245,6 +251,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             } else if (driveBaseThrottleValue < MAX_NEG_INPUT_THROTTLE_VALUE) {
                 driveBaseThrottleValue = MAX_NEG_INPUT_THROTTLE_VALUE;
             }
+            SmartDashboard.putNumber("Motion Profile Throttle", driveBaseThrottleValue);
             updateDriveMotors();
         } else if (true == driveDistancePidEnabled) {
             //We are driving by distance under PID control

@@ -197,7 +197,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
             funnelatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
             if(funnelatorLimitSwitch == false)
             {
-                if(!useTimeDelay && controlValveState)
+                if(!useTimeDelay && controlValveState && !leftAccumulatorLimitSwitch)
                 {
                     //Unlatch the button states and bring down the funnelator finger
                     latchAccumulatorSwitches = false;

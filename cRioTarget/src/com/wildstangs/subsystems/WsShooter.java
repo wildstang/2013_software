@@ -233,11 +233,11 @@ public class WsShooter extends WsSubsystem implements IObserver {
         } else {
             victorExit.set(null, Double.valueOf(0.0));
         }
-        if (((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
-                .getKickerValue() == true) {
-            victorExit.set(null, Double.valueOf(1.0));
-            victorEnter.set(null, Double.valueOf(1.0));
-        }
+//        if (((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
+//                .getKickerValue() == true) {
+//            victorExit.set(null, Double.valueOf(1.0));
+//            victorEnter.set(null, Double.valueOf(1.0));
+//        }
         if (((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
                 .isHopperUp() == false) {
             victorExit.set(null, Double.valueOf(0.0));
@@ -356,10 +356,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
             double previousValue = ((DoubleSubject) subjectThatCaused).getPreviousValue();
             if (previousValue < 0.25 && currentValue > 0.25) {
                 //We transitioned from below to above the positive threshold, increase the speed by by 100
-                wheelEnterSetPoint += 100;
+                wheelEnterSetPoint += 50;
             } else if (previousValue > -0.25 && currentValue < -0.25) {
                 //We transitioned from above to below the negative threshold, decrease the speed by 100
-                wheelEnterSetPoint -= 100;
+                wheelEnterSetPoint -= 50;
             }
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT) {
@@ -367,10 +367,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
             double previousValue = ((DoubleSubject) subjectThatCaused).getPreviousValue();
             if (previousValue < 0.25 && currentValue > 0.25) {
                 //We transitioned from below to above the positive threshold, increase the speed by by 100
-                wheelExitSetPoint += 100;
+                wheelExitSetPoint += 50;
             } else if (previousValue > -0.25 && currentValue < -0.25) {
                 //We transitioned from above to below the negative threshold, decrease the speed by 100
-                wheelExitSetPoint -= 100;
+                wheelExitSetPoint -= 50;
             }
         }
     }
