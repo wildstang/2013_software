@@ -26,7 +26,7 @@ public class WsAutonomousProgramDriveDistanceMotionProfile extends WsAutonomousP
     private DoubleConfigFileParameter distance;
 
     public WsAutonomousProgramDriveDistanceMotionProfile() {
-        super(9);
+        super(3);
         distance = new DoubleConfigFileParameter(this.getClass().getName(), "distance", 10.0);
     }
 
@@ -34,12 +34,12 @@ public class WsAutonomousProgramDriveDistanceMotionProfile extends WsAutonomousP
         programSteps[0] = new WsAutonomousStepStartDriveUsingMotionProfile(distance.getValue(), 0.0);
         programSteps[1] = new WsAutonomousStepWaitForDriveMotionProfile(); 
         programSteps[2] = new WsAutonomousStepStopDriveUsingMotionProfile();
-        programSteps[3] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[4] = new WsAutonomousStepSetDriveDistancePidSetpoint(distance.getValue());
-        programSteps[5] = new WsAutonomousStepWaitForDriveDistancePid();
-        programSteps[6] = new WsAutonomousStepStartDriveUsingMotionProfile(distance.getValue(), 0.0);
-        programSteps[7] = new WsAutonomousStepWaitForDriveMotionProfile(); 
-        programSteps[8] = new WsAutonomousStepStopDriveUsingMotionProfile();
+//        programSteps[3] = new WsAutonomousStepEnableDriveDistancePid();
+//        programSteps[4] = new WsAutonomousStepSetDriveDistancePidSetpoint(distance.getValue());
+//        programSteps[5] = new WsAutonomousStepWaitForDriveDistancePid();
+//        programSteps[6] = new WsAutonomousStepStartDriveUsingMotionProfile(distance.getValue(), 0.0);
+//        programSteps[7] = new WsAutonomousStepWaitForDriveMotionProfile(); 
+//        programSteps[8] = new WsAutonomousStepStopDriveUsingMotionProfile();
     }
 
     public String toString() {

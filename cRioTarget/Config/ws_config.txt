@@ -55,7 +55,7 @@ com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minInpu
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseHeadingPid.minOnTargetTime=0.1
 
 //Speed PID
-com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.p=0.100
+com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.p=0.00
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.i=0.0
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.d=0.00
 com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.errorIncrement=1.0
@@ -90,13 +90,14 @@ com.wildstangs.subsystems.WsDriveBase.slow_turn_forward_speed=0.30
 com.wildstangs.subsystems.WsDriveBase.slow_turn_backward_speed=-0.26
 com.wildstangs.subsystems.WsDriveBase.deadband=0.10
 com.wildstangs.subsystems.WsDriveBase.feed_forward_velocity_constant=1.0
-com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.00216
-//com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.0
+//com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.00216
+com.wildstangs.subsystems.WsDriveBase.feed_forward_acceleration_constant=0.0
 com.wildstangs.subsystems.WsDriveBase.max_acceleration_drive_profile=200.0
-com.wildstangs.subsystems.WsDriveBase.max_speed_inches_lowgear=65.0
+com.wildstangs.subsystems.WsDriveBase.max_speed_inches_lowgear=94.0
 //Velocity is in ft/sec
 com.wildstangs.subsystems.WsDriveBase.deceleration_velocity_threshold=48.0
 com.wildstangs.subsystems.WsDriveBase.deceleration_motor_speed=0.3
+com.wildstangs.subsystems.WsDriveBase.stopping_distance_at_max_speed_lowgear=1.0
 
 //Shooter
 com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=100
@@ -164,8 +165,8 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBa
 com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance.distance=100
 
 //Drive Distance Motion Profile
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=3
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.distance=40
+com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=0
+com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.distance=60
 
 //Drive heading
 //Heading is in degrees

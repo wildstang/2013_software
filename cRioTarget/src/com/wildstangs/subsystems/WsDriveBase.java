@@ -57,6 +57,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double SLOW_TURN_FORWARD_SPEED;
     private static double SLOW_TURN_BACKWARD_SPEED;
     private static double MAX_ACCELERATION_DRIVE_PROFILE = 600.0;
+    private static double STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR = 10.0;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
@@ -130,6 +131,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter MAX_SPEED_INCHES_LOWGEAR_config;
     private static DoubleConfigFileParameter DECELERATION_VELOCITY_THRESHOLD_config;
     private static DoubleConfigFileParameter DECELERATION_MOTOR_SPEED_config;
+    private static DoubleConfigFileParameter STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config;
 
     public WsDriveBase(String name) {
         super(name);
@@ -151,6 +153,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         MAX_SPEED_INCHES_LOWGEAR_config = new DoubleConfigFileParameter(this.getClass().getName(), "max_speed_inches_lowgear", 90.0);
         DECELERATION_VELOCITY_THRESHOLD_config = new DoubleConfigFileParameter(this.getClass().getName(), "deceleration_velocity_threshold", 48.0);
         DECELERATION_MOTOR_SPEED_config = new DoubleConfigFileParameter(this.getClass().getName(), "deceleration_motor_speed", 0.3);
+        STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config = new DoubleConfigFileParameter(this.getClass().getName(), "stopping_distance_at_max_speed_lowgear", 10.0);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -220,10 +223,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             setDriveSpeedPidSetpoint(continuousAccelerationFilter.getCurrVel());
             //Update system to get feed forward terms
             deltaPosError = this.deltaPosition - (deltaProfilePosition); 
-//            distance_remaining = this.distance_to_move - currentProfileX;
             distance_moved += this.deltaPosition; 
-            distance_remaining = this.distance_to_move - currentProfileX;
-            //Logger.getLogger().debug(this.getClass().getName(), "AccelFilter", "distance_left: " + distance_remaining + " p: " + continuousAccelerationFilter.getCurrPos()+ " v: " + continuousAccelerationFilter.getCurrVel() + " a: " + continuousAccelerationFilter.getCurrAcc() );
+//            distance_remaining = this.distance_to_move - currentProfileX;
+            distance_remaining = this.distance_to_move - distance_moved;
+            Logger.getLogger().debug(this.getClass().getName(), "AccelFilter", "distance_left: " + distance_remaining + " p: " + continuousAccelerationFilter.getCurrPos()+ " v: " + continuousAccelerationFilter.getCurrVel() + " a: " + continuousAccelerationFilter.getCurrAcc() );
             continuousAccelerationFilter.calculateSystem(distance_remaining , currentProfileV, goal_velocity, MAX_ACCELERATION_DRIVE_PROFILE, MAX_SPEED_INCHES_LOWGEAR, deltaTime);
             deltaProfilePosition = continuousAccelerationFilter.getCurrPos() - currentProfileX ;  
             currentProfileX = continuousAccelerationFilter.getCurrPos();
@@ -237,8 +240,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                                     + FEED_FORWARD_VELOCITY_CONSTANT*(continuousAccelerationFilter.getCurrVel()/ MAX_SPEED_INCHES_LOWGEAR )
                                     + FEED_FORWARD_ACCELERATION_CONSTANT*continuousAccelerationFilter.getCurrAcc(); 
             
-            if (((currentProfileV < DECELERATION_VELOCITY_THRESHOLD) && (currentProfileV > 0) && (currentProfileA < 0 )) ||
-               ((currentProfileV > -DECELERATION_VELOCITY_THRESHOLD) && (currentProfileV < 0) && (currentProfileA > 0 )))
+            if (((distance_remaining < STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR) && (currentProfileV > 0) && (currentProfileA < 0 )) ||
+               ((distance_remaining > -STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR) && (currentProfileV < 0) && (currentProfileA > 0 )))
             
             {
                 throttleValue =0.0; 
@@ -320,6 +323,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 //        this.deltaPosition = ((leftDistance + rightDistance)/2.0 - previousPositionSinceLastReset); 
         this.deltaPosition = (rightDistance - previousPositionSinceLastReset); 
         this.deltaTime = (newTime - previousTime); 
+        if (this.deltaTime > 0.060){ 
+            this.deltaTime = 0.060; 
+        }
         //Do velocity internally in in/sec
         currentVelocity= (deltaPosition / deltaTime ) ;
         currentAcceleration = ((currentVelocity - previousVelocity) / deltaTime); 
@@ -330,7 +336,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
         totalPosition += deltaPosition; 
         if ( Math.abs(deltaPosition) > 0.005 ){
-            //Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + "dpp:" + deltaProfilePosition +  " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
+            Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + "dpp:" + deltaProfilePosition +  " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
         }
         previousPositionSinceLastReset += deltaPosition; 
         previousTime = newTime; 
@@ -742,6 +748,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         DEADBAND = DEADBAND_config.getValue();
         DECELERATION_VELOCITY_THRESHOLD = DECELERATION_VELOCITY_THRESHOLD_config.getValue();
         DECELERATION_MOTOR_SPEED = DECELERATION_MOTOR_SPEED_config.getValue();
+        STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR = STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config.getValue(); 
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
         driveSpeedPid.notifyConfigChange();

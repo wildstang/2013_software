@@ -29,7 +29,7 @@ public class DriveBaseEncoders {
     //Following are inches per 20 ms
     private static final double VICTOR_BRAKES_EFFECT_DECELERATION = ((50.0/2000)*20);; 
     //Say it takes two seconds to get to top speed
-    private static final double ACCELERATION_PER_FRAME = (600.0/1000*20); 
+    private static final double ACCELERATION_PER_FRAME = (100.0/1000*20); 
 
     private static final boolean doModelWithCappedAcceleration = true; 
         DoubleGraph actual_left_speed;
