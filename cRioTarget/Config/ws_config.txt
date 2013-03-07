@@ -1,4 +1,4 @@
-//The Wildstand config file
+//The Wildstang config file
 com.wildstangs.logger.Logger.logIp=10.1.11.22
 com.wildstangs.logger.Logger.port=17654
 com.wildstangs.logger.Logger.logToServer=false
@@ -97,7 +97,7 @@ com.wildstangs.subsystems.WsDriveBase.max_speed_inches_lowgear=94.0
 //Velocity is in ft/sec
 com.wildstangs.subsystems.WsDriveBase.deceleration_velocity_threshold=48.0
 com.wildstangs.subsystems.WsDriveBase.deceleration_motor_speed=0.3
-com.wildstangs.subsystems.WsDriveBase.stopping_distance_at_max_speed_lowgear=1.0
+com.wildstangs.subsystems.WsDriveBase.stopping_distance_at_max_speed_lowgear=12.0
 
 //Shooter
 com.wildstangs.subsystems.WsShooter.LowerWheelSpeed=100
@@ -168,12 +168,12 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBac
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.ThirdFrisbeeDelay=100
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstEnterWheelSetPoint=3000
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstExitWheelSetPoint=3000
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstEnterWheelSetPoint=3200
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstExitWheelSetPoint=3150
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstShooterAngle=false
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondEnterWheelSetPoint=3000
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondExitWheelSetPoint=3000
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondEnterWheelSetPoint=3200
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondExitWheelSetPoint=3150
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondShooterAngle=false
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FunnelatorLoadDelay=7000
@@ -186,7 +186,7 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance.distance=100
 
 //Drive Distance Motion Profile
 com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=0
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.distance=60
+com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.distance=100
 
 //Drive heading
 //Heading is in degrees

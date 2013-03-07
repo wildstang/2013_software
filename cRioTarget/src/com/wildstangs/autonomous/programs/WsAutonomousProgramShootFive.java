@@ -59,7 +59,7 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootFive() {
-        super(35);
+        super(21);
     }
 
     public void defineSteps() {
