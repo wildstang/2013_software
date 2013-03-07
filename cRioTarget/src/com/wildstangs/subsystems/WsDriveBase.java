@@ -240,9 +240,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                                     + FEED_FORWARD_VELOCITY_CONSTANT*(continuousAccelerationFilter.getCurrVel()/ MAX_SPEED_INCHES_LOWGEAR )
                                     + FEED_FORWARD_ACCELERATION_CONSTANT*continuousAccelerationFilter.getCurrAcc(); 
             
-            if (((distance_remaining < STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR) && (currentProfileV > 0) && (currentProfileA < 0 )) ||
-               ((distance_remaining > -STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR) && (currentProfileV < 0) && (currentProfileA > 0 )))
-            
+            if (((distance_remaining < getStoppingDistanceFromDistanceToMove(distance_to_move)) && (currentProfileV > 0) && (currentProfileA < 0 )) ||
+               ((distance_remaining > -getStoppingDistanceFromDistanceToMove(distance_to_move)) && (currentProfileV < 0) && (currentProfileA > 0 )))
             {
                 throttleValue =0.0; 
             }
@@ -776,5 +775,13 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
     public double getDeltaPosError (){ 
         return deltaPosError;
+    }
+    
+    private double getStoppingDistanceFromDistanceToMove(double distance) {
+        if (Math.abs(distance) > 40.0) {
+            return STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR;
+        } else {
+            return (STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR - ((3.0f/15.0f) * (40 - Math.abs(distance))));
+        }
     }
 }

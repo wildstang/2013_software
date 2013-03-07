@@ -238,11 +238,12 @@ public class WsShooter extends WsSubsystem implements IObserver {
 //            victorExit.set(null, Double.valueOf(1.0));
 //            victorEnter.set(null, Double.valueOf(1.0));
 //        }
-        if (((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
+        //This is commented out because we want to keep the flywheels at speed no matter what
+        /*if (((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
                 .isHopperUp() == false) {
             victorExit.set(null, Double.valueOf(0.0));
             victorEnter.set(null, Double.valueOf(0.0));
-        }
+        }*/
         if (speedExit < wheelExitSetPoint + (wheelExitSetPoint * atSpeedTolerance)
                 && speedExit > wheelExitSetPoint - (wheelExitSetPoint * atSpeedTolerance)
                 && speedEnter < wheelEnterSetPoint + (wheelEnterSetPoint * atSpeedTolerance)
