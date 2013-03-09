@@ -155,5 +155,6 @@ public class WsAutonomousManager implements IObserver {
         programs[9] = new WsAutonomousProgramDriveHeading();
         programs[10] = new WsAutonomousProgramTestSerial();
         programs[11] = new WsAutonomousProgramShootFive();
+        programs[12] = new WsAutonomousProgramShootThree();
     }
 }
