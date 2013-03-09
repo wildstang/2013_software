@@ -21,7 +21,7 @@ public class WsInputFacade {
     private static List sensorInputs = new List();
 
     /**
-     * Method to get the instance of this singleton object. ö
+     * Method to get the instance of this singleton object.
      *
      * @return The instance of WsInputFacade
      */
