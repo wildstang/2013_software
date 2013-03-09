@@ -133,6 +133,6 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
     }
 
     public String toString() {
-        return "Shoot Five Frisbees";
+        return "Shoot Five Frisbees And Pick Up Two More";
     }
 }
