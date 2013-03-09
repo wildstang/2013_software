@@ -76,6 +76,6 @@ public class WsAutonomousProgramShootThree extends WsAutonomousProgram {
     }
 
     public String toString() {
-        return "Shooting Seven Frisbees";
+        return "Shooting Three Frisbees";
     }
 }
