@@ -29,20 +29,26 @@ public class WsIntake extends WsSubsystem implements IObserver {
     private double switchDelayTime;
     private boolean useTimeDelay = true;
     
-    private static final boolean controlValveDefaultState = false;
-    private boolean controlValveState;
+    private static final boolean fingerValveDefaultState = false;
+    private boolean fingerValveState;
     private boolean motorForward = false, motorBack = false;
     private boolean rightAccumulatorLimitSwitch = false, leftAccumulatorLimitSwitch = false,
             funnelatorLimitSwitch = false;
     private boolean latchAccumulatorSwitches = false;
-    private boolean overrideButtonState;
+    private boolean fingerDownOverrideButtonState;
+    private boolean fingerUpOverrideButtonState;
     private boolean counting = false;
     private double countTo = 0;
 
     public WsIntake(String name) {
         super(name);
 
+        //Finger down override button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
+        subject.attach(this);
+        
+        //Finger up override button
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON9);
         subject.attach(this);
 
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
@@ -65,8 +71,8 @@ public class WsIntake extends WsSubsystem implements IObserver {
     }
 
     public void init() {
-        controlValveState = controlValveDefaultState;
-        overrideButtonState = false;
+        fingerValveState = fingerValveDefaultState;
+        fingerDownOverrideButtonState = false;
         motorForward = false;
         motorBack = false;
         countTo = 0;
@@ -86,20 +92,26 @@ public class WsIntake extends WsSubsystem implements IObserver {
                 }
             } //Otherwise if the right switch is still true, leave up the finger for now
             else {
-                controlValveState = true;
+                fingerValveState = true;
             }
         } //We should always default to the finger being down
         else {
-            controlValveState = false;
+            fingerValveState = false;
         }
-        //If the override button is pressed, bring down the finger
-        if (true == overrideButtonState) {
-            controlValveState = false;
+
+        if (true == fingerDownOverrideButtonState && false == fingerUpOverrideButtonState) {
+            //Override the finger down
+            fingerValveState = false;
+        } else if (false == fingerDownOverrideButtonState && true == fingerUpOverrideButtonState) {
+            //Override the finger up
+            fingerValveState = true;
+        } else {
+            //Palm smash, leave the finger down
+            fingerValveState = false;
         }
 
         //Set the finger state in the output facade
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.FRISBIE_CONTROL).set((IOutputEnum) null, new Boolean(controlValveState));
-
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.FRISBIE_CONTROL).set((IOutputEnum) null, new Boolean(fingerValveState));
 
         WsFloorPickup pickup = ((WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
         boolean up = pickup.isUp();
@@ -130,7 +142,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
             {
                 //Unlatch the button states and bring down the funnelator finger
                 latchAccumulatorSwitches = false;
-                controlValveState = false;
+                fingerValveState = false;
                 counting = false;
             }
         }
@@ -169,7 +181,9 @@ public class WsIntake extends WsSubsystem implements IObserver {
     public void acceptNotification(Subject subjectThatCaused) {
         BooleanSubject button = (BooleanSubject) subjectThatCaused;
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON10) {
-            overrideButtonState = button.getValue();
+            fingerDownOverrideButtonState = button.getValue();
+        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON9) {
+            fingerUpOverrideButtonState = button.getValue();
         } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
             if (button.getValue()) {
                 motorForward = true;
@@ -197,11 +211,11 @@ public class WsIntake extends WsSubsystem implements IObserver {
             funnelatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
             if(funnelatorLimitSwitch == false)
             {
-                if(!useTimeDelay && controlValveState && !leftAccumulatorLimitSwitch)
+                if(!useTimeDelay && fingerValveState && !leftAccumulatorLimitSwitch)
                 {
                     //Unlatch the button states and bring down the funnelator finger
                     latchAccumulatorSwitches = false;
-                    controlValveState = false;
+                    fingerValveState = false;
                 }
             }
         }
