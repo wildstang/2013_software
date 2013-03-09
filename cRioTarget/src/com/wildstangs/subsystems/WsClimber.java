@@ -4,6 +4,7 @@ import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
@@ -40,7 +41,10 @@ public class WsClimber extends WsSubsystem implements IObserver {
 
     public void acceptNotification(Subject subjectThatCaused) {
         if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON2) {
-            climbState = !climbState;
+            BooleanSubject button = (BooleanSubject) subjectThatCaused;
+            if (true == button.getValue() && false == button.getPreviousValue()) {
+                climbState = !climbState;
+            }
         }
     }
 
