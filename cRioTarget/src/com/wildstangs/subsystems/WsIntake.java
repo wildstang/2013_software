@@ -105,9 +105,6 @@ public class WsIntake extends WsSubsystem implements IObserver {
         } else if (false == fingerDownOverrideButtonState && true == fingerUpOverrideButtonState) {
             //Override the finger up
             fingerValveState = true;
-        } else {
-            //Palm smash, leave the finger down
-            fingerValveState = false;
         }
 
         //Set the finger state in the output facade
