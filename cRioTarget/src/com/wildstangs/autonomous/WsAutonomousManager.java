@@ -142,7 +142,7 @@ public class WsAutonomousManager implements IObserver {
     }
 
     private void definePrograms() {
-        programs = new WsAutonomousProgram[12];
+        programs = new WsAutonomousProgram[13];
         programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper.
         programs[1] = new WsAutonomousProgramShootSeven();
         programs[2] = new WsAutonomousProgramDriveDistance();
@@ -155,5 +155,6 @@ public class WsAutonomousManager implements IObserver {
         programs[9] = new WsAutonomousProgramDriveHeading();
         programs[10] = new WsAutonomousProgramTestSerial();
         programs[11] = new WsAutonomousProgramShootFive();
+        programs[12] = new WsAutonomousProgramShootFiveAndGrab();
     }
 }
