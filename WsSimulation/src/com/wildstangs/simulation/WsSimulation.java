@@ -36,8 +36,6 @@ public class WsSimulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        WsProfilingTimer durationTimer = new WsProfilingTimer("Sim method duration", 50);
-        WsProfilingTimer periodTimer = new WsProfilingTimer("Sim method period", 50);
 
         //Instantiate the Facades and Containers
 

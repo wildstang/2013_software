@@ -40,7 +40,6 @@ public class Jaguar implements ComponentListener, ActionListener {
     private boolean isGraphRunning;
 
     private JFrame frame;
-    private JLabel jaguarNum;
     private JLabel jaguarSpeed;
     private JButton startStop;
     

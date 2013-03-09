@@ -176,7 +176,7 @@ public class WsHardwareJoystick implements IHardwareJoystick {
     
     //This converts from 0 -255 unsigned scale or really weird signed 0to127 and -128to-1 
     private double getJoystickValueFromUSB(byte signedByte){
-        double axisValue = 0.0; 
+        double axisValue; 
         if (signedByte >= 0 ){
             axisValue = -1.0 + (signedByte/128.0);
         }else {

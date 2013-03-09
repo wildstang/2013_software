@@ -51,14 +51,8 @@ public class OnscreenJoystick implements KeyListener, IJoystick {
 
     private double x, y, z;//-1 to 1
     private int xpos, ypos, zpos;//pixel position. z is 0-460.
-    private double xOffset, yOffset;
-    private double drift;
     
     private int button;
-    private String buttonStr;
-    
-    private long keyTime;
-    private boolean isTestingTime;
 
     private boolean mouseClicked = false;
     private boolean trigger = false;
@@ -93,12 +87,6 @@ public class OnscreenJoystick implements KeyListener, IJoystick {
         frame.setVisible(true);        
     }
     
-    private void createDrift() {}
-
-    /**
-     * The X value of the Joystick.
-     * @return The X value of the Joystick, ranges from -1.0 to +1.0.
-     */
     public double getX() {
         return -x;
     }

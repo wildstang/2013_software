@@ -33,12 +33,9 @@ import javax.swing.JLabel;
 public class Victor implements ComponentListener, ActionListener {
 
     private double speed;
-    private long startTime;
     private boolean isGraphRunning;
 
     private JFrame frame;
-    private JLabel victorNum;
-    private JLabel victorSpeed;
     private JButton startStop;
     
     private SpeedGrapher graph;
@@ -56,6 +53,7 @@ public class Victor implements ComponentListener, ActionListener {
      * @param speed The speed value of the Victor between -1.0 and +1.0.
      */
     public void set(double speed) {
+        this.speed = speed;
 
     }
 
