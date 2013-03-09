@@ -27,6 +27,7 @@ public class WsAutonomousProgramShootThree extends WsAutonomousProgram {
     private IntegerConfigFileParameter FirstExitWheelSetPoint;
     private BooleanConfigFileParameter FirstShooterAngle;
     private IntegerConfigFileParameter ThirdFrisbeeDelay;
+    private IntegerConfigFileParameter LowerAccumulatorDelay;
     private WsShooter.Preset startPreset;
 
     private void defineConfigValues() {
@@ -36,6 +37,7 @@ public class WsAutonomousProgramShootThree extends WsAutonomousProgram {
         FirstExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstExitWheelSetPoint", 4500);
         FirstShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstShooterAngle", false);
         ThirdFrisbeeDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdFrisbeeDelay", 100);
+        LowerAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".LowerAccumulatorDelay", 2000);
 
         startPreset = new WsShooter.Preset(FirstEnterWheelSetPoint.getValue(),
                 FirstExitWheelSetPoint.getValue(),
@@ -44,7 +46,7 @@ public class WsAutonomousProgramShootThree extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootThree() {
-        super(9);
+        super(14);
     }
 
     public void defineSteps() {
@@ -65,6 +67,11 @@ public class WsAutonomousProgramShootThree extends WsAutonomousProgram {
         programSteps[6] = new WsAutonomousStepMultikick(2);
         programSteps[7] = new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue());
         programSteps[8] = new WsAutonomousStepMultikick(1);
+        programSteps[9] = new WsAutonomousStepLowerAccumulator();
+        programSteps[10] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
+        programSteps[11] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse); 
+        programSteps[12] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
+        programSteps[13] = new WsAutonomousStepRaiseAccumulator();
         
     }
 
