@@ -71,7 +71,7 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootSeven() {
-        super(35);
+        super(36);
     }
 
     public void defineSteps() {
@@ -139,26 +139,26 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram {
                 pfa2.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
                 pfa2.addStep(ssc2_5);
             ssc2.addStep(pfa2);
-            
         programSteps[23] = new WsAutonomousStepIntakeMotorStop();
         programSteps[24] = new WsAutonomousStepRaiseHopper();
         WsAutonomousParallelStepGroup pg5 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
         programSteps[25] = pg5;
             pg5.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(FifthDrive.getValue(), 0.0));
+            pg5.addStep(new WsAutonomousStepDriveManual(0, 0.8));
             pg5.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, secondShooterPreset.ANGLE));
         WsAutonomousParallelStepGroup pg6 = new WsAutonomousParallelStepGroup("5 Wait for shooter and drive");
         programSteps[26] = pg6;
             pg6.addStep(new WsAutonomousStepWaitForShooter());
             pg6.addStep(new WsAutonomousStepWaitForDriveMotionProfile());
         programSteps[27] = new WsAutonomousStepStopDriveUsingMotionProfile();
-        programSteps[28] = new WsAutonomousStepMultikick(4);
-        programSteps[29] = new WsAutonomousStepLowerAccumulator();
-        programSteps[30] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
-        programSteps[31] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse); 
-        programSteps[32] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
-        programSteps[33] = new WsAutonomousStepRaiseAccumulator();
-        programSteps[34] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
-        
+        programSteps[28] = new WsAutonomousStepDriveManual(0, 0);
+        programSteps[29] = new WsAutonomousStepMultikick(4);
+        programSteps[30] = new WsAutonomousStepLowerAccumulator();
+        programSteps[31] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
+        programSteps[32] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse); 
+        programSteps[33] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
+        programSteps[34] = new WsAutonomousStepRaiseAccumulator();
+        programSteps[35] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
     }
 
     public String toString() {
