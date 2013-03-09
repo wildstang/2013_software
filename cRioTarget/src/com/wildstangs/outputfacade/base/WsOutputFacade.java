@@ -81,7 +81,7 @@ public class WsOutputFacade {
     public static final String ACCUMULATOR_VICTOR = "AccumulatorVictor";
     public static final String FUNNELATOR_ROLLER = "FunnelatorRoller";
     public static final String LOADING_RAMP = "LoadingRamp";
-
+    public static final String CLIMBER = "Climber";
     /**
      * Constructor for WsOutputFacade.
      *
@@ -110,7 +110,7 @@ public class WsOutputFacade {
             outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
             outputs.add(new DataElement(ACCUMULATOR_SOLENOID, new WsSolenoid(ACCUMULATOR_SOLENOID, 1, 2)));
             outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
-
+            outputs.add(new DataElement(CLIMBER, new WsSolenoid(CLIMBER, 1, 4)));
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
             outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6)));
