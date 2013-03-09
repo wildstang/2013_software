@@ -14,7 +14,6 @@ import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsVictor;
-import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.simulation.encoders.DriveBaseEncoders;
 import com.wildstangs.simulation.encoders.FlywheelEncoders;
 import com.wildstangs.simulation.hopper.HopperLimitSwitches;

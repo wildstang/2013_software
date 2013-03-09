@@ -23,7 +23,6 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 /**
  * A Victor speed controller emulation for FRC.

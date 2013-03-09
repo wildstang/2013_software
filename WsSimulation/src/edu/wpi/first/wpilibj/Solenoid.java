@@ -36,7 +36,6 @@ public class Solenoid {
      */
     public Solenoid(final int moduleNumber, final int channel) {
         WsSolenoidContainer.getInstance().add(this, moduleNumber, channel);
-	mChannel = channel;
         initSolenoid();
     }
 
