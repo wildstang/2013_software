@@ -25,10 +25,8 @@ public class WsIntake extends WsSubsystem implements IObserver {
             this.getClass().getName(), "FingerDelayFromAccumulatorSwitch", 15.0);
     private BooleanConfigFileParameter useDelay = new BooleanConfigFileParameter(
             this.getClass().getName(), "UseTimeDelay", true);
-    
     private double switchDelayTime;
     private boolean useTimeDelay = true;
-    
     private static final boolean controlValveDefaultState = false;
     private boolean controlValveState;
     private boolean motorForward = false, motorBack = false;
@@ -38,6 +36,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
     private boolean overrideButtonState;
     private boolean counting = false;
     private double countTo = 0;
+    private int numLatchedDiscs = 0;
 
     public WsIntake(String name) {
         super(name);
@@ -59,7 +58,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
 
         subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
-        
+
         switchDelayTime = switchDelay.getValue();
         useTimeDelay = useDelay.getValue();
     }
@@ -77,10 +76,8 @@ public class WsIntake extends WsSubsystem implements IObserver {
         //If this is true, the driver just brought the accumulator up and we have locked the switch states
         if (true == latchAccumulatorSwitches) {
             //Once the left limit switch has transitioned to false, it is safe to let the second frisbee through
-            if (false == leftAccumulatorLimitSwitch) 
-            {
-                if(useTimeDelay)
-                {
+            if (false == leftAccumulatorLimitSwitch) {
+                if (useTimeDelay) {
                     counting = true;
                     countTo = Timer.getFPGATimestamp() + switchDelayTime;
                 }
@@ -123,31 +120,27 @@ public class WsIntake extends WsSubsystem implements IObserver {
                     .set(null, Double.valueOf(0.0));
             SmartDashboard.putNumber("Funnelator roller", 0.0);
         }
-        
-        if(useTimeDelay && counting)
-        {
-            if(Timer.getFPGATimestamp() >= countTo)
-            {
+
+        if (useTimeDelay && counting) {
+            if (Timer.getFPGATimestamp() >= countTo) {
                 //Unlatch the button states and bring down the funnelator finger
                 latchAccumulatorSwitches = false;
                 controlValveState = false;
                 counting = false;
             }
         }
-        
+
         SmartDashboard.putBoolean("RightAccumulatorLimitSwitch: ", rightAccumulatorLimitSwitch);
         SmartDashboard.putBoolean("LeftAccumulatorLimitSwitch: ", leftAccumulatorLimitSwitch);
         SmartDashboard.putBoolean("FunnelatorLimitSwitch: ", funnelatorLimitSwitch);
     }
 
-    public void notifyConfigChange() 
-    {
+    public void notifyConfigChange() {
         switchDelayTime = switchDelay.getValue();
         useTimeDelay = useDelay.getValue();
     }
 
-    public boolean getFunnelatorLimitSwitch() 
-    {
+    public boolean getFunnelatorLimitSwitch() {
         return funnelatorLimitSwitch;
     }
 
@@ -164,6 +157,22 @@ public class WsIntake extends WsSubsystem implements IObserver {
         if (true == rightAccumulatorLimitSwitch && true == leftAccumulatorLimitSwitch) {
             latchAccumulatorSwitches = true;
         }
+    }
+
+    public void latchNumDiscs() {
+        if (true == rightAccumulatorLimitSwitch && true == leftAccumulatorLimitSwitch) {
+            numLatchedDiscs = 2;
+        } else if (true == rightAccumulatorLimitSwitch && false == leftAccumulatorLimitSwitch) {
+            numLatchedDiscs = 1;
+        } else if (false == rightAccumulatorLimitSwitch && true == leftAccumulatorLimitSwitch) {
+            numLatchedDiscs = 1;
+        } else {
+            numLatchedDiscs = 0;
+        }
+    }
+
+    public int getNumLatchedDiscs() {
+        return numLatchedDiscs;
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
@@ -195,10 +204,8 @@ public class WsIntake extends WsSubsystem implements IObserver {
         } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
                 getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null))) {
             funnelatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
-            if(funnelatorLimitSwitch == false)
-            {
-                if(!useTimeDelay && controlValveState && !leftAccumulatorLimitSwitch)
-                {
+            if (funnelatorLimitSwitch == false) {
+                if (!useTimeDelay && controlValveState && !leftAccumulatorLimitSwitch) {
                     //Unlatch the button states and bring down the funnelator finger
                     latchAccumulatorSwitches = false;
                     controlValveState = false;
