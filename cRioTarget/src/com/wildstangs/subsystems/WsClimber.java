@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class WsClimber extends WsSubsystem implements IObserver {
 
-    private static final boolean CLIMB_DEFAULT_VALUE = true;
+    private static final boolean CLIMB_DEFAULT_VALUE = false;
     private boolean climbState;
 
     public WsClimber(String name) {
