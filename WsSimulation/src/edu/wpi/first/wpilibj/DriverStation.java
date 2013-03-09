@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 package edu.wpi.first.wpilibj;
 
-import edu.wpi.first.wpilibj.communication.*;
 import edu.wpi.first.wpilibj.parsing.IInputOutput;
 
 /**

@@ -11,7 +11,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import java.awt.event.KeyListener;
 import javax.swing.JLabel;

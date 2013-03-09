@@ -9,10 +9,6 @@ package edu.wpi.first.wpilibj;
 
 import com.wildstangs.simulation.*;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
      /**
  * Solenoid class for running high voltage Digital Output (9472 module).

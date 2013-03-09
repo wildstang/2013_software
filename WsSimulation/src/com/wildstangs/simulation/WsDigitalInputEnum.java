@@ -1,7 +1,6 @@
 package com.wildstangs.simulation;
 
 import com.wildstangs.inputfacade.base.IInputEnum;
-import com.wildstangs.subjects.base.ISubjectEnum;
 
 /**
  *  Enum types used for the Driver Joystick class.  
