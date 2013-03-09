@@ -18,7 +18,6 @@ import com.wildstangs.simulation.*;
  */
 public class Solenoid {
 
-    private int mChannel;
     private boolean outputState;
     
 /**
