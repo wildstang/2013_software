@@ -22,10 +22,10 @@ public class WsAutonomousStartPositionEnum {
     public static final WsAutonomousStartPositionEnum UNKNOWN = new WsAutonomousStartPositionEnum(0, "unknown", "Unknown Position");
     public static final WsAutonomousStartPositionEnum BACK_LEFT_PYRAMID_OUTSIDE = new WsAutonomousStartPositionEnum(1, "outsidePyramidBackLeft", "Outside pyramid, by back left corner");
     public static final WsAutonomousStartPositionEnum BACK_LEFT_PYRAMID_INSIDE = new WsAutonomousStartPositionEnum(2, "insidePyramidBackLeft", "Inside pyramid, by back left corner");
-    public static final WsAutonomousStartPositionEnum POSITION3 = new WsAutonomousStartPositionEnum(3, "unknown", "Unknown Position");
+    public static final WsAutonomousStartPositionEnum BACK_RIGHT_PYRAMID_INSIDE = new WsAutonomousStartPositionEnum(3, "insidePyramidBackRight", "Inside Pyramid, back right");
     public static final WsAutonomousStartPositionEnum CENTER_BACK_PYRAMID = new WsAutonomousStartPositionEnum(4, "insidePyramidBackCenter", "Inside pyramid, back center");
-    public static final WsAutonomousStartPositionEnum POSITION5 = new WsAutonomousStartPositionEnum(5, "unknown", "Unknown Position");
-    public static final WsAutonomousStartPositionEnum POSITION6 = new WsAutonomousStartPositionEnum(6, "unknown", "Unknown Position");
+    public static final WsAutonomousStartPositionEnum FRONT_RIGHT_PYRAMID_OUTSIDE = new WsAutonomousStartPositionEnum(5, "outsidePyramidFrontRight", "Outside Pyramid, front right");
+    public static final WsAutonomousStartPositionEnum FRONT_LEFT_PYRAMID_OUTSIDE = new WsAutonomousStartPositionEnum(6, "outsidePyramidFrontLeft", "Outside Pyramid, front left");
     public static final WsAutonomousStartPositionEnum POSITION7 = new WsAutonomousStartPositionEnum(7, "unknown", "Unknown Position");
     public static final WsAutonomousStartPositionEnum POSITION8 = new WsAutonomousStartPositionEnum(8, "unknown", "Unknown Position");
     public static final WsAutonomousStartPositionEnum POSITION9 = new WsAutonomousStartPositionEnum(9, "unknown", "Unknown Position");
@@ -61,13 +61,13 @@ public class WsAutonomousStartPositionEnum {
             case 2:
                 return WsAutonomousStartPositionEnum.BACK_LEFT_PYRAMID_INSIDE;
             case 3:
-                return WsAutonomousStartPositionEnum.POSITION3;
+                return WsAutonomousStartPositionEnum.BACK_RIGHT_PYRAMID_INSIDE;
             case 4:
                 return WsAutonomousStartPositionEnum.CENTER_BACK_PYRAMID;
             case 5:
-                return WsAutonomousStartPositionEnum.POSITION5;
+                return WsAutonomousStartPositionEnum.FRONT_RIGHT_PYRAMID_OUTSIDE;
             case 6:
-                return WsAutonomousStartPositionEnum.POSITION6;
+                return WsAutonomousStartPositionEnum.FRONT_LEFT_PYRAMID_OUTSIDE;
             case 7:
                 return WsAutonomousStartPositionEnum.POSITION7;
             case 8:
