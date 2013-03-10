@@ -142,8 +142,10 @@ public class WsInputFacade {
         BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(WsOutputFacade.getInstance().getClass().getName(), "2012_Robot", false);
         if (outputsFor2012.getValue()) {
             sensorInputs.add(new DataElement(RIGHT_ACCUMULATOR_LIMIT_SWITCH, new WsDigitalInput(11)));
+            sensorInputs.add(new DataElement(FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(7)));
         } else {
             sensorInputs.add(new DataElement(RIGHT_ACCUMULATOR_LIMIT_SWITCH, new WsDigitalInput(7)));
+            sensorInputs.add(new DataElement(FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(9)));
         }
         oiInputs.add(new DataElement(DRIVER_JOYSTICK, new WsDriverJoystick()));
         oiInputs.add(new DataElement(MANIPULATOR_JOYSTICK, new WsManipulatorJoystick()));
@@ -156,7 +158,6 @@ public class WsInputFacade {
         sensorInputs.add(new DataElement(LEFT_ACCUMULATOR_LIMIT_SWITCH, new WsDigitalInput(6)));
         sensorInputs.add(new DataElement(HOPPER_DOWN_LIMIT_SWITCH, new WsDigitalInput(13)));
         sensorInputs.add(new DataElement(HOPPER_UP_LIMIT_SWITCH, new WsDigitalInput(12)));
-        sensorInputs.add(new DataElement(FUNNELATOR_LIMIT_SWITCH, new WsDigitalInput(9)));
         sensorInputs.add(new DataElement(ACCUMULATOR_UP_LIMIT_SWITCH, new WsDigitalInput(8)));
     }
 }
