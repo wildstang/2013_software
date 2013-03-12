@@ -103,8 +103,10 @@ public class WsOutputFacade {
             outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6)));
             outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 10)));
-            outputs.add(new DataElement(LOADING_RAMP, new WsServo(LOADING_RAMP, 7)));
+            outputs.add(new DataElement(LOADING_RAMP, new WsServo(LOADING_RAMP, 6)));
             outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 8)));
+            
+            outputs.add(new DataElement(CLIMBER, new WsSolenoid(CLIMBER, 2, 1)));
 
         } else {
             outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
