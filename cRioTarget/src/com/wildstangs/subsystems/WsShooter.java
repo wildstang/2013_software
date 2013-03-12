@@ -132,14 +132,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
         subject.attach(this);
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
         subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.ANALOG5).getSubject((ISubjectEnum) null);
-        subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.ANALOG6).getSubject((ISubjectEnum) null);
-        subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.ANALOG7).getSubject((ISubjectEnum) null);
-        subject.attach(this);
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.ANALOG8).getSubject((ISubjectEnum) null);
-        subject.attach(this);
 
         lowWheelSpeed = lowerWheelSpeed.getValue();
         lowVictorSpeed = lowerVictorSpeed.getValue();
@@ -202,24 +194,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
             exitKnobValue = 3.3;
         }
         //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
-        double  calcKnobExitSetPoint = ((enterKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
+        double  calcKnobExitSetPoint = ((exitKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
                 + lowWheelExitTestSpeed;
         int knobExitSetPoint = ((int)(calcKnobExitSetPoint/25))*25;
-        double analog5 = ((DoubleSubject) WsInputFacade.getInstance()
-                .getOiInput(WsInputFacade.ANALOG5)
-                .getSubject((ISubjectEnum) null)).getValue();
-        
-        double analog6 = ((DoubleSubject) WsInputFacade.getInstance()
-                .getOiInput(WsInputFacade.ANALOG6)
-                .getSubject((ISubjectEnum) null)).getValue();
-        
-        double analog7 = ((DoubleSubject) WsInputFacade.getInstance()
-                .getOiInput(WsInputFacade.ANALOG7)
-                .getSubject((ISubjectEnum) null)).getValue();
-        
-        double analog8 = ((DoubleSubject) WsInputFacade.getInstance()
-                .getOiInput(WsInputFacade.ANALOG8)
-                .getSubject((ISubjectEnum) null)).getValue();
         
         if (((BooleanSubject) WsInputFacade.getInstance()
                 .getOiInput(WsInputFacade.SHOOTER_WHEEL_SPEED_OVERRIDE)
@@ -288,10 +265,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("ExitWheelSetPoint", wheelExitSetPoint);
         SmartDashboard.putNumber("KnobEnterSetPoint", knobEnterSetPoint);
         SmartDashboard.putNumber("KnobExitSetPoint", knobExitSetPoint);
-        SmartDashboard.putNumber("Analog5", analog5);
-        SmartDashboard.putNumber("Analog6", analog6);
-        SmartDashboard.putNumber("Analog7", analog7);
-        SmartDashboard.putNumber("Analog8", analog8);
         
         //set shooter angle
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));

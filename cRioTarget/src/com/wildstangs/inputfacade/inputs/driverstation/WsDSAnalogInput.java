@@ -57,6 +57,8 @@ public class WsDSAnalogInput implements IInput {
     }
 
     public void pullData() {
+        
+        //analogValue.setValue(DriverStation.getInstance().getAnalogIn(channel));
         try {
             analogValue.setValue(DriverStation.getInstance().getEnhancedIO().getAnalogIn(channel));
         }

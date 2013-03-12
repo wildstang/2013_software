@@ -130,10 +130,6 @@ public class WsInputFacade {
     public static final String HOPPER_UP_LIMIT_SWITCH = "HopperUpLimitSwitch";
     public static final String HOPPER_DOWN_LIMIT_SWITCH = "HopperDownLimitSwitch";
     public static final String ACCUMULATOR_UP_LIMIT_SWITCH = "AccumulatorUpLimitSwitch";
-       public static final String ANALOG5 = "Analog5";   
-       public static final String ANALOG6 = "Analog6";   
-       public static final String ANALOG7 = "Analog7";   
-       public static final String ANALOG8 = "Analog8";
 
     /**
      * Constructor for the WsInputFacade.
@@ -153,12 +149,10 @@ public class WsInputFacade {
         }
         oiInputs.add(new DataElement(DRIVER_JOYSTICK, new WsDriverJoystick()));
         oiInputs.add(new DataElement(MANIPULATOR_JOYSTICK, new WsManipulatorJoystick()));
-        oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(4)));
-        oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(3))); //probably needs different value
-        oiInputs.add(new DataElement(ANALOG5, new WsDSAnalogInput(5)));
-        oiInputs.add(new DataElement(ANALOG6, new WsDSAnalogInput(6)));
-        oiInputs.add(new DataElement(ANALOG7, new WsDSAnalogInput(7)));
-        oiInputs.add(new DataElement(ANALOG8, new WsDSAnalogInput(8)));
+        oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(5)));
+        oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(7)));
+        //oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(4)));
+        //oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(3)));
         oiInputs.add(new DataElement(SHOOTER_WHEEL_SPEED_OVERRIDE, new WsDSDigitalInput(2)));
         oiInputs.add(new DataElement(AUTO_PROGRAM_SELECTOR, new WsDSAnalogInput(2)));
         oiInputs.add(new DataElement(LOCK_IN_SWITCH, new WsDSDigitalInput(1)));
