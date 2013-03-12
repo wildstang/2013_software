@@ -19,11 +19,12 @@ public class WsAutonomousStepWaitForDiscsLatchedThroughFunnelator extends WsAuto
     int numDiscsCollected = 0;
 
     public WsAutonomousStepWaitForDiscsLatchedThroughFunnelator() {
-        Subject subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
-        subject.attach(this);
+        
     }
 
     public void initialize() {
+        Subject subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        subject.attach(this);
         numLatchedDiscs = ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE)).getNumLatchedDiscs();
         if (numLatchedDiscs == 0) {
             //No discs were collected, no need to intake
