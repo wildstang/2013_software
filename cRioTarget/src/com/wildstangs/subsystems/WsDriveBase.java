@@ -226,7 +226,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             distance_moved += this.deltaPosition; 
 //            distance_remaining = this.distance_to_move - currentProfileX;
             distance_remaining = this.distance_to_move - distance_moved;
-            Logger.getLogger().debug(this.getClass().getName(), "AccelFilter", "distance_left: " + distance_remaining + " p: " + continuousAccelerationFilter.getCurrPos()+ " v: " + continuousAccelerationFilter.getCurrVel() + " a: " + continuousAccelerationFilter.getCurrAcc() );
+            //Logger.getLogger().debug(this.getClass().getName(), "AccelFilter", "distance_left: " + distance_remaining + " p: " + continuousAccelerationFilter.getCurrPos()+ " v: " + continuousAccelerationFilter.getCurrVel() + " a: " + continuousAccelerationFilter.getCurrAcc() );
             continuousAccelerationFilter.calculateSystem(distance_remaining , currentProfileV, goal_velocity, MAX_ACCELERATION_DRIVE_PROFILE, MAX_SPEED_INCHES_LOWGEAR, deltaTime);
             deltaProfilePosition = continuousAccelerationFilter.getCurrPos() - currentProfileX ;  
             currentProfileX = continuousAccelerationFilter.getCurrPos();
@@ -335,7 +335,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
         totalPosition += deltaPosition; 
         if ( Math.abs(deltaPosition) > 0.005 ){
-            Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + "dpp:" + deltaProfilePosition +  " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
+            //Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + "dpp:" + deltaProfilePosition +  " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
         }
         previousPositionSinceLastReset += deltaPosition; 
         previousTime = newTime; 
