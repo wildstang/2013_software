@@ -3,10 +3,12 @@ package com.wildstangs.inputfacade.inputs.driverstation;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.IInput;
 import com.wildstangs.inputfacade.base.IInputEnum;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStationEnhancedIO.EnhancedIOException;
 
 /**
  *
@@ -55,7 +57,15 @@ public class WsDSAnalogInput implements IInput {
     }
 
     public void pullData() {
-        analogValue.setValue(DriverStation.getInstance().getAnalogIn(channel));
+        
+        //analogValue.setValue(DriverStation.getInstance().getAnalogIn(channel));
+        try {
+            analogValue.setValue(DriverStation.getInstance().getEnhancedIO().getAnalogIn(channel));
+        }
+        catch (EnhancedIOException e) {
+            analogValue.setValue(DriverStation.getInstance().getAnalogIn(channel));
+            Logger.getLogger().error(this.getClass().getName(), "pullData", "Enhanced IO Error(switch to non-enhanced): " + e.toString());
+        }
     }
 
     public void notifyConfigChange() {

@@ -182,8 +182,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
             enterKnobValue = 3.3;
         }
         //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
-        double knobEnterSetPoint = ((enterKnobValue * (highWheelEnterTestSpeed - lowWheelEnterTestSpeed)) / 3.3)
+        double calcKnobEnterSetPoint = ((enterKnobValue * (highWheelEnterTestSpeed - lowWheelEnterTestSpeed)) / 3.3)
                 + lowWheelEnterTestSpeed;
+        int knobEnterSetPoint = ((int)(calcKnobEnterSetPoint/25))*25;
 
         double exitKnobValue = ((DoubleSubject) WsInputFacade.getInstance()
                 .getOiInput(WsInputFacade.EXIT_WHEEL_SHOOTER_SPEED_INPUT)
@@ -193,9 +194,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
             exitKnobValue = 3.3;
         }
         //((currentValue x (maxSetPoint - minSetPoint)) / maxValue) + minSetPoint = wantedSetPoint
-        double knobExitSetPoint = ((enterKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
+        double  calcKnobExitSetPoint = ((exitKnobValue * (highWheelExitTestSpeed - lowWheelExitTestSpeed)) / 3.3)
                 + lowWheelExitTestSpeed;
-
+        int knobExitSetPoint = ((int)(calcKnobExitSetPoint/25))*25;
+        
         if (((BooleanSubject) WsInputFacade.getInstance()
                 .getOiInput(WsInputFacade.SHOOTER_WHEEL_SPEED_OVERRIDE)
                 .getSubject((ISubjectEnum) null)).getValue()) {
@@ -263,6 +265,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("ExitWheelSetPoint", wheelExitSetPoint);
         SmartDashboard.putNumber("KnobEnterSetPoint", knobEnterSetPoint);
         SmartDashboard.putNumber("KnobExitSetPoint", knobExitSetPoint);
+        
         //set shooter angle
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
     }

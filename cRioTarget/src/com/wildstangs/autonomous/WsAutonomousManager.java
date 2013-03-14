@@ -102,12 +102,18 @@ public class WsAutonomousManager implements IObserver {
                 if (positionSwitch >= 3.3) {
                     positionSwitch = 3.3f;
                 }
+                if (positionSwitch < 0) {
+                    positionSwitch = 0;
+                }
                 currentPosition = WsAutonomousStartPositionEnum.getEnumFromValue((int) (Math.floor((positionSwitch / 3.4) * WsAutonomousStartPositionEnum.POSITION_COUNT)));
                 SmartDashboard.putString("Current Start Position", currentPosition.toString());
             } else if (cause.getType() == WsDSAnalogInputEnum.INPUT2) {
                 selectorSwitch = (float) ((DoubleSubject) cause).getValue();
                 if (selectorSwitch >= 3.3) {
                     selectorSwitch = 3.3f;
+                }
+                if(selectorSwitch < 0) {
+                    selectorSwitch = 0;
                 }
                 currentProgram = (int) (Math.floor((selectorSwitch / 3.4) * programs.length));
                 SmartDashboard.putString("Current Autonomous Program", programs[currentProgram].toString());
