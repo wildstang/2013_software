@@ -13,9 +13,6 @@ com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=false
 //Digital Outputs: Replace 'NAME' with whatever name you send in
 //com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
 
-//Solenoids: Replace 'NAME' with whatever ame you send in
-//com.wildstangs.outputfacade.outputs.WsSolenoid.NAME.shouldStartTrue=false
-
 //Subsystems
 com.wildstangs.subsystems.WsHopper.forwardCycles=15
 com.wildstangs.subsystems.WsHopper.backwardCycles=15
@@ -81,9 +78,6 @@ com.wildstangs.subsystems.WsDriveBase.heading_high_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.max_high_gear_percent=0.800
 com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput.startState=0.0
 com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput.startState=0
-com.wildstangs.outputfacade.outputs.WsSolenoid.FrisbieControl.shouldStartTrue=false
-com.wildstangs.outputfacade.outputs.WsSolenoid.Kicker.shouldStartTrue=false
-com.wildstangs.outputfacade.outputs.WsSolenoid.AccumulatorSolenoid.shouldStartTrue=false
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
 com.wildstangs.subsystems.WsDriveBase.encoder_gear_ratio=6.0
 com.wildstangs.subsystems.WsDriveBase.slow_turn_forward_speed=0.30

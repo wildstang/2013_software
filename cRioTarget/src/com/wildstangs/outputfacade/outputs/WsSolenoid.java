@@ -16,16 +16,12 @@ public class WsSolenoid implements IOutput {
 
     BooleanSubject subject;
     Solenoid solenoid;
-    BooleanConfigFileParameter shouldStartTrue;
 
     public WsSolenoid(String name, int module, int channel1) {
         this.subject = new BooleanSubject(name);
-        shouldStartTrue = new BooleanConfigFileParameter(
-                this.getClass().getName() + "." + name, "shouldStartTrue", false);
-
-        subject.setValue(shouldStartTrue.getValue());
+        subject.setValue(false);
         solenoid = new Solenoid(module, channel1);
-        solenoid.set(shouldStartTrue.getValue());
+        solenoid.set(false);
 
 
     }
