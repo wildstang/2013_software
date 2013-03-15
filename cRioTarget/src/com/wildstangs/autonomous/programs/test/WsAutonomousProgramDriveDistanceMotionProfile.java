@@ -4,6 +4,7 @@
  */
 package com.wildstangs.autonomous.programs.test;
 
+import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepDriveManual;
 import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepStartDriveUsingMotionProfile;
@@ -26,11 +27,11 @@ public class WsAutonomousProgramDriveDistanceMotionProfile extends WsAutonomousP
 
     public WsAutonomousProgramDriveDistanceMotionProfile() {
         super(5);
-        distance = new DoubleConfigFileParameter(this.getClass().getName(), "distance", 10.0);
-        heading = new DoubleConfigFileParameter(this.getClass().getName(), "heading", 0.0);
     }
 
     public void defineSteps() {
+        distance = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".distance", 10.0);
+        heading = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".heading", 0.0);
         programSteps[0] = new WsAutonomousStepStartDriveUsingMotionProfile(distance.getValue(), 0.0);
         programSteps[1] = new WsAutonomousStepDriveManual(0, heading.getValue());
         programSteps[2] = new WsAutonomousStepWaitForDriveMotionProfile(); 

@@ -22,7 +22,7 @@ public class WsAutonomousStepDelay extends WsAutonomousStep /* This step delays 
         int delay = (int) Math.ceil((double) msDelay / (double) MS_PER_FRAME);
         count = delay - 1;
         this.msDelay = msDelay;
-        if (delay <= 0) {
+        if (delay < 0) {
             pass = false;
             errorInfo = "Negative delay";
         }

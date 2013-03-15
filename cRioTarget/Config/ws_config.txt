@@ -4,20 +4,13 @@ com.wildstangs.logger.Logger.port=17654
 com.wildstangs.logger.Logger.logToServer=false
 com.wildstangs.logger.Logger.logToStdout=true
 com.wildstangs.logger.Logger.logLevel="DEBUG"
-com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.
-com.wildstangs.inputfacade.inputs.WsDigitalInput.startState=false
-
-//2012 Robot Selection
-com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=false
-
-//Digital Outputs: Replace 'NAME' with whatever name you send in
-//com.wildstangs.outputfacade.outputs.WsDigitalOutput.NAME.startState=false
 
 //Subsystems
 com.wildstangs.subsystems.WsHopper.forwardCycles=15
 com.wildstangs.subsystems.WsHopper.backwardCycles=15
 com.wildstangs.subsystems.WsIntake.FingerDelayFromAccumulatorSwitch=15.0
 com.wildstangs.subsystems.WsIntake.UseTimeDelay=false
+com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
 
 //Distance PID
 com.wildstangs.pid.controller.base.WsPidController.WsDriveBaseDistancePid.p=0.01
@@ -76,9 +69,6 @@ com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
 com.wildstangs.subsystems.WsDriveBase.throttle_high_gear_accel_factor=0.750
 com.wildstangs.subsystems.WsDriveBase.heading_high_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.max_high_gear_percent=0.800
-com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput.startState=0.0
-com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput.startState=0
-com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
 com.wildstangs.subsystems.WsDriveBase.encoder_gear_ratio=6.0
 com.wildstangs.subsystems.WsDriveBase.slow_turn_forward_speed=0.30
 com.wildstangs.subsystems.WsDriveBase.slow_turn_backward_speed=-0.26
@@ -129,6 +119,7 @@ com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
 //  XXXXX   X   X    X     X     X  X   X
 //  X   X   X  XX    X  X  X     X  X   X
 // XXX XXX   XX XX    XX    XXXXX  XXX XXX
+com.wildstangs.autonomous.programs.WsAutonomousProgramSleeper.ForceStopAtStep=0
 
 //ShootSeven
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=0
@@ -175,19 +166,43 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBac
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.LowerAccumulatorDelay=1500
 
 //ShootFive, Grab 2
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.ForceStopAtStep=0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.ForceStopAtStep=0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FirstDrive=94.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.SecondDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.ThirdDrive=60.0
+
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.ThirdFrisbeeDelay=100
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FirstEnterWheelSetPoint=2300
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FirstExitWheelSetPoint=3550
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FirstShooterAngle=false
+
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.SecondEnterWheelSetPoint=2500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.SecondExitWheelSetPoint=2500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.SecondShooterAngle=true
+
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FunnelatorLoadDelay=7000
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.LowerAccumulatorDelay=1500
+
+
+//ShootFiveTwist
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.ForceStopAtStep=0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.TwistAngle=20.0
+
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstDrive=94.0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondDrive=0.0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.ThirdDrive=60.0
+
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.ThirdFrisbeeDelay=100
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstEnterWheelSetPoint=2300
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstExitWheelSetPoint=3550
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstShooterAngle=false
+
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondEnterWheelSetPoint=2500
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondExitWheelSetPoint=2500
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondShooterAngle=true
+
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FunnelatorLoadDelay=7000
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.LowerAccumulatorDelay=1500
 
 
 //Shoot Three
@@ -200,6 +215,14 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBa
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.FirstExitWheelSetPoint=3550
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.FirstShooterAngle=false
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.LowerAccumulatorDelay=1500
+//Inside Pyramid Back Center
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.StartDrive=0.0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.SecondDrive=0.0
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.ThirdFrisbeeDelay=100
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.FirstEnterWheelSetPoint=2300
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.FirstExitWheelSetPoint=3550
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.FirstShooterAngle=false
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.LowerAccumulatorDelay=1500
 //Inside Pyramid Back Right
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.StartDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.SecondDrive=0.0
@@ -227,13 +250,37 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidF
 
 //Drive distance
 //Distance is in inches
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistance.distance=100
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistance.distance=100
 
 //Drive Distance Motion Profile
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=0
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.heading=0.8
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveDistanceMotionProfile.distance=-46
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=0
+
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.heading=0.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.distance=25.0
+
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackLeft.heading=0.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackLeft.distance=50.0
+
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackRight.heading=0.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackRight.distance=100.0
+
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.outsidePyramidFrontLeft.heading=0.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.outsidePyramidFrontLeft.distance=10.0
+
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.outsidePyramidFrontRight.heading=0.8
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.outsidePyramidFrontRight.distance=-46
 
 //Drive heading
 //Heading is in degrees
-com.wildstangs.autonomous.programs.WsAutonomousProgramDriveHeading.angle=-30
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveHeading.angle=-30
+
+
+//2012 Robot Selection
+com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=false
+
+com.wildstangs.inputfacade.inputs.WsAnalogueInput.startState=0.0
+com.wildstangs.inputfacade.inputs.WsDigitalInput.startState=false
+com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput.startState=0.0
+com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput.startState=false
+
+
