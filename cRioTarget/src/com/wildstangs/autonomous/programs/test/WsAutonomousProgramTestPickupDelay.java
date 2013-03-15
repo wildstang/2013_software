@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.wildstangs.autonomous.programs;
+package com.wildstangs.autonomous.programs.test;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;

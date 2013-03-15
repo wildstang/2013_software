@@ -4,6 +4,16 @@
  */
 package com.wildstangs.autonomous;
 
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramHopperTest;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramForwardsTest;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramTestPickupDelay;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramTestParallel;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramTestSerial;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveHeading;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistance;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramTestIntake;
+import com.wildstangs.autonomous.programs.test.WsAutonomousProgramFloorPickup;
 import com.wildstangs.autonomous.programs.*;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInputEnum;
