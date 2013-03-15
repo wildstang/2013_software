@@ -23,7 +23,7 @@ public class WsAutonomousProgramTestPickupDelay extends WsAutonomousProgram
 {
     public WsAutonomousProgramTestPickupDelay()
     {
-        super(11);
+        super(22);
     }
     public void defineSteps()
     {
@@ -38,12 +38,23 @@ public class WsAutonomousProgramTestPickupDelay extends WsAutonomousProgram
         programSteps[8] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
         programSteps[9] = new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator();
         programSteps[10] = new WsAutonomousStepIntakeMotorStop();
+        programSteps[11] = new WsAutonomousStepLowerAccumulator();
+        programSteps[12] = new WsAutonomousStepLowerHopper();
+        programSteps[13] = new WsAutonomousStepDelay();
+        programSteps[14] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
+        programSteps[15] = new WsAutonomousStepDelay(3000);
+        programSteps[16] = new WsAutonomousStepIntakeMotorStop();
+        programSteps[17] = new WsAutonomousStepRaiseAccumulator();
+        programSteps[18] = new WsAutonomousStepWaitForAccumulatorUp();
+        programSteps[19] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
+        programSteps[20] = new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator();
+        programSteps[21] = new WsAutonomousStepIntakeMotorStop();
         
     }
     
     public String toString()
     {
-        return "Test Pickup Delay";
+        return "TEST WaitForDiscsLatched TWICE";
     }
 }
 

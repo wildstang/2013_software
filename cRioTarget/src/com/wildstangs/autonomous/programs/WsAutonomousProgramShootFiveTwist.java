@@ -19,11 +19,12 @@ import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.subsystems.WsShooter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
+public class WsAutonomousProgramShootFiveTwist extends WsAutonomousProgram {
 
     private DoubleConfigFileParameter FirstDrive;
     private DoubleConfigFileParameter SecondDrive;
     private DoubleConfigFileParameter ThirdDrive;
+    private DoubleConfigFileParameter TwistAngle;
     private IntegerConfigFileParameter FirstEnterWheelSetPoint;
     private IntegerConfigFileParameter FirstExitWheelSetPoint;
     private BooleanConfigFileParameter FirstShooterAngle;
@@ -36,6 +37,7 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
     private WsShooter.Preset firstShooterPreset, secondShooterPreset;
 
     private void defineConfigValues() {
+        TwistAngle = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".TwistAngle", 30);
         FirstDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstDrive", 60.5);
         SecondDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondDrive", 60.5);
         ThirdDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdDrive", 60.5);
@@ -59,8 +61,8 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
                 ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
-    public WsAutonomousProgramShootFiveAndGrab() {
-        super(24);
+    public WsAutonomousProgramShootFiveTwist() {
+        super(29);
     }
 
     public void defineSteps() {
@@ -75,7 +77,15 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
             ssc1.addStep(new WsAutonomousStepMultikick(2));
             ssc1.addStep(new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue()));
             ssc1.addStep(new WsAutonomousStepMultikick(1));
-        programSteps[3] = new WsAutonomousStepLowerHopper();
+            
+        WsAutonomousSerialStepContainer sstwist = new WsAutonomousSerialStepContainer("Twist back to square up to frisbees");
+        programSteps[3] = sstwist;
+            sstwist.addStep(new WsAutonomousStepSetDriveHeadingPidRelativeSetpoint(TwistAngle.getValue()));
+            sstwist.addStep(new WsAutonomousStepEnableDriveHeadingPid());
+            sstwist.addStep(new WsAutonomousStepWaitForDriveHeadingPid());
+            
+            sstwist.addStep(new WsAutonomousStepLowerHopper());
+        
         programSteps[4] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
         programSteps[5] = new WsAutonomousStepStartDriveUsingMotionProfile(FirstDrive.getValue(), 0.0);
         programSteps[6] = new WsAutonomousStepWaitForDriveMotionProfile(); 
@@ -129,9 +139,14 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
                 pfa2.addStep(ssc5);
             ssc4.addStep(pfa2);
             ssc4.addStep(new WsAutonomousStepIntakeMotorStop()); 
+        programSteps[24] = new WsAutonomousStepLowerAccumulator();
+        programSteps[25] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
+        programSteps[26] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse); 
+        programSteps[27] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
+        programSteps[28] = new WsAutonomousStepRaiseAccumulator();
     }
 
     public String toString() {
-        return "Shoot Five Frisbees And Pick Up Two More";
+        return "Shoot Five Frisbees TWIST And Pick Up Two More";
     }
 }

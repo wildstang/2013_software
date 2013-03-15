@@ -6,6 +6,7 @@ package com.wildstangs.autonomous.programs.test;
 
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepEnableDriveHeadingPid;
+import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepSetDriveHeadingPidRelativeSetpoint;
 import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepSetDriveHeadingPidSetpoint;
 import com.wildstangs.autonomous.steps.drivebase.WsAutonomousStepWaitForDriveHeadingPid;
 import com.wildstangs.config.DoubleConfigFileParameter;
@@ -28,12 +29,12 @@ public class WsAutonomousProgramDriveHeading extends WsAutonomousProgram {
     }
 
     public void defineSteps() {
-        programSteps[0] = new WsAutonomousStepEnableDriveHeadingPid();
-        programSteps[1] = new WsAutonomousStepSetDriveHeadingPidSetpoint(angle.getValue());
+        programSteps[0] = new WsAutonomousStepSetDriveHeadingPidRelativeSetpoint(angle.getValue());
+        programSteps[1] = new WsAutonomousStepEnableDriveHeadingPid();
         programSteps[2] = new WsAutonomousStepWaitForDriveHeadingPid();
     }
 
     public String toString() {
-        return "Test by driving to a specified heading using PID control";
+        return "TEST Relative heading test using PID control";
     }
 }

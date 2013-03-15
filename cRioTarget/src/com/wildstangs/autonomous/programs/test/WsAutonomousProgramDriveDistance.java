@@ -34,6 +34,7 @@ public class WsAutonomousProgramDriveDistance extends WsAutonomousProgram {
     }
 
     public String toString() {
-        return "Test by driving forward for a specified distance using PID control";
+        return "TEST PID Drive distance";
+        
     }
 }

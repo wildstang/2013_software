@@ -46,6 +46,6 @@ public class WsAutonomousProgramDriveDistanceMotionProfile extends WsAutonomousP
     }
 
     public String toString() {
-        return "Test by driving forward for a specified distance using motion profile";
+        return "TEST Motion profile distance";
     }
 }
