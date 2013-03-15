@@ -58,14 +58,14 @@ public class WsDSAnalogInput implements IInput {
 
     public void pullData() {
         
-        //analogValue.setValue(DriverStation.getInstance().getAnalogIn(channel));
-        try {
-            analogValue.setValue(DriverStation.getInstance().getEnhancedIO().getAnalogIn(channel));
-        }
-        catch (EnhancedIOException e) {
-            analogValue.setValue(DriverStation.getInstance().getAnalogIn(channel));
-            Logger.getLogger().error(this.getClass().getName(), "pullData", "Enhanced IO Error(switch to non-enhanced): " + e.toString());
-        }
+        analogValue.setValue(DriverStation.getInstance().getAnalogIn(channel));
+//        try {
+//            analogValue.setValue(DriverStation.getInstance().getEnhancedIO().getAnalogIn(channel));
+//        }
+//        catch (EnhancedIOException e) {
+//            analogValue.setValue(DriverStation.getInstance().getAnalogIn(channel));
+//            Logger.getLogger().error(this.getClass().getName(), "pullData", "Enhanced IO Error(switch to non-enhanced): " + e.toString());
+//        }
     }
 
     public void notifyConfigChange() {

@@ -149,10 +149,10 @@ public class WsInputFacade {
         }
         oiInputs.add(new DataElement(DRIVER_JOYSTICK, new WsDriverJoystick()));
         oiInputs.add(new DataElement(MANIPULATOR_JOYSTICK, new WsManipulatorJoystick()));
-        oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(5)));
-        oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(7)));
-        //oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(4)));
-        //oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(3)));
+//        oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(5)));
+//        oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(7)));
+        oiInputs.add(new DataElement(ENTER_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(4)));
+        oiInputs.add(new DataElement(EXIT_WHEEL_SHOOTER_SPEED_INPUT, new WsDSAnalogInput(3)));
         oiInputs.add(new DataElement(SHOOTER_WHEEL_SPEED_OVERRIDE, new WsDSDigitalInput(2)));
         oiInputs.add(new DataElement(AUTO_PROGRAM_SELECTOR, new WsDSAnalogInput(2)));
         oiInputs.add(new DataElement(LOCK_IN_SWITCH, new WsDSDigitalInput(1)));

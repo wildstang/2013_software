@@ -9,6 +9,7 @@ import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
 import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
+import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedThroughFunnelator;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
@@ -22,6 +23,7 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
 
     private DoubleConfigFileParameter FirstDrive;
     private DoubleConfigFileParameter SecondDrive;
+    private DoubleConfigFileParameter ThirdDrive;
     private IntegerConfigFileParameter FirstEnterWheelSetPoint;
     private IntegerConfigFileParameter FirstExitWheelSetPoint;
     private BooleanConfigFileParameter FirstShooterAngle;
@@ -36,6 +38,7 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
     private void defineConfigValues() {
         FirstDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstDrive", 60.5);
         SecondDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondDrive", 60.5);
+        ThirdDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdDrive", 60.5);
         FirstEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstEnterWheelSetPoint", 5000);
         FirstExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstExitWheelSetPoint", 4500);
         FirstShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstShooterAngle", false);
@@ -57,7 +60,7 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootFiveAndGrab() {
-        super(21);
+        super(29);
     }
 
     public void defineSteps() {
@@ -86,13 +89,10 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
         programSteps[10] = ssc2;
             ssc2.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
         WsAutonomousParallelFinishedOnAnyStepGroup pfa1 = new WsAutonomousParallelFinishedOnAnyStepGroup("Time out or take in a frisbee 1");
-        WsAutonomousSerialStepContainer ssc3 = new WsAutonomousSerialStepContainer("Two frisbees on limit switch 2");
-            ssc3.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
-            ssc3.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
                 pfa1.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
-                pfa1.addStep(ssc3);
+                pfa1.addStep(new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator());
             ssc2.addStep(pfa1);
-            ssc2.addStep(new WsAutonomousStepIntakeMotorStop()); 
+            ssc2.addStep(new WsAutonomousStepIntakeMotorStop());
         programSteps[11] = new WsAutonomousStepRaiseHopper();
         WsAutonomousParallelStepGroup pg3 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
         programSteps[12] = pg3;
@@ -106,7 +106,7 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
         programSteps[15] = new WsAutonomousStepMultikick(2);
         programSteps[16] = new WsAutonomousStepLowerHopper();
         programSteps[17] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
-        programSteps[18] = new WsAutonomousStepStartDriveUsingMotionProfile(FirstDrive.getValue(), 0.0);
+        programSteps[18] = new WsAutonomousStepStartDriveUsingMotionProfile(ThirdDrive.getValue(), 0.0);
         programSteps[19] = new WsAutonomousStepWaitForDriveMotionProfile(); 
         programSteps[20] = new WsAutonomousStepStopDriveUsingMotionProfile();
         programSteps[21] = new WsAutonomousStepIntakeMotorStop();
@@ -122,8 +122,8 @@ public class WsAutonomousProgramShootFiveAndGrab extends WsAutonomousProgram {
             ssc5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
             ssc5.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
                 pfa2.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
-                pfa2.addStep(ssc3);
-            ssc4.addStep(pfa1);
+                pfa2.addStep(ssc5);
+            ssc4.addStep(pfa2);
             ssc4.addStep(new WsAutonomousStepIntakeMotorStop()); 
         programSteps[24] = new WsAutonomousStepLowerAccumulator();
         programSteps[25] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());

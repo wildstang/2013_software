@@ -52,9 +52,9 @@ public class WsAutonomousManager implements IObserver {
 
     public void startCurrentProgram() {
         runningProgram = programs[lockedProgram];
+        Logger.getLogger().always("Auton", "Running Autonomous Program", runningProgram.toString());
         runningProgram.initialize();
         SmartDashboard.putString("Running Autonomous Program", runningProgram.toString());
-        Logger.getLogger().always("Auton", "Running Autonomous Program", runningProgram.toString());
     }
 
     public void clear() {
@@ -148,7 +148,7 @@ public class WsAutonomousManager implements IObserver {
     }
 
     private void definePrograms() {
-        programs = new WsAutonomousProgram[14];
+        programs = new WsAutonomousProgram[15];
         programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper.
         programs[1] = new WsAutonomousProgramShootSeven();
         programs[2] = new WsAutonomousProgramDriveDistance();
@@ -163,5 +163,6 @@ public class WsAutonomousManager implements IObserver {
         programs[11] = new WsAutonomousProgramShootFive();
         programs[12] = new WsAutonomousProgramShootThree();
         programs[13] = new WsAutonomousProgramShootFiveAndGrab();
+        programs[14] = new WsAutonomousProgramTestPickupDelay();
     }
 }

@@ -9,6 +9,7 @@ import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
 import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
+import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedThroughFunnelator;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
@@ -94,8 +95,8 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
                 pfa1.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()));
                 pfa1.addStep(ssc3);
             ssc2.addStep(pfa1);
-            ssc2.addStep(new WsAutonomousStepIntakeMotorStop()); 
-        programSteps[11] = new WsAutonomousStepRaiseHopper();
+            ssc2.addStep(new WsAutonomousStepIntakeMotorStop());
+                programSteps[11] = new WsAutonomousStepRaiseHopper();
         WsAutonomousParallelStepGroup pg3 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
         programSteps[12] = pg3;
             pg3.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(SecondDrive.getValue(), 0.0));
