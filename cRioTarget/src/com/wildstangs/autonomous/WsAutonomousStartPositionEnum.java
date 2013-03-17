@@ -21,7 +21,7 @@ public class WsAutonomousStartPositionEnum {
     }
     public static final WsAutonomousStartPositionEnum UNKNOWN = new WsAutonomousStartPositionEnum(0, "unknown", "Unknown Position");
     public static final WsAutonomousStartPositionEnum CENTER_BACK_PYRAMID = new WsAutonomousStartPositionEnum(1, "insidePyramidBackCenter", "Inside pyramid, back center");
-    public static final WsAutonomousStartPositionEnum BACK_LEFT_PYRAMID_OUTSIDE = new WsAutonomousStartPositionEnum(2, "outsidePyramidBackLeft", "Outside pyramid, by back left corner");
+    public static final WsAutonomousStartPositionEnum POSITION2 = new WsAutonomousStartPositionEnum(2, "unknown", "Unknown Position");
     public static final WsAutonomousStartPositionEnum BACK_LEFT_PYRAMID_INSIDE = new WsAutonomousStartPositionEnum(3, "insidePyramidBackLeft", "Inside pyramid, by back left corner");
     public static final WsAutonomousStartPositionEnum BACK_RIGHT_PYRAMID_INSIDE = new WsAutonomousStartPositionEnum(4, "insidePyramidBackRight", "Inside Pyramid, back right");
     public static final WsAutonomousStartPositionEnum FRONT_RIGHT_PYRAMID_OUTSIDE = new WsAutonomousStartPositionEnum(5, "outsidePyramidFrontRight", "Outside Pyramid, front right");
@@ -59,7 +59,7 @@ public class WsAutonomousStartPositionEnum {
             case 1:
                 return WsAutonomousStartPositionEnum.CENTER_BACK_PYRAMID;
             case 2:
-                return WsAutonomousStartPositionEnum.BACK_LEFT_PYRAMID_OUTSIDE;
+                return WsAutonomousStartPositionEnum.POSITION2;
             case 3:
                 return WsAutonomousStartPositionEnum.BACK_LEFT_PYRAMID_INSIDE;
             case 4:

@@ -33,8 +33,8 @@ public class WsAutonomousProgramShootThree extends WsAutonomousProgram {
     private void defineConfigValues() {
         StartDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".StartDrive", 60.5);
         SecondDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondDrive", 60.5);
-        FirstEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstEnterWheelSetPoint", 5000);
-        FirstExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstExitWheelSetPoint", 4500);
+        FirstEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstEnterWheelSetPoint", 2100);
+        FirstExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstExitWheelSetPoint", 3500);
         FirstShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstShooterAngle", false);
         ThirdFrisbeeDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdFrisbeeDelay", 100);
         LowerAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".LowerAccumulatorDelay", 2000);
@@ -46,32 +46,17 @@ public class WsAutonomousProgramShootThree extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootThree() {
-        super(14);
+        super(6);
     }
 
     public void defineSteps() {
         defineConfigValues();
-        WsAutonomousParallelStepGroup pg1 = new WsAutonomousParallelStepGroup("Drive and Set shooter");
-        programSteps[0] = pg1;
-            pg1.addStep(new WsAutonomousStepSetDriveDistancePidSetpoint(StartDrive.getValue()));
-            pg1.addStep(new WsAutonomousStepSetShooterPreset(startPreset.ENTER_WHEEL_SET_POINT, startPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE));
-            pg1.addStep(new WsAutonomousStepLowerAccumulator());
-        programSteps[1] = new WsAutonomousStepEnableDriveDistancePid();
-        WsAutonomousParallelStepGroup pg2 = new WsAutonomousParallelStepGroup("Wait for shooter and drive");
-        programSteps[2] = pg2;
-            pg2.addStep(new WsAutonomousStepWaitForShooter());
-            pg2.addStep(new WsAutonomousStepWaitForDriveDistancePid());
-        programSteps[3] = new WsAutonomousStepSetDriveDistancePidSetpoint(SecondDrive.getValue());
-        programSteps[4] = new WsAutonomousStepEnableDriveDistancePid();
-        programSteps[5] = new WsAutonomousStepWaitForDriveDistancePid();
-        programSteps[6] = new WsAutonomousStepMultikick(2);
-        programSteps[7] = new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue());
-        programSteps[8] = new WsAutonomousStepMultikick(1);
-        programSteps[9] = new WsAutonomousStepLowerAccumulator();
-        programSteps[10] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
-        programSteps[11] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse); 
-        programSteps[12] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
-        programSteps[13] = new WsAutonomousStepRaiseAccumulator();
+        programSteps[0] = new WsAutonomousStepSetShooterPreset(startPreset.ENTER_WHEEL_SET_POINT, startPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE);
+        programSteps[1] = new WsAutonomousStepWaitForShooter();
+        programSteps[2] = new WsAutonomousStepMultikick(2);
+        programSteps[3] = new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue());
+        programSteps[4] = new WsAutonomousStepMultikick(1);
+        programSteps[5] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
         
     }
 

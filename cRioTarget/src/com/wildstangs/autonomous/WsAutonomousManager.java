@@ -98,7 +98,8 @@ public class WsAutonomousManager implements IObserver {
 
     public void acceptNotification(Subject cause) {
         if (cause instanceof DoubleSubject) {
-            if (cause.getType() == WsDSAnalogInputEnum.INPUT1) {
+            if (cause == WsInputFacade.getInstance().getOiInput(WsInputFacade.START_POSITION_SELECTOR)
+                    .getSubject((ISubjectEnum) null)) {
                 positionSwitch = (float) ((DoubleSubject) cause).getValue();
                 if (positionSwitch >= 3.3) {
                     positionSwitch = 3.3f;
@@ -108,7 +109,8 @@ public class WsAutonomousManager implements IObserver {
                 }
                 currentPosition = WsAutonomousStartPositionEnum.getEnumFromValue((int) (Math.floor((positionSwitch / 3.4) * WsAutonomousStartPositionEnum.POSITION_COUNT)));
                 SmartDashboard.putString("Current Start Position", currentPosition.toString());
-            } else if (cause.getType() == WsDSAnalogInputEnum.INPUT2) {
+            } else if (cause == WsInputFacade.getInstance().getOiInput(WsInputFacade.AUTO_PROGRAM_SELECTOR)
+                    .getSubject((ISubjectEnum) null)) {
                 selectorSwitch = (float) ((DoubleSubject) cause).getValue();
                 if (selectorSwitch >= 3.3) {
                     selectorSwitch = 3.3f;
@@ -121,7 +123,7 @@ public class WsAutonomousManager implements IObserver {
             }
         } else if (cause instanceof BooleanSubject) {
             lockInSwitch = ((BooleanSubject) cause).getValue();
-            lockedProgram = lockInSwitch ? currentProgram : 0;
+            lockedProgram = !lockInSwitch ? currentProgram : 0;
             SmartDashboard.putString("Locked Autonomous Program", programs[lockedProgram].toString());
         }
     }
