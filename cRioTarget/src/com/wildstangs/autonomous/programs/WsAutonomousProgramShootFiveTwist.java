@@ -62,7 +62,7 @@ public class WsAutonomousProgramShootFiveTwist extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootFiveTwist() {
-        super(29);
+        super(25);
     }
 
     public void defineSteps() {
@@ -139,11 +139,7 @@ public class WsAutonomousProgramShootFiveTwist extends WsAutonomousProgram {
                 pfa2.addStep(ssc5);
             ssc4.addStep(pfa2);
             ssc4.addStep(new WsAutonomousStepIntakeMotorStop()); 
-        programSteps[24] = new WsAutonomousStepLowerAccumulator();
-        programSteps[25] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
-        programSteps[26] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse); 
-        programSteps[27] = new WsAutonomousStepDelay(LowerAccumulatorDelay.getValue());
-        programSteps[28] = new WsAutonomousStepRaiseAccumulator();
+        programSteps[24] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
     }
 
     public String toString() {
