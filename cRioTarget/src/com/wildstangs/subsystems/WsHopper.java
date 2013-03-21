@@ -57,6 +57,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         liftValue = LIFT_DEFAULT_VALUE;
         cycle = 0;
         kickerButtonPressed = false;
+        disks = 0;
     }
 
     public void update() {
@@ -114,6 +115,10 @@ public class WsHopper extends WsSubsystem implements IObserver {
                     goingForward = true;
                     cycle = 0;
                     kickerValue = true;
+                    if(disks > 0)
+                    {
+                        disks--;
+                    }
                 }
             }
         } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) {
