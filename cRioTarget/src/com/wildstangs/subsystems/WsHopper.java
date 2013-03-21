@@ -32,6 +32,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
     private boolean kickerButtonPressed = false;
     private boolean kickerValue;
     private DoubleSolenoid.Value liftValue;
+    private int disks = 0;
 
     public WsHopper(String name) {
         super(name);
@@ -57,6 +58,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         liftValue = LIFT_DEFAULT_VALUE;
         cycle = 0;
         kickerButtonPressed = false;
+        disks = 0;
     }
 
     public void update() {
@@ -76,6 +78,10 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 if (kickerButtonPressed && this.isUpLimitSwitchTriggered()) {
                     goingForward = true;
                     kickerValue = true;
+                    if(disks > 0)
+                    {
+                        disks--;
+                    }
                 }
             }
         }
@@ -118,6 +124,10 @@ public class WsHopper extends WsSubsystem implements IObserver {
                     goingForward = true;
                     cycle = 0;
                     kickerValue = true;
+                    if(disks > 0)
+                    {
+                        disks--;
+                    }
                 }
             }
         } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) {
@@ -157,5 +167,15 @@ public class WsHopper extends WsSubsystem implements IObserver {
 
     public boolean isHopperUp() {
         return (liftValue == DoubleSolenoid.Value.kForward);
+    }
+    
+    public void addDisk()
+    {
+        disks++;
+    }
+    
+    public int getDisks()
+    {
+        return disks;
     }
 }
