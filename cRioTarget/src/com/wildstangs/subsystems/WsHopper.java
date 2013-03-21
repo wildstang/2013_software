@@ -10,6 +10,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
+import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -78,6 +79,14 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 }
             }
         }
+        
+        //If the funnelator limit switch is pressed, leave the hopper down
+        WsIntake intakeSubsystem = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
+        boolean funnelatorLimitSwitch = intakeSubsystem.getFunnelatorLimitSwitch();
+        if (true == funnelatorLimitSwitch) {
+            liftValue = DoubleSolenoid.Value.kReverse;
+        }
+        
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
 
@@ -134,7 +143,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         }
     }
 
-    public DoubleSolenoid.Value get_LiftState() {
+    public DoubleSolenoid.Value getLiftState() {
         return liftValue;
     }
 

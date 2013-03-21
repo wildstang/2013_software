@@ -2,7 +2,6 @@ package com.wildstangs.autonomous.steps.floorpickup;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
 import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.Subject;
