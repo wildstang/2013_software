@@ -84,7 +84,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         WsIntake intakeSubsystem = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
         boolean funnelatorLimitSwitch = intakeSubsystem.getFunnelatorLimitSwitch();
         if (true == funnelatorLimitSwitch) {
-            liftValue = DoubleSolenoid.Value.kForward;
+            liftValue = DoubleSolenoid.Value.kReverse;
         }
         
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
