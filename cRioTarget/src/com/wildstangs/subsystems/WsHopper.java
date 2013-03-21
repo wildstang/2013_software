@@ -12,7 +12,6 @@ import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -144,7 +143,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         }
     }
 
-    public DoubleSolenoid.Value get_LiftState() {
+    public DoubleSolenoid.Value getLiftState() {
         return liftValue;
     }
 
