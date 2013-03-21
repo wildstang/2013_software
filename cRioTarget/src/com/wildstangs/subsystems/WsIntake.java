@@ -224,6 +224,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
                     latchAccumulatorSwitches = false;
                     fingerValveState = false;
                 }
+                ((WsHopper)WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER)).addDisk();
             }
         }
     }
