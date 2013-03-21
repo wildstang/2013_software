@@ -62,7 +62,7 @@ com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.minO
 
 
 //Drivebase 
-com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.210
+com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.4457752
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500

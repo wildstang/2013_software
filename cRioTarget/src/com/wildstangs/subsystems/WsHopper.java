@@ -120,7 +120,10 @@ public class WsHopper extends WsSubsystem implements IObserver {
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
             kickerButtonPressed = button.getValue();
             if (button.getValue()) {
-                if (!goingForward && !goingBack && this.isUpLimitSwitchTriggered()) {
+                if (!goingForward && !goingBack && (this.isUpLimitSwitchTriggered() ||
+                    ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(
+                        WsSubsystemContainer.WS_INTAKE)).getFingerDownOverrideButtonState()))
+                {
                     goingForward = true;
                     cycle = 0;
                     kickerValue = true;

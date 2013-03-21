@@ -168,6 +168,11 @@ public class WsIntake extends WsSubsystem implements IObserver {
             latchAccumulatorSwitches = true;
         }
     }
+    
+    public boolean getFingerDownOverrideButtonState()
+    {
+        return fingerDownOverrideButtonState;
+    }
 
     public void latchNumDiscs() {
         if (true == rightAccumulatorLimitSwitch && true == leftAccumulatorLimitSwitch) {
