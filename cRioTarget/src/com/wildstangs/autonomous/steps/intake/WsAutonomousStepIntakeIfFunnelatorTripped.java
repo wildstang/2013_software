@@ -38,7 +38,7 @@ public class WsAutonomousStepIntakeIfFunnelatorTripped extends WsAutonomousStep 
     }
 
     public void update() {
-        if (true == funnelatorSwitch) {
+        if (false == funnelatorSwitch) {
             Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
             BooleanSubject backButton = (BooleanSubject) subject;
             backButton.setValue(false);
