@@ -17,6 +17,7 @@ import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.simulation.encoders.DriveBaseEncoders;
 import com.wildstangs.simulation.encoders.FlywheelEncoders;
+import com.wildstangs.simulation.funnelator.FunnelatorLimitSwitch;
 import com.wildstangs.simulation.hopper.HopperLimitSwitches;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
@@ -30,7 +31,7 @@ public class WsSimulation {
 
     static String c = "WsSimulation";
     
-    static boolean autonomousRun = true;
+    static boolean autonomousRun = false;
     
     /**
      * @param args the command line arguments
@@ -101,6 +102,7 @@ public class WsSimulation {
         FlywheelEncoders flywheelEncoders = new FlywheelEncoders(); 
         HopperLimitSwitches limitSwitches = new HopperLimitSwitches(); 
         AccumulatorLimitSwitch aclimitSwitches = new AccumulatorLimitSwitch(); 
+        FunnelatorLimitSwitch funnellimitSwitches = new FunnelatorLimitSwitch(); 
 //        periodTimer.startTimingSection();
         
 //        ContinuousAccelFilter accelFilter = new ContinuousAccelFilter(0, 0, 0);
@@ -138,7 +140,7 @@ public class WsSimulation {
 //            periodTimer.endTimingSection();
 //            periodTimer.startTimingSection();
 //            durationTimer.startTimingSection();
-            if (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper")){
+            if (false == autonomousRun || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper"))){
                 
                 //Update the Victor graphs
                 leftDriveSpeed.update();
@@ -168,6 +170,7 @@ public class WsSimulation {
                 flywheelEncoders.update(); 
                 limitSwitches.update();
                 aclimitSwitches.update();
+                funnellimitSwitches.update();
             }
 
 //            durationTimer.endTimingSection();
