@@ -101,6 +101,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         SmartDashboard.putBoolean("KickerReady", goingForward || goingBack);
         SmartDashboard.putBoolean("Up limit switch", upLimitSwitchValue);
         SmartDashboard.putBoolean("Down limit switch", downLimitSwitchValue);
+        SmartDashboard.putNumber("Num disks", disks);
     }
 
     public void notifyConfigChange() {
