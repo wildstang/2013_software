@@ -75,7 +75,9 @@ public class WsHopper extends WsSubsystem implements IObserver {
             if (cycle >= backwardCycles) {
                 goingBack = false;
                 cycle = 0;
-                if (kickerButtonPressed && this.isUpLimitSwitchTriggered()) {
+                if (kickerButtonPressed && (this.isUpLimitSwitchTriggered()||
+                    ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(
+                        WsSubsystemContainer.WS_INTAKE)).getFingerDownOverrideButtonState())) {
                     goingForward = true;
                     kickerValue = true;
                     if(disks > 0)

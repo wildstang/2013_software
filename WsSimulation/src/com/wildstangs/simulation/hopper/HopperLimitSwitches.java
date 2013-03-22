@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj.Encoder;
  */
 public class HopperLimitSwitches {
 
-    private static int UP_LIMIT_SWITCH_CHANNEL = 12-1;
-    private static int DOWN_LIMIT_SWITCH_CHANNEL = 13-1;
+    private static int UP_LIMIT_SWITCH_CHANNEL = 12;
+    private static int DOWN_LIMIT_SWITCH_CHANNEL = 13;
     public HopperLimitSwitches() {
     }
     
