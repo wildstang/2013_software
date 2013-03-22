@@ -28,7 +28,7 @@ public class HopperLimitSwitches {
     public void update(){
         
         //Get the lift value 
-        DoubleSolenoid.Value solValue = ((DoubleSolenoid.Value) ((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER)).get_LiftState()); 
+        DoubleSolenoid.Value solValue = ((DoubleSolenoid.Value) ((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER)).getLiftState()); 
         
         //Forward is up
         if (solValue == DoubleSolenoid.Value.kForward){
