@@ -107,8 +107,8 @@ com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed=2800
 com.wildstangs.subsystems.WsShooter.PresetShortHighAngle=true
 
 //Loading Ramp
-com.wildstangs.subsystems.WsLoadingRamp.AngleUp=76.5
-com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
+com.wildstangs.subsystems.WsLoadingRamp.AngleUp=0.0
+com.wildstangs.subsystems.WsLoadingRamp.AngleDown=108.0
 
 //   XX
 //    X              X
