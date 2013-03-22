@@ -86,12 +86,6 @@ public class WsHopper extends WsSubsystem implements IObserver {
             }
         }
         
-        //If the funnelator limit switch is pressed, leave the hopper down
-        WsIntake intakeSubsystem = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
-        boolean funnelatorLimitSwitch = intakeSubsystem.getFunnelatorLimitSwitch();
-        if (true == funnelatorLimitSwitch) {
-            liftValue = DoubleSolenoid.Value.kReverse;
-        }
         
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
@@ -137,7 +131,14 @@ public class WsHopper extends WsSubsystem implements IObserver {
         } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) {
             if (button.getValue() == true && (button.getPreviousValue() == false)) {
                 if (liftValue == DoubleSolenoid.Value.kReverse) {
-                    liftValue = DoubleSolenoid.Value.kForward;
+                    
+                    WsIntake intakeSubsystem = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
+                    boolean funnelatorLimitSwitch = intakeSubsystem.getFunnelatorLimitSwitch();
+                //Only allow the hopper to go up if the funnelator switch is NOT tripped (prevent jam-ups in autonomous)
+                    if (false == funnelatorLimitSwitch) {
+                        liftValue = DoubleSolenoid.Value.kForward;
+                    }
+                    
                 } else {
                     liftValue = DoubleSolenoid.Value.kReverse;
                 }
