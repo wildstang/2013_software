@@ -61,7 +61,7 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootFive() {
-        super(17);
+        super(19);
     }
 
     public void defineSteps() {
@@ -73,7 +73,9 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
         programSteps[1] = new WsAutonomousStepWaitForShooter();
         WsAutonomousSerialStepContainer ssc1 = new WsAutonomousSerialStepContainer("Kick twice, delay, then kick again");
         programSteps[2] = ssc1;
-            ssc1.addStep(new WsAutonomousStepMultikick(2));
+            ssc1.addStep(new WsAutonomousStepMultikick(1));
+            ssc1.addStep(new WsAutonomousStepDelay(100));
+            ssc1.addStep(new WsAutonomousStepMultikick(1));
             ssc1.addStep(new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue()));
             ssc1.addStep(new WsAutonomousStepMultikick(1));
         programSteps[3] = new WsAutonomousStepLowerHopper();
@@ -119,8 +121,10 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
             pg4.addStep(new WsAutonomousStepWaitForShooter());
             pg4.addStep(new WsAutonomousStepWaitForDriveMotionProfile());
         programSteps[14] = new WsAutonomousStepStopDriveUsingMotionProfile();
-        programSteps[15] = new WsAutonomousStepMultikick(2);
-        programSteps[16] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
+        programSteps[15] = new WsAutonomousStepMultikick(1);
+        programSteps[16] = new WsAutonomousStepDelay(200);
+        programSteps[17] = new WsAutonomousStepMultikick(1);
+        programSteps[18] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
     }
 
     public String toString() {
