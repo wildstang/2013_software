@@ -27,7 +27,7 @@ public class FunnelatorLimitSwitch {
 //        
 //        if (angle.intValue() == 1){
 //            //Set the limit switches based on that value
-//            WsDigitalInputContainer.getInstance().inputs[FUNNELATOR_LIMIT_SWITCH_CHANNEL].set(true);
+            WsDigitalInputContainer.getInstance().inputs[FUNNELATOR_LIMIT_SWITCH_CHANNEL].set(true);
 //            
 //        } else { 
 //            //Set the limit switches based on that value

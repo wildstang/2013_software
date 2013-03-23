@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class WsIntake extends WsSubsystem implements IObserver {
 
     private DoubleConfigFileParameter switchDelay = new DoubleConfigFileParameter(
-            this.getClass().getName(), "FingerDelayFromAccumulatorSwitch", 15.0);
+            this.getClass().getName(), "FingerDelayFromAccumulatorSwitch", 3.5);
     private BooleanConfigFileParameter useDelay = new BooleanConfigFileParameter(
             this.getClass().getName(), "UseTimeDelay", true);
     private double switchDelayTime;
@@ -77,6 +77,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
         motorBack = false;
         countTo = 0;
         counting = false;
+        latchAccumulatorSwitches=false; 
     }
 
     public void update() {
@@ -84,7 +85,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
         if (true == latchAccumulatorSwitches) {
             //Once the left limit switch has transitioned to false, it is safe to let the second frisbee through
             if (false == leftAccumulatorLimitSwitch) {
-                if (useTimeDelay) {
+                if (useTimeDelay && !counting) {
                     counting = true;
                     countTo = Timer.getFPGATimestamp() + switchDelayTime;
                 }
