@@ -81,7 +81,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private DoubleConfigFileParameter EXIT_GEAR_RATIO_config = new DoubleConfigFileParameter(
             this.getClass().getName(), "exit_gear_ratio", 3.2);
     private DoubleConfigFileParameter minnimumSafeFlywheelSpeed = new DoubleConfigFileParameter(
-            this.getClass().getName(), "MinnimumSafeFlywheelSpeed", 1200);
+            this.getClass().getName(), "MinnimumSafeFlywheelSpeed", 1200.0);
     private double ENTER_GEAR_RATIO = 3.0;
     private double EXIT_GEAR_RATIO = 3.2;
     private double wheelEnterSetPoint = 0;
