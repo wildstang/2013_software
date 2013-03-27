@@ -75,9 +75,10 @@ public class WsHopper extends WsSubsystem implements IObserver {
             if (cycle >= backwardCycles) {
                 goingBack = false;
                 cycle = 0;
-                if (kickerButtonPressed && (this.isUpLimitSwitchTriggered()||
-                    ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(
-                        WsSubsystemContainer.WS_INTAKE)).getFingerDownOverrideButtonState())) {
+                WsShooter shooter = (WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER);
+                WsIntake intake = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
+                if (kickerButtonPressed && ((this.isUpLimitSwitchTriggered() && shooter.isFlywheelAtSafeSpeed())||
+                    intake.getFingerDownOverrideButtonState())) {
                     goingForward = true;
                     kickerValue = true;
                     if(disks > 0)
@@ -117,9 +118,10 @@ public class WsHopper extends WsSubsystem implements IObserver {
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
             kickerButtonPressed = button.getValue();
             if (button.getValue()) {
-                if (!goingForward && !goingBack && (this.isUpLimitSwitchTriggered() ||
-                    ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(
-                        WsSubsystemContainer.WS_INTAKE)).getFingerDownOverrideButtonState()))
+                WsShooter shooter = (WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER);
+                WsIntake intake = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
+                if (!goingForward && !goingBack && ((this.isUpLimitSwitchTriggered() &&
+                    shooter.isFlywheelAtSafeSpeed()) || intake.getFingerDownOverrideButtonState()))
                 {
                     goingForward = true;
                     cycle = 0;
