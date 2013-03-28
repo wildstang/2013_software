@@ -80,8 +80,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
             this.getClass().getName(), "enter_gear_ratio", 3.0);
     private DoubleConfigFileParameter EXIT_GEAR_RATIO_config = new DoubleConfigFileParameter(
             this.getClass().getName(), "exit_gear_ratio", 3.2);
-    private DoubleConfigFileParameter minnimumSafeFlywheelSpeed = new DoubleConfigFileParameter(
-            this.getClass().getName(), "MinnimumSafeFlywheelSpeed", 1200.0);
+    private DoubleConfigFileParameter minimumSafeFlywheelSpeed = new DoubleConfigFileParameter(
+            this.getClass().getName(), "MinimumSafeFlywheelSpeed", 1200.0);
     private double ENTER_GEAR_RATIO = 3.0;
     private double EXIT_GEAR_RATIO = 3.2;
     private double wheelEnterSetPoint = 0;
@@ -148,7 +148,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
         atSpeedTolerance = atSpeedToleranceConfig.getValue();
         
-        safeFlywheelSpeed = minnimumSafeFlywheelSpeed.getValue();
+        safeFlywheelSpeed = minimumSafeFlywheelSpeed.getValue();
     }
 
     public DoubleSolenoid.Value translatePresetConfigAngle(boolean configVal) {
@@ -290,7 +290,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
         atSpeedTolerance = atSpeedToleranceConfig.getValue();
 
-        safeFlywheelSpeed = minnimumSafeFlywheelSpeed.getValue();
+        safeFlywheelSpeed = minimumSafeFlywheelSpeed.getValue();
         
         ENTER_GEAR_RATIO = ENTER_GEAR_RATIO_config.getValue();
         EXIT_GEAR_RATIO = EXIT_GEAR_RATIO_config.getValue();

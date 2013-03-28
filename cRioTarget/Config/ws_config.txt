@@ -93,7 +93,7 @@ com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=5000
 com.wildstangs.subsystems.WsShooter.AtSpeedTolerance=0.05
 com.wildstangs.subsystems.WsShooter.enter_gear_ratio=3.2
 com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
-com.wildstangs.subsystems.WsShooter.MinnimumSafeFlywheelSpeed=1200.0
+com.wildstangs.subsystems.WsShooter.MinimumSafeFlywheelSpeed=1200.0
 
 
 //Shooter Presets
