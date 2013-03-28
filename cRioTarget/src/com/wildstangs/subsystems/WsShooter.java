@@ -80,6 +80,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
             this.getClass().getName(), "enter_gear_ratio", 3.0);
     private DoubleConfigFileParameter EXIT_GEAR_RATIO_config = new DoubleConfigFileParameter(
             this.getClass().getName(), "exit_gear_ratio", 3.2);
+    private DoubleConfigFileParameter minnimumSafeFlywheelSpeed = new DoubleConfigFileParameter(
+            this.getClass().getName(), "MinnimumSafeFlywheelSpeed", 1200.0);
     private double ENTER_GEAR_RATIO = 3.0;
     private double EXIT_GEAR_RATIO = 3.2;
     private double wheelEnterSetPoint = 0;
@@ -90,8 +92,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private double testingEnterKnob = 0.0;
     private double testingExitKnob = 0.0;
     private double atSpeedTolerance;
+    private double safeFlywheelSpeed = 0.0;
     private boolean testingCalled = false;
     private boolean atSpeed = false;
+    private boolean atSafeSpeed = false;
     private boolean presetUnlock = false;
     private DoubleSolenoid.Value angleFlag = DoubleSolenoid.Value.kReverse;
 
@@ -143,6 +147,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         highWheelExitTestSpeed = upperWheelExitTestSpeed.getValue();
 
         atSpeedTolerance = atSpeedToleranceConfig.getValue();
+        
+        safeFlywheelSpeed = minnimumSafeFlywheelSpeed.getValue();
     }
 
     public DoubleSolenoid.Value translatePresetConfigAngle(boolean configVal) {
@@ -254,6 +260,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         } else {
             atSpeed = false;
         }
+        
+        atSafeSpeed = ((speedExit > safeFlywheelSpeed) && (speedEnter > safeFlywheelSpeed));
 
         SmartDashboard.putNumber("EnterWheelSpeed", speedEnter);
         SmartDashboard.putNumber("ExitWheelSpeed", speedExit);
@@ -282,6 +290,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
         atSpeedTolerance = atSpeedToleranceConfig.getValue();
 
+        safeFlywheelSpeed = minnimumSafeFlywheelSpeed.getValue();
+        
         ENTER_GEAR_RATIO = ENTER_GEAR_RATIO_config.getValue();
         EXIT_GEAR_RATIO = EXIT_GEAR_RATIO_config.getValue();
         
@@ -421,5 +431,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
     public boolean isAtSpeed() {
         return atSpeed;
+    }
+    
+    public boolean isFlywheelAtSafeSpeed()
+    {
+        return atSafeSpeed;
     }
 }
