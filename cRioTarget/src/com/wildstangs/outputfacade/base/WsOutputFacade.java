@@ -82,6 +82,7 @@ public class WsOutputFacade {
     public static final String FUNNELATOR_ROLLER = "FunnelatorRoller";
     public static final String LOADING_RAMP = "LoadingRamp";
     public static final String CLIMBER = "Climber";
+    public static final String FRISBEE_HOLDER_SERVO = "FrisbeeHolderServo";
     /**
      * Constructor for WsOutputFacade.
      *
@@ -122,6 +123,7 @@ public class WsOutputFacade {
         }
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 9)));
+        outputs.add(new DataElement(FRISBEE_HOLDER_SERVO, new WsServo(FRISBEE_HOLDER_SERVO, 8)));
 
 
 
