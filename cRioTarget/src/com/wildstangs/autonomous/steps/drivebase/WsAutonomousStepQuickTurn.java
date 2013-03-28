@@ -24,6 +24,7 @@ public class WsAutonomousStepQuickTurn extends WsAutonomousStep
     public void initialize()
     {
         angle = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getGyroAngle() + value;
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setThrottleValue(0);
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setHeadingValue(value < 0 ? -1.0 : 1.0);
     }
 

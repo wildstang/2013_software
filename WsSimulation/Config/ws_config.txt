@@ -8,7 +8,7 @@ com.wildstangs.logger.Logger.logLevel="DEBUG"
 //Subsystems
 com.wildstangs.subsystems.WsHopper.forwardCycles=15
 com.wildstangs.subsystems.WsHopper.backwardCycles=15
-com.wildstangs.subsystems.WsIntake.FingerDelayFromAccumulatorSwitch=15.0
+com.wildstangs.subsystems.WsIntake.FingerDelayFromAccumulatorSwitch=3.5
 com.wildstangs.subsystems.WsIntake.UseTimeDelay=false
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
 
@@ -62,7 +62,7 @@ com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.minO
 
 
 //Drivebase 
-com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.210
+com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.4457752
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
@@ -99,16 +99,16 @@ com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed=2200
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed=2150
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterAngle=true
-com.wildstangs.subsystems.WsShooter.PresetLongLowEnterSpeed=2300
+com.wildstangs.subsystems.WsShooter.PresetLongLowEnterSpeed=2800
 com.wildstangs.subsystems.WsShooter.PresetLongLowExitSpeed=3550
 com.wildstangs.subsystems.WsShooter.PresetLongLowAngle=false
-com.wildstangs.subsystems.WsShooter.PresetShortHighEnterSpeed=2700
-com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed=2650
+com.wildstangs.subsystems.WsShooter.PresetShortHighEnterSpeed=2200
+com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed=2800
 com.wildstangs.subsystems.WsShooter.PresetShortHighAngle=true
 
 //Loading Ramp
-com.wildstangs.subsystems.WsLoadingRamp.AngleUp=76.5
-com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
+com.wildstangs.subsystems.WsLoadingRamp.AngleUp=0.0
+com.wildstangs.subsystems.WsLoadingRamp.AngleDown=108.0
 
 //   XX
 //    X              X
@@ -133,7 +133,7 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBa
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.ThirdFrisbeeDelay=100
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FirstEnterWheelSetPoint=2300
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FirstEnterWheelSetPoint=2800
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FirstExitWheelSetPoint=3550
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootSeven.insidePyramidBackCenter.FirstShooterAngle=false
 
@@ -153,15 +153,15 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBac
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.ThirdFrisbeeDelay=100
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstEnterWheelSetPoint=2300
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstEnterWheelSetPoint=2800
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstExitWheelSetPoint=3550
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FirstShooterAngle=false
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondEnterWheelSetPoint=2300
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondEnterWheelSetPoint=2800
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondExitWheelSetPoint=3550
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.SecondShooterAngle=false
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FunnelatorLoadDelay=6000
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.FunnelatorLoadDelay=3500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.RaiseAccumulatorDelay=3000
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFive.insidePyramidBackCenter.LowerAccumulatorDelay=1500
 
@@ -172,7 +172,7 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyr
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.ThirdDrive=60.0
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.ThirdFrisbeeDelay=100
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FirstEnterWheelSetPoint=2300
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FirstEnterWheelSetPoint=2800
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FirstExitWheelSetPoint=3550
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveAndGrab.insidePyramidBackCenter.FirstShooterAngle=false
 
@@ -193,12 +193,12 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyram
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.ThirdDrive=60.0
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.ThirdFrisbeeDelay=100
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstEnterWheelSetPoint=2300
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstExitWheelSetPoint=3550
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstEnterWheelSetPoint=2800
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstExitWheelSetPoint=3500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FirstShooterAngle=false
 
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondEnterWheelSetPoint=2500
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondExitWheelSetPoint=2500
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondEnterWheelSetPoint=2200
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondExitWheelSetPoint=2800
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.SecondShooterAngle=true
 
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyramidBackCenter.FunnelatorLoadDelay=7000
@@ -208,45 +208,30 @@ com.wildstangs.autonomous.programs.WsAutonomousProgramShootFiveTwist.insidePyram
 //Shoot Three
 //Inside Pyramid Back Left
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.ForceStopAtStep=0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.StartDrive=0.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.SecondDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.ThirdFrisbeeDelay=100
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.FirstEnterWheelSetPoint=2300
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.FirstExitWheelSetPoint=3550
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.FirstEnterWheelSetPoint=2800
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.FirstExitWheelSetPoint=3500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.FirstShooterAngle=false
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackLeft.LowerAccumulatorDelay=1500
 //Inside Pyramid Back Center
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.StartDrive=0.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.SecondDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.ThirdFrisbeeDelay=100
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.FirstEnterWheelSetPoint=2300
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.FirstExitWheelSetPoint=3550
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.FirstEnterWheelSetPoint=2800
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.FirstExitWheelSetPoint=3500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.FirstShooterAngle=false
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackCenter.LowerAccumulatorDelay=1500
 //Inside Pyramid Back Right
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.StartDrive=0.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.SecondDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.ThirdFrisbeeDelay=100
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.FirstEnterWheelSetPoint=2300
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.FirstExitWheelSetPoint=3550
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.FirstEnterWheelSetPoint=2800
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.FirstExitWheelSetPoint=3500
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.FirstShooterAngle=false
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.insidePyramidBackRight.LowerAccumulatorDelay=1500
 //Outside Pyramid Front Right
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.StartDrive=0.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.SecondDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.ThirdFrisbeeDelay=100
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.FirstEnterWheelSetPoint=2300
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.FirstExitWheelSetPoint=3550
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.FirstShooterAngle=false
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.LowerAccumulatorDelay=1500
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.FirstEnterWheelSetPoint=2200
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.FirstExitWheelSetPoint=2800
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontRight.FirstShooterAngle=true
 //Outside Pyramid Front Left
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.StartDrive=0.0
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.SecondDrive=0.0
 com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.ThirdFrisbeeDelay=100
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.FirstEnterWheelSetPoint=2300
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.FirstExitWheelSetPoint=3550
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.FirstShooterAngle=false
-com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.LowerAccumulatorDelay=1500
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.FirstEnterWheelSetPoint=2200
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.FirstExitWheelSetPoint=2800
+com.wildstangs.autonomous.programs.WsAutonomousProgramShootThree.outsidePyramidFrontLeft.FirstShooterAngle=true
 
 //Drive distance
 //Distance is in inches
@@ -269,6 +254,14 @@ com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionPr
 
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.outsidePyramidFrontRight.heading=0.8
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.outsidePyramidFrontRight.distance=-46
+
+//Test Drive Patterns
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.FirstRelativeAngle=45.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.SecondRelativeAngle=45.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.FirstDriveDistance=100.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.FirstDriveVelocity=1.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.SecondDriveDistance=30.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.SecondDriveVelocity=1.0
 
 //Drive heading
 //Heading is in degrees
