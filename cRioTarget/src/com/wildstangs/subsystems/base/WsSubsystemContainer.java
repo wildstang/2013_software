@@ -4,7 +4,6 @@ import com.wildstangs.subsystems.WsClimber;
 import com.wildstangs.subsystems.WsCompressor;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.WsFloorPickup;
-import com.wildstangs.subsystems.WsFrisbeeHolder;
 import com.wildstangs.subsystems.WsHopper;
 import com.wildstangs.subsystems.WsIntake;
 import com.wildstangs.subsystems.WsLandingGear;
@@ -78,7 +77,6 @@ public class WsSubsystemContainer {
     public static final String WS_LANDING_GEAR = "WsLandingGear";
     public static final String WS_LOADING_RAMP = "WsLoadingRamp";
     public static final String WS_CLIMBER = "WsClimber";
-    public static final String WS_FRISBEEHOLDER = "WsFrisbeeHolder";
 
     /**
      * Constructor for the subsystem container.
@@ -96,6 +94,5 @@ public class WsSubsystemContainer {
         subsystem.add(new DataElement(WS_LANDING_GEAR, new WsLandingGear(WS_LANDING_GEAR)));
         subsystem.add(new DataElement(WS_LOADING_RAMP, new WsLoadingRamp(WS_LOADING_RAMP)));
         subsystem.add(new DataElement(WS_CLIMBER, new WsClimber(WS_CLIMBER)));
-        subsystem.add(new DataElement(WS_FRISBEEHOLDER, new WsFrisbeeHolder(WS_FRISBEEHOLDER)));
     }
 }

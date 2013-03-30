@@ -130,7 +130,6 @@ public class WsInputFacade {
     public static final String HOPPER_UP_LIMIT_SWITCH = "HopperUpLimitSwitch";
     public static final String HOPPER_DOWN_LIMIT_SWITCH = "HopperDownLimitSwitch";
     public static final String ACCUMULATOR_UP_LIMIT_SWITCH = "AccumulatorUpLimitSwitch";
-    public static final String FRISBEE_HOLDER_OUT_LIMIT_SWITCH = "FrisbeeHolderOutLimitSwitch";
 
     /**
      * Constructor for the WsInputFacade.
@@ -162,6 +161,5 @@ public class WsInputFacade {
         sensorInputs.add(new DataElement(HOPPER_DOWN_LIMIT_SWITCH, new WsDigitalInput(13)));
         sensorInputs.add(new DataElement(HOPPER_UP_LIMIT_SWITCH, new WsDigitalInput(12)));
         sensorInputs.add(new DataElement(ACCUMULATOR_UP_LIMIT_SWITCH, new WsDigitalInput(8)));
-        sensorInputs.add(new DataElement(FRISBEE_HOLDER_OUT_LIMIT_SWITCH, new WsDigitalInput(14)));
     }
 }

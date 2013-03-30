@@ -115,6 +115,8 @@ public class WsOutputFacade {
             outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
             outputs.add(new DataElement(CLIMBER, new WsSolenoid(CLIMBER, 1, 4)));
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
+            //put the frisbee holder above the lift, so it updates first.
+            outputs.add(new DataElement(FRISBEE_HOLDER_SERVO, new WsServo(FRISBEE_HOLDER_SERVO, 8)));
             outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6)));
             outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
@@ -123,7 +125,6 @@ public class WsOutputFacade {
         }
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 9)));
-        outputs.add(new DataElement(FRISBEE_HOLDER_SERVO, new WsServo(FRISBEE_HOLDER_SERVO, 8)));
 
 
 
