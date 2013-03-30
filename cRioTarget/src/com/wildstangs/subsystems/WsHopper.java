@@ -136,12 +136,12 @@ public class WsHopper extends WsSubsystem implements IObserver {
             if (button.getValue() == true && (button.getPreviousValue() == false)) {
                 if (liftValue == DoubleSolenoid.Value.kReverse) {
                     
-//                    WsIntake intakeSubsystem = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
-//                    boolean funnelatorLimitSwitch = intakeSubsystem.getFunnelatorLimitSwitch();
-//                //Only allow the hopper to go up if the funnelator switch is NOT tripped (prevent jam-ups in autonomous)
-//                    if (false == funnelatorLimitSwitch) {
+                    WsIntake intakeSubsystem = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
+                    boolean funnelatorLimitSwitch = intakeSubsystem.getFunnelatorLimitSwitch();
+                //Only allow the hopper to go up if the funnelator switch is NOT tripped (prevent jam-ups in autonomous)
+                    if (false == funnelatorLimitSwitch) {
                         liftValue = DoubleSolenoid.Value.kForward;
-//                    }
+                    }
                     
                 } else {
                     liftValue = DoubleSolenoid.Value.kReverse;

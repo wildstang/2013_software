@@ -108,8 +108,8 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
                 pfa1.addStep(sscfunnel);
                 pfa1.addStep(ssc3);
             ssc2.addStep(pfa1);
-//            ssc2.addStep(new WsAutonomousStepDelay(500));
-//            ssc2.addStep(new WsAutonomousStepIntakeIfFunnelatorTripped());
+            ssc2.addStep(new WsAutonomousStepDelay(500));
+            ssc2.addStep(new WsAutonomousStepIntakeIfFunnelatorTripped());
             ssc2.addStep(new WsAutonomousStepIntakeMotorStop());
                 programSteps[11] = new WsAutonomousStepRaiseHopper();
         WsAutonomousParallelStepGroup pg3 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
