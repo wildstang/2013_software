@@ -28,8 +28,8 @@ public class WsAutonomousStepWaitForDriveMotionProfile extends WsAutonomousStep 
             (distanceRemaining > -0.01))  {
             finished = true;
         } 
-        if ((distanceRemaining < 10.0) &&
-            (distanceRemaining > -10.0) &&
+        if ((distanceRemaining < 12.0) &&
+            (distanceRemaining > -12.0) &&
                 (velocity < 0.10) &&
                 (velocity > -0.10))  {
             finished = true; 

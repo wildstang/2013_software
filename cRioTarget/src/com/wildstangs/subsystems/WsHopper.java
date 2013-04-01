@@ -13,6 +13,7 @@ import com.wildstangs.subsystems.base.WsSubsystem;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import com.wildstangs.timer.WsTimer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -34,9 +35,8 @@ public class WsHopper extends WsSubsystem implements IObserver {
     private boolean kickerValue;
     private DoubleSolenoid.Value liftValue;
     private int disks = 0;
-    private boolean timerStarted = false;
-    private double startTime = 0, endTime = 0;
-    private WsTimer timer = new WsTimer();
+    private boolean timeRecovery = false;
+    private double startTime = 0;
 
     public WsHopper(String name) {
         super(name);
@@ -63,7 +63,8 @@ public class WsHopper extends WsSubsystem implements IObserver {
         cycle = 0;
         kickerButtonPressed = false;
         disks = 0;
-        timer.reset();
+        timeRecovery = false; 
+        startTime = 0 ; 
     }
 
     public void update() {
@@ -74,6 +75,9 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 goingBack = true;
                 kickerValue = false;
                 cycle = 0;
+                //Measure time till the flywheel gets back to speed
+                timeRecovery = true;
+                startTime = Timer.getFPGATimestamp();
             }
         } else if (goingBack) {
             cycle++;
@@ -93,17 +97,17 @@ public class WsHopper extends WsSubsystem implements IObserver {
             }
         }
         
-        if(timerStarted)
+        if(timeRecovery)
         {
             WsShooter shooter = (WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER);
             if(shooter.isAtSpeed())
             {
-                endTime = timer.get();
-                timer.stop();
-                timer.reset();
-                
+                double endTime = Timer.getFPGATimestamp(); 
+                double diffTime = (endTime - startTime);
+                SmartDashboard.putNumber("Recovery Time", diffTime);
                 System.out.println("Flywheel up to speed in: " + (endTime - startTime));
                 System.out.println("Start Time: " + startTime + " End Time: " + endTime);
+                timeRecovery = false; 
             }
         }
         
@@ -143,14 +147,6 @@ public class WsHopper extends WsSubsystem implements IObserver {
                     goingForward = true;
                     cycle = 0;
                     kickerValue = true;
-                    if(timerStarted)
-                    {
-                        timer.stop();
-                    }
-                    timer.reset();
-                    timerStarted = true;
-                    timer.start();
-                    startTime = timer.get();
                     if(disks > 0)
                     {
                         disks--;
