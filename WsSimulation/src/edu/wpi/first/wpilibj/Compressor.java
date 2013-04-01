@@ -7,7 +7,6 @@
 
 package edu.wpi.first.wpilibj;
 
-import edu.wpi.first.wpilibj.communication.UsageReporting;
 import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
 import edu.wpi.first.wpilibj.parsing.IDevice;
 import edu.wpi.first.wpilibj.tables.ITable;
@@ -24,7 +23,6 @@ public class Compressor extends SensorBase implements IDevice, LiveWindowSendabl
     private DigitalInput m_pressureSwitch;
     private Relay m_relay;
     private boolean m_enabled;
-    private boolean m_run = true;
 
     /**
      * Initialize the Compressor object.
@@ -90,7 +88,6 @@ public class Compressor extends SensorBase implements IDevice, LiveWindowSendabl
      * the pressure switch.
      */
     public void free() {
-        m_run = false;
         m_pressureSwitch.free();
         m_relay.free();
         m_pressureSwitch = null;

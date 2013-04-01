@@ -28,9 +28,7 @@ public class LogViewer implements Runnable {
           serverSocket.receive(receivePacket); 
 
           String logEntry = new String(receivePacket.getData()); 
-  
-          InetAddress IPAddress = receivePacket.getAddress();  
-          
+            
           System.out.println (logEntry.trim());
           
           receiveData = new byte[1500];

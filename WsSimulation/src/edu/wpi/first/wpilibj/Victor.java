@@ -16,8 +16,6 @@
  */
 package edu.wpi.first.wpilibj;
 
-import java.awt.Dimension;
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -25,7 +23,6 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 /**
  * A Victor speed controller emulation for FRC.
@@ -35,12 +32,9 @@ import javax.swing.JLabel;
 public class Victor implements ComponentListener, ActionListener {
 
     private double speed;
-    private long startTime;
     private boolean isGraphRunning;
 
     private JFrame frame;
-    private JLabel victorNum;
-    private JLabel victorSpeed;
     private JButton startStop;
     
     private SpeedGrapher graph;
@@ -58,6 +52,7 @@ public class Victor implements ComponentListener, ActionListener {
      * @param speed The speed value of the Victor between -1.0 and +1.0.
      */
     public void set(double speed) {
+        this.speed = speed;
 
     }
 

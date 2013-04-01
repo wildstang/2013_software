@@ -34,10 +34,7 @@ public class Gyro {
     static final double kCalibrationSampleTime = 5.0;
     static final double kDefaultVoltsPerDegreePerSecond = 0.007;
     AnalogChannel m_analog;
-    double m_voltsPerDegreePerSecond;
-    double m_offset;
     boolean m_channelAllocated;
-    AccumulatorResult result;
 
     /**
      * Initialize the gyro.
@@ -48,8 +45,6 @@ public class Gyro {
      * rest before the competition starts.
      */
     private void initGyro() {
-        result = new AccumulatorResult();
-        m_voltsPerDegreePerSecond = kDefaultVoltsPerDegreePerSecond;
     }
 
     /**
@@ -134,7 +129,6 @@ public class Gyro {
      * @param voltsPerDegreePerSecond The type of gyro specified as the voltage that represents one degree/second.
      */
     public void setSensitivity(double voltsPerDegreePerSecond) {
-        m_voltsPerDegreePerSecond = voltsPerDegreePerSecond;
     }
 
     /**

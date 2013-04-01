@@ -1,9 +1,6 @@
 package com.wildstangs.simulation.encoders;
 
 import edu.wpi.first.wpilibj.*;
-import com.wildstangs.subjects.base.DoubleSubject;
-import com.wildstangs.subjects.base.IObserver;
-import com.wildstangs.subjects.base.Subject;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

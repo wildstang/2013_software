@@ -4,15 +4,10 @@
  */
 package com.wildstangs.simulation.hopper;
 
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.outputfacade.base.IOutputEnum;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.simulation.WsDigitalInputContainer;
-import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subsystems.WsHopper;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 
 /**
  *

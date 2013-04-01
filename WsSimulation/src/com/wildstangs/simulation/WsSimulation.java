@@ -14,7 +14,6 @@ import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsVictor;
-import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.simulation.encoders.DriveBaseEncoders;
 import com.wildstangs.simulation.encoders.FlywheelEncoders;
 import com.wildstangs.simulation.funnelator.FunnelatorLimitSwitch;
@@ -37,8 +36,6 @@ public class WsSimulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        WsProfilingTimer durationTimer = new WsProfilingTimer("Sim method duration", 50);
-        WsProfilingTimer periodTimer = new WsProfilingTimer("Sim method period", 50);
 
         //Instantiate the Facades and Containers
 

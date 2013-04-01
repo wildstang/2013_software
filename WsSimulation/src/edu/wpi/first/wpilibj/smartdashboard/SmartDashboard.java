@@ -9,12 +9,8 @@ package edu.wpi.first.wpilibj.smartdashboard;
 
 import edu.wpi.first.wpilibj.NamedSendable;
 import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.networktables.NetworkTableKeyNotDefined;
-import edu.wpi.first.wpilibj.tables.ITable;
 import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
-import java.util.Hashtable;
-import java.util.NoSuchElementException;
 
 /**
  * The {@link SmartDashboard} class is the bridge between robot programs and the SmartDashboard on the
