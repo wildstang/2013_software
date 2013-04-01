@@ -13,7 +13,7 @@ public class FlywheelEncoders {
     private double enter_wheel_speed = 0.0;
     private double exit_wheel_speed = 0.0;
     
-    private static int AMOUNT_TO_CHANGE = 50; 
+    private static int AMOUNT_TO_CHANGE = 10; 
 
     public FlywheelEncoders() {
         

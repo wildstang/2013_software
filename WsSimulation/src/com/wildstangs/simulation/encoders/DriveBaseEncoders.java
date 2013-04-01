@@ -175,9 +175,9 @@ public class DriveBaseEncoders {
         ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).set(right_encoder);
 
         if (Math.abs(actual_left_drive_speed) > 0.01){
-            Logger.getLogger().debug(this.getClass().getName(), "KinematicsSimulation", "lDS: " + actual_left_drive_speed + " %: " + percentagePower + " rDS: " + actual_right_drive_speed + " dle: " + left_encoder_velocity_increment + " dre: " + right_encoder_velocity_increment);
-            WsDriveBase db = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE));
-            Logger.getLogger().debug(this.getClass().getName(), "SpeedPid", "value: " + db.getPidSpeedValue() + " error: " + db.getSpeedError() + " posError: " + db.getDeltaPosError() + " \n ");
+//            Logger.getLogger().debug(this.getClass().getName(), "KinematicsSimulation", "lDS: " + actual_left_drive_speed + " %: " + percentagePower + " rDS: " + actual_right_drive_speed + " dle: " + left_encoder_velocity_increment + " dre: " + right_encoder_velocity_increment);
+//            WsDriveBase db = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE));
+//            Logger.getLogger().debug(this.getClass().getName(), "SpeedPid", "value: " + db.getPidSpeedValue() + " error: " + db.getSpeedError() + " posError: " + db.getDeltaPosError() + " \n ");
         }
 
         actual_left_speed.updateWithValue(actual_left_drive_speed, MAX_SPEED_INCHES); 
