@@ -36,6 +36,7 @@ public class WsAutonomousStepWaitForDiscsLatchedThroughFunnelator extends WsAuto
     public void update() {
         if(numDiscsCollected >= numLatchedDiscs) {
             //We have collected all the discs in the accumulator, we're done here
+            numDiscsCollected = 0;
             finished = true;
         }
     }
