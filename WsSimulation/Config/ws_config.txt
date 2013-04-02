@@ -275,6 +275,14 @@ com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionPr
 //Heading is in degrees
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveHeading.angle=-30
 
+//Test Drive Patterns
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.FirstRelativeAngle=45.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.SecondRelativeAngle=45.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.FirstDriveDistance=100.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.FirstDriveVelocity=1.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.SecondDriveDistance=30.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.SecondDriveVelocity=1.0
+
 
 //2012 Robot Selection
 com.wildstangs.outputfacade.base.WsOutputFacade.2012_Robot=false

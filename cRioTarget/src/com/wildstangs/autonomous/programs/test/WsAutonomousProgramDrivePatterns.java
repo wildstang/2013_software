@@ -28,7 +28,7 @@ public class WsAutonomousProgramDrivePatterns extends WsAutonomousProgram
     
     public WsAutonomousProgramDrivePatterns()
     {
-        super(7);
+        super(5);
     }
     
     public void defineSteps()
@@ -46,13 +46,11 @@ public class WsAutonomousProgramDrivePatterns extends WsAutonomousProgram
         secondDriveVelocity = new DoubleConfigFileParameter(
                this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + "SecondDriveVelocity", 1.0);
         
-        programSteps[0] = new WsAutonomousStepSetDriveHeadingPidRelativeSetpoint(firstAngle.getValue());
-        programSteps[1] = new WsAutonomousStepStartDriveUsingMotionProfile(firstDriveDistance.getValue(), firstDriveVelocity.getValue());
-        programSteps[2] = new WsAutonomousStepWaitForDriveMotionProfile();
-        programSteps[3] = new WsAutonomousStepQuickTurn(secondAngle.getValue());
-        programSteps[4] = new WsAutonomousStepSetDriveHeadingPidRelativeSetpoint(0);
-        programSteps[5] = new WsAutonomousStepStartDriveUsingMotionProfile(secondDriveDistance.getValue(), secondDriveVelocity.getValue());
-        programSteps[6] = new WsAutonomousStepWaitForDriveMotionProfile();
+        programSteps[0] = new WsAutonomousStepStartDriveUsingMotionProfile(firstDriveDistance.getValue(), firstDriveVelocity.getValue());
+        programSteps[1] = new WsAutonomousStepWaitForDriveMotionProfile();
+        programSteps[2] = new WsAutonomousStepQuickTurn(secondAngle.getValue());
+        programSteps[3] = new WsAutonomousStepStartDriveUsingMotionProfile(secondDriveDistance.getValue(), secondDriveVelocity.getValue());
+        programSteps[4] = new WsAutonomousStepWaitForDriveMotionProfile();
     }
     
     public String toString()
