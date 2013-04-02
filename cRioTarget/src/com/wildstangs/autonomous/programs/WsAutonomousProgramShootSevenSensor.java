@@ -6,7 +6,9 @@ package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
+import com.wildstangs.autonomous.steps.WsAutonomousParallelFinishedOnAnyStepGroup;
 import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
+import com.wildstangs.autonomous.steps.WsAutonomousSerialStepContainer;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
 import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
@@ -57,7 +59,7 @@ public class WsAutonomousProgramShootSevenSensor extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootSevenSensor() {
-        super(26);
+        super(23);
     }
 
     public void defineSteps() {
@@ -83,8 +85,12 @@ public class WsAutonomousProgramShootSevenSensor extends WsAutonomousProgram {
             pg3.addStep(new WsAutonomousStepRaiseAccumulator());
             pg3.addStep(new WsAutonomousStepWaitForAccumulatorUp());
        programSteps[9] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
-       programSteps[10] = new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator();            
-        WsAutonomousParallelStepGroup pg4 = new WsAutonomousParallelStepGroup("Set up for intake");
+        WsAutonomousParallelStepGroup pgIntake = new WsAutonomousParallelStepGroup("Wait for intake");
+       programSteps[10] = pgIntake;
+       pgIntake.addStep(new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator());            
+       pgIntake.addStep(new WsAutonomousStepDelay(1000));  //Min delay since it is not "finished on any"
+       
+       WsAutonomousParallelStepGroup pg4 = new WsAutonomousParallelStepGroup("Set up for intake");
         programSteps[11] = pg4;
             pg4.addStep(new WsAutonomousStepLowerHopper());
             pg4.addStep(new WsAutonomousStepLowerAccumulator());
@@ -103,19 +109,25 @@ public class WsAutonomousProgramShootSevenSensor extends WsAutonomousProgram {
             pg7.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(thirdDrive.getValue(), 0.0));
             pg7.addStep(new WsAutonomousStepDriveManual(0, 0.8));
             pg7.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, secondShooterPreset.ANGLE));
-        programSteps[17] = pg6;
-            pg6.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
-            pg6.addStep(pg7);
-        programSteps[18] = new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator();       
-        programSteps[19] = new WsAutonomousStepIntakeMotorStop();
-        programSteps[20] = new WsAutonomousStepRaiseHopper();
-        programSteps[21] = pg6;
-            pg6.addStep(new WsAutonomousStepWaitForShooter());
-            pg6.addStep(new WsAutonomousStepWaitForDriveMotionProfile());
-        programSteps[22] = new WsAutonomousStepStopDriveUsingMotionProfile();
-        programSteps[23] = new WsAutonomousStepDriveManual(0, 0);
-        programSteps[24] = new WsAutonomousStepMultikick(4);
-        programSteps[25] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
+            pg7.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
+        WsAutonomousParallelStepGroup pgIntakeDrive = new WsAutonomousParallelStepGroup("Intake and drive");
+        WsAutonomousParallelStepGroup pgIntake2 = new WsAutonomousParallelStepGroup("Wait for intake");
+        WsAutonomousSerialStepContainer pssDrive = new WsAutonomousSerialStepContainer("Wait for Drive and stop");
+        programSteps[17] = pgIntakeDrive;
+            pgIntakeDrive.addStep(pgIntake2);
+                pgIntake2.addStep(new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator());            
+                pgIntake2.addStep(new WsAutonomousStepDelay(1000)); //Min delay since it is not "finished on any"
+            pgIntakeDrive.addStep(pssDrive);
+                pssDrive.addStep(new WsAutonomousStepWaitForDriveMotionProfile());    
+                pssDrive.addStep( new WsAutonomousStepStopDriveUsingMotionProfile());   
+                pssDrive.addStep(new WsAutonomousStepDriveManual(0, 0));
+       
+
+        programSteps[18] = new WsAutonomousStepIntakeMotorStop();
+        programSteps[19] = new WsAutonomousStepRaiseHopper();
+        programSteps[20] = new WsAutonomousStepWaitForShooter(); 
+        programSteps[21] = new WsAutonomousStepMultikick(4);
+        programSteps[22] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
     }
 
     public String toString() {

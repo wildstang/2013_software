@@ -28,8 +28,8 @@ public class WsAutonomousStepWaitForDiscsLatchedThroughFunnelator extends WsAuto
         numLatchedDiscs = ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE)).getNumLatchedDiscs();
         if (numLatchedDiscs == 0) {
             //No discs were collected, no need to intake
-//            finished = true;
-            numLatchedDiscs = 1 ; 
+            finished = true;
+//            numLatchedDiscs = 1 ; 
         }
     }
 
