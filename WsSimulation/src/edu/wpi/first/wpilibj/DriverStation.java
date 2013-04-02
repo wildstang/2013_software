@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 package edu.wpi.first.wpilibj;
 
-import edu.wpi.first.wpilibj.communication.*;
 import edu.wpi.first.wpilibj.parsing.IInputOutput;
 
 /**
@@ -40,12 +39,6 @@ public class DriverStation implements IInputOutput {
 
     private static DriverStation instance = new DriverStation();
     private int m_digitalOut;
-    private volatile boolean m_thread_keepalive = true;
-    private boolean m_userInDisabled = false;
-    private boolean m_userInAutonomous = false;
-    private boolean m_userInTeleop = false;
-    private boolean m_userInTest = false;
-    private boolean m_newControlData;
     private double[] analogValues = {0.0, 0.0, 0.0, 0.0};
 
     /**
@@ -70,7 +63,6 @@ public class DriverStation implements IInputOutput {
      * Kill the thread
      */
     public void release() {
-        m_thread_keepalive = false;
     }
 
     /**
@@ -79,7 +71,6 @@ public class DriverStation implements IInputOutput {
     public void waitForData() {
     }
 
-    private static boolean lastEnabled = false;
 
     /**
      * Copy data from the DS task for the user.
@@ -403,20 +394,20 @@ public class DriverStation implements IInputOutput {
     /** Only to be used to tell the Driver Station what code you claim to be executing
 	 *   for diagnostic purposes only
 	 * @param entering If true, starting disabled code; if false, leaving disabled code */
-	public void InDisabled(boolean entering) {m_userInDisabled=entering;}
+	public void InDisabled(boolean entering) {}
 
         /** Only to be used to tell the Driver Station what code you claim to be executing
 	 *   for diagnostic purposes only
 	 * @param entering If true, starting autonomous code; if false, leaving autonomous code */
-	public void InAutonomous(boolean entering) {m_userInAutonomous=entering;}
+	public void InAutonomous(boolean entering) {}
 	
         /** Only to be used to tell the Driver Station what code you claim to be executing
 	 *   for diagnostic purposes only
 	 * @param entering If true, starting teleop code; if false, leaving teleop code */
-	public void InOperatorControl(boolean entering) {m_userInTeleop=entering;}
+	public void InOperatorControl(boolean entering) {}
         
         /** Only to be used to tell the Driver Station what code you claim to be executing
          *   for diagnostic purposes only
          * @param entering If true, starting test code; if false, leaving test code */
-        public void InTest(boolean entering) {m_userInTeleop = entering; }
+        public void InTest(boolean entering) {}
 }

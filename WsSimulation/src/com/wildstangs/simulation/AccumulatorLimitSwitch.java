@@ -5,10 +5,6 @@
 package com.wildstangs.simulation;
 
 import com.wildstangs.outputfacade.base.WsOutputFacade;
-import com.wildstangs.outputfacade.outputs.WsSolenoid;
-import com.wildstangs.subsystems.WsFloorPickup;
-import com.wildstangs.subsystems.base.WsSubsystemContainer;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  *

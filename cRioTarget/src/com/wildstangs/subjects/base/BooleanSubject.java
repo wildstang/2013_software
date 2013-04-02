@@ -43,7 +43,7 @@ public class BooleanSubject extends Subject {
             previousValue = currentValue;
             currentValue = newValue;
             notifyObservers();
-            System.out.println(name + " changed to " + currentValue);
+//            System.out.println(name + " changed to " + currentValue);
         }
 
     }

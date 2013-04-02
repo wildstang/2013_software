@@ -6,7 +6,6 @@ import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 
 
@@ -150,13 +149,13 @@ public class DriveBaseEncoders {
         }
         
         
-        int left_encoder = ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder()).get(); 
-        int right_encoder = ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).get(); 
+        int left_encoder = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder().get(); 
+        int right_encoder = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder().get(); 
         //Compensate for variable period
         int left_encoder_velocity_increment = 0 ; 
         int right_encoder_velocity_increment = 0; 
-        int left_encoder_acc_increment = 0 ; 
-        int right_encoder_acc_increment = 0; 
+        int left_encoder_acc_increment; 
+        int right_encoder_acc_increment; 
         double currTime = Timer.getFPGATimestamp(); 
         double deltaTime = currTime - previousTime; 
         if (Math.abs(actual_right_drive_speed) > 0.001){
@@ -171,13 +170,13 @@ public class DriveBaseEncoders {
         }
         previousTime = currTime; 
         
-        ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder()).set(left_encoder);
-        ((Encoder) ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder()).set(right_encoder);
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftEncoder().set(left_encoder);
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightEncoder().set(right_encoder);
 
         if (Math.abs(actual_left_drive_speed) > 0.01){
-            Logger.getLogger().debug(this.getClass().getName(), "KinematicsSimulation", "lDS: " + actual_left_drive_speed + " %: " + percentagePower + " rDS: " + actual_right_drive_speed + " dle: " + left_encoder_velocity_increment + " dre: " + right_encoder_velocity_increment);
-            WsDriveBase db = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE));
-            Logger.getLogger().debug(this.getClass().getName(), "SpeedPid", "value: " + db.getPidSpeedValue() + " error: " + db.getSpeedError() + " posError: " + db.getDeltaPosError() + " \n ");
+//            Logger.getLogger().debug(this.getClass().getName(), "KinematicsSimulation", "lDS: " + actual_left_drive_speed + " %: " + percentagePower + " rDS: " + actual_right_drive_speed + " dle: " + left_encoder_velocity_increment + " dre: " + right_encoder_velocity_increment);
+//            WsDriveBase db = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE));
+//            Logger.getLogger().debug(this.getClass().getName(), "SpeedPid", "value: " + db.getPidSpeedValue() + " error: " + db.getSpeedError() + " posError: " + db.getDeltaPosError() + " \n ");
         }
 
         actual_left_speed.updateWithValue(actual_left_drive_speed, MAX_SPEED_INCHES); 

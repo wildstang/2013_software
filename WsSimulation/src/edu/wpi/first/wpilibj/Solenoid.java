@@ -9,10 +9,6 @@ package edu.wpi.first.wpilibj;
 
 import com.wildstangs.simulation.*;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
      /**
  * Solenoid class for running high voltage Digital Output (9472 module).
@@ -22,7 +18,6 @@ import javax.swing.JLabel;
  */
 public class Solenoid {
 
-    private int mChannel;
     private boolean outputState;
     
 /**
@@ -40,7 +35,6 @@ public class Solenoid {
      */
     public Solenoid(final int moduleNumber, final int channel) {
         WsSolenoidContainer.getInstance().add(this, moduleNumber, channel);
-	mChannel = channel;
         initSolenoid();
     }
 

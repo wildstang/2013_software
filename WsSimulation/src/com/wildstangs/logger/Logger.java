@@ -214,7 +214,7 @@ public class Logger {
         int builtStringLen;
         double timeSinceInit = Timer.getFPGATimestamp() - initTime ;
         //need to construct an object array for java 1.3.
-        Object [] sArgs = new Object[]{new Long(++numEventsPosted), new Double(timeSinceInit), l.toString(), c, id, message.toString()};
+        Object [] sArgs = new Object[]{Long.valueOf(++numEventsPosted), Double.valueOf(timeSinceInit), l.toString(), c, id, message.toString()};
         builtString = String.format("0x%04x|%017.6f|%s|%s|1|%s|%s", sArgs);
                 
        

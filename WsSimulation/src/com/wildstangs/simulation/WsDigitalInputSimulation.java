@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 package com.wildstangs.simulation;
 
-import edu.wpi.first.wpilibj.*;
 
 
 /**
