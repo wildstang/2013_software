@@ -6,6 +6,8 @@
 package com.wildstangs.autonomous.steps.drivebase;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
+import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 
@@ -23,9 +25,14 @@ public class WsAutonomousStepQuickTurn extends WsAutonomousStep
 
     public void initialize()
     {
+        
         angle = ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getGyroAngle() + value;
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setThrottleValue(0);
-        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setHeadingValue(value < 0 ? -1.0 : 1.0);
+        ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setHeadingValue(value < 0 ? 0.8 : -0.8);
+        
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(0.0));
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(value < 0 ? 0.8 : -0.8));
+ 
     }
 
     public void update()
@@ -35,6 +42,8 @@ public class WsAutonomousStepQuickTurn extends WsAutonomousStep
         {
             if(angle > gyroAngle)
             {
+                ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setHeadingValue(0.0);
+                WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
                 finished = true;
             }
         }
@@ -42,6 +51,8 @@ public class WsAutonomousStepQuickTurn extends WsAutonomousStep
         {
             if(angle < gyroAngle)
             {
+                ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setHeadingValue(0.0);
+                WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
                 finished = true;
             }
         }

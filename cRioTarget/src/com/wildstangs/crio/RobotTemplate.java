@@ -108,15 +108,15 @@ public class RobotTemplate extends IterativeRobot {
     }
 
     public void teleopPeriodic() {
-        periodTimer.endTimingSection();
-        periodTimer.startTimingSection();
-        durationTimer.startTimingSection();
+//        periodTimer.endTimingSection();
+//        periodTimer.startTimingSection();
+//        durationTimer.startTimingSection();
         WsInputFacade.getInstance().updateOiData();
         WsInputFacade.getInstance().updateSensorData();
         WsSubsystemContainer.getInstance().update();
         WsOutputFacade.getInstance().update();
         Watchdog.getInstance().feed();
-        durationTimer.endTimingSection();
+//        durationTimer.endTimingSection();
     }
 
     /**
