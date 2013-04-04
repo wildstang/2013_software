@@ -448,6 +448,15 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             driveBaseHeadingValue = MAX_NEG_INPUT_HEADING_VALUE;
         }
     }
+    
+    public void overrideHeadingValue(double newHeading) {
+        driveBaseHeadingValue = newHeading;
+        if (driveBaseHeadingValue > MAX_INPUT_HEADING_VALUE) {
+            driveBaseHeadingValue = MAX_INPUT_HEADING_VALUE;
+        } else if (driveBaseHeadingValue < MAX_NEG_INPUT_HEADING_VALUE) {
+            driveBaseHeadingValue = MAX_NEG_INPUT_HEADING_VALUE;
+        }
+    }
 
     public void updateDriveMotors() {
         double rightMotorSpeed = 0;
@@ -644,7 +653,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         pidThrottleValue = pidThrottle;
     }
 
-    public Gyro getLeftGyro() {
+    public Gyro getGyro() {
         return driveHeadingGyro;
     }
 

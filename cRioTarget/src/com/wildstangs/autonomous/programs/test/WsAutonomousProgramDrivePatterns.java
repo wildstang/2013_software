@@ -29,7 +29,7 @@ public class WsAutonomousProgramDrivePatterns extends WsAutonomousProgram
     
     public WsAutonomousProgramDrivePatterns()
     {
-        super(7);
+        super(8);
     }
     
     public void defineSteps()
@@ -50,10 +50,11 @@ public class WsAutonomousProgramDrivePatterns extends WsAutonomousProgram
         programSteps[0] = new WsAutonomousStepStartDriveUsingMotionProfile(firstDriveDistance.getValue(), firstDriveVelocity.getValue());
         programSteps[1] = new WsAutonomousStepWaitForDriveMotionProfile();
         programSteps[2] = new WsAutonomousStepStopDriveUsingMotionProfile(); 
-        programSteps[3] = new WsAutonomousStepQuickTurn(secondAngle.getValue());
+        programSteps[3] = new WsAutonomousStepQuickTurn(firstAngle.getValue());
         programSteps[4] = new WsAutonomousStepStartDriveUsingMotionProfile(secondDriveDistance.getValue(), secondDriveVelocity.getValue());
         programSteps[5] = new WsAutonomousStepWaitForDriveMotionProfile();
-        programSteps[6] = new WsAutonomousStepStopDriveUsingMotionProfile(); 
+        programSteps[6] = new WsAutonomousStepStopDriveUsingMotionProfile();
+        programSteps[7] = new WsAutonomousStepQuickTurn(secondAngle.getValue());
     }
     
     public String toString()

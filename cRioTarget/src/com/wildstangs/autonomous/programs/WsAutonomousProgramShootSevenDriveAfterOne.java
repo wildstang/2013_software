@@ -33,8 +33,11 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
     private IntegerConfigFileParameter secondEnterWheelSetPoint;
     private IntegerConfigFileParameter secondExitWheelSetPoint;
     private BooleanConfigFileParameter secondShooterAngle;
+    private IntegerConfigFileParameter thirdEnterWheelSetPoint;
+    private IntegerConfigFileParameter thirdExitWheelSetPoint;
+    private BooleanConfigFileParameter thirdShooterAngle;
     private IntegerConfigFileParameter thirdFrisbeeDelay;
-    private WsShooter.Preset startPreset, secondShooterPreset;
+    private WsShooter.Preset startPreset, secondShooterPreset, thirdShooterPreset;
 
     private void defineConfigValues() {
         firstDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstDrive", 36);
@@ -46,6 +49,9 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
         secondEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondEnterWheelSetPoint", 2200);
         secondExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondExitWheelSetPoint", 2850);
         secondShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondShooterAngle", true);
+        thirdEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdEnterWheelSetPoint", 2200);
+        thirdExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdExitWheelSetPoint", 2850);
+        thirdShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdShooterAngle", true);
         thirdFrisbeeDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdFrisbeeDelay", 100);
 
         startPreset = new WsShooter.Preset(firstEnterWheelSetPoint.getValue(),
@@ -56,6 +62,11 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
                 secondExitWheelSetPoint.getValue(),
                 secondShooterAngle.getValue()
                 ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        thirdShooterPreset = new WsShooter.Preset(thirdEnterWheelSetPoint.getValue(),
+                thirdExitWheelSetPoint.getValue(),
+                thirdShooterAngle.getValue()
+                ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        
     }
 
     public WsAutonomousProgramShootSevenDriveAfterOne() {
@@ -74,7 +85,7 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
         WsAutonomousSerialStepContainer pssDriveWhileShooting = new WsAutonomousSerialStepContainer("Drive While Shooting");
         WsAutonomousSerialStepContainer pssShootWhileDriving = new WsAutonomousSerialStepContainer("Shoot while driving");
         
-            pssShootWhileDriving.addStep(new WsAutonomousStepSetShooterPreset(3800, 3000, DoubleSolenoid.Value.kForward));
+            pssShootWhileDriving.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, secondShooterPreset.ANGLE));
             pssShootWhileDriving.addStep(new WsAutonomousStepWaitForShooter()); 
             pssShootWhileDriving.addStep(new WsAutonomousStepMultikick(2)); 
             
@@ -90,6 +101,7 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
             pg2.addStep(pssShootWhileDriving);
         WsAutonomousParallelStepGroup pg3 = new WsAutonomousParallelStepGroup("Raise accumulator and wait for it");
         programSteps[3] = pg3;
+            pg3.addStep(new WsAutonomousStepSetShooterPreset(0,0,startPreset.ANGLE));
             pg3.addStep(new WsAutonomousStepLowerHopper());
             pg3.addStep(new WsAutonomousStepRaiseAccumulator());
             pg3.addStep(new WsAutonomousStepWaitForAccumulatorUp());
@@ -118,7 +130,7 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
             pg7.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(thirdDrive.getValue(), 0.0));
             pg7.addStep(new WsAutonomousStepDriveManual(0, 0.8));
             //Keep the angle down so that the intake can still occur
-            pg7.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE));
+            pg7.addStep(new WsAutonomousStepSetShooterPreset(thirdShooterPreset.ENTER_WHEEL_SET_POINT, thirdShooterPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE));
             pg7.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
         WsAutonomousParallelStepGroup pgIntakeDrive = new WsAutonomousParallelStepGroup("Intake and drive");
         WsAutonomousParallelStepGroup pgIntake2 = new WsAutonomousParallelStepGroup("Wait for intake");
@@ -130,7 +142,7 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
                         pgIntake2.addStep(new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator());            
                         pgIntake2.addStep(new WsAutonomousStepDelay(1000)); //Min delay since it is not "finished on any"
                     pssIntakeThenRaise.addStep(new WsAutonomousStepIntakeMotorStop());
-                    pssIntakeThenRaise.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, secondShooterPreset.ANGLE));
+                    pssIntakeThenRaise.addStep(new WsAutonomousStepSetShooterPreset(thirdShooterPreset.ENTER_WHEEL_SET_POINT, thirdShooterPreset.EXIT_WHEEL_SET_POINT, thirdShooterPreset.ANGLE));
                 
             pgIntakeDrive.addStep(pssDrive);
                 pssDrive.addStep(new WsAutonomousStepWaitForDriveMotionProfile());    
@@ -140,13 +152,13 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
 
         programSteps[13] = new WsAutonomousStepRaiseHopper();
         programSteps[14] = new WsAutonomousStepWaitForHopperUp();
-        programSteps[15] = new WsAutonomousStepWaitForShooter(); 
+        programSteps[15] = new WsAutonomousStepWaitForShooter();
         programSteps[16] = new WsAutonomousStepDelay(200);
         programSteps[17] = new WsAutonomousStepMultikick(4);
         programSteps[18] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
     }
 
     public String toString() {
-        return "Shooting Seven Frisbees sensor only";
+        return "Shooting Seven Frisbees, drive after first frisbee shot";
     }
 }
