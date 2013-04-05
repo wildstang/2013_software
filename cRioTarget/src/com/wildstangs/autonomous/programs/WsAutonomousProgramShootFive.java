@@ -61,7 +61,7 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootFive() {
-        super(19);
+        super(20);
     }
 
     public void defineSteps() {
@@ -88,43 +88,25 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
         programSteps[9] = pg2;
             pg2.addStep(new WsAutonomousStepRaiseAccumulator());
             pg2.addStep(new WsAutonomousStepWaitForAccumulatorUp());
-        WsAutonomousSerialStepContainer ssc2 = new WsAutonomousSerialStepContainer("Intake two frisbees");
-        programSteps[10] = ssc2;
-            ssc2.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
-        WsAutonomousParallelFinishedOnAnyStepGroup pfa1 = new WsAutonomousParallelFinishedOnAnyStepGroup("Time out or take in a frisbee 1");
-        WsAutonomousSerialStepContainer ssc3 = new WsAutonomousSerialStepContainer("Two frisbees on limit switch 2");
-            ssc3.addStep(new WsAutonomousStepOverrideFunnelatorUpButtonOn());    
-            ssc3.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
-            ssc3.addStep(new WsAutonomousStepOverrideFunnelatorUpButtonOff());
-            ssc3.addStep(new WsAutonomousStepOverrideFunnelatorButtonOn());
-            ssc3.addStep(new WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse());
-            ssc3.addStep(new WsAutonomousStepOverrideFunnelatorButtonOff());
-        WsAutonomousSerialStepContainer sscfunnel = new WsAutonomousSerialStepContainer("Funnel Delay");
-            sscfunnel.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()/2));
-            sscfunnel.addStep(new WsAutonomousStepOverrideFunnelatorUpButtonOff());
-            sscfunnel.addStep(new WsAutonomousStepOverrideFunnelatorButtonOn());
-            sscfunnel.addStep(new WsAutonomousStepDelay(FunnelatorLoadDelay.getValue()/2));
-            sscfunnel.addStep(new WsAutonomousStepOverrideFunnelatorButtonOff());
-                pfa1.addStep(sscfunnel);
-                pfa1.addStep(ssc3);
-            ssc2.addStep(pfa1);
-            ssc2.addStep(new WsAutonomousStepDelay(500));
-            ssc2.addStep(new WsAutonomousStepIntakeIfFunnelatorTripped());
-            ssc2.addStep(new WsAutonomousStepIntakeMotorStop());
-                programSteps[11] = new WsAutonomousStepRaiseHopper();
+        programSteps[10] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
+        WsAutonomousParallelStepGroup pgIntake = new WsAutonomousParallelStepGroup("Wait for intake");
+        programSteps[11] = pgIntake;
+            pgIntake.addStep(new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator());            
+            pgIntake.addStep(new WsAutonomousStepDelay(1000));  //Min delay since it is not "finished on any"
+        programSteps[12] = new WsAutonomousStepRaiseHopper();
         WsAutonomousParallelStepGroup pg3 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
-        programSteps[12] = pg3;
+        programSteps[13] = pg3;
             pg3.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(SecondDrive.getValue(), 0.0));
             pg3.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, secondShooterPreset.ANGLE));
         WsAutonomousParallelStepGroup pg4 = new WsAutonomousParallelStepGroup("5 Wait for shooter and drive");
-        programSteps[13] = pg4;
+        programSteps[14] = pg4;
             pg4.addStep(new WsAutonomousStepWaitForShooter());
             pg4.addStep(new WsAutonomousStepWaitForDriveMotionProfile());
-        programSteps[14] = new WsAutonomousStepStopDriveUsingMotionProfile();
-        programSteps[15] = new WsAutonomousStepMultikick(1);
-        programSteps[16] = new WsAutonomousStepDelay(200);
-        programSteps[17] = new WsAutonomousStepMultikick(1);
-        programSteps[18] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
+        programSteps[15] = new WsAutonomousStepStopDriveUsingMotionProfile();
+        programSteps[16] = new WsAutonomousStepMultikick(1);
+        programSteps[17] = new WsAutonomousStepDelay(200);
+        programSteps[18] = new WsAutonomousStepMultikick(1);
+        programSteps[19] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
     }
 
     public String toString() {

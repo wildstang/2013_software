@@ -212,6 +212,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         currentProfileX = 0.0; 
         continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
         Logger.getLogger().always(this.getClass().getName(), "init", "Drive Base init");
+        //Zero out all motor values left over from autonomous
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(0.0));
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(0.0));
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).update();
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).update();
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(0.0));
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).update();
     }
    
     public void update() {

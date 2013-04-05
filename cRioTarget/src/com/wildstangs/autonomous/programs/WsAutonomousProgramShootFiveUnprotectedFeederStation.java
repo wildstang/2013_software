@@ -17,7 +17,7 @@ import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.subsystems.WsShooter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class WsAutonomousProgramShootFiveFeederStation extends WsAutonomousProgram {
+public class WsAutonomousProgramShootFiveUnprotectedFeederStation extends WsAutonomousProgram {
 
     private DoubleConfigFileParameter FirstDrive;
     private DoubleConfigFileParameter SecondDrive;
@@ -73,7 +73,7 @@ public class WsAutonomousProgramShootFiveFeederStation extends WsAutonomousProgr
                this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondFeederDriveVelocity", 0.0);
     }
 
-    public WsAutonomousProgramShootFiveFeederStation() {
+    public WsAutonomousProgramShootFiveUnprotectedFeederStation() {
         super(28);
     }
 
@@ -86,9 +86,8 @@ public class WsAutonomousProgramShootFiveFeederStation extends WsAutonomousProgr
         programSteps[1] = new WsAutonomousStepWaitForShooter();
         WsAutonomousSerialStepContainer ssc1 = new WsAutonomousSerialStepContainer("Kick twice, delay, then kick again");
         programSteps[2] = ssc1;
-            ssc1.addStep(new WsAutonomousStepDelay(100));
             ssc1.addStep(new WsAutonomousStepMultikick(1));
-            ssc1.addStep(new WsAutonomousStepDelay(700));
+            ssc1.addStep(new WsAutonomousStepDelay(100));
             ssc1.addStep(new WsAutonomousStepMultikick(1));
             ssc1.addStep(new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue()));
             ssc1.addStep(new WsAutonomousStepMultikick(1));
@@ -118,7 +117,7 @@ public class WsAutonomousProgramShootFiveFeederStation extends WsAutonomousProgr
             pg4.addStep(new WsAutonomousStepWaitForDriveMotionProfile());
         programSteps[15] = new WsAutonomousStepStopDriveUsingMotionProfile();
         programSteps[16] = new WsAutonomousStepMultikick(1);
-        programSteps[17] = new WsAutonomousStepDelay(700);
+        programSteps[17] = new WsAutonomousStepDelay(200);
         programSteps[18] = new WsAutonomousStepMultikick(1);
         programSteps[19] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
         //Drive to the feeder station
@@ -133,6 +132,6 @@ public class WsAutonomousProgramShootFiveFeederStation extends WsAutonomousProgr
     }
 
     public String toString() {
-        return "Shoot Five Frisbees, drive to protected feeder station ";
+        return "Shoot Five Frisbees, drive to UNprotected feeder station ";
     }
 }
