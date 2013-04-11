@@ -4,6 +4,9 @@
  */
 package com.wildstangs.subsystems;
 
+import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
@@ -21,10 +24,13 @@ public class WsLED extends WsSubsystem implements IObserver
 {
     private I2C i2c;
     private int waitCounter = 0; //Waits for 5 update calls before sending the payload
+    boolean kickerButtonPressed = false;
     public WsLED (String name)
     {
         super(name);
         i2c = new I2C(DigitalModule.getInstance(1), 0x52 << 1);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+        subject.attach(this);
     }
     
     public void init()
@@ -72,9 +78,17 @@ public class WsLED extends WsSubsystem implements IObserver
                 // Display Robot Grabber
                 // 0x01 0x6C 0x0A  RED
                 // 0x01 0x6C 0x0B  GREEN
-                commandByte = 0x01;
-                payloadByteOne = 0x6C;
-                payloadByteTwo = (true/*robot_grabber_state*/) ? 0x0B : 0x0A; //Obviously not the right value
+                if (kickerButtonPressed) {
+                    commandByte = 0x01;
+                    payloadByteOne = 0x6C;
+                    payloadByteTwo = 0x0B;
+                }
+                else {
+                    commandByte = 0x01;
+                    payloadByteOne = 0x6C;
+                    payloadByteTwo = 0x0A;
+                }
+                    
                 dataBytes[0] = commandByte;
                 dataBytes[1] = payloadByteOne;
                 dataBytes[2] = payloadByteTwo;
@@ -142,7 +156,11 @@ public class WsLED extends WsSubsystem implements IObserver
      
     public void acceptNotification(Subject subjectThatCaused) 
     {
+        BooleanSubject button = (BooleanSubject) subjectThatCaused;
         
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
+            kickerButtonPressed = button.getValue();  
+        }
     }
     
     public void sendPayloadData(byte[] data, int size)
