@@ -17,6 +17,7 @@ import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.simulation.encoders.DriveBaseEncoders;
 import com.wildstangs.simulation.encoders.FlywheelEncoders;
 import com.wildstangs.simulation.funnelator.FunnelatorLimitSwitch;
+import com.wildstangs.simulation.gyro.GyroSimulation;
 import com.wildstangs.simulation.hopper.HopperLimitSwitches;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
@@ -99,7 +100,8 @@ public class WsSimulation {
         FlywheelEncoders flywheelEncoders = new FlywheelEncoders(); 
         HopperLimitSwitches limitSwitches = new HopperLimitSwitches(); 
         AccumulatorLimitSwitch aclimitSwitches = new AccumulatorLimitSwitch(); 
-        FunnelatorLimitSwitch funnellimitSwitches = new FunnelatorLimitSwitch(); 
+        FunnelatorLimitSwitch funnellimitSwitches = new FunnelatorLimitSwitch();
+        GyroSimulation gyro = new GyroSimulation();
 //        periodTimer.startTimingSection();
         
 //        ContinuousAccelFilter accelFilter = new ContinuousAccelFilter(0, 0, 0);
@@ -147,6 +149,7 @@ public class WsSimulation {
                 driverThrottle.update(); 
                 enterSpeed.update();
                 exitSpeed.update();
+                gyro.update();
 
                 //Update the encoders
                 dbEncoders.update();

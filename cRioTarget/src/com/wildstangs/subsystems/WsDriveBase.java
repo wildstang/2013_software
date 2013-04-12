@@ -212,6 +212,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         currentProfileX = 0.0; 
         continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
         Logger.getLogger().always(this.getClass().getName(), "init", "Drive Base init");
+        //Zero out all motor values left over from autonomous
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(0.0));
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(0.0));
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).update();
+        (WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).update();
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(0.0));
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
+        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).update();
     }
    
     public void update() {
@@ -448,6 +456,15 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             driveBaseHeadingValue = MAX_NEG_INPUT_HEADING_VALUE;
         }
     }
+    
+    public void overrideHeadingValue(double newHeading) {
+        driveBaseHeadingValue = newHeading;
+        if (driveBaseHeadingValue > MAX_INPUT_HEADING_VALUE) {
+            driveBaseHeadingValue = MAX_INPUT_HEADING_VALUE;
+        } else if (driveBaseHeadingValue < MAX_NEG_INPUT_HEADING_VALUE) {
+            driveBaseHeadingValue = MAX_NEG_INPUT_HEADING_VALUE;
+        }
+    }
 
     public void updateDriveMotors() {
         double rightMotorSpeed = 0;
@@ -644,7 +661,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         pidThrottleValue = pidThrottle;
     }
 
-    public Gyro getLeftGyro() {
+    public Gyro getGyro() {
         return driveHeadingGyro;
     }
 

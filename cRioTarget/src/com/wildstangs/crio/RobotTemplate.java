@@ -14,7 +14,6 @@ import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
-import com.wildstangs.timer.WsTimer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Watchdog;
 

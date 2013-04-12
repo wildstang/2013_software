@@ -35,6 +35,7 @@ public class Gyro {
     static final double kDefaultVoltsPerDegreePerSecond = 0.007;
     AnalogChannel m_analog;
     boolean m_channelAllocated;
+    private double angle = 0.0;
 
     /**
      * Initialize the gyro.
@@ -118,7 +119,11 @@ public class Gyro {
      * of the returned rate from the gyro.
      */
     public double getAngle() {
-            return 0.0;
+            return angle;
+    }
+    
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 
     /**

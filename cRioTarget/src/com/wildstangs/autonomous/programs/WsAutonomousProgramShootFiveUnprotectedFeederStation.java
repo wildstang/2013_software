@@ -2,16 +2,13 @@ package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
-import com.wildstangs.autonomous.steps.WsAutonomousParallelFinishedOnAnyStepGroup;
 import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
 import com.wildstangs.autonomous.steps.WsAutonomousSerialStepContainer;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
 import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
-import com.wildstangs.autonomous.steps.intake.WsAutonomousStepIntakeIfFunnelatorTripped;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedThroughFunnelator;
-import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
 import com.wildstangs.config.BooleanConfigFileParameter;
@@ -20,7 +17,7 @@ import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.subsystems.WsShooter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
+public class WsAutonomousProgramShootFiveUnprotectedFeederStation extends WsAutonomousProgram {
 
     private DoubleConfigFileParameter FirstDrive;
     private DoubleConfigFileParameter SecondDrive;
@@ -35,6 +32,9 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
     private IntegerConfigFileParameter LowerAccumulatorDelay;
     private IntegerConfigFileParameter ThirdFrisbeeDelay;
     private WsShooter.Preset firstShooterPreset, secondShooterPreset;
+    //Feeder station drive config
+    private DoubleConfigFileParameter firstFeederAngle, secondFeederAngle, firstFeederDriveDistance, firstFeederDriveVelocity,
+            secondFeederDriveDistance, secondFeederDriveVelocity;
 
     private void defineConfigValues() {
         FirstDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstDrive", 50.0);
@@ -58,10 +58,23 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
                 SecondExitWheelSetPoint.getValue(),
                 SecondShooterAngle.getValue()
                 ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        //Feeder station drive
+        firstFeederAngle = new DoubleConfigFileParameter(
+               this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstFeederRelativeAngle", 90);
+        secondFeederAngle = new DoubleConfigFileParameter(
+               this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondFeederRelativeAngle", 90);
+        firstFeederDriveDistance = new DoubleConfigFileParameter(
+               this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstFeederDriveDistance", -80);
+        firstFeederDriveVelocity = new DoubleConfigFileParameter(
+               this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstFeederDriveVelocity", 0.0);
+        secondFeederDriveDistance = new DoubleConfigFileParameter(
+               this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondFeederDriveDistance", 120);
+        secondFeederDriveVelocity = new DoubleConfigFileParameter(
+               this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondFeederDriveVelocity", 0.0);
     }
 
-    public WsAutonomousProgramShootFive() {
-        super(20);
+    public WsAutonomousProgramShootFiveUnprotectedFeederStation() {
+        super(28);
     }
 
     public void defineSteps() {
@@ -107,9 +120,18 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
         programSteps[17] = new WsAutonomousStepDelay(200);
         programSteps[18] = new WsAutonomousStepMultikick(1);
         programSteps[19] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
+        //Drive to the feeder station
+        programSteps[20] = new WsAutonomousStepStartDriveUsingMotionProfile(firstFeederDriveDistance.getValue(), firstFeederDriveVelocity.getValue());
+        programSteps[21] = new WsAutonomousStepWaitForDriveMotionProfile();
+        programSteps[22] = new WsAutonomousStepStopDriveUsingMotionProfile(); 
+        programSteps[23] = new WsAutonomousStepQuickTurn(firstFeederAngle.getValue());
+        programSteps[24] = new WsAutonomousStepStartDriveUsingMotionProfile(secondFeederDriveDistance.getValue(), secondFeederDriveVelocity.getValue());
+        programSteps[25] = new WsAutonomousStepWaitForDriveMotionProfile();
+        programSteps[26] = new WsAutonomousStepStopDriveUsingMotionProfile();
+        programSteps[27] = new WsAutonomousStepQuickTurn(secondFeederAngle.getValue());
     }
 
     public String toString() {
-        return "Shoot Five Frisbees";
+        return "Shoot Five Frisbees, drive to UNprotected feeder station ";
     }
 }

@@ -84,13 +84,13 @@ public class WsAutonomousProgramShootSevenSensor extends WsAutonomousProgram {
         programSteps[8] = pg3;
             pg3.addStep(new WsAutonomousStepRaiseAccumulator());
             pg3.addStep(new WsAutonomousStepWaitForAccumulatorUp());
-       programSteps[9] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
+        programSteps[9] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
         WsAutonomousParallelStepGroup pgIntake = new WsAutonomousParallelStepGroup("Wait for intake");
-       programSteps[10] = pgIntake;
-       pgIntake.addStep(new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator());            
-       pgIntake.addStep(new WsAutonomousStepDelay(1000));  //Min delay since it is not "finished on any"
+        programSteps[10] = pgIntake;
+            pgIntake.addStep(new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator());            
+            pgIntake.addStep(new WsAutonomousStepDelay(1000));  //Min delay since it is not "finished on any"
        
-       WsAutonomousParallelStepGroup pg4 = new WsAutonomousParallelStepGroup("Set up for intake");
+        WsAutonomousParallelStepGroup pg4 = new WsAutonomousParallelStepGroup("Set up for intake");
         programSteps[11] = pg4;
             pg4.addStep(new WsAutonomousStepLowerHopper());
             pg4.addStep(new WsAutonomousStepLowerAccumulator());
