@@ -294,7 +294,6 @@ public class WsLED extends WsSubsystem implements IObserver {
             // Extremely fast and cheap data confirmation algorithm
             data[3] = (byte) (~data[1]);
             data[4] = (byte) (~data[2]);
-            System.out.println("SendByte");
             //byte[] dataToSend, int sendSize, byte[] dataReceived, int receiveSize
             i2c.transaction(data, size, rcvBytes, 0);
         }
