@@ -74,6 +74,8 @@ public class WsHopper extends WsSubsystem implements IObserver {
         cycle = 0;
         kickerButtonPressed = false;
         disks = 0;
+        timeRecovery = false; 
+        startTime = 0 ; 
         upValue = servoValue1.getValue();
         downValue = servoValue2.getValue();
         servoUp = true;
@@ -181,6 +183,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
                         liftValue = DoubleSolenoid.Value.kForward;
                         //Also lift the frisbee holder
                         servoUp = true;
+                    }
                     
                 } else {
                     liftValue = DoubleSolenoid.Value.kReverse;
