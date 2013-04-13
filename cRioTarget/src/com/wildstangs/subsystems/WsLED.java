@@ -1,6 +1,7 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
@@ -18,26 +19,39 @@ public class WsLED extends WsSubsystem implements IObserver {
 
     private I2C i2c;
     boolean kickerButtonPressed = false;
+    boolean climbButtonPressed = false;
     MessageHandler messageSender;
-    boolean enabledSendData = true;
+    boolean enabledDataSent = true;
     boolean autoSendData = true;
     boolean disableSendData = true;
     boolean kickSent = false;
+    boolean climbSent = false;
+    boolean intakeSent = false;
+    boolean intakeChanged = false;
+    boolean intakeButtonPreviousState = false;
 
     public WsLED(String name) {
         super(name);
         i2c = new I2C(DigitalModule.getInstance(1), 0x52 << 1);
         Thread t = new Thread(messageSender = new MessageHandler(i2c));
         t.start();
+        //Kicker
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+        subject.attach(this);
+        //Intake
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        subject.attach(this);
+        //Climb
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON2);
         subject.attach(this);
     }
 
     public void init() {
-        enabledSendData = true;
+        enabledDataSent = false;
         autoSendData = true;
         disableSendData = true;
         kickSent = false;
+        intakeButtonPreviousState = false;
     }
 
     public void update() {
@@ -66,13 +80,18 @@ public class WsLED extends WsSubsystem implements IObserver {
                 // Handle TeleOp signalling here
                 //-----------------------------------------------------------------
 
-                // Display Robot Grabber
-                // 0x01 0x6C 0x0A  RED
-                // 0x01 0x6C 0x0B  GREEN
+                // Outputs
+                // 0x04 0x52 station RED Alliance
+                // 0x04 0x47 station BLUE Alliance
+                // 0x05 0x13 0x14  SHOOT
+                // 0x06 0x11 0x12  Climb
+                // 0x07 0x11 0x12  Intake
+                // No other bytes by default.
+                
                 if (kickerButtonPressed) {
-                    commandByte = 0x01;
-                    payloadByteOne = 0x6C;
-                    payloadByteTwo = 0x0B;
+                    commandByte = 0x05;
+                    payloadByteOne = 0x13;
+                    payloadByteTwo = 0x14;
 
                     dataBytes[0] = commandByte;
                     dataBytes[1] = payloadByteOne;
@@ -81,39 +100,64 @@ public class WsLED extends WsSubsystem implements IObserver {
                     dataBytes[4] = 0;
                     if (!kickSent) {
                         messageSender.setSendData(dataBytes, dataBytes.length);
-                        messageSender.setSendData(dataBytes, dataBytes.length);
                         synchronized (messageSender) {
                             messageSender.notify();
                         }
-                        enabledSendData = true;
+                        enabledDataSent = true;
                         kickSent = true;
                     }
-                    //messageSender.send();
-                } else if (enabledSendData) {
-                    kickSent = false;
-                    commandByte = 0x01;
-                    payloadByteOne = 0x6C;
-                    payloadByteTwo = 0x0A;
+                } else if (climbButtonPressed) {
+                    commandByte = 0x06;
+                    payloadByteOne = 0x11;
+                    payloadByteTwo = 0x12;
 
                     dataBytes[0] = commandByte;
                     dataBytes[1] = payloadByteOne;
                     dataBytes[2] = payloadByteTwo;
                     dataBytes[3] = 0;
                     dataBytes[4] = 0;
-
-
-                    messageSender.setSendData(dataBytes, dataBytes.length);
-                    messageSender.setSendData(dataBytes, dataBytes.length);
-                    synchronized (messageSender) {
-                        messageSender.notify();
+                    if (!climbSent) {
+                        messageSender.setSendData(dataBytes, dataBytes.length);
+                        synchronized (messageSender) {
+                            messageSender.notify();
+                        }
+                        enabledDataSent = true;
+                        climbSent = true;
                     }
-                    enabledSendData = false;
+                }
+                else if (intakeChanged) {
+                    commandByte = 0x06;
+                    payloadByteOne = 0x11;
+                    payloadByteTwo = 0x12;
+
+                    dataBytes[0] = commandByte;
+                    dataBytes[1] = payloadByteOne;
+                    dataBytes[2] = payloadByteTwo;
+                    dataBytes[3] = 0;
+                    dataBytes[4] = 0;
+                    if (!intakeSent) {
+                        messageSender.setSendData(dataBytes, dataBytes.length);
+                        synchronized (messageSender) {
+                            messageSender.notify();
+                        }
+                        enabledDataSent = true;
+                        intakeSent = true;
+                        intakeChanged = false;
+                    }
+                }
+                else if (enabledDataSent) {
+                    kickSent = false;
+                    climbSent = false;
+                    enabledDataSent = false;
+                    intakeSent = false;
+                    intakeChanged = false;
                 }
 
             } else {
-                commandByte = 0x01;
-                payloadByteOne = 0x1C;
-                payloadByteTwo = 0x1D;
+                //auto 
+                commandByte = 0x02;
+                payloadByteOne = 0x11;
+                payloadByteTwo = 0x12;
                 
                 if (true == autoSendData) {
                     dataBytes[0] = commandByte;
@@ -180,6 +224,23 @@ public class WsLED extends WsSubsystem implements IObserver {
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
             kickerButtonPressed = button.getValue();
         }
+        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
+            if (intakeButtonPreviousState == false) {
+                intakeButtonPreviousState = button.getValue();
+                intakeChanged = true;
+            }
+            else if (intakeButtonPreviousState != button.getValue()) {
+                intakeButtonPreviousState = button.getValue();
+                intakeChanged = true;
+            }
+            else {
+                intakeChanged = false;
+            }
+        }
+        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON2) {
+            climbButtonPressed = button.getValue();
+        }
+        
     }
 
     private static class MessageHandler implements Runnable {
@@ -233,10 +294,9 @@ public class WsLED extends WsSubsystem implements IObserver {
             // Extremely fast and cheap data confirmation algorithm
             data[3] = (byte) (~data[1]);
             data[4] = (byte) (~data[2]);
-
-            System.out.println("Input2 w: Data size: " + data.length + " byte[0]: " + Integer.toHexString(data[0]) + " byte[1]: " + Integer.toHexString(data[1]) + " byte[2]: " + Integer.toHexString(data[2]) + " byte[3]: " + Integer.toHexString(data[3]) + " byte[4]: " + Integer.toHexString(data[4]));            // Send the bytes - this is a blocking call
+            System.out.println("SendByte");
             //byte[] dataToSend, int sendSize, byte[] dataReceived, int receiveSize
-            i2c.transaction(data, size, rcvBytes, rcvBytes.length);
+            i2c.transaction(data, size, rcvBytes, 0);
         }
     }
 }
