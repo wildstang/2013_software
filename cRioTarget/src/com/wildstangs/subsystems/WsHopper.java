@@ -35,10 +35,10 @@ public class WsHopper extends WsSubsystem implements IObserver {
     private boolean kickerValue;
     private DoubleSolenoid.Value liftValue;
     private int disks = 0;
-    private DoubleConfigFileParameter servoUpValue = new DoubleConfigFileParameter(
-            this.getClass().getName(), "AngleUp", 75);
-    private DoubleConfigFileParameter servoDownValue = new DoubleConfigFileParameter(
-            this.getClass().getName(), "AngleDown", 0);
+    private DoubleConfigFileParameter servoValue1 = new DoubleConfigFileParameter(
+            this.getClass().getName(), "AngleDown", 75);
+    private DoubleConfigFileParameter servoValue2 = new DoubleConfigFileParameter(
+            this.getClass().getName(), "AngleUp", 0);
     private boolean servoUp = true;
     private double upValue;
     private double downValue;
@@ -71,8 +71,8 @@ public class WsHopper extends WsSubsystem implements IObserver {
         cycle = 0;
         kickerButtonPressed = false;
         disks = 0;
-        upValue = servoUpValue.getValue();
-        downValue = servoDownValue.getValue();
+        upValue = servoValue1.getValue();
+        downValue = servoValue2.getValue();
         servoUp = true;
     }
 
@@ -106,7 +106,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
         ((WsServo) WsOutputFacade.getInstance().getOutput(WsOutputFacade.FRISBEE_HOLDER_SERVO))
-                .setAngle((IOutputEnum) null, new Double(servoUp ? upValue : downValue));
+                .setAngle((IOutputEnum) null, new Double(servoUp ? downValue : upValue));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
 
         SmartDashboard.putBoolean("Kicker value", kickerValue);
@@ -182,7 +182,13 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 getSubject(WsManipulatorJoystickButtonEnum.BUTTON1))
         {
             if (button.getValue() == true && (button.getPreviousValue() == false)) {
-                servoUp = !servoUp;
+                if (liftValue == DoubleSolenoid.Value.kForward)
+                {
+                    servoUp = true;
+                }
+                else {
+                    servoUp = !servoUp;
+                }
             }
         }
     }
