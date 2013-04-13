@@ -77,6 +77,8 @@ public class RobotTemplate extends IterativeRobot {
 
     public void disabledPeriodic() {
         WsInputFacade.getInstance().updateOiData();
+        //Make LED stuff go in disabled.
+        ((WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_LED))).update();
     }
 
     public void autonomousInit() {
