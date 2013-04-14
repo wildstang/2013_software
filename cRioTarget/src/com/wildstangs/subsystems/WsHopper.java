@@ -38,9 +38,9 @@ public class WsHopper extends WsSubsystem implements IObserver {
     private int disks = 0;
     private boolean timeRecovery = false;
     private double startTime = 0;
-    private DoubleConfigFileParameter servoValue1 = new DoubleConfigFileParameter(
+    private DoubleConfigFileParameter servoDownValue = new DoubleConfigFileParameter(
             this.getClass().getName(), "AngleDown", 75);
-    private DoubleConfigFileParameter servoValue2 = new DoubleConfigFileParameter(
+    private DoubleConfigFileParameter servoUpValue = new DoubleConfigFileParameter(
             this.getClass().getName(), "AngleUp", 0);
     private boolean servoUp = true;
     private double upValue;
@@ -76,8 +76,8 @@ public class WsHopper extends WsSubsystem implements IObserver {
         disks = 0;
         timeRecovery = false; 
         startTime = 0 ; 
-        upValue = servoValue1.getValue();
-        downValue = servoValue2.getValue();
+        downValue = servoDownValue.getValue();
+        upValue = servoUpValue.getValue();
         servoUp = true;
     }
 
@@ -129,7 +129,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
         ((WsServo) WsOutputFacade.getInstance().getOutput(WsOutputFacade.FRISBEE_HOLDER_SERVO))
-                .setAngle((IOutputEnum) null, new Double(servoUp ? downValue : upValue));
+                .setAngle((IOutputEnum) null, new Double(servoUp ? upValue : downValue));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
 
         SmartDashboard.putBoolean("Kicker value", kickerValue);
