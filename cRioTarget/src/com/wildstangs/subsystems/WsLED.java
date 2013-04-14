@@ -17,24 +17,28 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public class WsLED extends WsSubsystem implements IObserver {
 
-    private I2C i2c;
+    MessageHandler messageSender;
+    //button states.
     boolean kickerButtonPressed = false;
     boolean climbButtonPressed = false;
-    MessageHandler messageSender;
-    boolean enabledDataSent = true;
-    boolean autoSendData = true;
-    boolean disableSendData = true;
+    boolean intakeChanged = false;
+    boolean intakeButtonPreviousState = false;
+    // Sent states
+    boolean autoDataSent = false;
+    boolean disableDataSent = false;
     boolean kickSent = false;
     boolean climbSent = false;
     boolean intakeSent = false;
-    boolean intakeChanged = false;
-    boolean intakeButtonPreviousState = false;
+    //Send message control
+    boolean sendData = false;
 
     public WsLED(String name) {
         super(name);
-        i2c = new I2C(DigitalModule.getInstance(1), 0x52 << 1);
-        Thread t = new Thread(messageSender = new MessageHandler(i2c));
+        //Fire up the message sender thread.
+        Thread t = new Thread(messageSender = new MessageHandler());
+        //This is safe because there is only one instance of the subsystem in the subsystem container.
         t.start();
+        
         //Kicker
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
         subject.attach(this);
@@ -47,22 +51,17 @@ public class WsLED extends WsSubsystem implements IObserver {
     }
 
     public void init() {
-        enabledDataSent = false;
-        autoSendData = true;
-        disableSendData = true;
-        kickSent = false;
+        autoDataSent = false;
+        disableDataSent = false;
         intakeButtonPreviousState = false;
+        sendData = false;
     }
 
     public void update() {
         byte[] dataBytes = new byte[5];
-        byte commandByte = dataBytes[0];
-        byte payloadByteOne = dataBytes[1];
-        byte payloadByteTwo = dataBytes[2];
-
-        // Get Data Handles
-        //DriverStation* p_ds = DriverStation::GetInstance();
-        //WsOutputFacade* p_of = WsOutputFacade::instance();
+        byte commandByte = 0x00;
+        byte payloadByteOne = 0x00;
+        byte payloadByteTwo = 0x00;
 
         // Get all inputs relevant to the LEDs
         boolean isRobotEnabled = DriverStation.getInstance().isEnabled();
@@ -71,203 +70,181 @@ public class WsLED extends WsSubsystem implements IObserver {
         DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
         int station_location = DriverStation.getInstance().getLocation();
 
-
-
-        if (DriverStation.getInstance().isEnabled() == true) {
-            if (DriverStation.getInstance().isOperatorControl() == true) {
-
-                //-----------------------------------------------------------------
+        /**
+         * --------------------------------------------------------- 
+         * | Function      | Cmd  | PL 1 | PL 2                    |
+         * --------------------------------------------------------- 
+         * | Shoot         | 0x05 | 0x13 | 0x14                    | 
+         * | Climb         | 0x06 | 0x11 | 0x12                    | 
+         * | Intake on     | 0x07 | 0x11 | 0x12 (same as off)      | 
+         * | Intake off    | 0x07 | 0x11 | 0x12(same as on)        |
+         * | Red Alliance  | 0x04 | 0x52 | station id(0x01 - 0x03) |
+         * | Blue Alliance | 0x04 | 0x47 | station id(0x01 - 0x03) |
+         * ---------------------------------------------------------
+         *
+         * Send sequence once, no spamming the Arduino.
+         */
+        if (isRobotEnabled) {
+            if (isRobotTeleop) {
+                //--------------------------------------------------------------
                 // Handle TeleOp signalling here
-                //-----------------------------------------------------------------
+                //--------------------------------------------------------------
 
-                // Outputs
-                // 0x04 0x52 station RED Alliance
-                // 0x04 0x47 station BLUE Alliance
-                // 0x05 0x13 0x14  SHOOT
-                // 0x06 0x11 0x12  Climb
-                // 0x07 0x11 0x12  Intake
-                // No other bytes by default.
-                
                 if (kickerButtonPressed) {
                     commandByte = 0x05;
                     payloadByteOne = 0x13;
                     payloadByteTwo = 0x14;
-
-                    dataBytes[0] = commandByte;
-                    dataBytes[1] = payloadByteOne;
-                    dataBytes[2] = payloadByteTwo;
-                    dataBytes[3] = 0;
-                    dataBytes[4] = 0;
                     if (!kickSent) {
-                        messageSender.setSendData(dataBytes, dataBytes.length);
-                        synchronized (messageSender) {
-                            messageSender.notify();
-                        }
-                        enabledDataSent = true;
+                        sendData = true;
                         kickSent = true;
                     }
                 } else if (climbButtonPressed) {
                     commandByte = 0x06;
                     payloadByteOne = 0x11;
                     payloadByteTwo = 0x12;
-
-                    dataBytes[0] = commandByte;
-                    dataBytes[1] = payloadByteOne;
-                    dataBytes[2] = payloadByteTwo;
-                    dataBytes[3] = 0;
-                    dataBytes[4] = 0;
                     if (!climbSent) {
-                        messageSender.setSendData(dataBytes, dataBytes.length);
-                        synchronized (messageSender) {
-                            messageSender.notify();
-                        }
-                        enabledDataSent = true;
+                        sendData = true;
                         climbSent = true;
                     }
-                }
-                else if (intakeChanged) {
+                } else if (intakeChanged) {
                     commandByte = 0x06;
                     payloadByteOne = 0x11;
                     payloadByteTwo = 0x12;
-
-                    dataBytes[0] = commandByte;
-                    dataBytes[1] = payloadByteOne;
-                    dataBytes[2] = payloadByteTwo;
-                    dataBytes[3] = 0;
-                    dataBytes[4] = 0;
                     if (!intakeSent) {
-                        messageSender.setSendData(dataBytes, dataBytes.length);
-                        synchronized (messageSender) {
-                            messageSender.notify();
-                        }
-                        enabledDataSent = true;
+                        sendData = true;
                         intakeSent = true;
-                        intakeChanged = false;
+                        //intakeChanged = false;
                     }
-                }
-                else if (enabledDataSent) {
+                } else {
                     kickSent = false;
                     climbSent = false;
-                    enabledDataSent = false;
                     intakeSent = false;
-                    intakeChanged = false;
+                    //Make sure we don't send anything on this run through.
+                    sendData = false;
+                    //intakeChanged = false;
                 }
 
-            } else {
-                //auto 
+            } else if (isRobotAuton) {
+                //--------------------------------------------------------------
+                //  Handle Autonomous signalling here
+                //--------------------------------------------------------------
+                //One send and one send only. 
+                //Don't take time in auto sending LED cmds.
                 commandByte = 0x02;
                 payloadByteOne = 0x11;
                 payloadByteTwo = 0x12;
-                
-                if (true == autoSendData) {
-                    dataBytes[0] = commandByte;
-                    dataBytes[1] = payloadByteOne;
-                    dataBytes[2] = payloadByteTwo;
-                    dataBytes[3] = 0;
-                    dataBytes[4] = 0;
-                    messageSender.setSendData(dataBytes, dataBytes.length);
-                    synchronized (messageSender) {
-                        messageSender.notify();
-                    }
-                    autoSendData = false;
+
+                if (!autoDataSent) {
+                    sendData = true;
+                    autoDataSent = true;
                 }
             }
         } else {
-            //Update is not called during disabled.  Code for reference only.
-            //---------------------------------------------------------------------
+            //------------------------------------------------------------------
             // Handle Disabled signalling here
-            //---------------------------------------------------------------------
+            //------------------------------------------------------------------
             switch (alliance.value) {
-                    case DriverStation.Alliance.kRed_val: {
-                        commandByte = 0x04;
-                        payloadByteOne = 0x52;
-                        payloadByteTwo = ((byte) station_location);
-                    }
-                    break;
-
-                    case DriverStation.Alliance.kBlue_val: {
-                        commandByte = 0x04;
-                        payloadByteOne = 0x47;
-                        payloadByteTwo = ((byte) station_location);
-                    }
-                    break;
-
-                    default: {
-                        disableSendData = false;
-                    }
-                    break;
+                case DriverStation.Alliance.kRed_val: {
+                    commandByte = 0x04;
+                    payloadByteOne = 0x52;
+                    payloadByteTwo = ((byte) station_location);
                 }
+                break;
 
-                if ((station_location < 1)
-                        || (station_location > 3)) {
-                    disableSendData = false;
+                case DriverStation.Alliance.kBlue_val: {
+                    commandByte = 0x04;
+                    payloadByteOne = 0x47;
+                    payloadByteTwo = ((byte) station_location);
                 }
+                break;
 
-                if (true == disableSendData) {
-                    dataBytes[0] = commandByte;
-                    dataBytes[1] = payloadByteOne;
-                    dataBytes[2] = payloadByteTwo;
-                    dataBytes[3] = 0;
-                    dataBytes[4] = 0;
-                    messageSender.setSendData(dataBytes, dataBytes.length);
-                    synchronized (messageSender) {
-                        messageSender.notify();
-                    }
-                    disableSendData = false;
+                default: {
+                    disableDataSent = true;
                 }
+                break;
+            }
+
+            if ((station_location < 1)
+                    || (station_location > 3)) {
+                disableDataSent = true;
+            }
+
+            if (!disableDataSent) {
+                sendData = true;
+                disableDataSent = true;
+            }
+        }
+        if (sendData) {
+            dataBytes[0] = commandByte;
+            dataBytes[1] = payloadByteOne;
+            dataBytes[2] = payloadByteTwo;
+            dataBytes[3] = 0;
+            dataBytes[4] = 0;
+            synchronized (messageSender) {
+                messageSender.setSendData(dataBytes, dataBytes.length);
+                messageSender.notify();
+            }
+            sendData = false;
         }
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        BooleanSubject button = (BooleanSubject) subjectThatCaused;
+        boolean buttonState = ((BooleanSubject) subjectThatCaused).getValue();
 
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
-            kickerButtonPressed = button.getValue();
+            kickerButtonPressed = buttonState;
         }
         if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
             if (intakeButtonPreviousState == false) {
-                intakeButtonPreviousState = button.getValue();
+                if ((intakeButtonPreviousState = buttonState) == true) {
+                    intakeChanged = true;
+                }
+            } else if (intakeButtonPreviousState != buttonState) {
+                intakeButtonPreviousState = buttonState;
                 intakeChanged = true;
-            }
-            else if (intakeButtonPreviousState != button.getValue()) {
-                intakeButtonPreviousState = button.getValue();
-                intakeChanged = true;
-            }
-            else {
+            } else {
                 intakeChanged = false;
             }
         }
         if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON2) {
-            climbButtonPressed = button.getValue();
+            climbButtonPressed = buttonState;
         }
-        
+
     }
 
     private static class MessageHandler implements Runnable {
+        //Designed to only have one single threaded controller. (WsLED)
+        //Offload to a thread avoid blocking main thread with LED sends.
 
-        static byte[] rcvBytes = new byte[5];
-        boolean update;
+        static byte[] rcvBytes;
         byte[] sendData;
         int sendSize = 0;
-        boolean dataToSend = false;
-        static I2C i2c;
+        I2C i2c;
         boolean running = true;
+        boolean dataToSend = false;
 
-        public MessageHandler(I2C i2cOutput) {
-            i2c = i2cOutput;
+        public MessageHandler() {
+            //Get ourselves an i2c instance to send out some data.
+            i2c = new I2C(DigitalModule.getInstance(1), 0x52 << 1);
         }
 
         public void run() {
             while (running) {
                 synchronized (this) {
                     try {
+                        //blocking sleep until someone calls notify.
                         this.wait();
-                        sendPayloadData(sendData, sendSize);
-                        update = false;
-                        dataToSend = false;
-                        sendSize = 0;
-                    } catch (InterruptedException e) {
-                    }
+                        //Need at least 5 bytes and someone has to have called setSendData.
+                        if (sendSize >= 5 && dataToSend) {
+                            // Extremely fast and cheap data confirmation algorithm
+                            sendData[3] = (byte) (~sendData[1]);
+                            sendData[4] = (byte) (~sendData[2]);
+                            //byte[] dataToSend, int sendSize, byte[] dataReceived, int receiveSize
+                            // set receive size to 0 to avoid sending an i2c read request.
+                            i2c.transaction(sendData, sendSize, rcvBytes, 0);
+                            dataToSend = false;
+                        }
+                    } catch (InterruptedException e) {}   
                 }
             }
         }
@@ -278,24 +255,8 @@ public class WsLED extends WsSubsystem implements IObserver {
             dataToSend = true;
         }
 
-        public void send() {
-            update = true;
-        }
-
         public void stop() {
             running = false;
-        }
-
-        private static void sendPayloadData(byte[] data, int size) {
-            if (5 != size && data != null) {
-                return;
-            }
-
-            // Extremely fast and cheap data confirmation algorithm
-            data[3] = (byte) (~data[1]);
-            data[4] = (byte) (~data[2]);
-            //byte[] dataToSend, int sendSize, byte[] dataReceived, int receiveSize
-            i2c.transaction(data, size, rcvBytes, 0);
         }
     }
 }
