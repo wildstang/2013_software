@@ -10,8 +10,8 @@ com.wildstangs.subsystems.WsHopper.forwardCycles=15
 com.wildstangs.subsystems.WsHopper.backwardCycles=15
 com.wildstangs.subsystems.WsHopper.AngleUp=160.0
 com.wildstangs.subsystems.WsHopper.AngleDown=72.0
-com.wildstangs.subsystems.WsIntake.FingerDelayFromAccumulatorSwitch=15.0
-com.wildstangs.subsystems.WsIntake.UseTimeDelay=false
+com.wildstangs.subsystems.WsIntake.FingerDelayFromFunnelatorSwitch=1.0
+com.wildstangs.subsystems.WsIntake.UseTimeDelay=true
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
 
 //Distance PID

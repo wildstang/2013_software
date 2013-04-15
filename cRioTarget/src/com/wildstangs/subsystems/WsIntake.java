@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class WsIntake extends WsSubsystem implements IObserver {
 
     private DoubleConfigFileParameter switchDelay = new DoubleConfigFileParameter(
-            this.getClass().getName(), "FingerDelayFromAccumulatorSwitch", 3.5);
+            this.getClass().getName(), "FingerDelayFromFunnelatorSwitch", 1.0);
     private BooleanConfigFileParameter useDelay = new BooleanConfigFileParameter(
             this.getClass().getName(), "UseTimeDelay", true);
     private double switchDelayTime;
@@ -36,8 +36,8 @@ public class WsIntake extends WsSubsystem implements IObserver {
     private boolean latchAccumulatorSwitches = false;
     private boolean fingerDownOverrideButtonState;
     private boolean fingerUpOverrideButtonState;
-    private boolean counting = false;
-    private double countTo = 0;
+    private boolean hasFirstDiscGoneThrough = false;
+    private double timeAfterDelayToBringDownFinger = 0;
     private int numLatchedDiscs = 0;
 
     public WsIntake(String name) {
@@ -75,8 +75,8 @@ public class WsIntake extends WsSubsystem implements IObserver {
         fingerDownOverrideButtonState = false;
         motorForward = false;
         motorBack = false;
-        countTo = 0;
-        counting = false;
+        timeAfterDelayToBringDownFinger = 0;
+        hasFirstDiscGoneThrough = false;
         latchAccumulatorSwitches=false; 
     }
 
@@ -84,10 +84,12 @@ public class WsIntake extends WsSubsystem implements IObserver {
         //If this is true, the driver just brought the accumulator up and we have locked the switch states
         if (true == latchAccumulatorSwitches) {
             //Once the left limit switch has transitioned to false, it is safe to let the second frisbee through
-            if (false == leftAccumulatorLimitSwitch) {
-                if (useTimeDelay && !counting) {
-                    counting = true;
-                    countTo = Timer.getFPGATimestamp() + switchDelayTime;
+            if (true == hasFirstDiscGoneThrough) {
+                if (Timer.getFPGATimestamp() >= timeAfterDelayToBringDownFinger) {
+                    //Unlatch the button states and bring down the funnelator finger
+                    latchAccumulatorSwitches = false;
+                    fingerValveState = false;
+                    hasFirstDiscGoneThrough = false;
                 }
             } //Otherwise if the right switch is still true, leave up the finger for now
             else {
@@ -130,15 +132,6 @@ public class WsIntake extends WsSubsystem implements IObserver {
             WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
                     .set(null, Double.valueOf(0.0));
             SmartDashboard.putNumber("Funnelator roller", 0.0);
-        }
-
-        if (useTimeDelay && counting) {
-            if (Timer.getFPGATimestamp() >= countTo) {
-                //Unlatch the button states and bring down the funnelator finger
-                latchAccumulatorSwitches = false;
-                fingerValveState = false;
-                counting = false;
-            }
         }
 
         SmartDashboard.putBoolean("RightAccumulatorLimitSwitch: ", rightAccumulatorLimitSwitch);
@@ -224,11 +217,15 @@ public class WsIntake extends WsSubsystem implements IObserver {
             funnelatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
             if(funnelatorLimitSwitch == false)
             {
-                if(!useTimeDelay && fingerValveState && !leftAccumulatorLimitSwitch)
+                if(useTimeDelay && fingerValveState && latchAccumulatorSwitches)
                 {
+                    hasFirstDiscGoneThrough = true;
+                    timeAfterDelayToBringDownFinger = Timer.getFPGATimestamp() + switchDelayTime;
+                }else if(!useTimeDelay && fingerValveState && !leftAccumulatorLimitSwitch){
                     //Unlatch the button states and bring down the funnelator finger
                     latchAccumulatorSwitches = false;
                     fingerValveState = false;
+                    
                 }
                 ((WsHopper)WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER)).addDisk();
             }
