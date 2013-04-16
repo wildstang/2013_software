@@ -85,6 +85,7 @@ public class WsOutputFacade {
     public static final String LOADING_RAMP = "LoadingRamp";
     public static final String CLIMBER = "Climber";
     public static final String TOMAHAWK_SERVO = "TomahawkServo";
+    public static final String LIGHT_CANNON_RELAY = "LightCannonRelay";
     /**
      * Constructor for WsOutputFacade.
      *
