@@ -22,7 +22,7 @@ public class WsLightCannon extends WsSubsystem implements IObserver
     {
         super(name);
         
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON10);
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON9);
         subject.attach(this);
     }
 
