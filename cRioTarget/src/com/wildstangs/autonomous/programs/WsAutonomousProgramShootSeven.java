@@ -73,7 +73,7 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootSeven() {
-        super(31);
+        super(29);
     }
 
     public void defineSteps() {
@@ -170,16 +170,14 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram {
         WsAutonomousParallelStepGroup pg5 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
         programSteps[24] = pg5;
             pg5.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(FifthDrive.getValue(), 0.0));
-            pg5.addStep(new WsAutonomousStepDriveManual(0, 0.8));
             pg5.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, secondShooterPreset.ANGLE));
         WsAutonomousParallelStepGroup pg6 = new WsAutonomousParallelStepGroup("5 Wait for shooter and drive");
         programSteps[25] = pg6;
             pg6.addStep(new WsAutonomousStepWaitForShooter());
             pg6.addStep(new WsAutonomousStepWaitForDriveMotionProfile());
         programSteps[26] = new WsAutonomousStepStopDriveUsingMotionProfile();
-        programSteps[27] = new WsAutonomousStepDriveManual(0, 0);
-        programSteps[28] = new WsAutonomousStepMultikick(4);
-        programSteps[29] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
+        programSteps[27] = new WsAutonomousStepMultikick(4);
+        programSteps[28] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
     }
 
     public String toString() {

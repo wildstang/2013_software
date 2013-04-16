@@ -258,7 +258,7 @@ com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistance.distanc
 //Drive Distance Motion Profile
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=0
 
-com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.heading=0.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.heading=0.2
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.distance=25.0
 
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackLeft.heading=0.0

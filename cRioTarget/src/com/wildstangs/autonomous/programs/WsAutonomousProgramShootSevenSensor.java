@@ -107,7 +107,6 @@ public class WsAutonomousProgramShootSevenSensor extends WsAutonomousProgram {
         WsAutonomousParallelStepGroup pg7 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
         programSteps[16] = pg7;
             pg7.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(thirdDrive.getValue(), 0.0));
-            pg7.addStep(new WsAutonomousStepDriveManual(0, 0.8));
             pg7.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE));
             pg7.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
         WsAutonomousParallelStepGroup pgIntakeDrive = new WsAutonomousParallelStepGroup("Intake and drive");
@@ -125,7 +124,6 @@ public class WsAutonomousProgramShootSevenSensor extends WsAutonomousProgram {
             pgIntakeDrive.addStep(pssDrive);
                 pssDrive.addStep(new WsAutonomousStepWaitForDriveMotionProfile());    
                 pssDrive.addStep( new WsAutonomousStepStopDriveUsingMotionProfile());   
-                pssDrive.addStep(new WsAutonomousStepDriveManual(0, 0));
        
 
         programSteps[18] = new WsAutonomousStepRaiseHopper();
