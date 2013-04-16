@@ -11,7 +11,6 @@ import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.WsHopper;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  *
