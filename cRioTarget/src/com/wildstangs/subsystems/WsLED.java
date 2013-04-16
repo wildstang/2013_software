@@ -107,13 +107,13 @@ public class WsLED extends WsSubsystem implements IObserver {
                         climbSent = true;
                     }
                 } else if (intakeChanged) {
-                    commandByte = 0x06;
+                    commandByte = 0x07;
                     payloadByteOne = 0x11;
                     payloadByteTwo = 0x12;
                     if (!intakeSent) {
                         sendData = true;
                         intakeSent = true;
-                        //intakeChanged = false;
+                        intakeChanged = false;
                     }
                 } else {
                     kickSent = false;
@@ -121,7 +121,7 @@ public class WsLED extends WsSubsystem implements IObserver {
                     intakeSent = false;
                     //Make sure we don't send anything on this run through.
                     sendData = false;
-                    //intakeChanged = false;
+                    intakeChanged = false;
                 }
 
             } else if (isRobotAuton) {
@@ -159,14 +159,14 @@ public class WsLED extends WsSubsystem implements IObserver {
                 break;
 
                 default: {
-                    disableDataSent = true;
+                    disableDataSent = false;
                 }
                 break;
             }
 
             if ((station_location < 1)
                     || (station_location > 3)) {
-                disableDataSent = true;
+                disableDataSent = false;
             }
 
             if (!disableDataSent) {
@@ -241,6 +241,7 @@ public class WsLED extends WsSubsystem implements IObserver {
                             sendData[4] = (byte) (~sendData[2]);
                             //byte[] dataToSend, int sendSize, byte[] dataReceived, int receiveSize
                             // set receive size to 0 to avoid sending an i2c read request.
+                            //System.out.println("Cmd: " + Integer.toHexString(sendData[0]));
                             i2c.transaction(sendData, sendSize, rcvBytes, 0);
                             dataToSend = false;
                         }
