@@ -8,8 +8,8 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.DigitalModule;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 
 /**
  *
