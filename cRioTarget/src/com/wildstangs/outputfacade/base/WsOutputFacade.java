@@ -3,10 +3,12 @@ package com.wildstangs.outputfacade.base;
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.outputfacade.outputs.WsDoubleSolenoid;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
+import com.wildstangs.outputfacade.outputs.WsRelay;
 import com.wildstangs.outputfacade.outputs.WsServo;
 import com.wildstangs.outputfacade.outputs.WsSolenoid;
 import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.types.DataElement;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.networktables2.util.List;
 
 /**
@@ -125,8 +127,6 @@ public class WsOutputFacade {
         }
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 9)));
-
-
-
+        outputs.add(new DataElement(LIGHT_CANNON_RELAY, new WsRelay(1, 2, Relay.Direction.kForward)));
     }
 }
