@@ -131,7 +131,7 @@ public class WsSimulation {
         if(autonomousRun)
         {
             WsAutonomousManager.getInstance().setPosition(1);
-            WsAutonomousManager.getInstance().setProgram(6);
+            WsAutonomousManager.getInstance().setProgram(7);
             WsAutonomousManager.getInstance().startCurrentProgram();
         }
         

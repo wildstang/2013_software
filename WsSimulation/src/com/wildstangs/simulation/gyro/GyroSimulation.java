@@ -28,9 +28,9 @@ public class GyroSimulation {
         double angle = gyro.getAngle();
         //Handle brakes
         if ((left_drive_speed > 0.1) && (right_drive_speed < 0.1)) {
-            angle++;
-        } else if ((left_drive_speed < 0.1) && (right_drive_speed > 0.1)) {
             angle--;
+        } else if ((left_drive_speed < 0.1) && (right_drive_speed > 0.1)) {
+            angle++;
         }
         gyro.setAngle(angle);
         gyroAngle.updateWithValue(angle, 360);
