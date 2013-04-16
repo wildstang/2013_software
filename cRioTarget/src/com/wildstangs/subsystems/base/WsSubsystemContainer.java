@@ -7,7 +7,6 @@ import com.wildstangs.subsystems.WsFloorPickup;
 import com.wildstangs.subsystems.WsHopper;
 import com.wildstangs.subsystems.WsIntake;
 import com.wildstangs.subsystems.WsLED;
-import com.wildstangs.subsystems.WsLandingGear;
 import com.wildstangs.subsystems.WsLoadingRamp;
 import com.wildstangs.subsystems.WsShooter;
 import com.wildstangs.types.DataElement;
@@ -75,7 +74,6 @@ public class WsSubsystemContainer {
     public static final String WS_FLOOR_PICKUP = "WsFloorPickup";
     public static final String WS_HOPPER = "WsHopper";
     public static final String WS_SHOOTER = "WsShooter";
-    public static final String WS_LANDING_GEAR = "WsLandingGear";
     public static final String WS_LOADING_RAMP = "WsLoadingRamp";
     public static final String WS_CLIMBER = "WsClimber";
     public static final String WS_LED = "WsLED";
@@ -93,7 +91,6 @@ public class WsSubsystemContainer {
         subsystem.add(new DataElement(WS_FLOOR_PICKUP, new WsFloorPickup(WS_FLOOR_PICKUP)));
         subsystem.add(new DataElement(WS_HOPPER, new WsHopper(WS_HOPPER)));
         subsystem.add(new DataElement(WS_SHOOTER, new WsShooter(WS_SHOOTER)));
-        subsystem.add(new DataElement(WS_LANDING_GEAR, new WsLandingGear(WS_LANDING_GEAR)));
         subsystem.add(new DataElement(WS_LOADING_RAMP, new WsLoadingRamp(WS_LOADING_RAMP)));
         subsystem.add(new DataElement(WS_CLIMBER, new WsClimber(WS_CLIMBER)));
         subsystem.add(new DataElement(WS_LED, new WsLED(WS_LED)));

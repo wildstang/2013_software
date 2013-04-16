@@ -82,7 +82,7 @@ public class WsOutputFacade {
     public static final String FUNNELATOR_ROLLER = "FunnelatorRoller";
     public static final String LOADING_RAMP = "LoadingRamp";
     public static final String CLIMBER = "Climber";
-    public static final String FRISBEE_HOLDER_SERVO = "FrisbeeHolderServo";
+    public static final String TOMAHAWK_SERVO = "TomahawkServo";
     /**
      * Constructor for WsOutputFacade.
      *
@@ -116,7 +116,7 @@ public class WsOutputFacade {
             outputs.add(new DataElement(CLIMBER, new WsSolenoid(CLIMBER, 1, 4)));
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));
             //put the frisbee holder above the lift, so it updates first.
-            outputs.add(new DataElement(FRISBEE_HOLDER_SERVO, new WsServo(FRISBEE_HOLDER_SERVO, 8)));
+            outputs.add(new DataElement(TOMAHAWK_SERVO, new WsServo(TOMAHAWK_SERVO, 8)));
             outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
             outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6)));
             outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));

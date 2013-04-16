@@ -38,13 +38,13 @@ public class WsHopper extends WsSubsystem implements IObserver {
     private int disks = 0;
     private boolean timeRecovery = false;
     private double startTime = 0;
-    private DoubleConfigFileParameter servoDownValue = new DoubleConfigFileParameter(
+    private DoubleConfigFileParameter tomahawkDownConfig = new DoubleConfigFileParameter(
             this.getClass().getName(), "AngleDown", 75);
-    private DoubleConfigFileParameter servoUpValue = new DoubleConfigFileParameter(
+    private DoubleConfigFileParameter tomahawkUpConfig = new DoubleConfigFileParameter(
             this.getClass().getName(), "AngleUp", 0);
-    private boolean servoUp = true;
-    private double upValue;
-    private double downValue;
+    private boolean tomahawkUp = true;
+    private double tomahawkUpValue;
+    private double tomahawkDownValue;
 
     public WsHopper(String name) {
         super(name);
@@ -61,8 +61,12 @@ public class WsHopper extends WsSubsystem implements IObserver {
 
         subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
-        
+
         subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON1);
+        subject.attach(this);
+
+        //Needed for tomahawk control
+        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
     }
 
@@ -74,11 +78,11 @@ public class WsHopper extends WsSubsystem implements IObserver {
         cycle = 0;
         kickerButtonPressed = false;
         disks = 0;
-        timeRecovery = false; 
-        startTime = 0 ; 
-        downValue = servoDownValue.getValue();
-        upValue = servoUpValue.getValue();
-        servoUp = true;
+        timeRecovery = false;
+        startTime = 0;
+        tomahawkDownValue = tomahawkDownConfig.getValue();
+        tomahawkUpValue = tomahawkUpConfig.getValue();
+        tomahawkUp = true;
     }
 
     public void update() {
@@ -100,36 +104,33 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 cycle = 0;
                 WsShooter shooter = (WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER);
                 WsIntake intake = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
-                if (kickerButtonPressed && ((this.isUpLimitSwitchTriggered() && shooter.isFlywheelAtSafeSpeed())||
-                    intake.getFingerDownOverrideButtonState())) {
+                if (kickerButtonPressed && ((this.isUpLimitSwitchTriggered() && shooter.isFlywheelAtSafeSpeed())
+                        || intake.getFingerDownOverrideButtonState())) {
                     goingForward = true;
                     kickerValue = true;
-                    if(disks > 0)
-                    {
+                    if (disks > 0) {
                         disks--;
                     }
                 }
             }
         }
-        
-        if(timeRecovery)
-        {
+
+        if (timeRecovery) {
             WsShooter shooter = (WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER);
-            if(shooter.isAtSpeed())
-            {
-                double endTime = Timer.getFPGATimestamp(); 
+            if (shooter.isAtSpeed()) {
+                double endTime = Timer.getFPGATimestamp();
                 double diffTime = (endTime - startTime);
                 SmartDashboard.putNumber("Recovery Time", diffTime);
                 System.out.println("Flywheel up to speed in: " + (endTime - startTime));
                 System.out.println("Start Time: " + startTime + " End Time: " + endTime);
-                timeRecovery = false; 
+                timeRecovery = false;
             }
         }
-        
-        
+
+
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
-        ((WsServo) WsOutputFacade.getInstance().getOutput(WsOutputFacade.FRISBEE_HOLDER_SERVO))
-                .setAngle((IOutputEnum) null, new Double(servoUp ? upValue : downValue));
+        ((WsServo) WsOutputFacade.getInstance().getOutput(WsOutputFacade.TOMAHAWK_SERVO))
+                .setAngle((IOutputEnum) null, new Double(tomahawkUp ? tomahawkUpValue : tomahawkDownValue));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
 
         SmartDashboard.putBoolean("Kicker value", kickerValue);
@@ -137,7 +138,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         SmartDashboard.putBoolean("KickerReady", goingForward || goingBack);
         SmartDashboard.putBoolean("Up limit switch", upLimitSwitchValue);
         SmartDashboard.putBoolean("Down limit switch", downLimitSwitchValue);
-        SmartDashboard.putBoolean("Frisbee Servo Position", servoUp);
+        SmartDashboard.putBoolean("Frisbee Servo Position", tomahawkUp);
         SmartDashboard.putNumber("Num disks", disks);
     }
 
@@ -160,14 +161,12 @@ public class WsHopper extends WsSubsystem implements IObserver {
             if (button.getValue()) {
                 WsShooter shooter = (WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER);
                 WsIntake intake = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
-                if (!goingForward && !goingBack && ((this.isUpLimitSwitchTriggered() &&
-                    shooter.isFlywheelAtSafeSpeed()) || intake.getFingerDownOverrideButtonState()))
-                {
+                if (!goingForward && !goingBack && ((this.isUpLimitSwitchTriggered()
+                        && shooter.isFlywheelAtSafeSpeed()) || intake.getFingerDownOverrideButtonState())) {
                     goingForward = true;
                     cycle = 0;
                     kickerValue = true;
-                    if(disks > 0)
-                    {
+                    if (disks > 0) {
                         disks--;
                     }
                 }
@@ -175,16 +174,15 @@ public class WsHopper extends WsSubsystem implements IObserver {
         } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) {
             if (button.getValue() == true && (button.getPreviousValue() == false)) {
                 if (liftValue == DoubleSolenoid.Value.kReverse) {
-                    
                     WsIntake intakeSubsystem = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
                     boolean funnelatorLimitSwitch = intakeSubsystem.getFunnelatorLimitSwitch();
-                //Only allow the hopper to go up if the funnelator switch is NOT tripped (prevent jam-ups in autonomous)
+                    //Only allow the hopper to go up if the funnelator switch is NOT tripped (prevent jam-ups in autonomous)
                     if (false == funnelatorLimitSwitch) {
                         liftValue = DoubleSolenoid.Value.kForward;
-                        //Also lift the frisbee holder
-                        servoUp = true;
+                        //Also lift the tomahawk
+                        tomahawkUp = true;
                     }
-                    
+
                 } else {
                     liftValue = DoubleSolenoid.Value.kReverse;
                 }
@@ -201,17 +199,19 @@ public class WsHopper extends WsSubsystem implements IObserver {
             upLimitSwitchValue = ((BooleanSubject) WsInputFacade.getInstance()
                     .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
                     .getSubject(((ISubjectEnum) null))).getValue();
-        }
-        else if(subjectThatCaused == WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).
-                getSubject(WsManipulatorJoystickButtonEnum.BUTTON1))
-        {
+        } else if (subjectThatCaused == WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).
+                getSubject(WsManipulatorJoystickButtonEnum.BUTTON1)) {
             if (button.getValue() == true && (button.getPreviousValue() == false)) {
-                if (liftValue == DoubleSolenoid.Value.kForward)
-                {
-                    servoUp = true;
+                if (liftValue == DoubleSolenoid.Value.kForward) {
+                    tomahawkUp = true;
+                } else {
+                    tomahawkUp = !tomahawkUp;
                 }
-                else {
-                    servoUp = !servoUp;
+            }
+        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
+            if (true == button.getValue()) {
+                if (liftValue == DoubleSolenoid.Value.kReverse) {
+                    tomahawkUp = true;
                 }
             }
         }
@@ -232,18 +232,16 @@ public class WsHopper extends WsSubsystem implements IObserver {
     public boolean isHopperUp() {
         return (liftValue == DoubleSolenoid.Value.kForward);
     }
-    
-    public boolean isFrisbeeHolderUp() {
-        return servoUp;
+
+    public boolean isTomahawkUp() {
+        return tomahawkUp;
     }
-    
-    public void addDisk()
-    {
+
+    public void addDisk() {
         disks++;
     }
-    
-    public int getDisks()
-    {
+
+    public int getDisks() {
         return disks;
     }
 }
