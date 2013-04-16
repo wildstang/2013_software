@@ -709,11 +709,16 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
     
     public void startStraightMoveWithMotionProfile(double distance, double goal_velocity){
+        startMoveWithHeadingAndMotionProfile(distance, goal_velocity, 0.0);
+        
+    }
+    public void startMoveWithHeadingAndMotionProfile(double distance, double goal_velocity, double heading){
         this.distance_to_move = distance; 
         this.distance_moved = 0.0; 
         this.distance_remaining = distance;
         this.goal_velocity = goal_velocity; 
         motionProfileActive = true; 
+        overrideHeadingValue(heading);
     }
     
     public void stopStraightMoveWithMotionProfile(){
@@ -724,6 +729,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         this.distance_remaining = 0.0; 
         this.goal_velocity = 0.0;
         motionProfileActive =false; 
+        overrideHeadingValue(0.0);
     }
 
     public WsPidStateType getHeadingPidState() {

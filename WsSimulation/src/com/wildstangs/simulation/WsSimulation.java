@@ -31,7 +31,7 @@ public class WsSimulation {
 
     static String c = "WsSimulation";
     
-    static boolean autonomousRun = false;
+    static boolean autonomousRun = true;
     
     /**
      * @param args the command line arguments
@@ -131,7 +131,7 @@ public class WsSimulation {
         if(autonomousRun)
         {
             WsAutonomousManager.getInstance().setPosition(1);
-            WsAutonomousManager.getInstance().setProgram(11);
+            WsAutonomousManager.getInstance().setProgram(6);
             WsAutonomousManager.getInstance().startCurrentProgram();
         }
         
