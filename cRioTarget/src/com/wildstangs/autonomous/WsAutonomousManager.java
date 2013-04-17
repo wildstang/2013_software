@@ -151,15 +151,16 @@ public class WsAutonomousManager implements IObserver {
     }
 
     private void definePrograms() {
-        programs = new WsAutonomousProgram[9];
+        programs = new WsAutonomousProgram[10];
         programs[0] = new WsAutonomousProgramSleeper(); //Always leave Sleeper as 0. Other parts of the code assume 0 is Sleeper.
         programs[1] = new WsAutonomousProgramShootFive();
         programs[2] = new WsAutonomousProgramShootFiveFeederStation();
         programs[3] = new WsAutonomousProgramShootFiveUnprotectedFeederStation();
-        programs[4] = new WsAutonomousProgramShootThree();
-        programs[5] = new WsAutonomousProgramShootSevenSensor();
-        programs[6] = new WsAutonomousProgramDriveDistanceMotionProfile();
-        programs[7] = new WsAutonomousProgramDrivePatterns();
-        programs[8] = new WsAutonomousProgramShootSevenDriveAfterOne();
+        programs[4] = new WsAutonomousProgramShootFiveFromMiddleLine(); 
+        programs[5] = new WsAutonomousProgramShootThree();
+        programs[6] = new WsAutonomousProgramShootSevenSensor();
+        programs[7] = new WsAutonomousProgramDriveDistanceMotionProfile();
+        programs[8] = new WsAutonomousProgramDrivePatterns();
+        programs[9] = new WsAutonomousProgramShootSevenDriveAfterOne();
     }
 }
