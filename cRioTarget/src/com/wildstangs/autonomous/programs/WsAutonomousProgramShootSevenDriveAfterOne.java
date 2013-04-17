@@ -37,6 +37,7 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
     private IntegerConfigFileParameter thirdExitWheelSetPoint;
     private BooleanConfigFileParameter thirdShooterAngle;
     private IntegerConfigFileParameter thirdFrisbeeDelay;
+    private IntegerConfigFileParameter accumulatorDelay;
     private WsShooter.Preset startPreset, secondShooterPreset, thirdShooterPreset;
 
     private void defineConfigValues() {
@@ -53,6 +54,7 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
         thirdExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdExitWheelSetPoint", 2850);
         thirdShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdShooterAngle", true);
         thirdFrisbeeDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdFrisbeeDelay", 100);
+        accumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".LowerAccumulatorDelay", 1000);
 
         startPreset = new WsShooter.Preset(firstEnterWheelSetPoint.getValue(),
                 firstExitWheelSetPoint.getValue(),
@@ -116,8 +118,12 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
             pg4.addStep(new WsAutonomousStepLowerHopper());
             pg4.addStep(new WsAutonomousStepLowerAccumulator());
             pg4.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
-            pg4.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(secondDrive.getValue(), 0.0));
-        programSteps[7] = new WsAutonomousStepWaitForDriveMotionProfile(); 
+        WsAutonomousSerialStepContainer pssWaitandThenDrive = new WsAutonomousSerialStepContainer("Wait a bit for accumulator and then Drive");
+            pssWaitandThenDrive.addStep(new WsAutonomousStepDelay(accumulatorDelay.getValue()));
+            pssWaitandThenDrive.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(secondDrive.getValue(), 0.0));
+            pssWaitandThenDrive.addStep(new WsAutonomousStepWaitForDriveMotionProfile());
+            
+        programSteps[7] = pssWaitandThenDrive; 
         programSteps[8] = new WsAutonomousStepStopDriveUsingMotionProfile();
         programSteps[9] = new WsAutonomousStepIntakeMotorStop();
         WsAutonomousParallelStepGroup pg5 = new WsAutonomousParallelStepGroup("Raise accumulator and wait for it");
@@ -148,7 +154,10 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
                 pssDrive.addStep( new WsAutonomousStepStopDriveUsingMotionProfile());   
        
 
-        programSteps[13] = new WsAutonomousStepRaiseHopper();
+        WsAutonomousSerialStepContainer pssHopperDelay = new WsAutonomousSerialStepContainer("Wait for hopper");
+            pssHopperDelay.addStep(new WsAutonomousStepDelay(accumulatorDelay.getValue()));
+            pssHopperDelay.addStep(new WsAutonomousStepRaiseHopper());
+        programSteps[13] = pssHopperDelay; 
         programSteps[14] = new WsAutonomousStepWaitForHopperUp();
         programSteps[15] = new WsAutonomousStepWaitForShooter();
         programSteps[16] = new WsAutonomousStepDelay(200);
