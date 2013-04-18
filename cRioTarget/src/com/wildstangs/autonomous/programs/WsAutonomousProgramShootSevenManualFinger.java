@@ -24,7 +24,7 @@ import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.subsystems.WsShooter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class WsAutonomousProgramShootSeven extends WsAutonomousProgram {
+public class WsAutonomousProgramShootSevenManualFinger extends WsAutonomousProgram {
 
     private DoubleConfigFileParameter StartDrive;
     private DoubleConfigFileParameter AngleTurn;
@@ -72,7 +72,7 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram {
                 ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
-    public WsAutonomousProgramShootSeven() {
+    public WsAutonomousProgramShootSevenManualFinger() {
         super(29);
     }
 
@@ -181,6 +181,6 @@ public class WsAutonomousProgramShootSeven extends WsAutonomousProgram {
     }
 
     public String toString() {
-        return "Shooting Seven Frisbees";
+        return "Shooting Seven Frisbees With Manual Finger";
     }
 }
