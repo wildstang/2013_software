@@ -80,7 +80,7 @@ public class WsOutputFacade {
     public static final String SHOOTER_ANGLE = "ShooterAngle";
     public static final String FRISBIE_CONTROL = "FrisbieControl";
     public static final String ACCUMULATOR_SOLENOID = "AccumulatorSolenoid";
-    public static final String SECONDARY_ACCUMULATOR_SOLENOID = "SecondaryAccumulatorSolenoid";
+    public static final String ACCUMULATOR_SECONDARY_SOLENOID = "AccumulatorSecondarySolenoid";
     public static final String ACCUMULATOR_VICTOR = "AccumulatorVictor";
     public static final String FUNNELATOR_ROLLER = "FunnelatorRoller";
     public static final String LOADING_RAMP = "LoadingRamp";
@@ -116,7 +116,7 @@ public class WsOutputFacade {
         } else {
             outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
             outputs.add(new DataElement(ACCUMULATOR_SOLENOID, new WsSolenoid(ACCUMULATOR_SOLENOID, 1, 2)));
-            outputs.add(new DataElement(SECONDARY_ACCUMULATOR_SOLENOID, new WsSolenoid(SECONDARY_ACCUMULATOR_SOLENOID, 1, 5)));
+            outputs.add(new DataElement(ACCUMULATOR_SECONDARY_SOLENOID, new WsSolenoid(ACCUMULATOR_SECONDARY_SOLENOID, 1, 5)));
             outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 3)));
             outputs.add(new DataElement(CLIMBER, new WsSolenoid(CLIMBER, 1, 4)));
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 2, 1, 2)));

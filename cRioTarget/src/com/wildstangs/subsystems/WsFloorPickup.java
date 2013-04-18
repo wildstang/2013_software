@@ -54,7 +54,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         accumulatorUpLimitSwitch = true;
 
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SECONDARY_ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SECONDARY_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR).set(null, Double.valueOf(0.0));
     }
 
@@ -67,7 +67,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         boolean switchState = ((Boolean) (upSwitch.get((IInputEnum) null))).booleanValue();
         SmartDashboard.putBoolean("Accumulator Up Limit Switch", switchState);
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.SECONDARY_ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SECONDARY_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
 
         if (motorForward == true && solenoidState == false && (false == ((WsHopper) WsSubsystemContainer.getInstance()
                 .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isDownLimitSwitchTriggered())) {
