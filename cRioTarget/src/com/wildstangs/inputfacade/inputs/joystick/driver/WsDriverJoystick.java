@@ -23,6 +23,7 @@ public class WsDriverJoystick implements IInput {
 
     DoubleSubject throttle;
     DoubleSubject heading;
+    private DoubleSubject dPadUpDown;
     final static int numberOfButtons = 12;
     BooleanSubject[] buttons;
     Joystick driverJoystick = null;
@@ -32,6 +33,8 @@ public class WsDriverJoystick implements IInput {
             return throttle;
         } else if (subjectEnum == WsDriverJoystickEnum.HEADING) {
             return heading;
+        } else if (subjectEnum == WsDriverJoystickEnum.D_PAD_UP_DOWN) {
+            return dPadUpDown;
         } else if (subjectEnum instanceof WsDriverJoystickButtonEnum) {
             return buttons[((WsDriverJoystickButtonEnum) subjectEnum).toValue()];
         } else {
@@ -43,8 +46,10 @@ public class WsDriverJoystick implements IInput {
     public WsDriverJoystick() {
         throttle = new DoubleSubject("Throttle");
         heading = new DoubleSubject("Heading");
+        dPadUpDown = new DoubleSubject(WsDriverJoystickEnum.D_PAD_UP_DOWN);
         driverJoystick = (Joystick) new Joystick(1);
         buttons = new BooleanSubject[numberOfButtons];
+        driverJoystick.setAxisChannel(Joystick.AxisType.kThrottle, 6);
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new BooleanSubject(WsDriverJoystickButtonEnum.getEnumFromIndex(i));
         }
@@ -57,6 +62,8 @@ public class WsDriverJoystick implements IInput {
             // this serves no purpose but an example
         } else if (key == WsDriverJoystickEnum.HEADING) {
             heading.setValue(value);
+        } else if (key == WsDriverJoystickEnum.D_PAD_UP_DOWN) {
+            dPadUpDown.setValue(value);
         } else if (key instanceof WsDriverJoystickButtonEnum) {
             buttons[((WsDriverJoystickButtonEnum) key).toValue()].setValue(value);
         } else {
@@ -70,6 +77,8 @@ public class WsDriverJoystick implements IInput {
             return throttle.getValueAsObject();
         } else if (key == WsDriverJoystickEnum.HEADING) {
             return heading.getValueAsObject();
+        } else if (key == WsDriverJoystickEnum.D_PAD_UP_DOWN) {
+            return dPadUpDown.getValueAsObject();
         } else if (key instanceof WsDriverJoystickButtonEnum) {
             return buttons[((WsDriverJoystickButtonEnum) key).toValue()].getValueAsObject();
         } else {
@@ -80,6 +89,7 @@ public class WsDriverJoystick implements IInput {
     public void update() {
         throttle.updateValue();
         heading.updateValue();
+        dPadUpDown.updateValue();
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].updateValue();
         }
@@ -91,6 +101,7 @@ public class WsDriverJoystick implements IInput {
         }
         throttle.setValue(driverJoystick.getY() * -1);
         heading.setValue(driverJoystick.getZ() * -1);
+        dPadUpDown.setValue(driverJoystick.getThrottle() * -1);
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setValue(driverJoystick.getRawButton(i + 1));
         }

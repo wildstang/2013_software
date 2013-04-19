@@ -30,6 +30,11 @@ public class WsDriverJoystickEnum implements IInputEnum {
     public static final WsDriverJoystickEnum HEADING = new WsDriverJoystickEnum(1, "HEADING");
 
     /**
+     * D-Pad enum types
+     */
+    public static final WsDriverJoystickEnum D_PAD_UP_DOWN = new WsDriverJoystickEnum(2, "D_PAD_UP_DOWN"); 
+    
+    /**
      * Converts the enum type to a String.
      *
      * @return A string representing the enum.
