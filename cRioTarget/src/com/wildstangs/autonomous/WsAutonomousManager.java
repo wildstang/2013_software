@@ -7,7 +7,6 @@ package com.wildstangs.autonomous;
 import com.wildstangs.autonomous.programs.*;
 import com.wildstangs.autonomous.programs.test.*;
 import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInputEnum;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.subjects.base.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

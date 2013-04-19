@@ -36,7 +36,6 @@ public class WsAutonomousStepKick extends WsAutonomousStep {
             waitForKickerFalseToTrue = true;
             waitForKickerTrueToFalse = false;
         }
-
     }
 
     public void update() {
