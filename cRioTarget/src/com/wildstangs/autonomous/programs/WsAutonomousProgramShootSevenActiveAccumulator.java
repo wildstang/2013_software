@@ -35,6 +35,8 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
     private IntegerConfigFileParameter secondEnterWheelSetPoint;
     private IntegerConfigFileParameter secondExitWheelSetPoint;
     private BooleanConfigFileParameter secondShooterAngle;
+    private IntegerConfigFileParameter accumulatorDelay;
+
     private WsShooter.Preset startPreset, secondShooterPreset;
 
     private void defineConfigValues() {
@@ -47,6 +49,7 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
         secondEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondEnterWheelSetPoint", 2200);
         secondExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondExitWheelSetPoint", 2850);
         secondShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondShooterAngle", true);
+        accumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".LowerAccumulatorDelay", 1000);
 
         startPreset = new WsShooter.Preset(firstEnterWheelSetPoint.getValue(),
                 firstExitWheelSetPoint.getValue(),
@@ -104,7 +107,10 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
             pg4.addStep(new WsAutonomousStepLowerHopper());
             pg4.addStep(new WsAutonomousStepLowerAccumulator());
             pg4.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
-            pg4.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(secondDrive.getValue(), 0.0));
+            WsAutonomousSerialStepContainer pssWaitandThenDrive = new WsAutonomousSerialStepContainer("Wait a bit for accumulator and then Drive");
+            pg4.addStep(pssWaitandThenDrive); 
+                pssWaitandThenDrive.addStep(new WsAutonomousStepDelay(accumulatorDelay.getValue()));
+                pssWaitandThenDrive.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(secondDrive.getValue(), 0.0));
         WsAutonomousParallelStepGroup stopRaiseAccum1 = new WsAutonomousParallelStepGroup("Stop Drive, raise accumulator 1");
         WsAutonomousSerialStepContainer stopMotion1 = new WsAutonomousSerialStepContainer("Wait for Drive and stop 1");
         WsAutonomousSerialStepContainer raiseAccum1 = new WsAutonomousSerialStepContainer("Raise Accumulator 1");
