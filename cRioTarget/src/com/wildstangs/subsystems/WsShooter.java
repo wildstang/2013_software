@@ -100,6 +100,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private double aboveSetpointTolerance = 0.0;
     private double underSetpointTolerance = 0.0;
     private DoubleSolenoid.Value angleFlag = DoubleSolenoid.Value.kReverse;
+    private boolean outputSnapshot = false;
 
     public WsShooter(String name) {
         super(name);
@@ -228,22 +229,25 @@ public class WsShooter extends WsSubsystem implements IObserver {
         WsVictor victorEnter = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER);
         WsVictor victorExit = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_EXIT);
 
+        double victorEnterValue ; 
+        double victorExitValue ; 
         if (((speedEnter < lowWheelSpeed) && (speedEnter < wheelEnterSetPoint))) {
-            victorEnter.set(null, Double.valueOf(lowVictorSpeed));
-
+            victorEnterValue = lowVictorSpeed;
         } else if (speedEnter < wheelEnterSetPoint) {
-            victorEnter.set(null, Double.valueOf(1.0));
+            victorEnterValue= 1.0; 
         } else {
-            victorEnter.set(null, Double.valueOf(0.0));
+            victorEnterValue= 0.0; 
         }
+        victorEnter.set(null, Double.valueOf(victorEnterValue));
 
         if (((speedExit < lowWheelSpeed) && (speedExit < wheelExitSetPoint))) {
-            victorExit.set((IOutputEnum) null, Double.valueOf(lowVictorSpeed));
+            victorExitValue = lowVictorSpeed;
         } else if (speedExit < wheelExitSetPoint) {
-            victorExit.set(null, Double.valueOf(1.0));
+            victorExitValue= 1.0; 
         } else {
-            victorExit.set(null, Double.valueOf(0.0));
+            victorExitValue= 0.0;
         }
+        victorExit.set(null, Double.valueOf(victorExitValue));
 //        if (((WsHopper) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER))
 //                .getKickerValue() == true) {
 //            victorExit.set(null, Double.valueOf(1.0));
@@ -255,6 +259,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
             victorExit.set(null, Double.valueOf(0.0));
             victorEnter.set(null, Double.valueOf(0.0));
         }*/
+        boolean lastAtSpeed = atSpeed; 
         if (speedExit > wheelExitSetPoint - underSetpointTolerance &&
             speedExit < wheelExitSetPoint + aboveSetpointTolerance &&
             speedEnter > wheelEnterSetPoint - underSetpointTolerance &&
@@ -273,14 +278,23 @@ public class WsShooter extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("ExitWheelSpeed", speedExit);
         SmartDashboard.putNumber("EnterCounter", enterCounterCount);
         SmartDashboard.putNumber("ExitCounter", exitCounterCount);
-        SmartDashboard.putNumber("ExitWheelVictor", ((Double) victorExit.get((IOutputEnum) null)).doubleValue());
-        SmartDashboard.putNumber("EnterWheelVictor", ((Double) victorEnter.get((IOutputEnum) null)).doubleValue());
+        SmartDashboard.putNumber("ExitWheelVictor", victorExitValue);
+        SmartDashboard.putNumber("EnterWheelVictor", victorEnterValue);
         SmartDashboard.putNumber("EnterWheelSetPoint", wheelEnterSetPoint);
         SmartDashboard.putNumber("ExitWheelSetPoint", wheelExitSetPoint);
         SmartDashboard.putNumber("KnobEnterSetPoint", knobEnterSetPoint);
         SmartDashboard.putNumber("KnobExitSetPoint", knobExitSetPoint);
         SmartDashboard.putBoolean("Flywheels At Speed", atSpeed);
         
+        if (outputSnapshot){
+            Logger.getLogger().debug(this.getClass().getName(), "Flywheel Snapshot", "AtSpeed:" + atSpeed + " Enter: " + (int)speedEnter + " Exit: " + (int)speedExit + " Victors: " +  (int)victorEnterValue +  (int)victorExitValue );
+            outputSnapshot = false; 
+        }
+        //Output snapshot at transitions to figure out range
+        if ((lastAtSpeed == true) && (atSpeed == false))
+        {
+            Logger.getLogger().debug(this.getClass().getName(), "Flywheel Not AtSpeed", " Enter: " + (int)speedEnter + " " + (int)wheelEnterSetPoint + " " +(int)(speedEnter-wheelEnterSetPoint)  + " Exit: " + (int)speedExit + " " + (int)wheelExitSetPoint + " " +(int)(speedExit-wheelExitSetPoint) + " Victors: " +  (int)victorEnterValue +  (int)victorExitValue );
+        }
         //set shooter angle
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
     }
@@ -444,5 +458,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
     public boolean isFlywheelAtSafeSpeed()
     {
         return atSafeSpeed;
+    }
+    
+    public void outputFlywheelSnapshot(){
+        outputSnapshot = true;
     }
 }

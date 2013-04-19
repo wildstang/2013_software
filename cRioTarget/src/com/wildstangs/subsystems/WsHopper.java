@@ -4,6 +4,7 @@ import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsServo;
@@ -111,6 +112,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
                     if (disks > 0) {
                         disks--;
                     }
+                    shooter.outputFlywheelSnapshot();
                 }
             }
         }
@@ -121,8 +123,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 double endTime = Timer.getFPGATimestamp();
                 double diffTime = (endTime - startTime);
                 SmartDashboard.putNumber("Recovery Time", diffTime);
-                System.out.println("Flywheel up to speed in: " + (endTime - startTime));
-                System.out.println("Start Time: " + startTime + " End Time: " + endTime);
+                Logger.getLogger().debug(this.getClass().getName(), "Recovery Time", "Flywheel up to speed in: " + (endTime - startTime));
                 timeRecovery = false;
             }
         }
