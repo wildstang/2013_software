@@ -2,16 +2,18 @@ package com.wildstangs.autonomous.programs;
 
 import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
-import com.wildstangs.autonomous.steps.WsAutonomousParallelFinishedOnAnyStepGroup;
+import com.wildstangs.autonomous.parameters.AutonomousBooleanConfigFileParameter;
+import com.wildstangs.autonomous.parameters.AutonomousBooleanStartPositionConfigFileParameter;
+import com.wildstangs.autonomous.parameters.AutonomousDoubleConfigFileParameter;
+import com.wildstangs.autonomous.parameters.AutonomousIntegerConfigFileParameter;
+import com.wildstangs.autonomous.parameters.AutonomousIntegerStartPositionConfigFileParameter;
 import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
 import com.wildstangs.autonomous.steps.WsAutonomousSerialStepContainer;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
 import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
-import com.wildstangs.autonomous.steps.intake.WsAutonomousStepIntakeIfFunnelatorTripped;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedThroughFunnelator;
-import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
 import com.wildstangs.config.BooleanConfigFileParameter;
@@ -30,26 +32,20 @@ public class WsAutonomousProgramShootFive extends WsAutonomousProgram {
     private IntegerConfigFileParameter SecondEnterWheelSetPoint;
     private IntegerConfigFileParameter SecondExitWheelSetPoint;
     private BooleanConfigFileParameter SecondShooterAngle;
-    private IntegerConfigFileParameter FunnelatorLoadDelay;
-    private IntegerConfigFileParameter RaiseAccumulatorDelay;
-    private IntegerConfigFileParameter LowerAccumulatorDelay;
     private IntegerConfigFileParameter ThirdFrisbeeDelay;
     private WsShooter.Preset firstShooterPreset, secondShooterPreset;
 
     private void defineConfigValues() {
-        FirstDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstDrive", 50.0);
-        SecondDrive = new DoubleConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondDrive", -50.0);
-        FirstEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstEnterWheelSetPoint", 2800);
-        FirstExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstExitWheelSetPoint", 3550);
-        FirstShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FirstShooterAngle", false);
-        SecondEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondEnterWheelSetPoint", 2800);
-        SecondExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondExitWheelSetPoint", 3550);
-        SecondShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondShooterAngle", false);
-        RaiseAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".RaiseAccumulatorDelay", 3000);
-        LowerAccumulatorDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".LowerAccumulatorDelay", 1500);
-        FunnelatorLoadDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".FunnelatorLoadDelay", 6000);
-        ThirdFrisbeeDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdFrisbeeDelay", 100);
-
+        FirstDrive = new AutonomousDoubleConfigFileParameter("ShootFive.FirstDrive", 50);
+        SecondDrive = new AutonomousDoubleConfigFileParameter("ShootFive.SecondDrive", -50);
+        FirstEnterWheelSetPoint = new AutonomousIntegerStartPositionConfigFileParameter("FirstEnterWheelSetPoint", 2800);
+        FirstExitWheelSetPoint = new AutonomousIntegerStartPositionConfigFileParameter("FirstExitWheelSetPoint", 3550);
+        FirstShooterAngle = new AutonomousBooleanStartPositionConfigFileParameter("FirstShooterAngle", false);
+        SecondEnterWheelSetPoint = new AutonomousIntegerStartPositionConfigFileParameter("FirstEnterWheelSetPoint", 2800);
+        SecondExitWheelSetPoint = new AutonomousIntegerStartPositionConfigFileParameter("FirstExitWheelSetPoint", 3550);
+        SecondShooterAngle = new AutonomousBooleanStartPositionConfigFileParameter("FirstShooterAngle", false);
+        ThirdFrisbeeDelay = new AutonomousIntegerConfigFileParameter("ThirdFrisbeeDelay", 700);
+        
         firstShooterPreset = new WsShooter.Preset(FirstEnterWheelSetPoint.getValue(),
                 FirstExitWheelSetPoint.getValue(),
                 FirstShooterAngle.getValue()
