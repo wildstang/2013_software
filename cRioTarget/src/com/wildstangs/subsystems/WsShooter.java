@@ -16,7 +16,6 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
-import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -74,8 +73,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
             this.getClass().getName(), "LowerWheelExitTestSpeed", 0);
     private DoubleConfigFileParameter upperWheelExitTestSpeed = new DoubleConfigFileParameter(
             this.getClass().getName(), "UpperWheelExitTestSpeed", 9000);
-    private DoubleConfigFileParameter atSpeedToleranceConfig = new DoubleConfigFileParameter(
-            this.getClass().getName(), "AtSpeedTolerance", .05);
+    private DoubleConfigFileParameter atSpeedToleranceAboveSetpointConfig = new DoubleConfigFileParameter(
+            this.getClass().getName(), "AtSpeedToleranceAboveSetpoint", 200);
+    private DoubleConfigFileParameter atSpeedToleranceUnderSetpointConfig = new DoubleConfigFileParameter(
+            this.getClass().getName(), "AtSpeedToleranceUnderSetpoint", 25);
     private DoubleConfigFileParameter ENTER_GEAR_RATIO_config = new DoubleConfigFileParameter(
             this.getClass().getName(), "enter_gear_ratio", 3.0);
     private DoubleConfigFileParameter EXIT_GEAR_RATIO_config = new DoubleConfigFileParameter(
@@ -91,12 +92,13 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private double lowWheelEnterTestSpeed, highWheelEnterTestSpeed, lowWheelExitTestSpeed, highWheelExitTestSpeed;
     private double testingEnterKnob = 0.0;
     private double testingExitKnob = 0.0;
-    private double atSpeedTolerance;
     private double safeFlywheelSpeed = 0.0;
     private boolean testingCalled = false;
     private boolean atSpeed = false;
     private boolean atSafeSpeed = false;
     private boolean presetUnlock = false;
+    private double aboveSetpointTolerance = 0.0;
+    private double underSetpointTolerance = 0.0;
     private DoubleSolenoid.Value angleFlag = DoubleSolenoid.Value.kReverse;
 
     public WsShooter(String name) {
@@ -146,7 +148,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         highWheelEnterTestSpeed = upperWheelEnterTestSpeed.getValue();
         highWheelExitTestSpeed = upperWheelExitTestSpeed.getValue();
 
-        atSpeedTolerance = atSpeedToleranceConfig.getValue();
+         underSetpointTolerance = atSpeedToleranceUnderSetpointConfig.getValue();
+         aboveSetpointTolerance = atSpeedToleranceAboveSetpointConfig.getValue();
         
         safeFlywheelSpeed = minimumSafeFlywheelSpeed.getValue();
     }
@@ -252,12 +255,15 @@ public class WsShooter extends WsSubsystem implements IObserver {
             victorExit.set(null, Double.valueOf(0.0));
             victorEnter.set(null, Double.valueOf(0.0));
         }*/
-        if (speedExit < wheelExitSetPoint + (wheelExitSetPoint * atSpeedTolerance)
-                && speedExit > wheelExitSetPoint - (wheelExitSetPoint * atSpeedTolerance)
-                && speedEnter < wheelEnterSetPoint + (wheelEnterSetPoint * atSpeedTolerance)
-                && speedEnter > wheelEnterSetPoint - (wheelEnterSetPoint * atSpeedTolerance)) {
+        if (speedExit > wheelExitSetPoint - underSetpointTolerance &&
+            speedExit < wheelExitSetPoint + aboveSetpointTolerance &&
+            speedEnter > wheelEnterSetPoint - underSetpointTolerance &&
+            speedEnter < wheelEnterSetPoint + aboveSetpointTolerance)
+        {
             atSpeed = true;
-        } else {
+        } 
+        else 
+        {
             atSpeed = false;
         }
         
@@ -288,8 +294,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
         highWheelEnterTestSpeed = upperWheelEnterTestSpeed.getValue();
         highWheelExitTestSpeed = upperWheelExitTestSpeed.getValue();
-
-        atSpeedTolerance = atSpeedToleranceConfig.getValue();
+        
+        underSetpointTolerance = atSpeedToleranceUnderSetpointConfig.getValue();
+        aboveSetpointTolerance = atSpeedToleranceAboveSetpointConfig.getValue();
 
         safeFlywheelSpeed = minimumSafeFlywheelSpeed.getValue();
         

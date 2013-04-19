@@ -10,7 +10,7 @@ com.wildstangs.subsystems.WsHopper.forwardCycles=15
 com.wildstangs.subsystems.WsHopper.backwardCycles=15
 com.wildstangs.subsystems.WsHopper.AngleUp=160.0
 com.wildstangs.subsystems.WsHopper.AngleDown=72.0
-com.wildstangs.subsystems.WsIntake.FingerDelayFromFunnelatorSwitch=1.0
+com.wildstangs.subsystems.WsIntake.FingerDelayFromFunnelatorSwitch=0.125
 com.wildstangs.subsystems.WsIntake.UseTimeDelay=true
 com.wildstangs.subsystems.WsFloorPickup.maxAccumulatorSpeed=1.0
 
@@ -64,7 +64,7 @@ com.wildstangs.pid.controller.base.WsSpeedPidController.WsDriveBaseSpeedPid.minO
 
 
 //Drivebase 
-com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.210
+com.wildstangs.subsystems.WsDriveBase.wheel_diameter=6.4457752
 com.wildstangs.subsystems.WsDriveBase.ticks_per_rotation=360.0
 com.wildstangs.subsystems.WsDriveBase.throttle_low_gear_accel_factor=0.250
 com.wildstangs.subsystems.WsDriveBase.heading_low_gear_accel_factor=0.500
@@ -92,26 +92,27 @@ com.wildstangs.subsystems.WsShooter.LowerWheelEnterTestSpeed=0.0
 com.wildstangs.subsystems.WsShooter.LowerWheelExitTestSpeed=0.0
 com.wildstangs.subsystems.WsShooter.UpperWheelEnterTestSpeed=5000
 com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=5000
-com.wildstangs.subsystems.WsShooter.AtSpeedTolerance=0.05
+com.wildstangs.subsystems.WsShooter.AtSpeedToleranceAboveSetpoint=100
+com.wildstangs.subsystems.WsShooter.AtSpeedToleranceUnderSetpoint=25
 com.wildstangs.subsystems.WsShooter.enter_gear_ratio=3.2
 com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 com.wildstangs.subsystems.WsShooter.MinimumSafeFlywheelSpeed=1200.0
 
 
 //Shooter Presets
-com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed=2200
+com.wildstangs.subsystems.WsShooter.PresetTowerShooterEnterSpeed=2100
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterExitSpeed=2150
 com.wildstangs.subsystems.WsShooter.PresetTowerShooterAngle=true
-com.wildstangs.subsystems.WsShooter.PresetLongLowEnterSpeed=2300
-com.wildstangs.subsystems.WsShooter.PresetLongLowExitSpeed=3550
+com.wildstangs.subsystems.WsShooter.PresetLongLowEnterSpeed=2700
+com.wildstangs.subsystems.WsShooter.PresetLongLowExitSpeed=3450
 com.wildstangs.subsystems.WsShooter.PresetLongLowAngle=false
-com.wildstangs.subsystems.WsShooter.PresetShortHighEnterSpeed=2700
-com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed=2650
+com.wildstangs.subsystems.WsShooter.PresetShortHighEnterSpeed=2100
+com.wildstangs.subsystems.WsShooter.PresetShortHighExitSpeed=2700
 com.wildstangs.subsystems.WsShooter.PresetShortHighAngle=true
 
 //Loading Ramp
-com.wildstangs.subsystems.WsLoadingRamp.AngleUp=76.5
-com.wildstangs.subsystems.WsLoadingRamp.AngleDown=170.0
+com.wildstangs.subsystems.WsLoadingRamp.AngleUp=0.0
+com.wildstangs.subsystems.WsLoadingRamp.AngleDown=108.0
 
 //   XX
 //    X              X
@@ -407,6 +408,10 @@ com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insideP
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.FirstDriveVelocity=0.0
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.SecondDriveDistance=55.0
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDrivePatterns.insidePyramidBackCenter.SecondDriveVelocity=0.0
+
+//Drive heading
+//Heading is in degrees
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveHeading.angle=-30
 
 
 //2012 Robot Selection
