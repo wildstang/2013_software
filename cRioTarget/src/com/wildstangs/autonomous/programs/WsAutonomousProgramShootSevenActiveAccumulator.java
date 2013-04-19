@@ -35,7 +35,6 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
     private IntegerConfigFileParameter secondEnterWheelSetPoint;
     private IntegerConfigFileParameter secondExitWheelSetPoint;
     private BooleanConfigFileParameter secondShooterAngle;
-    private IntegerConfigFileParameter thirdFrisbeeDelay;
     private WsShooter.Preset startPreset, secondShooterPreset;
 
     private void defineConfigValues() {
@@ -48,7 +47,6 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
         secondEnterWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondEnterWheelSetPoint", 2200);
         secondExitWheelSetPoint = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondExitWheelSetPoint", 2850);
         secondShooterAngle = new BooleanConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".SecondShooterAngle", true);
-        thirdFrisbeeDelay = new IntegerConfigFileParameter(this.getClass().getName(), WsAutonomousManager.getInstance().getStartPosition().toConfigString() + ".ThirdFrisbeeDelay", 100);
 
         startPreset = new WsShooter.Preset(firstEnterWheelSetPoint.getValue(),
                 firstExitWheelSetPoint.getValue(),
