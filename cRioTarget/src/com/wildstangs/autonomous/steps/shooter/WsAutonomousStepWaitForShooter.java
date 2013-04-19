@@ -18,6 +18,7 @@ public class WsAutonomousStepWaitForShooter extends WsAutonomousStep {
     }
 
     public void initialize() {
+        System.out.println("Wait...");
     }
 
     public void update() {

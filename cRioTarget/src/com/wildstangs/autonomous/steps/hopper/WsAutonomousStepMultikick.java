@@ -5,6 +5,7 @@
 package com.wildstangs.autonomous.steps.hopper;
 
 import com.wildstangs.autonomous.steps.WsAutonomousSerialStepGroup;
+import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
 
 /**
  *
@@ -12,21 +13,31 @@ import com.wildstangs.autonomous.steps.WsAutonomousSerialStepGroup;
  */
 public class WsAutonomousStepMultikick extends WsAutonomousSerialStepGroup {
 
-    private int count;
+    private int numFrisbees;
 
-    public WsAutonomousStepMultikick(int count) {
-        super(count);
-        this.count = count;
+    public WsAutonomousStepMultikick(int numFrisbees) {
+        super(numFrisbees + (numFrisbees - 1));
+        this.numFrisbees = numFrisbees;
         defineSteps();
     }
 
     public void defineSteps() {
-        for (int i = 0; i < count; i++) {
-            steps[i] = new WsAutonomousStepKick();
+        System.out.println("Num steps: " + getNumSteps(numFrisbees));
+        System.out.println("Num frisbees: " + numFrisbees);
+        for (int i = 0; i < getNumSteps(numFrisbees); i++) {
+            if (i % 2 == 0) {
+                steps[i] = new WsAutonomousStepKick();
+            } else {
+                steps[i] = new WsAutonomousStepWaitForShooter();
+            }
         }
     }
 
     public String toString() {
-        return "Kick " + count + " frisbees";
+        return "Kick " + numFrisbees + " frisbees";
+    }
+    
+    private int getNumSteps(int frisbees) {
+        return frisbees + (frisbees - 1);
     }
 }
