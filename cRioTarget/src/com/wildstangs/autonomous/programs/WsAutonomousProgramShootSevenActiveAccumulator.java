@@ -15,6 +15,7 @@ import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForAccumulatorLeftAndRightLimitSwitches;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedThroughFunnelator;
+import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedIntoFunnelator;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
 import com.wildstangs.config.BooleanConfigFileParameter;
@@ -97,7 +98,7 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
         programSteps[4] = new WsAutonomousStepIntakeMotorPullFrisbeesIn();
         WsAutonomousParallelStepGroup pgIntake = new WsAutonomousParallelStepGroup("Wait for intake");
         programSteps[5] = pgIntake;
-            pgIntake.addStep(new WsAutonomousStepWaitForDiscsLatchedThroughFunnelator());            
+            pgIntake.addStep(new WsAutonomousStepWaitForDiscsLatchedIntoFunnelator());            
             pgIntake.addStep(new WsAutonomousStepDelay(1000));  //Min delay since it is not "finished on any"
        
         WsAutonomousParallelStepGroup pg4 = new WsAutonomousParallelStepGroup("Set up for intake");
