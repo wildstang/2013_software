@@ -1,4 +1,4 @@
- package com.wildstangs.subsystems;
+package com.wildstangs.subsystems;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.IInputEnum;
@@ -20,10 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Adam
  */
 public class WsFloorPickup extends WsSubsystem implements IObserver {
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
 
     boolean solenoidState = false;
+    boolean secondarySolenoidState = false;
     boolean motorForward = false, motorBack = false;
     double maxVictorSpeed;
     boolean accumulatorUpLimitSwitch = false;
@@ -49,11 +48,13 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
 
     public void init() {
         solenoidState = false;
+        secondarySolenoidState = false;
         motorForward = false;
         motorBack = false;
         accumulatorUpLimitSwitch = true;
 
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SECONDARY_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR).set(null, Double.valueOf(0.0));
     }
 
@@ -66,6 +67,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         boolean switchState = ((Boolean) (upSwitch.get((IInputEnum) null))).booleanValue();
         SmartDashboard.putBoolean("Accumulator Up Limit Switch", switchState);
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
+        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SECONDARY_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
 
         if (motorForward == true && solenoidState == false && (false == ((WsHopper) WsSubsystemContainer.getInstance()
                 .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isDownLimitSwitchTriggered())) {
@@ -104,6 +106,9 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             solenoidState = button.getValue();
+            //For now we activate the secondary solenoid whenever the primary one is activated.
+            //This is subject to change
+            secondarySolenoidState = button.getValue();
             //Latch the accumulator switch states if we just brought the accumulator up
             if (false == button.getValue()) {
                 ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE)).latchAccumulatorSwitches();
