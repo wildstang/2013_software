@@ -123,6 +123,23 @@ com.wildstangs.subsystems.WsLoadingRamp.AngleDown=108.0
 //  XXXXX   X   X    X     X     X  X   X
 //  X   X   X  XX    X  X  X     X  X   X
 // XXX XXX   XX XX    XX    XXXXX  XXX XXX
+com.wildstangs.autonomous.parameters.ShootSeven.FirstDrive=27
+com.wildstangs.autonomous.parameters.ShootSeven.SecondDrive=109
+com.wildstangs.autonomous.parameters.ShootSeven.ThirdDrive=58
+
+com.wildstangs.autonomous.parameters.ThirdFrisbeeDelay=700
+com.wildstangs.autonomous.parameters.LowerAccumulatorDelay=300
+
+com.wildstangs.autonomous.parameters.FirstEnterWheelSetPoint.insidePyramidBackCenter=2800   
+com.wildstangs.autonomous.parameters.FirstExitWheelSetPoint.insidePyramidBackCenter=3550
+com.wildstangs.autonomous.parameters.FirstShooterAngle.insidePyramidBackCenter=false
+
+com.wildstangs.autonomous.parameters.FrontPyramid.EnterWheelSetPoint=2100   
+com.wildstangs.autonomous.parameters.FrontPyramid.ExitWheelSetPoint=2750
+com.wildstangs.autonomous.parameters.FrontPyramid.ShooterAngle=true
+
+
+//Sleeper
 com.wildstangs.autonomous.programs.WsAutonomousProgramSleeper.ForceStopAtStep=0
 
 //ShootSevenManualFinger
