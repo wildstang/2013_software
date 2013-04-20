@@ -76,13 +76,14 @@ public class FileLogger {
         {
             path = logPath;
            try {
-              fc = (FileConnection) Connector.open(path, Connector.READ);
-              if (fc.exists()) {
-                    logFile = fc.openDataOutputStream();
-                    bw = new BufferedWriter(new OutputStreamWriter(logFile));
+              fc = (FileConnection) Connector.open(path, Connector.READ_WRITE);
+              if (!fc.exists()) {
+                  fc.create();
               }
+              logFile = fc.openDataOutputStream();                    
+              bw = new BufferedWriter(new OutputStreamWriter(logFile));
             } catch (IOException e) { 
-                System.out.println("Unable to open output file.");
+                System.out.println("Unable to open output file." + e.toString());
             }
         }
 
@@ -95,11 +96,12 @@ public class FileLogger {
                         if (dataToWrite) {
                             bw.write(outputString);
                             bw.newLine();
+                            bw.flush();
                             dataToWrite = false;
                         }
                         
                     } catch (Exception e) {
-                        System.out.println("Error writing data");
+                        System.out.println("Error writing data " + e.toString());
                    } 
                 }
             }
@@ -124,7 +126,7 @@ public class FileLogger {
                 bw.flush();
             }
             catch (IOException e) { 
-                System.out.println("Unable to flush buffered writer");
+                System.out.println("Unable to flush buffered writer: " + e.toString());
             }
         }
     }

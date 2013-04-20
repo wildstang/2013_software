@@ -10,6 +10,7 @@ import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.logger.FileLogger;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.profiling.WsProfilingTimer;
@@ -33,6 +34,8 @@ public class RobotTemplate extends IterativeRobot {
     public void robotInit() {
         startupTimer.startTimingSection();
         System.out.println("RobotInit Start");
+        //Enables the filelogger thread.
+        //FileLogger.getFileLogger().startLogger();
         try {
             WsConfigFacade.getInstance().setFileName("/ws_config.txt");
             WsConfigFacade.getInstance().readConfig();
