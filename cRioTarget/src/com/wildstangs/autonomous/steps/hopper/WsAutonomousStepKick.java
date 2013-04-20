@@ -23,7 +23,6 @@ public class WsAutonomousStepKick extends WsAutonomousStep {
 
     public void initialize() {
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
-        System.out.println("Button: " + ((BooleanSubject) subject).getValue());
         WsHopper subsystem = (WsHopper) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         //Check if the kicker is already kicking and set up wait
         if (subsystem.getKickerValue() == true) {
@@ -54,7 +53,6 @@ public class WsAutonomousStepKick extends WsAutonomousStep {
             if (subsystem.getKickerValue() == true) {
                 button.setValue(false);
                 finished = true;
-                System.out.println("Kick finished!");
             } else if (button.getValue() == true) {
                 button.setValue(false);
             } else {

@@ -3,7 +3,7 @@ com.wildstangs.logger.Logger.logIp=10.1.11.22
 com.wildstangs.logger.Logger.port=17654
 com.wildstangs.logger.Logger.logToServer=false
 com.wildstangs.logger.Logger.logToStdout=true
-com.wildstangs.logger.Logger.logLevel="DEBUG"
+com.wildstangs.logger.Logger.logLevel="INFO"
 
 //Subsystems
 com.wildstangs.subsystems.WsHopper.forwardCycles=15
