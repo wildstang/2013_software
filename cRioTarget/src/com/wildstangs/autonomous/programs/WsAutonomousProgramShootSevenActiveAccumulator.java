@@ -77,7 +77,6 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
         programSteps[0] = pg1;
             pg1.addStep(new WsAutonomousStepSetShooterPreset(startPreset.ENTER_WHEEL_SET_POINT, startPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE));
             pg1.addStep(new WsAutonomousStepLowerAccumulator());
-            pg1.addStep(new WsAutonomousStepWaitForShooter());
         WsAutonomousSerialStepContainer waitAndKick = new WsAutonomousSerialStepContainer();
         programSteps[1] = waitAndKick;
             waitAndKick.addStep(new WsAutonomousStepWaitForShooter());
