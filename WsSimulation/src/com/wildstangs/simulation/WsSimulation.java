@@ -139,7 +139,8 @@ public class WsSimulation {
 //            periodTimer.endTimingSection();
 //            periodTimer.startTimingSection();
 //            durationTimer.startTimingSection();
-            if (false == autonomousRun || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper"))){
+//            if (false == autonomousRun || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper"))){
+            if (false == autonomousRun  || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleesper"))){
                 
                 //Update the Victor graphs
                 leftDriveSpeed.update();
