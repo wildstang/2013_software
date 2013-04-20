@@ -93,7 +93,7 @@ com.wildstangs.subsystems.WsShooter.LowerWheelExitTestSpeed=0.0
 com.wildstangs.subsystems.WsShooter.UpperWheelEnterTestSpeed=5000
 com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=5000
 com.wildstangs.subsystems.WsShooter.AtSpeedToleranceAboveSetpoint=100
-com.wildstangs.subsystems.WsShooter.AtSpeedToleranceUnderSetpoint=25
+com.wildstangs.subsystems.WsShooter.AtSpeedToleranceUnderSetpoint=60
 com.wildstangs.subsystems.WsShooter.enter_gear_ratio=3.2
 com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 com.wildstangs.subsystems.WsShooter.MinimumSafeFlywheelSpeed=1200.0
@@ -128,7 +128,8 @@ com.wildstangs.autonomous.parameters.ShootFive.SecondDrive=-50.0
 
 com.wildstangs.autonomous.parameters.ShootSeven.FirstDrive=27.0
 com.wildstangs.autonomous.parameters.ShootSeven.SecondDrive=109.0
-com.wildstangs.autonomous.parameters.ShootSeven.ThirdDrive=-58.0
+com.wildstangs.autonomous.parameters.ShootSeven.ThirdDrive=-49.0
+com.wildstangs.autonomous.parameters.ShootSeven.ThirdDriveHeading=0.22
 
 com.wildstangs.autonomous.parameters.ThirdFrisbeeDelay=700
 com.wildstangs.autonomous.parameters.LowerAccumulatorDelay=300
@@ -253,8 +254,8 @@ com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistance.distanc
 //Drive Distance Motion Profile
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.ForceStopAtStep=0
 
-com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.heading=0.5
-com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.distance=-80.0
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.heading=0.22
+com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackCenter.distance=-51.0
 
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackLeft.heading=0.5
 com.wildstangs.autonomous.programs.test.WsAutonomousProgramDriveDistanceMotionProfile.insidePyramidBackLeft.distance=-90.0

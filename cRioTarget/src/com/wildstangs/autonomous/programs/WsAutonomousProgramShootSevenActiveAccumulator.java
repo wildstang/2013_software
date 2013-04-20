@@ -4,7 +4,6 @@
  */
 package com.wildstangs.autonomous.programs;
 
-import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.parameters.AutonomousBooleanConfigFileParameter;
 import com.wildstangs.autonomous.parameters.AutonomousBooleanStartPositionConfigFileParameter;
@@ -19,8 +18,8 @@ import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForAccumulatorLeftAndRightLimitSwitches;
-import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedThroughFunnelator;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedIntoFunnelator;
+import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedThroughFunnelator;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
 import com.wildstangs.config.BooleanConfigFileParameter;
@@ -34,6 +33,7 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
     private DoubleConfigFileParameter firstDrive;
     private DoubleConfigFileParameter secondDrive;
     private DoubleConfigFileParameter thirdDrive;
+    private DoubleConfigFileParameter thirdDriveHeading;
     private IntegerConfigFileParameter firstEnterWheelSetPoint;
     private IntegerConfigFileParameter firstExitWheelSetPoint;
     private BooleanConfigFileParameter firstShooterAngle;
@@ -48,6 +48,7 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
         firstDrive = new AutonomousDoubleConfigFileParameter("ShootSeven.FirstDrive", 27);
         secondDrive = new AutonomousDoubleConfigFileParameter("ShootSeven.SecondDrive", 109);
         thirdDrive = new AutonomousDoubleConfigFileParameter("ShootSeven.ThirdDrive", -58);
+        thirdDriveHeading = new AutonomousDoubleConfigFileParameter("ShootSeven.ThirdDriveHeading", 0.22);
         firstEnterWheelSetPoint = new AutonomousIntegerStartPositionConfigFileParameter("FirstEnterWheelSetPoint", 2800);
         firstExitWheelSetPoint = new AutonomousIntegerStartPositionConfigFileParameter("FirstExitWheelSetPoint", 3550);
         firstShooterAngle = new AutonomousBooleanStartPositionConfigFileParameter("FirstShooterAngle", false);
@@ -67,7 +68,7 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
     }
 
     public WsAutonomousProgramShootSevenActiveAccumulator() {
-        super(16);
+        super(18);
     }
 
     public void defineSteps() {
@@ -77,7 +78,10 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
             pg1.addStep(new WsAutonomousStepSetShooterPreset(startPreset.ENTER_WHEEL_SET_POINT, startPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE));
             pg1.addStep(new WsAutonomousStepLowerAccumulator());
             pg1.addStep(new WsAutonomousStepWaitForShooter());
-        programSteps[1] = new WsAutonomousStepMultikick(3);  
+        WsAutonomousSerialStepContainer waitAndKick = new WsAutonomousSerialStepContainer();
+        programSteps[1] = waitAndKick;
+            waitAndKick.addStep(new WsAutonomousStepWaitForShooter());
+            waitAndKick.addStep(new WsAutonomousStepMultikick(3));
         WsAutonomousParallelStepGroup pg2 = new WsAutonomousParallelStepGroup("Drop hopper and turn on accum");
         programSteps[2] = pg2;
             pg2.addStep(new WsAutonomousStepLowerHopper());
@@ -136,7 +140,7 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
         programSteps[7] = stopRaiseAccum1; 
         WsAutonomousParallelStepGroup pg7 = new WsAutonomousParallelStepGroup("5 Drive and shooter set up");
         programSteps[8] = pg7;
-            pg7.addStep(new WsAutonomousStepStartDriveUsingMotionProfile(thirdDrive.getValue(), 0.0));
+            pg7.addStep(new WsAutonomousStepStartDriveUsingMotionProfileAndHeading(thirdDrive.getValue(), 0.0, thirdDriveHeading.getValue()));
             pg7.addStep(new WsAutonomousStepSetShooterPreset(secondShooterPreset.ENTER_WHEEL_SET_POINT, secondShooterPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE));
             pg7.addStep(new WsAutonomousStepIntakeMotorPullFrisbeesIn());
         WsAutonomousParallelStepGroup pgIntakeDrive = new WsAutonomousParallelStepGroup("Intake and drive");
@@ -162,7 +166,9 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
         //Wait for frisbees to settle.
         programSteps[13] = new WsAutonomousStepDelay(200);
         programSteps[14] = new WsAutonomousStepMultikick(4);
-        programSteps[15] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
+        programSteps[15] = new WsAutonomousStepLowerAccumulator();
+        programSteps[16] = new WsAutonomousStepDelay(300);
+        programSteps[17] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
     }
 
     public String toString() {

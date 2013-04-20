@@ -7,7 +7,6 @@ import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickEnum;
 import com.wildstangs.logger.Logger;
-import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.subjects.base.BooleanSubject;
@@ -291,10 +290,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
             outputSnapshot = false; 
         }
         //Output snapshot at transitions to figure out range
-        if ((lastAtSpeed == true) && (atSpeed == false))
+        /*if ((lastAtSpeed == true) && (atSpeed == false))
         {
             Logger.getLogger().debug(this.getClass().getName(), "Flywheel Not AtSpeed", " Enter: " + (int)speedEnter + " " + (int)wheelEnterSetPoint + " " +(int)(speedEnter-wheelEnterSetPoint)  + " Exit: " + (int)speedExit + " " + (int)wheelExitSetPoint + " " +(int)(speedExit-wheelExitSetPoint) + " Victors: " +  (int)victorEnterValue +  (int)victorExitValue );
-        }
+        }*/
         //set shooter angle
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
     }
