@@ -18,6 +18,7 @@ import com.wildstangs.subsystems.base.WsSubsystem;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.networktables2.util.List;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WsShooter extends WsSubsystem implements IObserver {
@@ -33,6 +34,20 @@ public class WsShooter extends WsSubsystem implements IObserver {
             this.EXIT_WHEEL_SET_POINT = exitWheelSetPoint;
             this.ANGLE = angle;
         }
+    }
+    public static class ShotSnapshot{
+        public final int enterWheelSpeed;
+        public final int exitWheelSpeed;
+        public final int enterVictorValue;
+        public final int exitVictorValue;
+        public final boolean atSpeed;
+        public ShotSnapshot(int enterWheelSpeed, int exitWheelSpeed, int enterVictorValue, int exitVictorValue, boolean atSpeed){
+            this.enterWheelSpeed = enterWheelSpeed; 
+            this.exitWheelSpeed = exitWheelSpeed; 
+            this.enterVictorValue = enterVictorValue; 
+            this.exitVictorValue = exitVictorValue; 
+            this.atSpeed = atSpeed; 
+        }        
     }
     private IntegerConfigFileParameter PresetTowerShooterEnterSpeed = new IntegerConfigFileParameter(
             this.getClass().getName(), "PresetTowerShooterEnterSpeed", 1600);
@@ -99,8 +114,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private double aboveSetpointTolerance = 0.0;
     private double underSetpointTolerance = 0.0;
     private DoubleSolenoid.Value angleFlag = DoubleSolenoid.Value.kReverse;
-    private boolean outputSnapshot = false;
-
+    private boolean latchShotSnapshot = false;
+    final List shotSnapshots = new List();
+    private int snapshotWaitCounter = 0 ; 
+    
     public WsShooter(String name) {
         super(name);
         BooleanConfigFileParameter outputsFor2012 = new BooleanConfigFileParameter(WsOutputFacade.getInstance().getClass().getName(), "2012_Robot", false);
@@ -180,6 +197,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         angleFlag = DoubleSolenoid.Value.kReverse;
         presetUnlock = false;
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
+        snapshotWaitCounter = 0 ; 
     }
 
     public void update() {
@@ -285,15 +303,26 @@ public class WsShooter extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("KnobExitSetPoint", knobExitSetPoint);
         SmartDashboard.putBoolean("Flywheels At Speed", atSpeed);
         
-        if (outputSnapshot){
-            Logger.getLogger().debug(this.getClass().getName(), "Flywheel Snapshot", "AtSpeed:" + atSpeed + " Enter: " + (int)speedEnter + " Exit: " + (int)speedExit + " Victors: " +  (int)victorEnterValue +  (int)victorExitValue );
-            outputSnapshot = false; 
+        
+        if (latchShotSnapshot){
+            shotSnapshots.add(new ShotSnapshot((int)speedEnter, (int)speedExit, (int)victorEnterValue, (int)victorExitValue, atSpeed));
+            latchShotSnapshot = false; 
+        }
+        
+        if (shotSnapshots.size() > 0 ){ 
+            snapshotWaitCounter++; 
+            if (snapshotWaitCounter > 50){
+                snapshotWaitCounter = 0 ; 
+                ShotSnapshot ss = (ShotSnapshot)shotSnapshots.get(0); 
+                Logger.getLogger().info(this.getClass().getName(), "Flywheel Snapshot", "AtSpeed:" + ss.atSpeed + " Enter: " + ss.enterWheelSpeed + " Exit: " + ss.exitWheelSpeed + " Victors: " +  ss.enterVictorValue +  ss.exitVictorValue );
+                shotSnapshots.remove(0);
+            }
         }
         //Output snapshot at transitions to figure out range
-        /*if ((lastAtSpeed == true) && (atSpeed == false))
-        {
-            Logger.getLogger().debug(this.getClass().getName(), "Flywheel Not AtSpeed", " Enter: " + (int)speedEnter + " " + (int)wheelEnterSetPoint + " " +(int)(speedEnter-wheelEnterSetPoint)  + " Exit: " + (int)speedExit + " " + (int)wheelExitSetPoint + " " +(int)(speedExit-wheelExitSetPoint) + " Victors: " +  (int)victorEnterValue +  (int)victorExitValue );
-        }*/
+//        if ((lastAtSpeed == true) && (atSpeed == false))
+//        {
+//            Logger.getLogger().debug(this.getClass().getName(), "Flywheel Not AtSpeed", " Enter: " + (int)speedEnter + " " + (int)wheelEnterSetPoint + " " +(int)(speedEnter-wheelEnterSetPoint)  + " Exit: " + (int)speedExit + " " + (int)wheelExitSetPoint + " " +(int)(speedExit-wheelExitSetPoint) + " Victors: " +  (int)victorEnterValue +  (int)victorExitValue );
+//        }
         //set shooter angle
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
     }
@@ -460,6 +489,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
     }
     
     public void outputFlywheelSnapshot(){
-        outputSnapshot = true;
+        latchShotSnapshot = true;
     }
 }

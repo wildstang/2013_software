@@ -3,7 +3,7 @@ com.wildstangs.logger.Logger.logIp=10.1.11.22
 com.wildstangs.logger.Logger.port=17654
 com.wildstangs.logger.Logger.logToServer=false
 com.wildstangs.logger.Logger.logToStdout=true
-com.wildstangs.logger.Logger.logLevel="DEBUG"
+com.wildstangs.logger.Logger.logLevel="INFO"
 
 //Subsystems
 com.wildstangs.subsystems.WsHopper.forwardCycles=15
@@ -93,7 +93,7 @@ com.wildstangs.subsystems.WsShooter.LowerWheelExitTestSpeed=0.0
 com.wildstangs.subsystems.WsShooter.UpperWheelEnterTestSpeed=5000
 com.wildstangs.subsystems.WsShooter.UpperWheelExitTestSpeed=5000
 com.wildstangs.subsystems.WsShooter.AtSpeedToleranceAboveSetpoint=100
-com.wildstangs.subsystems.WsShooter.AtSpeedToleranceUnderSetpoint=25
+com.wildstangs.subsystems.WsShooter.AtSpeedToleranceUnderSetpoint=60
 com.wildstangs.subsystems.WsShooter.enter_gear_ratio=3.2
 com.wildstangs.subsystems.WsShooter.exit_gear_ratio=3.2
 com.wildstangs.subsystems.WsShooter.MinimumSafeFlywheelSpeed=1200.0
