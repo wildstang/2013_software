@@ -4,22 +4,15 @@
  */
 package com.wildstangs.autonomous.programs;
 
-import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
-import com.wildstangs.autonomous.parameters.AutonomousBooleanConfigFileParameter;
 import com.wildstangs.autonomous.parameters.AutonomousBooleanStartPositionConfigFileParameter;
-import com.wildstangs.autonomous.parameters.AutonomousDoubleConfigFileParameter;
 import com.wildstangs.autonomous.parameters.AutonomousIntegerConfigFileParameter;
 import com.wildstangs.autonomous.parameters.AutonomousIntegerStartPositionConfigFileParameter;
-import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
-import com.wildstangs.autonomous.steps.drivebase.*;
-import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;
 import com.wildstangs.config.BooleanConfigFileParameter;
-import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.subsystems.WsShooter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;

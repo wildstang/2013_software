@@ -4,7 +4,6 @@
  */
 package com.wildstangs.autonomous.programs;
 
-import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.parameters.AutonomousBooleanConfigFileParameter;
 import com.wildstangs.autonomous.parameters.AutonomousBooleanStartPositionConfigFileParameter;
@@ -76,7 +75,10 @@ public class WsAutonomousProgramShootSevenSensor extends WsAutonomousProgram {
             pg1.addStep(new WsAutonomousStepSetShooterPreset(startPreset.ENTER_WHEEL_SET_POINT, startPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE));
             pg1.addStep(new WsAutonomousStepLowerAccumulator());
             pg1.addStep(new WsAutonomousStepWaitForShooter());
-        programSteps[1] = new WsAutonomousStepMultikick(2);  
+        WsAutonomousSerialStepContainer waitAndShoot = new WsAutonomousSerialStepContainer();
+        programSteps[1] = waitAndShoot;
+            waitAndShoot.addStep(new WsAutonomousStepWaitForShooter());
+            waitAndShoot.addStep(new WsAutonomousStepMultikick(2));
         programSteps[2] = new WsAutonomousStepDelay(thirdFrisbeeDelay.getValue());
         programSteps[3] = new WsAutonomousStepMultikick(1);
         WsAutonomousParallelStepGroup pg2 = new WsAutonomousParallelStepGroup("Drop hopper and turn on accum");

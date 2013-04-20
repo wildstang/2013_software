@@ -7,7 +7,6 @@ import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickEnum;
 import com.wildstangs.logger.Logger;
-import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsVictor;
 import com.wildstangs.subjects.base.BooleanSubject;

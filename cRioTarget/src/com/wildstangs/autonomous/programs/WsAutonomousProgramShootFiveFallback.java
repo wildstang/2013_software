@@ -1,6 +1,5 @@
 package com.wildstangs.autonomous.programs;
 
-import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.autonomous.WsAutonomousProgram;
 import com.wildstangs.autonomous.parameters.AutonomousBooleanStartPositionConfigFileParameter;
 import com.wildstangs.autonomous.parameters.AutonomousDoubleConfigFileParameter;

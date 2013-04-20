@@ -18,7 +18,6 @@ import com.wildstangs.autonomous.steps.drivebase.*;
 import com.wildstangs.autonomous.steps.floorpickup.*;
 import com.wildstangs.autonomous.steps.hopper.*;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepIntakeIfFunnelatorTripped;
-import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForDiscsLatchedThroughFunnelator;
 import com.wildstangs.autonomous.steps.intake.WsAutonomousStepWaitForFunnelatorLimitSwitchTrueToFalse;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepSetShooterPreset;
 import com.wildstangs.autonomous.steps.shooter.WsAutonomousStepWaitForShooter;

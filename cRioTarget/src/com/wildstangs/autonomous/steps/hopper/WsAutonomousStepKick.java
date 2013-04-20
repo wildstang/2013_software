@@ -20,17 +20,17 @@ public class WsAutonomousStepKick extends WsAutonomousStep {
 
     private boolean waitForKickerFalseToTrue;
     private boolean waitForKickerTrueToFalse;
-    private boolean firstUpdate;
 
     public void initialize() {
-
+        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+        System.out.println("Button: " + ((BooleanSubject) subject).getValue());
         WsHopper subsystem = (WsHopper) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         //Check if the kicker is already kicking and set up wait
         if (subsystem.getKickerValue() == true) {
             waitForKickerTrueToFalse = true;
             waitForKickerFalseToTrue = false;
         } else {
-            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+            subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
             BooleanSubject button = (BooleanSubject) subject;
             button.setValue(true);
             waitForKickerFalseToTrue = true;
@@ -49,11 +49,16 @@ public class WsAutonomousStepKick extends WsAutonomousStep {
                 waitForKickerTrueToFalse = false;
             }
         } else if (waitForKickerFalseToTrue) {
+            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+            BooleanSubject button = (BooleanSubject) subject;
             if (subsystem.getKickerValue() == true) {
-                Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
-                BooleanSubject button = (BooleanSubject) subject;
                 button.setValue(false);
                 finished = true;
+                System.out.println("Kick finished!");
+            } else if (button.getValue() == true) {
+                button.setValue(false);
+            } else {
+                button.setValue(true);
             }
         }
     }

@@ -11,7 +11,6 @@ import com.wildstangs.autonomous.parameters.AutonomousBooleanStartPositionConfig
 import com.wildstangs.autonomous.parameters.AutonomousDoubleConfigFileParameter;
 import com.wildstangs.autonomous.parameters.AutonomousIntegerConfigFileParameter;
 import com.wildstangs.autonomous.parameters.AutonomousIntegerStartPositionConfigFileParameter;
-import com.wildstangs.autonomous.steps.WsAutonomousParallelFinishedOnAnyStepGroup;
 import com.wildstangs.autonomous.steps.WsAutonomousParallelStepGroup;
 import com.wildstangs.autonomous.steps.WsAutonomousSerialStepContainer;
 import com.wildstangs.autonomous.steps.control.WsAutonomousStepDelay;
@@ -88,7 +87,10 @@ public class WsAutonomousProgramShootSevenDriveAfterOne extends WsAutonomousProg
             pg1.addStep(new WsAutonomousStepLowerAccumulator());
             pg1.addStep(new WsAutonomousStepWaitForShooter());
         //Kick one and then start driving
-        programSteps[1] = new WsAutonomousStepKick();
+        WsAutonomousSerialStepContainer waitAndShoot = new WsAutonomousSerialStepContainer();
+        programSteps[1] = waitAndShoot;
+            waitAndShoot.addStep(new WsAutonomousStepWaitForShooter());
+            waitAndShoot.addStep(new WsAutonomousStepMultikick(1));
         WsAutonomousSerialStepContainer pssDriveWhileShooting = new WsAutonomousSerialStepContainer("Drive While Shooting");
         WsAutonomousSerialStepContainer pssShootWhileDriving = new WsAutonomousSerialStepContainer("Shoot while driving");
         
