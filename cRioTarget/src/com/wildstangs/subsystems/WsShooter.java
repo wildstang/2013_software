@@ -94,6 +94,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
             this.getClass().getName(), "AtSpeedToleranceAboveSetpoint", 200);
     private DoubleConfigFileParameter atSpeedToleranceUnderSetpointConfig = new DoubleConfigFileParameter(
             this.getClass().getName(), "AtSpeedToleranceUnderSetpoint", 25);
+    private DoubleConfigFileParameter atSpeedToleranceUnderSetpointNoGoConfig = new DoubleConfigFileParameter(
+            this.getClass().getName(), "AtSpeedToleranceUnderSetpointNoGo", 10);
     private DoubleConfigFileParameter ENTER_GEAR_RATIO_config = new DoubleConfigFileParameter(
             this.getClass().getName(), "enter_gear_ratio", 3.0);
     private DoubleConfigFileParameter EXIT_GEAR_RATIO_config = new DoubleConfigFileParameter(
@@ -116,11 +118,15 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private boolean presetUnlock = false;
     private double aboveSetpointTolerance = 0.0;
     private double underSetpointTolerance = 0.0;
+    private double underSetpointNoGoTolerance = 0.0;
     private DoubleSolenoid.Value angleFlag = DoubleSolenoid.Value.kReverse;
-    private boolean latchShotSnapshot = false;
     final List shotSnapshots = new List();
     private int snapshotWaitCounter = 0 ; 
     private double initTime = 0.0; 
+    private double victorEnterValue = 0.0 ; 
+    private double victorExitValue = 0.0; 
+    private double speedEnter = 0.0; 
+    private double speedExit = 0.0; 
 
     
     public WsShooter(String name) {
@@ -171,6 +177,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         highWheelExitTestSpeed = upperWheelExitTestSpeed.getValue();
 
          underSetpointTolerance = atSpeedToleranceUnderSetpointConfig.getValue();
+         underSetpointNoGoTolerance = atSpeedToleranceUnderSetpointNoGoConfig.getValue();
          aboveSetpointTolerance = atSpeedToleranceAboveSetpointConfig.getValue();
         
         safeFlywheelSpeed = minimumSafeFlywheelSpeed.getValue();
@@ -242,8 +249,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
         int enterCounterCount = counterEnter.get();
         int exitCounterCount = counterExit.get();
         double newTime = Timer.getFPGATimestamp();
-        double speedEnter = (60.0 / (128 * ENTER_GEAR_RATIO)) * counterEnter.get() / (newTime - previousTime);
-        double speedExit = (60.0 / (128 * EXIT_GEAR_RATIO)) * counterExit.get() / (newTime - previousTime);
+        speedEnter = (60.0 / (128 * ENTER_GEAR_RATIO)) * counterEnter.get() / (newTime - previousTime);
+        speedExit = (60.0 / (128 * EXIT_GEAR_RATIO)) * counterExit.get() / (newTime - previousTime);
 
         this.resetEnterCounter();
         this.resetExitCounter();
@@ -253,8 +260,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
         WsVictor victorEnter = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER);
         WsVictor victorExit = (WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_EXIT);
 
-        double victorEnterValue ; 
-        double victorExitValue ; 
         if (((speedEnter < lowWheelSpeed) && (speedEnter < wheelEnterSetPoint))) {
             victorEnterValue = lowVictorSpeed;
         } else if (speedEnter < wheelEnterSetPoint) {
@@ -287,7 +292,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
         if (speedExit > wheelExitSetPoint - underSetpointTolerance &&
             speedExit < wheelExitSetPoint + aboveSetpointTolerance &&
             speedEnter > wheelEnterSetPoint - underSetpointTolerance &&
-            speedEnter < wheelEnterSetPoint + aboveSetpointTolerance)
+            speedEnter < wheelEnterSetPoint + aboveSetpointTolerance ) 
+//            ((speedEnter < (wheelEnterSetPoint - underSetpointNoGoTolerance))|| (speedEnter > (wheelEnterSetPoint + underSetpointNoGoTolerance))) &&
+//            ((speedExit  < (wheelExitSetPoint  - underSetpointNoGoTolerance))|| (speedExit  > (wheelExitSetPoint  + underSetpointNoGoTolerance))))
         {
             atSpeed = true;
         } 
@@ -309,15 +316,6 @@ public class WsShooter extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("KnobEnterSetPoint", knobEnterSetPoint);
         SmartDashboard.putNumber("KnobExitSetPoint", knobExitSetPoint);
         SmartDashboard.putBoolean("Flywheels At Speed", atSpeed);
-        
-        
-        if (latchShotSnapshot){
-            double time_since_init = Timer.getFPGATimestamp() - initTime; 
-            int shotMs = (int)(time_since_init * 1000); 
-            double dShotMs = shotMs / 1000.0; 
-            shotSnapshots.add(new ShotSnapshot((int)speedEnter, (int)speedExit, (int)victorEnterValue, (int)victorExitValue, atSpeed, dShotMs));
-            latchShotSnapshot = false; 
-        }
         
         if (shotSnapshots.size() > 0 ){ 
             snapshotWaitCounter++; 
@@ -350,6 +348,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         highWheelExitTestSpeed = upperWheelExitTestSpeed.getValue();
         
         underSetpointTolerance = atSpeedToleranceUnderSetpointConfig.getValue();
+        underSetpointNoGoTolerance = atSpeedToleranceUnderSetpointNoGoConfig.getValue();
         aboveSetpointTolerance = atSpeedToleranceAboveSetpointConfig.getValue();
 
         safeFlywheelSpeed = minimumSafeFlywheelSpeed.getValue();
@@ -500,7 +499,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
         return atSafeSpeed;
     }
     
-    public void outputFlywheelSnapshot(){
-        latchShotSnapshot = true;
+    public void cacheFlywheelSnapshot(){
+            double time_since_init = Timer.getFPGATimestamp() - initTime; 
+            int shotMs = (int)(time_since_init * 1000); 
+            double dShotMs = shotMs / 1000.0; 
+            shotSnapshots.add(new ShotSnapshot((int)speedEnter, (int)speedExit, (int)victorEnterValue, (int)victorExitValue, atSpeed, dShotMs));
     }
 }

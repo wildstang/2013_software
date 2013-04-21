@@ -91,8 +91,8 @@ public class WsSubsystemContainer {
         subsystem.add(new DataElement(WS_COMPRESSOR, new WsCompressor(WS_COMPRESSOR, 1, 1, 1, 1)));
         subsystem.add(new DataElement(WS_INTAKE, new WsIntake(WS_INTAKE)));
         subsystem.add(new DataElement(WS_FLOOR_PICKUP, new WsFloorPickup(WS_FLOOR_PICKUP)));
-        subsystem.add(new DataElement(WS_HOPPER, new WsHopper(WS_HOPPER)));
         subsystem.add(new DataElement(WS_SHOOTER, new WsShooter(WS_SHOOTER)));
+        subsystem.add(new DataElement(WS_HOPPER, new WsHopper(WS_HOPPER)));
         subsystem.add(new DataElement(WS_LOADING_RAMP, new WsLoadingRamp(WS_LOADING_RAMP)));
         subsystem.add(new DataElement(WS_CLIMBER, new WsClimber(WS_CLIMBER)));
         subsystem.add(new DataElement(WS_LED, new WsLED(WS_LED)));

@@ -31,6 +31,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
     private int forwardCycles;
     private int cycle;
     private boolean goingForward = false, goingBack = false;
+    private boolean prepareFiringSolution = false; 
     private boolean upLimitSwitchValue = false, downLimitSwitchValue = false;
     private boolean kickerButtonPressed = false;
     private boolean kickerValue;
@@ -83,6 +84,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
         tomahawkDownValue = tomahawkDownConfig.getValue();
         tomahawkUpValue = tomahawkUpConfig.getValue();
         tomahawkUp = true;
+        prepareFiringSolution = false; 
     }
 
     public void update() {
@@ -106,12 +108,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 WsIntake intake = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
                 if (kickerButtonPressed && ((this.isUpLimitSwitchTriggered() && shooter.isFlywheelAtSafeSpeed())
                         || intake.getFingerDownOverrideButtonState())) {
-                    goingForward = true;
-                    kickerValue = true;
-                    if (disks > 0) {
-                        disks--;
-                    }
-                    shooter.outputFlywheelSnapshot();
+                    prepareFiringSolution = true; 
                 }
             }
         }
@@ -124,6 +121,25 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 SmartDashboard.putNumber("Recovery Time", diffTime);
                 //Logger.getLogger().debug(this.getClass().getName(), "Recovery Time", "Flywheel up to speed in: " + (endTime - startTime));
                 timeRecovery = false;
+            }
+        }
+        //This allows the software to choose when the kicker actually kicks. However, software hasn't found a proper solution yet
+        if (prepareFiringSolution){
+            WsShooter shooter = (WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER);
+            WsIntake intake = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
+            if (((false == this.isUpLimitSwitchTriggered()) || (false ==shooter.isFlywheelAtSafeSpeed()) ) && (false == intake.getFingerDownOverrideButtonState())){
+                //Something happened between staging and firing to where it is not safe to fire!
+                prepareFiringSolution =false; 
+                
+            }else {
+                prepareFiringSolution =false; 
+                goingForward = true;
+                cycle = 0;
+                kickerValue = true;
+                if (disks > 0) {
+                    disks--;
+                }
+                shooter.cacheFlywheelSnapshot();
             }
         }
 
@@ -163,13 +179,9 @@ public class WsHopper extends WsSubsystem implements IObserver {
                 WsIntake intake = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
                 if (!goingForward && !goingBack && ((this.isUpLimitSwitchTriggered()
                         && shooter.isFlywheelAtSafeSpeed()) || intake.getFingerDownOverrideButtonState())) {
-                    goingForward = true;
-                    cycle = 0;
-                    kickerValue = true;
-                    if (disks > 0) {
-                        disks--;
-                    }
-                    shooter.outputFlywheelSnapshot();
+                    
+                    prepareFiringSolution = true; 
+                    
 
                 }
             }
