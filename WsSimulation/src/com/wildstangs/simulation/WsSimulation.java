@@ -42,6 +42,7 @@ public class WsSimulation {
 
         //start the log viewer.
         (new Thread(new LogViewer())).start();
+        FileLogger.getFileLogger().startLogger();
 
         try {
             WsConfigFacade.getInstance().setFileName("/Config/ws_config.txt");
@@ -57,6 +58,8 @@ public class WsSimulation {
         //System.out.println(WsConfigFacade.getInstance().getConfigItemName("com.wildstangs.WsInputFacade.WsDriverJoystick.trim"));
         //System.out.println(WsConfigFacade.getInstance().dumpConfigData());
         logger.always(c, "sim_startup", "Simulation starting.");
+        FileLogger.getFileLogger().logData("Sim Started"); 
+
         //logger.setLogLevel(Level.ALL);
         //logger.fatal(c, "fatal_test", "fatal");
         //logger.error(c, "erro_test", "error");

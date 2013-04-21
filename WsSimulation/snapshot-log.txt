@@ -1,0 +1,2 @@
+Sim Started
+ShotSec: 2.566 AtSpeed:false Enter: 2865 Exit: 3630 Victors: 00

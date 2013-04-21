@@ -35,7 +35,7 @@ public class RobotTemplate extends IterativeRobot {
         startupTimer.startTimingSection();
         System.out.println("RobotInit Start");
         //Enables the filelogger thread.
-        //FileLogger.getFileLogger().startLogger();
+        FileLogger.getFileLogger().startLogger();
         try {
             WsConfigFacade.getInstance().setFileName("/ws_config.txt");
             WsConfigFacade.getInstance().readConfig();
@@ -69,6 +69,8 @@ public class RobotTemplate extends IterativeRobot {
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
+        FileLogger.getFileLogger().logData("Disabled Init"); 
+
 //        Logger.getLogger().always(this.getClass().getName(), "disbledInit", "Config Completed");
         WsSubsystemContainer.getInstance().init();
         Logger.getLogger().readConfig();

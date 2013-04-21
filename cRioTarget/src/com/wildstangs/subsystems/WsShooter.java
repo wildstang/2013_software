@@ -6,6 +6,7 @@ import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickEnum;
+import com.wildstangs.logger.FileLogger;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsVictor;
@@ -37,16 +38,18 @@ public class WsShooter extends WsSubsystem implements IObserver {
     }
     public static class ShotSnapshot{
         public final int enterWheelSpeed;
+        public final double dShotSec;
         public final int exitWheelSpeed;
         public final int enterVictorValue;
         public final int exitVictorValue;
         public final boolean atSpeed;
-        public ShotSnapshot(int enterWheelSpeed, int exitWheelSpeed, int enterVictorValue, int exitVictorValue, boolean atSpeed){
+        public ShotSnapshot(int enterWheelSpeed, int exitWheelSpeed, int enterVictorValue, int exitVictorValue, boolean atSpeed, double dShotSec){
             this.enterWheelSpeed = enterWheelSpeed; 
             this.exitWheelSpeed = exitWheelSpeed; 
             this.enterVictorValue = enterVictorValue; 
             this.exitVictorValue = exitVictorValue; 
             this.atSpeed = atSpeed; 
+            this.dShotSec = dShotSec; 
         }        
     }
     private IntegerConfigFileParameter PresetTowerShooterEnterSpeed = new IntegerConfigFileParameter(
@@ -117,6 +120,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private boolean latchShotSnapshot = false;
     final List shotSnapshots = new List();
     private int snapshotWaitCounter = 0 ; 
+    private double initTime = 0.0; 
+
     
     public WsShooter(String name) {
         super(name);
@@ -169,6 +174,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
          aboveSetpointTolerance = atSpeedToleranceAboveSetpointConfig.getValue();
         
         safeFlywheelSpeed = minimumSafeFlywheelSpeed.getValue();
+        init(); 
     }
 
     public DoubleSolenoid.Value translatePresetConfigAngle(boolean configVal) {
@@ -198,6 +204,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         presetUnlock = false;
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
         snapshotWaitCounter = 0 ; 
+        initTime = Timer.getFPGATimestamp(); 
     }
 
     public void update() {
@@ -305,7 +312,10 @@ public class WsShooter extends WsSubsystem implements IObserver {
         
         
         if (latchShotSnapshot){
-            shotSnapshots.add(new ShotSnapshot((int)speedEnter, (int)speedExit, (int)victorEnterValue, (int)victorExitValue, atSpeed));
+            double time_since_init = Timer.getFPGATimestamp() - initTime; 
+            int shotMs = (int)(time_since_init * 1000); 
+            double dShotMs = shotMs / 1000.0; 
+            shotSnapshots.add(new ShotSnapshot((int)speedEnter, (int)speedExit, (int)victorEnterValue, (int)victorExitValue, atSpeed, dShotMs));
             latchShotSnapshot = false; 
         }
         
@@ -314,7 +324,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
             if (snapshotWaitCounter > 50){
                 snapshotWaitCounter = 0 ; 
                 ShotSnapshot ss = (ShotSnapshot)shotSnapshots.get(0); 
-                Logger.getLogger().info(this.getClass().getName(), "Flywheel Snapshot", "AtSpeed:" + ss.atSpeed + " Enter: " + ss.enterWheelSpeed + " Exit: " + ss.exitWheelSpeed + " Victors: " +  ss.enterVictorValue +  ss.exitVictorValue );
+                String snapshot =  "ShotSec: " + ss.dShotSec +  " AtSpeed:" + ss.atSpeed + " Enter: " + ss.enterWheelSpeed + " Exit: " + ss.exitWheelSpeed + " Victors: " +  ss.enterVictorValue +  ss.exitVictorValue ; 
+                Logger.getLogger().info(this.getClass().getName(), "Flywheel Snapshot", snapshot);
+                FileLogger.getFileLogger().logData(snapshot); 
                 shotSnapshots.remove(0);
             }
         }
