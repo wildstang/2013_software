@@ -87,6 +87,7 @@ public class WsOutputFacade {
     public static final String CLIMBER = "Climber";
     public static final String TOMAHAWK_SERVO = "TomahawkServo";
     public static final String LIGHT_CANNON_RELAY = "LightCannonRelay";
+    public static final String SAIL_SOLENOID = "SailSolenoid";
     /**
      * Constructor for WsOutputFacade.
      *
@@ -131,5 +132,6 @@ public class WsOutputFacade {
         outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
         outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 9)));
         outputs.add(new DataElement(LIGHT_CANNON_RELAY, new WsRelay(1, 2, Relay.Direction.kForward)));
+        outputs.add(new DataElement(SAIL_SOLENOID, new WsSolenoid(SAIL_SOLENOID, 1, 6)));
     }
 }
