@@ -24,6 +24,9 @@ public class DoubleSubjectGraph implements ComponentListener, ActionListener, IO
     private JButton startStop;
     private SpeedGrapher graph;
 
+    public DoubleSubjectGraph(){
+        
+    }
     /**
      * Creates a new double subject grapher.
      */

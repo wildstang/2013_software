@@ -23,6 +23,10 @@ public class DoubleGraph implements ComponentListener, ActionListener{
     private JButton startStop;
     private SpeedGrapher graph;
 
+    
+    public DoubleGraph(){
+        
+    }
     /**
      * Creates a new double subject grapher.
      */
