@@ -160,7 +160,7 @@ public class WsSimulation {
         if(autonomousRun)
         {
             WsAutonomousManager.getInstance().setPosition(1);
-            WsAutonomousManager.getInstance().setProgram(6);
+            WsAutonomousManager.getInstance().setProgram(14);
             WsAutonomousManager.getInstance().startCurrentProgram();
         }
         
@@ -169,7 +169,7 @@ public class WsSimulation {
 //            periodTimer.startTimingSection();
 //            durationTimer.startTimingSection();
 //            if (false == autonomousRun || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper"))){
-            if (false == autonomousRun  || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleesper"))){
+            if (false == autonomousRun  || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper"))){
                 
                 //Update the Victor graphs
                 if (driveMotorGraphs){

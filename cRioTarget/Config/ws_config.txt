@@ -135,6 +135,8 @@ com.wildstangs.autonomous.parameters.ShootSeven.ThirdDriveHeading=0.22
 com.wildstangs.autonomous.parameters.ThirdFrisbeeDelay=700
 com.wildstangs.autonomous.parameters.LowerAccumulatorDelay=300
 com.wildstangs.autonomous.parameters.FunnelatorLoadDelay=3000
+com.wildstangs.autonomous.parameters.DriveOffset=0.9
+com.wildstangs.autonomous.parameters.UseLeftDriveForOffset=true
 
 com.wildstangs.autonomous.parameters.FirstEnterWheelSetPoint.insidePyramidBackCenter=2700   
 com.wildstangs.autonomous.parameters.FirstExitWheelSetPoint.insidePyramidBackCenter=3450

@@ -3,6 +3,9 @@
  */
 package com.wildstangs.subsystems;
 
+import com.wildstangs.autonomous.parameters.AutonomousBooleanConfigFileParameter;
+import com.wildstangs.autonomous.parameters.AutonomousDoubleConfigFileParameter;
+import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
@@ -58,6 +61,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double SLOW_TURN_BACKWARD_SPEED;
     private static double MAX_ACCELERATION_DRIVE_PROFILE = 600.0;
     private static double STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR = 10.0;
+    private static double DRIVE_OFFSET = 1.0;
+    private static boolean USE_LEFT_SIDE_FOR_OFFSET = true;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
@@ -132,6 +137,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter DECELERATION_VELOCITY_THRESHOLD_config;
     private static DoubleConfigFileParameter DECELERATION_MOTOR_SPEED_config;
     private static DoubleConfigFileParameter STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config;
+    private static DoubleConfigFileParameter DRIVE_OFFSET_config;
+    private static BooleanConfigFileParameter USE_LEFT_SIDE_FOR_OFFSET_config;
 
     public WsDriveBase(String name) {
         super(name);
@@ -154,6 +161,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         DECELERATION_VELOCITY_THRESHOLD_config = new DoubleConfigFileParameter(this.getClass().getName(), "deceleration_velocity_threshold", 48.0);
         DECELERATION_MOTOR_SPEED_config = new DoubleConfigFileParameter(this.getClass().getName(), "deceleration_motor_speed", 0.3);
         STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config = new DoubleConfigFileParameter(this.getClass().getName(), "stopping_distance_at_max_speed_lowgear", 10.0);
+        DRIVE_OFFSET_config = new AutonomousDoubleConfigFileParameter("DriveOffset", 1.00);
+        USE_LEFT_SIDE_FOR_OFFSET_config = new AutonomousBooleanConfigFileParameter("UseLeftDriveForOffset", true);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -262,14 +271,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 driveBaseThrottleValue = MAX_NEG_INPUT_THROTTLE_VALUE;
             }
             SmartDashboard.putNumber("Motion Profile Throttle", driveBaseThrottleValue);
-            updateDriveMotors();
+            updateDriveMotors(true);
         } else if (true == driveDistancePidEnabled) {
             //We are driving by distance under PID control
             enableDistancePidControl();
             driveDistancePid.calcPid();
             setThrottleValue(pidThrottleValue);
             setHeadingValue(0);
-            updateDriveMotors();
+            updateDriveMotors(false);
             SmartDashboard.putNumber("PID Throttle Value", pidThrottleValue);
         } else if (true == driveHeadingPidEnabled) {
             //We are driving by heading under PID control
@@ -278,7 +287,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             quickTurnFlag = true;
             setThrottleValue(0);
             setHeadingValue(pidHeadingValue);
-            updateDriveMotors();
+            updateDriveMotors(false);
             SmartDashboard.putNumber("PID Heading Value", pidHeadingValue);
         } else if (true == driveDistancePidEnabled && true == driveHeadingPidEnabled) {
             //This isn't good...
@@ -303,7 +312,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             checkAutoQuickTurn();
 
             //Set the drive motor outputs
-            updateDriveMotors();
+            updateDriveMotors(false);
 
             SmartDashboard.putNumber("Throttle Value", driveBaseThrottleValue);
             SmartDashboard.putNumber("Heading Value", driveBaseHeadingValue);
@@ -319,6 +328,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
         SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
         SmartDashboard.putNumber("Right Distance: ", this.getRightDistance());
+        SmartDashboard.putNumber("Left Distance: ", this.getLeftDistance());
         SmartDashboard.putNumber("Gyro angle", this.getGyroAngle());
     }
 
@@ -466,7 +476,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         }
     }
 
-    public void updateDriveMotors() {
+    public void updateDriveMotors(boolean useDriveOffset) {
         double rightMotorSpeed = 0;
         double leftMotorSpeed = 0;
         double angularPower = 0.0;
@@ -523,6 +533,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             }
             if (leftMotorSpeed < NEG_MAX_MOTOR_OUTPUT) {
                 leftMotorSpeed = NEG_MAX_MOTOR_OUTPUT;
+            }
+        }
+        
+        if (useDriveOffset){
+            if(USE_LEFT_SIDE_FOR_OFFSET){
+                leftMotorSpeed = leftMotorSpeed * DRIVE_OFFSET; 
+            } else { 
+                rightMotorSpeed = rightMotorSpeed * DRIVE_OFFSET; 
             }
         }
         
@@ -593,14 +611,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
 
     public double getLeftDistance() {
         double distance = 0.0;
-        //We divide by 3 because the ratio of the wheel rotation to the encoder rotation is 3
-        if (DoubleSolenoid.Value.kForward == shifterFlag) {
-            //We are in low gear
-            distance = (leftDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
-        } else {
-            //We are in high gear
-            distance = (leftDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
-        }
+        distance = (leftDriveEncoder.get() / (TICKS_PER_ROTATION * ENCODER_GEAR_RATIO)) * 2.0 * Math.PI * (WHEEL_DIAMETER / 2.0);
         return distance;
     }
 
@@ -771,6 +782,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         DECELERATION_VELOCITY_THRESHOLD = DECELERATION_VELOCITY_THRESHOLD_config.getValue();
         DECELERATION_MOTOR_SPEED = DECELERATION_MOTOR_SPEED_config.getValue();
         STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR = STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config.getValue(); 
+        DRIVE_OFFSET = DRIVE_OFFSET_config.getValue();
+        USE_LEFT_SIDE_FOR_OFFSET = USE_LEFT_SIDE_FOR_OFFSET_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
         driveSpeedPid.notifyConfigChange();
