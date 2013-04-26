@@ -6,7 +6,6 @@ import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.inputfacade.base.WsInputFacade;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickEnum;
-import com.wildstangs.logger.FileLogger;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsVictor;
@@ -16,6 +15,7 @@ import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystem;
+import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -126,8 +126,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
     private double victorEnterValue = 0.0 ; 
     private double victorExitValue = 0.0; 
     private double speedEnter = 0.0; 
-    private double speedExit = 0.0; 
-
+    private double speedExit = 0.0;
     
     public WsShooter(String name) {
         super(name);
@@ -211,7 +210,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         presetUnlock = false;
         WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).set(null, new Integer(angleFlag.value));
         snapshotWaitCounter = 0 ; 
-        initTime = Timer.getFPGATimestamp(); 
+        initTime = Timer.getFPGATimestamp();
     }
 
     public void update() {
@@ -288,7 +287,12 @@ public class WsShooter extends WsSubsystem implements IObserver {
             victorExit.set(null, Double.valueOf(0.0));
             victorEnter.set(null, Double.valueOf(0.0));
         }*/
-        boolean lastAtSpeed = atSpeed; 
+        //Pause flywheels when quick-turning
+        if (((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getQuickTurnFlag() == true) {
+            victorEnter.set(null, Double.valueOf(0.0));
+            victorExit.set(null, Double.valueOf(0.0));
+        }
+        boolean lastAtSpeed = atSpeed;
         if (speedExit > wheelExitSetPoint - underSetpointTolerance &&
             speedExit < wheelExitSetPoint + aboveSetpointTolerance &&
             speedEnter > wheelEnterSetPoint - underSetpointTolerance &&
@@ -317,7 +321,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("KnobExitSetPoint", knobExitSetPoint);
         SmartDashboard.putBoolean("Flywheels At Speed", atSpeed);
         
-        if (shotSnapshots.size() > 0 ){ 
+        /*if (shotSnapshots.size() > 0 ){ 
             snapshotWaitCounter++; 
             if (snapshotWaitCounter > 50){
                 snapshotWaitCounter = 0 ; 
@@ -327,7 +331,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 FileLogger.getFileLogger().logData(snapshot); 
                 shotSnapshots.remove(0);
             }
-        }
+        }*/
         //Output snapshot at transitions to figure out range
 //        if ((lastAtSpeed == true) && (atSpeed == false))
 //        {
@@ -500,9 +504,9 @@ public class WsShooter extends WsSubsystem implements IObserver {
     }
     
     public void cacheFlywheelSnapshot(){
-            double time_since_init = Timer.getFPGATimestamp() - initTime; 
+            /*double time_since_init = Timer.getFPGATimestamp() - initTime; 
             int shotMs = (int)(time_since_init * 1000); 
             double dShotMs = shotMs / 1000.0; 
-            shotSnapshots.add(new ShotSnapshot((int)speedEnter, (int)speedExit, (int)victorEnterValue, (int)victorExitValue, atSpeed, dShotMs));
+            shotSnapshots.add(new ShotSnapshot((int)speedEnter, (int)speedExit, (int)victorEnterValue, (int)victorExitValue, atSpeed, dShotMs));*/
     }
 }

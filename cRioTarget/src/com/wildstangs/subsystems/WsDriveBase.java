@@ -63,6 +63,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR = 10.0;
     private static double DRIVE_OFFSET = 1.0;
     private static boolean USE_LEFT_SIDE_FOR_OFFSET = true;
+    private static double QUICK_TURN_CAP;
+    private static double QUICK_TURN_ANTITURBO;
     private static double driveBaseThrottleValue = 0.0;
     private static double driveBaseHeadingValue = 0.0;
     private static double pidThrottleValue = 0.0;
@@ -76,12 +78,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static boolean quickTurnFlag = false;
     private static Encoder leftDriveEncoder;
     private static Encoder rightDriveEncoder;
-    private static double encoderGearRatio;
     private static Gyro driveHeadingGyro;
     private static WsPidController driveHeadingPid;
     private static WsDriveBaseHeadingPidInput driveHeadingPidInput;
     private static WsDriveBaseHeadingPidOutput driveHeadingPidOutput;
-    private static double gyroValue;
     private static boolean driveHeadingPidEnabled = false;
     
     private static WsSpeedPidController driveSpeedPid;
@@ -102,6 +102,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static double FEED_FORWARD_ACCELERATION_CONSTANT = 0.00018; 
     private double totalPosition = 0.0; 
     private double previousPositionSinceLastReset = 0.0; 
+    private double previousRightPositionSinceLastReset = 0.0; 
+    private double previousLeftPositionSinceLastReset = 0.0; 
     private double deltaPosition = 0.0; 
     private double deltaTime = 0.0; 
     private double deltaPosError = 0.0; 
@@ -116,8 +118,6 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static WsPidController driveDistancePid;
     private static WsDriveBaseDistancePidInput driveDistancePidInput;
     private static WsDriveBaseDistancePidOutput driveDistancePidOutput;
-    private static double leftEncoderValue;
-    private static double rightEncoderValue;
     private static boolean driveDistancePidEnabled = false;
     private static DoubleConfigFileParameter WHEEL_DIAMETER_config;
     private static DoubleConfigFileParameter TICKS_PER_ROTATION_config;
@@ -138,6 +138,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static DoubleConfigFileParameter DECELERATION_MOTOR_SPEED_config;
     private static DoubleConfigFileParameter STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config;
     private static DoubleConfigFileParameter DRIVE_OFFSET_config;
+    private static DoubleConfigFileParameter QUICK_TURN_CAP_config;
+    private static DoubleConfigFileParameter QUICK_TURN_ANTITURBO_config;
     private static BooleanConfigFileParameter USE_LEFT_SIDE_FOR_OFFSET_config;
 
     public WsDriveBase(String name) {
@@ -163,6 +165,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config = new DoubleConfigFileParameter(this.getClass().getName(), "stopping_distance_at_max_speed_lowgear", 10.0);
         DRIVE_OFFSET_config = new AutonomousDoubleConfigFileParameter("DriveOffset", 1.00);
         USE_LEFT_SIDE_FOR_OFFSET_config = new AutonomousBooleanConfigFileParameter("UseLeftDriveForOffset", true);
+        QUICK_TURN_CAP_config = new DoubleConfigFileParameter(this.getClass().getName(), "quick_turn_cap", 10.0);
+        QUICK_TURN_ANTITURBO_config = new DoubleConfigFileParameter(this.getClass().getName(), "quick_turn_antiturbo", 10.0);
 
         //Anti-Turbo button
         Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
@@ -220,7 +224,6 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         previousTime =  Timer.getFPGATimestamp(); 
         currentProfileX = 0.0; 
         continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
-        Logger.getLogger().always(this.getClass().getName(), "init", "Drive Base init");
         //Zero out all motor values left over from autonomous
         (WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(0.0));
         (WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(0.0));
@@ -229,6 +232,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(0.0));
         WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
         WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).update();
+        //Clear encoders
+        resetLeftEncoder();
+        resetRightEncoder();
     }
    
     public void update() {
@@ -337,8 +343,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         double newTime = Timer.getFPGATimestamp();
         double leftDistance = this.getLeftDistance();
         double rightDistance = this.getRightDistance();
-//        this.deltaPosition = ((leftDistance + rightDistance)/2.0 - previousPositionSinceLastReset); 
-        this.deltaPosition = (rightDistance - previousPositionSinceLastReset); 
+        double rightDelta = (rightDistance - previousRightPositionSinceLastReset);
+        double leftDelta = (leftDistance - previousLeftPositionSinceLastReset);
+        this.deltaPosition = (Math.abs(rightDelta) > Math.abs(leftDelta) ? rightDelta : leftDelta);
         this.deltaTime = (newTime - previousTime); 
         if (this.deltaTime > 0.060){ 
             this.deltaTime = 0.060; 
@@ -355,7 +362,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         if ( Math.abs(deltaPosition) > 0.005 ){
             //Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + "dpp:" + deltaProfilePosition +  " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
         }
-        previousPositionSinceLastReset += deltaPosition; 
+        previousPositionSinceLastReset += deltaPosition;
+        previousRightPositionSinceLastReset += rightDelta;
+        previousLeftPositionSinceLastReset += leftDelta;
         previousTime = newTime; 
         previousVelocity = currentVelocity; 
         
@@ -495,6 +504,26 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             // Quick turn does not take throttle into account
             leftMotorSpeed += driveBaseHeadingValue;
             rightMotorSpeed -= driveBaseHeadingValue;
+            
+            /*if(true == antiTurboFlag) {
+                leftMotorSpeed /= ANTI_TURBO_MAX_DEFLECTION;
+                leftMotorSpeed *= QUICK_TURN_ANTITURBO;
+                rightMotorSpeed /= ANTI_TURBO_MAX_DEFLECTION;
+                rightMotorSpeed *= QUICK_TURN_ANTITURBO;
+            }
+            
+            if(false == turboFlag) {
+                if (leftMotorSpeed > QUICK_TURN_CAP) {
+                    leftMotorSpeed = QUICK_TURN_CAP;
+                } else if (leftMotorSpeed < -QUICK_TURN_CAP) {
+                    leftMotorSpeed = -QUICK_TURN_CAP;
+                }
+                if (rightMotorSpeed > QUICK_TURN_CAP) {
+                    rightMotorSpeed = QUICK_TURN_CAP;
+                } else if (rightMotorSpeed < -QUICK_TURN_CAP) {
+                    rightMotorSpeed = -QUICK_TURN_CAP;
+                }
+            }*/
         } else {
             if (driveBaseThrottleValue >= 0) {
                 if (rightMotorSpeed < 0) {
@@ -634,13 +663,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void resetLeftEncoder() {
-        this.leftEncoderValue = 0.0;
         leftDriveEncoder.reset();
         leftDriveEncoder.start();
     }
 
     public void resetRightEncoder() {
-        this.rightEncoderValue = 0.0;
         rightDriveEncoder.reset();
         rightDriveEncoder.start();
     }
@@ -762,6 +789,10 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         
         return pidSpeedValue;
     }
+    
+    public boolean getQuickTurnFlag() {
+        return quickTurnFlag;
+    }
 
     public void notifyConfigChange() {
         WHEEL_DIAMETER = WHEEL_DIAMETER_config.getValue();
@@ -784,6 +815,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR = STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config.getValue(); 
         DRIVE_OFFSET = DRIVE_OFFSET_config.getValue();
         USE_LEFT_SIDE_FOR_OFFSET = USE_LEFT_SIDE_FOR_OFFSET_config.getValue();
+        QUICK_TURN_CAP = QUICK_TURN_CAP_config.getValue();
+        QUICK_TURN_ANTITURBO = QUICK_TURN_ANTITURBO_config.getValue();
         driveDistancePid.notifyConfigChange();
         driveHeadingPid.notifyConfigChange();
         driveSpeedPid.notifyConfigChange();

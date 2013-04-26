@@ -10,7 +10,6 @@ import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.configfacade.WsConfigFacade;
 import com.wildstangs.configfacade.WsConfigFacadeException;
 import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.logger.FileLogger;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.profiling.WsProfilingTimer;
@@ -35,7 +34,7 @@ public class RobotTemplate extends IterativeRobot {
         startupTimer.startTimingSection();
         System.out.println("RobotInit Start");
         //Enables the filelogger thread.
-        FileLogger.getFileLogger().startLogger();
+        //FileLogger.getFileLogger().startLogger();
         try {
             WsConfigFacade.getInstance().setFileName("/ws_config.txt");
             WsConfigFacade.getInstance().readConfig();
@@ -69,7 +68,6 @@ public class RobotTemplate extends IterativeRobot {
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
-        FileLogger.getFileLogger().logData("Disabled Init"); 
 
 //        Logger.getLogger().always(this.getClass().getName(), "disbledInit", "Config Completed");
         WsSubsystemContainer.getInstance().init();

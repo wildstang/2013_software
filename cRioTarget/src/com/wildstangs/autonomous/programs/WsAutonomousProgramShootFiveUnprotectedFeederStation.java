@@ -114,7 +114,10 @@ public class WsAutonomousProgramShootFiveUnprotectedFeederStation extends WsAuto
             pg4.addStep(new WsAutonomousStepWaitForShooter());
             pg4.addStep(new WsAutonomousStepWaitForDriveMotionProfile());
         programSteps[15] = new WsAutonomousStepStopDriveUsingMotionProfile();
-        programSteps[16] = new WsAutonomousStepMultikick(1);
+        WsAutonomousSerialStepContainer waitAndShoot = new WsAutonomousSerialStepContainer();
+        programSteps[16] = waitAndShoot;
+            waitAndShoot.addStep(new WsAutonomousStepDelay(1000));
+            waitAndShoot.addStep(new WsAutonomousStepMultikick(1));
         programSteps[17] = new WsAutonomousStepDelay(200);
         programSteps[18] = new WsAutonomousStepMultikick(1);
         programSteps[19] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);

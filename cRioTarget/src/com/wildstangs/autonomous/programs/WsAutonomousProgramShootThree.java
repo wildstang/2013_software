@@ -38,17 +38,19 @@ public class WsAutonomousProgramShootThree extends WsAutonomousProgram {
     }
 
     public WsAutonomousProgramShootThree() {
-        super(6);
+        super(8);
     }
 
     public void defineSteps() {
         defineConfigValues();
         programSteps[0] = new WsAutonomousStepSetShooterPreset(startPreset.ENTER_WHEEL_SET_POINT, startPreset.EXIT_WHEEL_SET_POINT, startPreset.ANGLE);
         programSteps[1] = new WsAutonomousStepWaitForShooter();
-        programSteps[2] = new WsAutonomousStepMultikick(2);
-        programSteps[3] = new WsAutonomousStepDelay(ThirdFrisbeeDelay.getValue());
+        programSteps[2] = new WsAutonomousStepMultikick(1);
+        programSteps[3] = new WsAutonomousStepDelay(3000);
         programSteps[4] = new WsAutonomousStepMultikick(1);
-        programSteps[5] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
+        programSteps[5] = new WsAutonomousStepDelay(3000);
+        programSteps[6] = new WsAutonomousStepMultikick(1);
+        programSteps[7] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
         
     }
 
