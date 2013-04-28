@@ -5,8 +5,12 @@ import com.wildstangs.inputfacade.inputs.WsDigitalInput;
 import com.wildstangs.inputfacade.inputs.driverstation.WsDSAnalogInput;
 import com.wildstangs.inputfacade.inputs.driverstation.WsDSDigitalInput;
 import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystick;
+import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystick;
+import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.subjects.base.IObserver;
+import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.types.DataElement;
 import edu.wpi.first.wpilibj.networktables2.util.List;
 
@@ -112,6 +116,18 @@ public class WsInputFacade {
             }
         }
         return (IInput) null;
+    }
+    
+    final public void attachJoystickButton(IInputEnum button, IObserver observer ) {
+        if (button instanceof WsDriverJoystickButtonEnum){
+            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(button);
+            subject.attach(observer);
+        }else if (button instanceof WsManipulatorJoystickButtonEnum){
+            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(button);
+            subject.attach(observer);
+        }else {
+            //Function was not called with proper input
+        }
     }
     /**
      * Keys to represent Inputs

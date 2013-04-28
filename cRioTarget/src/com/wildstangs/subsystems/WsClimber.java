@@ -21,9 +21,10 @@ public class WsClimber extends WsSubsystem implements IObserver {
 
     public WsClimber(String name) {
         super(name);
-
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON2);
-        subject.attach(this);
+        WsInputFacade.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON2 , this); 
+        
+//        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON2);
+//        subject.attach(this);
     }
 
     public void init() {
