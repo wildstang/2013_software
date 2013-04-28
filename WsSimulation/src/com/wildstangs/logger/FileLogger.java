@@ -1,6 +1,5 @@
 package com.wildstangs.logger;
 
-import com.sun.jdi.connect.Connector;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

@@ -132,14 +132,14 @@ com.wildstangs.autonomous.parameters.ShootFive.SecondDrive=-50.0
 
 com.wildstangs.autonomous.parameters.ShootSeven.FirstDrive=27.0
 com.wildstangs.autonomous.parameters.ShootSeven.SecondDrive=109.0
-com.wildstangs.autonomous.parameters.ShootSeven.ThirdDrive=-55.0
-com.wildstangs.autonomous.parameters.ShootSeven.ThirdDriveHeading=0.20
+com.wildstangs.autonomous.parameters.ShootSeven.ThirdDrive=-52.0
+com.wildstangs.autonomous.parameters.ShootSeven.ThirdDriveHeading=0.22
 
 com.wildstangs.autonomous.parameters.ThirdFrisbeeDelay=700
 com.wildstangs.autonomous.parameters.LowerAccumulatorDelay=300
 com.wildstangs.autonomous.parameters.FunnelatorLoadDelay=3000
-com.wildstangs.autonomous.parameters.DriveOffset=1.0
-com.wildstangs.autonomous.parameters.UseLeftDriveForOffset=false
+com.wildstangs.autonomous.parameters.DriveOffset=0.985
+com.wildstangs.autonomous.parameters.UseLeftDriveForOffset=true
 
 com.wildstangs.autonomous.parameters.FirstEnterWheelSetPoint.insidePyramidBackCenter=2700   
 com.wildstangs.autonomous.parameters.FirstExitWheelSetPoint.insidePyramidBackCenter=3450

@@ -68,7 +68,7 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
     }
 
     public WsAutonomousProgramShootSevenActiveAccumulator() {
-        super(18);
+        super(17);
     }
 
     public void defineSteps() {
@@ -164,10 +164,9 @@ public class WsAutonomousProgramShootSevenActiveAccumulator extends WsAutonomous
         programSteps[12] = new WsAutonomousStepWaitForShooter(); 
         //Wait for frisbees to settle.
         programSteps[13] = new WsAutonomousStepDelay(200);
-        programSteps[14] = new WsAutonomousStepMultikick(4);
-        programSteps[15] = new WsAutonomousStepLowerAccumulator();
-        programSteps[16] = new WsAutonomousStepDelay(300);
-        programSteps[17] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
+        programSteps[14] = new WsAutonomousStepMultikick(5);
+        programSteps[15] = new WsAutonomousStepDelay(300);
+        programSteps[16] = new WsAutonomousStepSetShooterPreset(0, 0, DoubleSolenoid.Value.kReverse);
     }
 
     public String toString() {
