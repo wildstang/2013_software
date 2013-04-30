@@ -9,8 +9,12 @@ package edu.wpi.first.wpilibj.smartdashboard;
 
 import edu.wpi.first.wpilibj.NamedSendable;
 import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.networktables.NetworkTableKeyNotDefined;
+import edu.wpi.first.wpilibj.tables.ITable;
 import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
 
 /**
  * The {@link SmartDashboard} class is the bridge between robot programs and the SmartDashboard on the
@@ -24,12 +28,12 @@ import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 public class SmartDashboard {
     //TODO usage reporting
     /** The {@link NetworkTable} used by {@link SmartDashboard} */
-//    private static final NetworkTable table = NetworkTable.getTable("SmartDashboard");
+    private static final NetworkTable table = NetworkTable.getTable("SmartDashboard");
     /** 
      * A table linking tables in the SmartDashboard to the {@link SmartDashboardData} objects
      * they came from.
      */
-//    private static final Hashtable tablesToData = new Hashtable();
+    private static final Hashtable tablesToData = new Hashtable();
 
     /**
      * Maps the specified key to the specified value in this table.
@@ -40,10 +44,10 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if key is null
      */
     public static void putData(String key, Sendable data) {
-//        ITable dataTable = table.getSubTable(key);
-//        dataTable.putString("~TYPE~", data.getSmartDashboardType());
-//        data.initTable(dataTable);
-//        tablesToData.put(data, key);
+        ITable dataTable = table.getSubTable(key);
+        dataTable.putString("~TYPE~", data.getSmartDashboardType());
+        data.initTable(dataTable);
+        tablesToData.put(data, key);
     }
 
     
@@ -86,7 +90,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if key is null
      */
     public static void putBoolean(String key, boolean value) {
-//        table.putBoolean(key, value);
+        table.putBoolean(key, value);
     }
 
     /**
@@ -98,8 +102,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static boolean getBoolean(String key) throws TableKeyNotDefinedException{
-//        return table.getBoolean(key);
-        return false; 
+        return table.getBoolean(key);
     }
 
     /**
@@ -111,8 +114,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static boolean getBoolean(String key, boolean defaultValue) {
-//        return table.getBoolean(key, defaultValue);
-        return false; 
+        return table.getBoolean(key, defaultValue);
     }
 
     /**
@@ -124,7 +126,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if key is null
      */
     public static void putNumber(String key, double value) {
-//        table.putNumber(key, value);
+        table.putNumber(key, value);
     }
 
     /**
@@ -136,8 +138,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static double getNumber(String key) throws TableKeyNotDefinedException{
-//        return table.getNumber(key);
-        return 0.0; 
+        return table.getNumber(key);
     }
 
     /**
@@ -150,8 +151,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static double getNumber(String key, double defaultValue) {
-//        return table.getNumber(key, defaultValue);
-        return 0.0;
+        return table.getNumber(key, defaultValue);
     }
 
     /**
@@ -163,7 +163,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if key or value is null
      */
     public static void putString(String key, String value) {
-//        table.putString(key, value);
+        table.putString(key, value);
     }
 
     /**
@@ -175,8 +175,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static String getString(String key) throws TableKeyNotDefinedException{
-//        return table.getString(key);
-        return ""; 
+        return table.getString(key);
     }
 
         /**
@@ -189,8 +188,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static String getString(String key, String defaultValue) {
-//        return table.getString(key, defaultValue);
-        return "";
+        return table.getString(key, defaultValue);
     }
     
     
@@ -216,7 +214,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if key is null
      */
     public static void putInt(String key, int value) {
-//        table.putNumber(key, value);
+        table.putNumber(key, value);
     }
 
     /**
@@ -230,8 +228,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static int getInt(String key) throws TableKeyNotDefinedException{
-//        return (int) table.getNumber(key);
-        return 0;
+        return (int) table.getNumber(key);
     }
 
     /**
@@ -246,12 +243,11 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static int getInt(String key, int defaultValue) throws TableKeyNotDefinedException{
-//        try {
-//            return (int) table.getNumber(key);
-//        } catch (NoSuchElementException ex) {
-//            return defaultValue;
-//        }
-        return 0; 
+        try {
+            return (int) table.getNumber(key);
+        } catch (NoSuchElementException ex) {
+            return defaultValue;
+        }
     }
 
     /**
@@ -266,7 +262,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if key is null
      */
     public static void putDouble(String key, double value) {
-//        table.putNumber(key, value);
+        table.putNumber(key, value);
     }
 
     /**
@@ -280,8 +276,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static double getDouble(String key) throws TableKeyNotDefinedException{
-//        return table.getNumber(key);
-        return 0.0; 
+        return table.getNumber(key);
     }
 
     /**
@@ -296,8 +291,7 @@ public class SmartDashboard {
      * @throws IllegalArgumentException if the key is null
      */
     public static double getDouble(String key, double defaultValue) {
-//        return table.getNumber(key, defaultValue);
-        return 0.0; 
+        return table.getNumber(key, defaultValue);
     }
     
 }
