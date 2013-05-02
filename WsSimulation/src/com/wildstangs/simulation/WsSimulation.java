@@ -14,6 +14,7 @@ import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
 import com.wildstangs.outputfacade.outputs.WsVictor;
+import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.simulation.encoders.DriveBaseEncoders;
 import com.wildstangs.simulation.encoders.FlywheelEncoders;
 import com.wildstangs.simulation.funnelator.FunnelatorLimitSwitch;
@@ -38,6 +39,9 @@ public class WsSimulation {
     static boolean driveMotorGraphs = true;
     static boolean flywheelSpeedGraphs = false;
     static boolean driveThrottleGraph = true; 
+    
+    static WsProfilingTimer durationTimer = new WsProfilingTimer("Periodic method duration", 50);
+    static WsProfilingTimer periodTimer = new WsProfilingTimer("Periodic method period", 50);
     
     /**
      * @param args the command line arguments
@@ -131,7 +135,7 @@ public class WsSimulation {
         AccumulatorLimitSwitch aclimitSwitches = new AccumulatorLimitSwitch(); 
         FunnelatorLimitSwitch funnellimitSwitches = new FunnelatorLimitSwitch();
         GyroSimulation gyro = new GyroSimulation();
-//        periodTimer.startTimingSection();
+        periodTimer.startTimingSection();
         
 //        ContinuousAccelFilter accelFilter = new ContinuousAccelFilter(0, 0, 0);
 //        double distance_to_go = 60.5;
@@ -165,9 +169,9 @@ public class WsSimulation {
         }
         
         while (true) {
-//            periodTimer.endTimingSection();
-//            periodTimer.startTimingSection();
-//            durationTimer.startTimingSection();
+            periodTimer.endTimingSection();
+            periodTimer.startTimingSection();
+            durationTimer.startTimingSection();
 //            if (false == autonomousRun || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper"))){
             if (false == autonomousRun  || (false == WsAutonomousManager.getInstance().getRunningProgramName().equalsIgnoreCase("Sleeper"))){
                 
@@ -212,9 +216,11 @@ public class WsSimulation {
                 funnellimitSwitches.update();
             }
 
-//            durationTimer.endTimingSection();
+            double spentTime = durationTimer.endTimingSection();
+            int spentMS = (int)(spentTime *1000); 
+            int timeToSleep = ((20-spentMS)>0 ?(20-spentMS) :0 );
             try {
-                Thread.sleep(20);
+                Thread.sleep(timeToSleep);
             } catch (InterruptedException e) {
             }
 

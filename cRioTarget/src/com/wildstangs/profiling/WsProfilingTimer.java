@@ -2,6 +2,7 @@ package com.wildstangs.profiling;
 
 import com.wildstangs.logger.Logger;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WsProfilingTimer {
 
@@ -48,6 +49,7 @@ public class WsProfilingTimer {
             Logger.getLogger().debug(name, "Profile", reportText);
             reset();
         }
+        SmartDashboard.putNumber(name, spentTime);
         return spentTime;
     }
 
