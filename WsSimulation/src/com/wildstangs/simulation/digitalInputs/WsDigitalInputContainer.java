@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.wildstangs.simulation;
+package com.wildstangs.simulation.digitalInputs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

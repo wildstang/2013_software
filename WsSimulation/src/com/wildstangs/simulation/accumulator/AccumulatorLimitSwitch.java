@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.wildstangs.simulation;
+package com.wildstangs.simulation.accumulator;
 
+import com.wildstangs.simulation.digitalInputs.WsDigitalInputContainer;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 
 /**

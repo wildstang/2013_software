@@ -4,7 +4,7 @@
  */
 package com.wildstangs.simulation.hopper;
 
-import com.wildstangs.simulation.WsDigitalInputContainer;
+import com.wildstangs.simulation.digitalInputs.WsDigitalInputContainer;
 import com.wildstangs.subsystems.WsHopper;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;

@@ -5,7 +5,7 @@
 package com.wildstangs.simulation.funnelator;
 
 import com.wildstangs.outputfacade.base.WsOutputFacade;
-import com.wildstangs.simulation.WsDigitalInputContainer;
+import com.wildstangs.simulation.digitalInputs.WsDigitalInputContainer;
 import com.wildstangs.subsystems.WsShooter;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;

@@ -1,4 +1,4 @@
-package com.wildstangs.simulation;
+package com.wildstangs.simulation.digitalInputs;
 
 import com.wildstangs.inputfacade.base.IInputEnum;
 
