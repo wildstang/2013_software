@@ -1,4 +1,4 @@
-package com.wildstangs.simulation.encoders;
+package com.wildstangs.graph;
 
 import edu.wpi.first.wpilibj.*;
 import java.awt.Dimension;

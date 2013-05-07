@@ -1,25 +1,3 @@
-/* ****************************************************************************
- *
- * Module Name     : Joystick.java
- *
- * Copyright 2010, Incredible Technologies, Inc.  All Rights Reserved
- *
- * Author          : ChadS
- *
- * Creation Date   : Nov 5, 2012
- *
- * Status          : Not Submitted
- *
- * Submission ID   : SID.xx.yy
- *
- * RESERVED        :
- *
- * Purpose         :
- *
- * Edit History    : YOUR_INITIALS Date: 0-00-0000, SID.xx.yy, DESCRIPTION_OF_WHAT_CHANGED
- *
- * ****************************************************************************/
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.

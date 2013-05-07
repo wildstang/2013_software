@@ -1,5 +1,6 @@
 package com.wildstangs.simulation.gyro;
 
+import com.wildstangs.graph.DoubleGraph;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
 import com.wildstangs.simulation.encoders.*;

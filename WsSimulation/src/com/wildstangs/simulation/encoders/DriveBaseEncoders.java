@@ -1,6 +1,7 @@
 
 package com.wildstangs.simulation.encoders;
 
+import com.wildstangs.graph.DoubleGraph;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputfacade.base.IOutputEnum;
 import com.wildstangs.outputfacade.base.WsOutputFacade;
