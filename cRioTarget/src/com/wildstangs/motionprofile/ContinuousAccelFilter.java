@@ -3,6 +3,39 @@
  * and open the template in the editor.
  */
 
+/*
+ * This is a port to java of a c++ Filter used by Team 254 in 2011 under the BSD -2 license
+ * https://github.com/Team254/FRC-2011
+ */
+
+/*
+Copyright (c) 2011, Team 254 
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+The views and conclusions contained in the software and documentation are those
+of the authors and should not be interpreted as representing official policies, 
+either expressed or implied, of the FreeBSD Project. */
+
 package com.wildstangs.motionprofile;
 
 
@@ -10,12 +43,6 @@ public class ContinuousAccelFilter {
     protected double currPos; 
     protected double currVel; 
     protected double currAcc; 
-    //Usage: 
-    //m_straightFilter = new ContinuousAccelFilter();
-    //m_straightFilter->CalcSystem(m_robot->straightDistanceGoal - m_currentX, m_currentV, m_robot->straightDistanceGoalVelocity, m_robot->straightDistanceMaxAcceleration, m_robot->straightDistanceMaxVelocity, m_robot->dt);
-    //	m_currentA=m_straightFilter->GetCurrAcc();
-    // 	m_currentV=m_straightFilter->GetCurrVel();
-    // 	m_currentX=m_straightFilter->GetCurrPos();
 
     public double getCurrPos() {
         return currPos;
@@ -45,7 +72,6 @@ public class ContinuousAccelFilter {
     private double dt2,a,const_time,dtf,af;
     public void calculateSystem(double distance_to_target, double v, double goal_v, double max_a, double max_v, double dt)
     {
-        //Reset values before recalculating
         dt2 = 0 ; 
         a = 0;
         const_time = 0 ;
@@ -76,13 +102,11 @@ public class ContinuousAccelFilter {
     
     public void maxAccelTime(double distance_left, double curr_vel, double goal_vel, double max_a, double max_v)
     {
-        //TODO: clean up unnecessary return statements
         double local_const_time=0;
         double start_a=0;
         if(distance_left > 0)
             start_a=max_a;
         else if(distance_left==0) {
-            //TODO: Deal with velocity not right.
             dt2=0;
             a=0;
             const_time=0;
@@ -102,17 +126,14 @@ public class ContinuousAccelFilter {
         else
             max_accel_velocity=-Math.sqrt(-max_accel_velocity);
 
-        //Since we know what we'd have to do if we kept after it to decelerate, we know the sign of the acceleration.
         double final_a;
         if(max_accel_velocity>goal_vel)
             final_a=-max_a;
         else
             final_a=max_a;
 
-        //We now know the top velocity we can get to
         double top_v = Math.sqrt((distance_left + (curr_vel * curr_vel) / (2.0 * start_a) + (goal_vel * goal_vel) / (2.0 * final_a)) / (-1.0 / (2.0 * final_a) + 1.0 / (2.0 * start_a)));
 
-        //If it is too fast, we now know how long we get to accelerate for and how long to go at constant velocity
         double accel_time=0;
         if(top_v > max_v) {
             accel_time = (max_v - curr_vel) / max_a;
