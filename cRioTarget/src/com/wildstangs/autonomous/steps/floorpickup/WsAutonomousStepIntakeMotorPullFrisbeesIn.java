@@ -10,7 +10,7 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
 
 /**
  *
- * @author Liam Fruzyna
+ * @author Liam
  */
 public class WsAutonomousStepIntakeMotorPullFrisbeesIn extends WsAutonomousStep {
 

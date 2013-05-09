@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
- * @author Liam Fruzyna
+ * @author Liam
  */
 public class WsHopper extends WsSubsystem implements IObserver {
 

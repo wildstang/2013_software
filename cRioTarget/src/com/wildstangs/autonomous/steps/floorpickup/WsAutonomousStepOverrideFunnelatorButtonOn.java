@@ -8,7 +8,7 @@ import com.wildstangs.subjects.base.Subject;
 
 /**
  *
- * @author Liam Fruzyna
+ * @author Liam
  */
 public class WsAutonomousStepOverrideFunnelatorButtonOn extends WsAutonomousStep {
 

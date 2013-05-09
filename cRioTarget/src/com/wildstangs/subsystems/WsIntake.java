@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
- * @author Liam Fruzyna
+ * @author Liam
  */
 public class WsIntake extends WsSubsystem implements IObserver {
 

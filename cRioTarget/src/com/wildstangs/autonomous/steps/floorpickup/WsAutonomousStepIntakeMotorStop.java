@@ -11,7 +11,7 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
 
 /**
  *
- * @author Liam Fruzyna
+ * @author Liam
  */
 public class WsAutonomousStepIntakeMotorStop extends WsAutonomousStep {
 

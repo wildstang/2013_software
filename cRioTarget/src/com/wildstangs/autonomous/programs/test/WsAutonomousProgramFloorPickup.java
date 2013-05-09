@@ -11,7 +11,7 @@ import com.wildstangs.autonomous.steps.hopper.WsAutonomousStepLowerHopper;
 
 /**
  *
- * @author Liam Fruzyna
+ * @author Liam
  */
 public class WsAutonomousProgramFloorPickup extends WsAutonomousProgram {
 
