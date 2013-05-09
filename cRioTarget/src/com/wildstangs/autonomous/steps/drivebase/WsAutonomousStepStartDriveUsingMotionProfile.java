@@ -10,7 +10,7 @@ import com.wildstangs.subsystems.base.WsSubsystemContainer;
 
 /**
  *
- * @author Nathan Walters
+ * @author Nathan
  */
 public class WsAutonomousStepStartDriveUsingMotionProfile extends WsAutonomousStep {
 

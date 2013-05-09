@@ -12,7 +12,7 @@ import com.wildstangs.config.DoubleConfigFileParameter;
 
 /**
  *
- * @author Nathan Walters
+ * @author Nathan
  */
 /*
  * To change this template, choose Tools | Templates
