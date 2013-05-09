@@ -7,15 +7,15 @@ package com.wildstangs.simulation;
 import com.wildstangs.simulation.accumulator.AccumulatorLimitSwitch;
 import com.wildstangs.simulation.solenoids.WsSolenoidContainer;
 import com.wildstangs.autonomous.WsAutonomousManager;
-import com.wildstangs.configfacade.WsConfigFacade;
-import com.wildstangs.configfacade.WsConfigFacadeException;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
+import com.wildstangs.configmanager.WsConfigManager;
+import com.wildstangs.configmanager.WsConfigManagerException;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.logger.*;
 import com.wildstangs.logviewer.LogViewer;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
-import com.wildstangs.outputfacade.outputs.WsDriveSpeed;
-import com.wildstangs.outputfacade.outputs.WsVictor;
+import com.wildstangs.outputmanager.base.WsOutputManager;
+import com.wildstangs.outputmanager.outputs.WsDriveSpeed;
+import com.wildstangs.outputmanager.outputs.WsVictor;
 import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.simulation.encoders.DriveBaseEncoders;
 import com.wildstangs.simulation.encoders.FlywheelEncoders;
@@ -57,18 +57,18 @@ public class WsSimulation {
         FileLogger.getFileLogger().startLogger();
 
         try {
-            WsConfigFacade.getInstance().setFileName("/Config/ws_config.txt");
-            WsConfigFacade.getInstance().readConfig();
-            //System.out.println(WsConfigFacade.getInstance().getConfigParamByName("com.wildstangs.WsInputFacade.WsDriverJoystick.trim"));
-        } catch (WsConfigFacadeException wscfe) {
+            WsConfigManager.getInstance().setFileName("/Config/ws_config.txt");
+            WsConfigManager.getInstance().readConfig();
+            //System.out.println(WsConfigManager.getInstance().getConfigParamByName("com.wildstangs.WsInputManager.WsDriverJoystick.trim"));
+        } catch (WsConfigManagerException wscfe) {
             System.out.println(wscfe.toString());
         }
-//        WsConfigFacade.getInstance().dumpConfigData();
+//        WsConfigManager.getInstance().dumpConfigData();
 
         Logger logger = Logger.getLogger();
 
-        //System.out.println(WsConfigFacade.getInstance().getConfigItemName("com.wildstangs.WsInputFacade.WsDriverJoystick.trim"));
-        //System.out.println(WsConfigFacade.getInstance().dumpConfigData());
+        //System.out.println(WsConfigManager.getInstance().getConfigItemName("com.wildstangs.WsInputManager.WsDriverJoystick.trim"));
+        //System.out.println(WsConfigManager.getInstance().dumpConfigData());
         logger.always(c, "sim_startup", "Simulation starting.");
         FileLogger.getFileLogger().logData("Sim Started"); 
 
@@ -80,8 +80,8 @@ public class WsSimulation {
         //logger.debug(c, "debug_test", "debug");
         //logger.warning(c, "warning_test", "warning");
         //logger.always(c, "always_test", "always");
-        WsInputFacade.getInstance();
-        WsOutputFacade.getInstance();
+        WsInputManager.getInstance();
+        WsOutputManager.getInstance();
         WsSubsystemContainer.getInstance();
         
         DoubleSubjectGraph leftDriveSpeed = new DoubleSubjectGraph() ; 
@@ -94,35 +94,35 @@ public class WsSimulation {
         
         Subject subject;
         if (driveMotorGraphs){
-            subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED)).getSubject(null);
+            subject = ((WsDriveSpeed) WsOutputManager.getInstance().getOutput(WsOutputManager.LEFT_DRIVE_SPEED)).getSubject(null);
             leftDriveSpeed = new DoubleSubjectGraph("Left Drive Speed", subject);
             
-            subject = ((WsDriveSpeed) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED)).getSubject(null);
+            subject = ((WsDriveSpeed) WsOutputManager.getInstance().getOutput(WsOutputManager.RIGHT_DRIVE_SPEED)).getSubject(null);
             rightDriveSpeed = new DoubleSubjectGraph("Right Drive Speed", subject);
             
         }
 
         if(intakeMotorGraphs){
-            subject = ((WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)).getSubject(null);
+            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_VICTOR)).getSubject(null);
             accumulatorSpeed = new DoubleSubjectGraph("Accumulator Speed", subject);
 
-            subject = ((WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)).getSubject(null);
+            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.FUNNELATOR_ROLLER)).getSubject(null);
             funnelatorSpeed = new DoubleSubjectGraph("Funnelator Speed", subject);
             
         }
         
         if (driveThrottleGraph){
-            subject = ((WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK)).getSubject(WsDriverJoystickEnum.THROTTLE));
+            subject = ((WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK)).getSubject(WsDriverJoystickEnum.THROTTLE));
             driverThrottle = new DoubleSubjectGraph("Driver Throttle", subject);
         }
 
 
         if (flywheelSpeedGraphs){
             
-            subject = ((WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER)).getSubject(null);
+            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_ENTER)).getSubject(null);
             enterSpeed = new DoubleSubjectGraph("Enter Speed", subject);
 
-            subject = ((WsVictor) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_EXIT)).getSubject(null);
+            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_EXIT)).getSubject(null);
             exitSpeed = new DoubleSubjectGraph("Exit Speed", subject);
         }
 
@@ -198,18 +198,18 @@ public class WsSimulation {
 
                 //Update the encoders
                 dbEncoders.update();
-                WsInputFacade.getInstance().updateSensorData();
+                WsInputManager.getInstance().updateSensorData();
                 if(autonomousRun)
                 {
-                    WsInputFacade.getInstance().updateOiDataAutonomous();
+                    WsInputManager.getInstance().updateOiDataAutonomous();
                     WsAutonomousManager.getInstance().update();
                 }
                 else
                 {
-                    WsInputFacade.getInstance().updateOiData();
+                    WsInputManager.getInstance().updateOiData();
                 }
                 WsSubsystemContainer.getInstance().update();
-                WsOutputFacade.getInstance().update();
+                WsOutputManager.getInstance().update();
                 WsSolenoidContainer.getInstance().update();
 
                 flywheelEncoders.update(); 

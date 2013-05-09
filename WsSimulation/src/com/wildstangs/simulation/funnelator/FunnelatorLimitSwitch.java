@@ -4,7 +4,7 @@
  */
 package com.wildstangs.simulation.funnelator;
 
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.simulation.digitalInputs.WsDigitalInputContainer;
 import com.wildstangs.subsystems.WsShooter;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
@@ -23,7 +23,7 @@ public class FunnelatorLimitSwitch {
     public void update(){
         
         //Use the lift value in case you need to test a jammed true funnelator switch
-//        Integer angle = (Integer)WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_ANGLE).get(null); 
+//        Integer angle = (Integer)WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_ANGLE).get(null); 
 //        
 //        if (angle.intValue() == 1){
 //            //Set the limit switches based on that value

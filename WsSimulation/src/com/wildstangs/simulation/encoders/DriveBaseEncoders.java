@@ -3,8 +3,8 @@ package com.wildstangs.simulation.encoders;
 
 import com.wildstangs.graph.DoubleGraph;
 import com.wildstangs.logger.Logger;
-import com.wildstangs.outputfacade.base.IOutputEnum;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.outputmanager.base.IOutputEnum;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.Timer;
@@ -69,8 +69,8 @@ public class DriveBaseEncoders {
         //Create graphs for 
     }
     public void update (){ 
-        desired_left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
-        desired_right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
+        desired_left_drive_speed = ((Double) WsOutputManager.getInstance().getOutput(WsOutputManager.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
+        desired_right_drive_speed = ((Double) WsOutputManager.getInstance().getOutput(WsOutputManager.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
         double percentagePower = desired_left_drive_speed;
         //Convert victor -1 to 1 to -2.04 inches per 20 ms to 2.04
         desired_left_drive_speed *= MAX_SPEED_INCHES;

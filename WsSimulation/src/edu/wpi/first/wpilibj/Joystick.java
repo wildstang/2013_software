@@ -5,9 +5,9 @@
 
 package edu.wpi.first.wpilibj;
 
-import com.wildstangs.inputfacade.inputs.joystick.IHardwareJoystick;
+import com.wildstangs.inputmanager.inputs.joystick.IHardwareJoystick;
 import com.wildstangs.joystick.OnscreenJoystick;
-import com.wildstangs.inputfacade.inputs.joystick.IJoystick;
+import com.wildstangs.inputmanager.inputs.joystick.IJoystick;
 import com.wildstangs.joystick.WsHardwareJoystick;
 
 

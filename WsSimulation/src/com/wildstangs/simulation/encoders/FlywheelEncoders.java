@@ -1,7 +1,7 @@
 package com.wildstangs.simulation.encoders;
 
-import com.wildstangs.outputfacade.base.IOutputEnum;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.outputmanager.base.IOutputEnum;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subsystems.WsShooter;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.Counter;
@@ -23,8 +23,8 @@ public class FlywheelEncoders {
         exit_wheel_speed = 0.0;
     }
     public void update (){ 
-        enter_wheel_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_ENTER).get((IOutputEnum) null));
-        exit_wheel_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.SHOOTER_VICTOR_EXIT).get((IOutputEnum) null));
+        enter_wheel_speed = ((Double) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_ENTER).get((IOutputEnum) null));
+        exit_wheel_speed = ((Double) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_EXIT).get((IOutputEnum) null));
 
         
         

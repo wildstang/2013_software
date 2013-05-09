@@ -8,7 +8,7 @@ import com.codeminders.hidapi.ClassPathLibraryLoader;
 import com.codeminders.hidapi.HIDDevice;
 import com.codeminders.hidapi.HIDDeviceInfo;
 import com.codeminders.hidapi.HIDManager;
-import com.wildstangs.inputfacade.inputs.joystick.IHardwareJoystick;
+import com.wildstangs.inputmanager.inputs.joystick.IHardwareJoystick;
 import edu.wpi.first.wpilibj.Joystick;
 import java.util.Arrays;
 

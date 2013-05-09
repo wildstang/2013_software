@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.wildstangs.configfacade;
+package com.wildstangs.configmanager;
 
 
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.configmanager.WsConfigManagerException;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,24 +23,24 @@ import java.util.logging.Logger;
  *
  * @author Nathan
  */
-public class WsConfigFacade {
-    private static WsConfigFacade instance = null;
+public class WsConfigManager {
+    private static WsConfigManager instance = null;
     private static String configFileName = "/ws_config.txt";
     private static Hashtable config = new Hashtable();
 
     /**
-     * Gets the instance of the WsConfigFacade Singleton.
+     * Gets the instance of the WsConfigManager Singleton.
      *
-     * @return The instance of the WsConfigFacade.
+     * @return The instance of the WsConfigManager.
      */
-    public static WsConfigFacade getInstance() {
+    public static WsConfigManager getInstance() {
         if (instance == null) {
-            instance = new WsConfigFacade();
+            instance = new WsConfigManager();
         }
         return instance;
     }
 
-    protected WsConfigFacade() {}
+    protected WsConfigManager() {}
 
     /**
      * Sets the filename to parse. Overrides the default /ws_config.txt. The
@@ -48,7 +49,7 @@ public class WsConfigFacade {
      * @param filename The new filename to use for reading.
      * @throws WsConfigFacadeException
      */
-    public void setFileName(String filename) throws WsConfigFacadeException {
+    public void setFileName(String filename) throws WsConfigManagerException {
         String path = System.getProperty("user.dir"); 
         path += filename; 
         System.out.println("Path " + path);
@@ -56,16 +57,16 @@ public class WsConfigFacade {
         try {
             testFile.createNewFile();
         } catch (IOException ex) {
-            Logger.getLogger(WsConfigFacade.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WsConfigManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (testFile.exists()) {
             if (testFile.canRead()) {
                 configFileName = path;
             } else {
-                throw new WsConfigFacadeException("File " + path + " is not readable.");
+                throw new WsConfigManagerException("File " + path + " is not readable.");
             }
         } else {
-            throw new WsConfigFacadeException("File " + path + " does not exist.");
+            throw new WsConfigManagerException("File " + path + " does not exist.");
         }
     }
 
@@ -75,11 +76,11 @@ public class WsConfigFacade {
      * Comments can be by themselves on a line or at the end of the line.
      *
      * The config file should be on the format key=value Example:
-     * com.wildstangs.WsInputFacade.WsDriverJoystick.trim=0.1
+     * com.wildstangs.WsInputManager.WsDriverJoystick.trim=0.1
      *
      * @throws WsConfigFacadeException
      */
-    public void readConfig() throws WsConfigFacadeException {
+    public void readConfig() throws WsConfigManagerException {
         File configFile = new File(configFileName);
         BufferedReader br = null;
         String line;
@@ -113,29 +114,29 @@ public class WsConfigFacade {
                                 value = st.nextToken();
                                 config.put(key, value);
                             } else {
-                                throw new WsConfigFacadeException("Bad line in config file " + line);
+                                throw new WsConfigManagerException("Bad line in config file " + line);
                             }
                         }
                     }
 
                     }  catch (IOException ioe) {
-                    throw new WsConfigFacadeException(ioe.toString());
+                    throw new WsConfigManagerException(ioe.toString());
                 }
             }
         } else {
-            throw new WsConfigFacadeException("File " + configFileName + " does not exist");
+            throw new WsConfigManagerException("File " + configFileName + " does not exist");
         }
         if (br != null) {
             try {
                 br.close();
             } catch (IOException ioe) {
-                throw new WsConfigFacadeException("Error closing file.");
+                throw new WsConfigManagerException("Error closing file.");
             }
         }
         
         //Update all the facades
-        WsInputFacade.getInstance().notifyConfigChange();
-        WsOutputFacade.getInstance().notifyConfigChange();
+        WsInputManager.getInstance().notifyConfigChange();
+        WsOutputManager.getInstance().notifyConfigChange();
         WsSubsystemContainer.getInstance().notifyConfigChange();
         
     }
@@ -147,13 +148,13 @@ public class WsConfigFacade {
      * @return An Object that contains the value.
      * @throws WsConfigFacadeException if the key cannot be found.
      */
-    public String getConfigParamByName(String name) throws WsConfigFacadeException {
+    public String getConfigParamByName(String name) throws WsConfigManagerException {
         String o = null;  
         if (config.get(name) != null){ 
             o = (config.get(name)).toString();
         }
         if (o == null) {
-            throw new WsConfigFacadeException("Config Param " + name + " not found");
+            throw new WsConfigManagerException("Config Param " + name + " not found");
         }
         return o;
     }
@@ -169,7 +170,7 @@ public class WsConfigFacade {
     /**
      * Config Item name parser
      *
-     * Example: com.wildstangs.WsInputFacade.WsDriverJoystick.trim will return
+     * Example: com.wildstangs.WsInputManager.WsDriverJoystick.trim will return
      * trim.
      *
      * @returns The config Item name or null if the string is unparsable

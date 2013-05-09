@@ -1,8 +1,8 @@
 package com.wildstangs.simulation.gyro;
 
 import com.wildstangs.graph.DoubleGraph;
-import com.wildstangs.outputfacade.base.IOutputEnum;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.outputmanager.base.IOutputEnum;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.simulation.encoders.*;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
@@ -22,8 +22,8 @@ public class GyroSimulation {
     }
     
     public void update() {
-        left_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
-        right_drive_speed = ((Double) WsOutputFacade.getInstance().getOutput(WsOutputFacade.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
+        left_drive_speed = ((Double) WsOutputManager.getInstance().getOutput(WsOutputManager.LEFT_DRIVE_SPEED).get((IOutputEnum) null));
+        right_drive_speed = ((Double) WsOutputManager.getInstance().getOutput(WsOutputManager.RIGHT_DRIVE_SPEED).get((IOutputEnum) null));
         
         Gyro gyro = ((WsDriveBase) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE))).getGyro();
         double angle = gyro.getAngle();
