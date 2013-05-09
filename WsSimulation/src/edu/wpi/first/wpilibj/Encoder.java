@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 /**
  *
- * @author Nathan Walters
+ * @author Nathan
  */
 public class Encoder {
     int count;
