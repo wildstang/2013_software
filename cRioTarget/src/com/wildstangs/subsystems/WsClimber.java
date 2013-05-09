@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
- * @author Joshua Gustafson
+ * @author Joshua
  */
 public class WsClimber extends WsSubsystem implements IObserver {
 

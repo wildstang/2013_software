@@ -11,7 +11,7 @@ import com.wildstangs.subjects.base.ISubjectEnum;
 
 /**
  *
- * @author Joshua Gustafson
+ * @author Joshua
  */
 public class WsAutonomousStepWaitForAccumulatorUp extends WsAutonomousStep {
 
