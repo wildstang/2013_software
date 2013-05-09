@@ -1,7 +1,7 @@
 package com.wildstangs.autonomous.steps.intake;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
-import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -23,7 +23,7 @@ public class WsAutonomousStepWaitForDiscsLatchedThroughFunnelator extends WsAuto
     }
 
     public void initialize() {
-        Subject subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
         numLatchedDiscs = ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE)).getNumLatchedDiscs();
         if (numLatchedDiscs == 0) {

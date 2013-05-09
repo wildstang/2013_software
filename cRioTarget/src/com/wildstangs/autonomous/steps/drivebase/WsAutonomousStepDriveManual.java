@@ -5,8 +5,8 @@
 package com.wildstangs.autonomous.steps.drivebase;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickEnum;
 
 /**
  *
@@ -25,10 +25,10 @@ public class WsAutonomousStepDriveManual extends WsAutonomousStep {
     public void initialize() {
         finished = true;
         if (throttle != KEEP_PREVIOUS_STATE) {
-            WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(Math.max(Math.min(throttle, 1.0), -1.0)));
+            WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(Math.max(Math.min(throttle, 1.0), -1.0)));
         }
         if (heading != KEEP_PREVIOUS_STATE) {
-            WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(Math.max(Math.min(heading, 1.0), -1.0)));
+            WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(Math.max(Math.min(heading, 1.0), -1.0)));
         }
     }
 

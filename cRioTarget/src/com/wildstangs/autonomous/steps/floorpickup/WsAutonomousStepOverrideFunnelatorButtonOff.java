@@ -1,8 +1,8 @@
 package com.wildstangs.autonomous.steps.floorpickup;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.Subject;
 
@@ -13,7 +13,7 @@ import com.wildstangs.subjects.base.Subject;
 public class WsAutonomousStepOverrideFunnelatorButtonOff extends WsAutonomousStep {
 
     public void initialize() {
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
         BooleanSubject backButton = (BooleanSubject) subject;
 
         backButton.setValue(false);

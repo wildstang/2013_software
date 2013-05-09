@@ -1,12 +1,12 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
-import com.wildstangs.inputfacade.base.IInputEnum;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.WsDigitalInput;
-import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickButtonEnum;
-import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.inputmanager.base.IInputEnum;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.WsDigitalInput;
+import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -31,16 +31,16 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
 
     public WsFloorPickup(String name) {
         super(name);
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
         maxVictorSpeed = maxSpeed.getValue();
@@ -53,9 +53,9 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         motorBack = false;
         accumulatorUpLimitSwitch = true;
 
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SECONDARY_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR).set(null, Double.valueOf(0.0));
+        WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
+        WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_SECONDARY_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
+        WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_VICTOR).set(null, Double.valueOf(0.0));
     }
 
     public void notifyConfigChange() {
@@ -63,11 +63,11 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     }
 
     public void update() {
-        WsDigitalInput upSwitch = (WsDigitalInput) (WsInputFacade.getInstance().getSensorInput(WsInputFacade.ACCUMULATOR_UP_LIMIT_SWITCH));
+        WsDigitalInput upSwitch = (WsDigitalInput) (WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH));
         boolean switchState = ((Boolean) (upSwitch.get((IInputEnum) null))).booleanValue();
         SmartDashboard.putBoolean("Accumulator Up Limit Switch", switchState);
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_SECONDARY_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
+        WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
+        WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_SECONDARY_SOLENOID).set(null, Boolean.valueOf(secondarySolenoidState));
 
         if (motorForward == true && solenoidState == false && (false == ((WsHopper) WsSubsystemContainer.getInstance()
                 .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isDownLimitSwitchTriggered())) {
@@ -75,16 +75,16 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
         }
 
         if (motorForward) {
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)
+            WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_VICTOR)
                     .set(null, Double.valueOf(maxVictorSpeed));
             SmartDashboard.putNumber("Accumulator motor", maxVictorSpeed);
         } else if (motorBack) {
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)
+            WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_VICTOR)
                     .set(null, Double.valueOf(-maxVictorSpeed));
             SmartDashboard.putNumber("Accumulator motor", -maxVictorSpeed);
 
         } else {
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.ACCUMULATOR_VICTOR)
+            WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_VICTOR)
                     .set(null, Double.valueOf(0.0));
             SmartDashboard.putNumber("Accumulator motor", 0.0);
 
@@ -129,7 +129,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
             } else {
                 motorBack = false;
             }
-        } else if (subjectThatCaused.equals(WsInputFacade.getInstance().getSensorInput(WsInputFacade.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null))) {
+        } else if (subjectThatCaused.equals(WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null))) {
             accumulatorUpLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
         }
     }

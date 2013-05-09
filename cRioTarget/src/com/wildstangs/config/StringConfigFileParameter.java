@@ -4,7 +4,7 @@
  */
 package com.wildstangs.config;
 
-import com.wildstangs.configfacade.WsConfigFacade;
+import com.wildstangs.configmanager.WsConfigManager;
 import com.wildstangs.logger.Logger;
 
 /**
@@ -36,7 +36,7 @@ public class StringConfigFileParameter extends ConfigFileParameter {
     public String getValue() {
         String fullName = getFullParamName();
         try {
-            return WsConfigFacade.getInstance().getConfigParamByName(fullName);
+            return WsConfigManager.getInstance().getConfigParamByName(fullName);
         } catch (Throwable e) {
             Logger.getLogger().error(this.getClass().getName(), "getValue", fullName + " parameter not found. Using default value.");
             return defaultValue;

@@ -4,8 +4,8 @@
  */
 package com.wildstangs.pid.outputs;
 
-import com.wildstangs.outputfacade.base.IOutputEnum;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.outputmanager.base.IOutputEnum;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.pid.outputs.base.IPidOutput;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;

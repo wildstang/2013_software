@@ -4,7 +4,7 @@
  */
 package com.wildstangs.config;
 
-import com.wildstangs.configfacade.WsConfigFacade;
+import com.wildstangs.configmanager.WsConfigManager;
 import com.wildstangs.logger.Logger;
 
 /**
@@ -37,7 +37,7 @@ public class BooleanConfigFileParameter extends ConfigFileParameter {
         String fullName = getFullParamName();
         String val;
         try {
-            val = WsConfigFacade.getInstance().getConfigParamByName(fullName);
+            val = WsConfigManager.getInstance().getConfigParamByName(fullName);
             if (val.equals("true") || val.equals("True") || val.equals("TRUE")) {
                 return true;
             } else {

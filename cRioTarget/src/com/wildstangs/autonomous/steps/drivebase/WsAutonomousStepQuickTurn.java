@@ -5,8 +5,8 @@
 package com.wildstangs.autonomous.steps.drivebase;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.driver.WsDriverJoystickEnum;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickEnum;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 
@@ -29,8 +29,8 @@ public class WsAutonomousStepQuickTurn extends WsAutonomousStep {
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).setThrottleValue(0);
         ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).overrideHeadingValue(value < 0 ? 0.6 : -0.6);
 
-        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(0.0));
-        WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(value < 0 ? 0.6 : -0.6));
+        WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(0.0));
+        WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(value < 0 ? 0.6 : -0.6));
 
     }
 
@@ -44,13 +44,13 @@ public class WsAutonomousStepQuickTurn extends WsAutonomousStep {
         if (value < 0) {
             if (angle > gyroAngle) {
                 ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).overrideHeadingValue(0.0);
-                WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
+                WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
                 shouldFinish = true;
             }
         } else {
             if (angle < gyroAngle) {
                 ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).overrideHeadingValue(0.0);
-                WsInputFacade.getInstance().getOiInput(WsInputFacade.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
+                WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
                 shouldFinish = true;
             }
         }

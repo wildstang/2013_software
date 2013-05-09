@@ -2,10 +2,10 @@ package com.wildstangs.subsystems;
 
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
-import com.wildstangs.outputfacade.base.IOutputEnum;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.outputmanager.base.IOutputEnum;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -44,26 +44,26 @@ public class WsIntake extends WsSubsystem implements IObserver {
         super(name);
 
         //Finger down override button
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
         subject.attach(this);
         
         //Finger up override button
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON9);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON9);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.LEFT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.LEFT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.RIGHT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.RIGHT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
         switchDelayTime = switchDelay.getValue();
@@ -109,7 +109,7 @@ public class WsIntake extends WsSubsystem implements IObserver {
         }
 
         //Set the finger state in the output facade
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.FRISBIE_CONTROL).set((IOutputEnum) null, new Boolean(fingerValveState));
+        WsOutputManager.getInstance().getOutput(WsOutputManager.FRISBIE_CONTROL).set((IOutputEnum) null, new Boolean(fingerValveState));
 
         WsFloorPickup pickup = ((WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP)));
         boolean up = pickup.isUp();
@@ -120,16 +120,16 @@ public class WsIntake extends WsSubsystem implements IObserver {
 
         if (motorForward && ((WsHopper) WsSubsystemContainer.getInstance()
                 .getSubsystem(WsSubsystemContainer.WS_HOPPER)).isDownLimitSwitchTriggered()) {
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
+            WsOutputManager.getInstance().getOutput(WsOutputManager.FUNNELATOR_ROLLER)
                     .set(null, Double.valueOf(1.0));
             SmartDashboard.putNumber("Funnelator roller", 1.0);
         } else if (motorBack) {
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
+            WsOutputManager.getInstance().getOutput(WsOutputManager.FUNNELATOR_ROLLER)
                     .set(null, Double.valueOf(-1.0));
             SmartDashboard.putNumber("Funnelator roller", -1.0);
 
         } else {
-            WsOutputFacade.getInstance().getOutput(WsOutputFacade.FUNNELATOR_ROLLER)
+            WsOutputManager.getInstance().getOutput(WsOutputManager.FUNNELATOR_ROLLER)
                     .set(null, Double.valueOf(0.0));
             SmartDashboard.putNumber("Funnelator roller", 0.0);
         }
@@ -204,16 +204,16 @@ public class WsIntake extends WsSubsystem implements IObserver {
             } else {
                 motorBack = false;
             }
-        } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
-                getSensorInput(WsInputFacade.LEFT_ACCUMULATOR_LIMIT_SWITCH).
+        } else if (subjectThatCaused.equals(WsInputManager.getInstance().
+                getSensorInput(WsInputManager.LEFT_ACCUMULATOR_LIMIT_SWITCH).
                 getSubject((ISubjectEnum) null))) {
             leftAccumulatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
-        } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
-                getSensorInput(WsInputFacade.RIGHT_ACCUMULATOR_LIMIT_SWITCH).
+        } else if (subjectThatCaused.equals(WsInputManager.getInstance().
+                getSensorInput(WsInputManager.RIGHT_ACCUMULATOR_LIMIT_SWITCH).
                 getSubject((ISubjectEnum) null))) {
             rightAccumulatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
-        } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
-                getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null))) {
+        } else if (subjectThatCaused.equals(WsInputManager.getInstance().
+                getSensorInput(WsInputManager.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null))) {
             funnelatorLimitSwitch = ((BooleanSubject) subjectThatCaused).getValue();
             if(funnelatorLimitSwitch == false)
             {

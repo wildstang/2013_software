@@ -5,8 +5,8 @@
 package com.wildstangs.autonomous.steps.hopper;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.WsHopper;
@@ -23,7 +23,7 @@ public class WsAutonomousStepRaiseHopper extends WsAutonomousStep {
     public void initialize() {
         wait = false;
         WsHopper subsystem = (WsHopper) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         BooleanSubject button = (BooleanSubject) subject;
 
         if (!subsystem.isHopperUp()) {
@@ -35,7 +35,7 @@ public class WsAutonomousStepRaiseHopper extends WsAutonomousStep {
     public void update() {
         if (!wait) {
             WsHopper subsystem = (WsHopper) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
-            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
+            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
             BooleanSubject button = (BooleanSubject) subject;
             if (button.getValue()) {
                 button.setValue(false);

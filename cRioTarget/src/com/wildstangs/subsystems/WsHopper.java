@@ -2,11 +2,11 @@ package com.wildstangs.subsystems;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.config.IntegerConfigFileParameter;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
-import com.wildstangs.outputfacade.base.IOutputEnum;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
-import com.wildstangs.outputfacade.outputs.WsServo;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.outputmanager.base.IOutputEnum;
+import com.wildstangs.outputmanager.base.WsOutputManager;
+import com.wildstangs.outputmanager.outputs.WsServo;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -51,23 +51,23 @@ public class WsHopper extends WsSubsystem implements IObserver {
         super(name);
         init();
 
-        Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.HOPPER_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON1);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON1);
         subject.attach(this);
 
         //Needed for tomahawk control
-        subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
     }
 
@@ -144,10 +144,10 @@ public class WsHopper extends WsSubsystem implements IObserver {
         }
 
 
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
-        ((WsServo) WsOutputFacade.getInstance().getOutput(WsOutputFacade.TOMAHAWK_SERVO))
+        WsOutputManager.getInstance().getOutput(WsOutputManager.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
+        ((WsServo) WsOutputManager.getInstance().getOutput(WsOutputManager.TOMAHAWK_SERVO))
                 .setAngle((IOutputEnum) null, new Double(tomahawkUp ? tomahawkUpValue : tomahawkDownValue));
-        WsOutputFacade.getInstance().getOutput(WsOutputFacade.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
+        WsOutputManager.getInstance().getOutput(WsOutputManager.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
 
         SmartDashboard.putBoolean("Kicker value", kickerValue);
         SmartDashboard.putNumber("Lift Value", liftValue.value);
@@ -201,19 +201,19 @@ public class WsHopper extends WsSubsystem implements IObserver {
                     liftValue = DoubleSolenoid.Value.kReverse;
                 }
             }
-        } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
-                getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).
+        } else if (subjectThatCaused.equals(WsInputManager.getInstance().
+                getSensorInput(WsInputManager.HOPPER_DOWN_LIMIT_SWITCH).
                 getSubject((ISubjectEnum) null))) {
-            downLimitSwitchValue = ((BooleanSubject) WsInputFacade.getInstance()
-                    .getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH)
+            downLimitSwitchValue = ((BooleanSubject) WsInputManager.getInstance()
+                    .getSensorInput(WsInputManager.HOPPER_DOWN_LIMIT_SWITCH)
                     .getSubject(((ISubjectEnum) null))).getValue();
-        } else if (subjectThatCaused.equals(WsInputFacade.getInstance().
-                getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH).
+        } else if (subjectThatCaused.equals(WsInputManager.getInstance().
+                getSensorInput(WsInputManager.HOPPER_UP_LIMIT_SWITCH).
                 getSubject((ISubjectEnum) null))) {
-            upLimitSwitchValue = ((BooleanSubject) WsInputFacade.getInstance()
-                    .getSensorInput(WsInputFacade.HOPPER_UP_LIMIT_SWITCH)
+            upLimitSwitchValue = ((BooleanSubject) WsInputManager.getInstance()
+                    .getSensorInput(WsInputManager.HOPPER_UP_LIMIT_SWITCH)
                     .getSubject(((ISubjectEnum) null))).getValue();
-        } else if (subjectThatCaused == WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).
+        } else if (subjectThatCaused == WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).
                 getSubject(WsManipulatorJoystickButtonEnum.BUTTON1)) {
             if (button.getValue() == true && (button.getPreviousValue() == false)) {
                 if (liftValue == DoubleSolenoid.Value.kForward) {

@@ -5,7 +5,7 @@
 package com.wildstangs.autonomous.steps.intake;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
-import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
 
@@ -22,10 +22,10 @@ public class WsAutonomousStepWaitForAccumulatorLeftAndRightLimitSwitches extends
     }
 
     public void update() {
-        if (((BooleanSubject) WsInputFacade.getInstance().
-                getSensorInput(WsInputFacade.LEFT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null)).
-                getValue() == true && ((BooleanSubject) WsInputFacade.getInstance().
-                getSensorInput(WsInputFacade.RIGHT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null)).
+        if (((BooleanSubject) WsInputManager.getInstance().
+                getSensorInput(WsInputManager.LEFT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null)).
+                getValue() == true && ((BooleanSubject) WsInputManager.getInstance().
+                getSensorInput(WsInputManager.RIGHT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null)).
                 getValue() == true) {
             finished = true;
         }

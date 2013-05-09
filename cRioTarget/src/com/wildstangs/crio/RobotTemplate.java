@@ -7,11 +7,11 @@
 package com.wildstangs.crio;
 
 import com.wildstangs.autonomous.WsAutonomousManager;
-import com.wildstangs.configfacade.WsConfigFacade;
-import com.wildstangs.configfacade.WsConfigFacadeException;
-import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.configmanager.WsConfigManager;
+import com.wildstangs.configmanager.WsConfigManagerException;
+import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.logger.Logger;
-import com.wildstangs.outputfacade.base.WsOutputFacade;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.profiling.WsProfilingTimer;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -36,15 +36,15 @@ public class RobotTemplate extends IterativeRobot {
         //Enables the filelogger thread.
         //FileLogger.getFileLogger().startLogger();
         try {
-            WsConfigFacade.getInstance().setFileName("/ws_config.txt");
-            WsConfigFacade.getInstance().readConfig();
+            WsConfigManager.getInstance().setFileName("/ws_config.txt");
+            WsConfigManager.getInstance().readConfig();
             //WsConfigFacade.getInstance().dumpConfigData();
-        } catch (WsConfigFacadeException wscfe) {
+        } catch (WsConfigManagerException wscfe) {
             System.out.println(wscfe.toString());
         }
 
-        WsInputFacade.getInstance();
-        WsOutputFacade.getInstance();
+        WsInputManager.getInstance();
+        WsOutputManager.getInstance();
 //        Logger.getLogger().always(this.getClass().getName(), "robotInit", "Facades Completed");
         WsSubsystemContainer.getInstance().init();
 //        Logger.getLogger().always(this.getClass().getName(), "robotInit", "Subsystem Completed");
@@ -64,7 +64,7 @@ public class RobotTemplate extends IterativeRobot {
         initTimer.startTimingSection();
         WsAutonomousManager.getInstance().clear();
         try {
-            WsConfigFacade.getInstance().readConfig();
+            WsConfigManager.getInstance().readConfig();
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
@@ -79,7 +79,7 @@ public class RobotTemplate extends IterativeRobot {
     }
 
     public void disabledPeriodic() {
-        WsInputFacade.getInstance().updateOiData();
+        WsInputManager.getInstance().updateOiData();
         //Make LED stuff go in disabled.
         ((WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_LED))).update();
     }
@@ -94,11 +94,11 @@ public class RobotTemplate extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-        WsInputFacade.getInstance().updateOiDataAutonomous();
-        WsInputFacade.getInstance().updateSensorData();
+        WsInputManager.getInstance().updateOiDataAutonomous();
+        WsInputManager.getInstance().updateSensorData();
         WsAutonomousManager.getInstance().update();
         WsSubsystemContainer.getInstance().update();
-        WsOutputFacade.getInstance().update();
+        WsOutputManager.getInstance().update();
         Watchdog.getInstance().feed();
     }
 
@@ -115,10 +115,10 @@ public class RobotTemplate extends IterativeRobot {
 //        periodTimer.endTimingSection();
 //        periodTimer.startTimingSection();
 //        durationTimer.startTimingSection();
-        WsInputFacade.getInstance().updateOiData();
-        WsInputFacade.getInstance().updateSensorData();
+        WsInputManager.getInstance().updateOiData();
+        WsInputManager.getInstance().updateSensorData();
         WsSubsystemContainer.getInstance().update();
-        WsOutputFacade.getInstance().update();
+        WsOutputManager.getInstance().update();
         Watchdog.getInstance().feed();
 //        durationTimer.endTimingSection();
     }

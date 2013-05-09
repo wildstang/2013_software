@@ -1,8 +1,8 @@
 package com.wildstangs.autonomous.steps.intake;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
-import com.wildstangs.inputfacade.base.WsInputFacade;
-import com.wildstangs.inputfacade.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.base.WsInputManager;
+import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -19,7 +19,7 @@ public class WsAutonomousStepIntakeIfFunnelatorTripped extends WsAutonomousStep 
     boolean funnelatorSwitch;
 
     public WsAutonomousStepIntakeIfFunnelatorTripped() {
-        Subject subject = WsInputFacade.getInstance().getSensorInput(WsInputFacade.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.FUNNELATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
     }
 
@@ -28,7 +28,7 @@ public class WsAutonomousStepIntakeIfFunnelatorTripped extends WsAutonomousStep 
             finished = true;
         } else {
             WsFloorPickup subsystem = (WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
-            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
             BooleanSubject backButton = (BooleanSubject) subject;
 
             if (subsystem.getMotorBack() == false) {
@@ -39,7 +39,7 @@ public class WsAutonomousStepIntakeIfFunnelatorTripped extends WsAutonomousStep 
 
     public void update() {
         if (false == funnelatorSwitch) {
-            Subject subject = WsInputFacade.getInstance().getOiInput(WsInputFacade.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
             BooleanSubject backButton = (BooleanSubject) subject;
             backButton.setValue(false);
             finished = true;

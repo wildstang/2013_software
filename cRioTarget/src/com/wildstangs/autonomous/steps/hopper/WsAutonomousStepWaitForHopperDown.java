@@ -5,7 +5,7 @@
 package com.wildstangs.autonomous.steps.hopper;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
-import com.wildstangs.inputfacade.base.WsInputFacade;
+import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
 
@@ -22,7 +22,7 @@ public class WsAutonomousStepWaitForHopperDown extends WsAutonomousStep {
     }
 
     public void update() {
-        boolean downSwitchState = ((BooleanSubject) WsInputFacade.getInstance().getSensorInput(WsInputFacade.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null)).getValue();
+        boolean downSwitchState = ((BooleanSubject) WsInputManager.getInstance().getSensorInput(WsInputManager.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null)).getValue();
         if (true == downSwitchState) {
             finished = true;
         }
