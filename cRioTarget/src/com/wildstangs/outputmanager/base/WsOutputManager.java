@@ -7,6 +7,10 @@ import com.wildstangs.outputmanager.outputs.WsRelay;
 import com.wildstangs.outputmanager.outputs.WsServo;
 import com.wildstangs.outputmanager.outputs.WsSolenoid;
 import com.wildstangs.outputmanager.outputs.WsVictor;
+import com.wildstangs.outputmanager.outputs.no.NoDoubleSolenoid;
+import com.wildstangs.outputmanager.outputs.no.NoServo;
+import com.wildstangs.outputmanager.outputs.no.NoSolenoid;
+import com.wildstangs.outputmanager.outputs.no.NoVictor;
 import com.wildstangs.types.DataElement;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.networktables2.util.List;
@@ -87,6 +91,7 @@ public class WsOutputManager {
     public static final String CLIMBER = "Climber";
     public static final String TOMAHAWK_SERVO = "TomahawkServo";
     public static final String LIGHT_CANNON_RELAY = "LightCannonRelay";
+    public static final String TURRET = "Turret";
     /**
      * Constructor for WsOutputManager.
      *
@@ -101,17 +106,27 @@ public class WsOutputManager {
         if (outputsFor2012.getValue()) {
             //Shifter is actually a single solenoid on 4 but 2 is unused for faking it as a double
             outputs.add(new DataElement(SHIFTER, new WsDoubleSolenoid(SHIFTER, 1, 2, 4)));
-            outputs.add(new DataElement(FRISBIE_CONTROL, new WsSolenoid(FRISBIE_CONTROL, 1, 5)));
-
-            outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
-            outputs.add(new DataElement(ACCUMULATOR_SOLENOID, new WsSolenoid(ACCUMULATOR_SOLENOID, 2, 7)));
-            outputs.add(new DataElement(LIFT, new WsDoubleSolenoid(LIFT, 2, 3, 4)));
-            outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 2, 5, 6)));
-            outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 10)));
-            outputs.add(new DataElement(LOADING_RAMP, new WsServo(LOADING_RAMP, 6)));
-            outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 8)));
             
-            outputs.add(new DataElement(CLIMBER, new WsSolenoid(CLIMBER, 2, 1)));
+
+            //This goes to the ball staging upper solenoid to allow shooting
+            outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 5)));
+            outputs.add(new DataElement(SHOOTER_ANGLE, new WsDoubleSolenoid(SHOOTER_ANGLE, 1, 8, 3)));
+            outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsDriveSpeed(FUNNELATOR_ROLLER, 7,8)));
+            
+            outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
+            outputs.add(new DataElement(TURRET, new WsVictor(TURRET, 9)));
+            
+            //Unused
+            outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new NoVictor(SHOOTER_VICTOR_EXIT, 10)));
+            outputs.add(new DataElement(ACCUMULATOR_VICTOR, new NoVictor(ACCUMULATOR_VICTOR, 6)));
+            outputs.add(new DataElement(LOADING_RAMP, new NoServo(LOADING_RAMP, 6)));
+            outputs.add(new DataElement(CLIMBER, new NoSolenoid(CLIMBER, 2, 1)));
+            outputs.add(new DataElement(FRISBIE_CONTROL, new NoSolenoid(FRISBIE_CONTROL, 1, 5)));
+            outputs.add(new DataElement(ACCUMULATOR_SOLENOID, new NoSolenoid(ACCUMULATOR_SOLENOID, 2, 7)));
+            outputs.add(new DataElement(LIFT, new NoDoubleSolenoid(LIFT, 2, 3, 4)));
+            outputs.add(new DataElement(ACCUMULATOR_SECONDARY_SOLENOID, new NoSolenoid(ACCUMULATOR_SECONDARY_SOLENOID, 1, 5)));
+            outputs.add(new DataElement(TOMAHAWK_SERVO, new NoServo(TOMAHAWK_SERVO, 8)));
+
 
         } else {
             outputs.add(new DataElement(KICKER, new WsSolenoid(KICKER, 1, 1)));
@@ -127,9 +142,10 @@ public class WsOutputManager {
             outputs.add(new DataElement(SHOOTER_VICTOR_EXIT, new WsVictor(SHOOTER_VICTOR_EXIT, 6)));
             outputs.add(new DataElement(LOADING_RAMP, new WsServo(LOADING_RAMP, 7)));
             outputs.add(new DataElement(FUNNELATOR_ROLLER, new WsVictor(FUNNELATOR_ROLLER, 10)));
+            outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
+            outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 9)));
+            outputs.add(new DataElement(TURRET, new NoVictor(TURRET, 9)));
         }
-        outputs.add(new DataElement(SHOOTER_VICTOR_ENTER, new WsVictor(SHOOTER_VICTOR_ENTER, 5)));
-        outputs.add(new DataElement(ACCUMULATOR_VICTOR, new WsVictor(ACCUMULATOR_VICTOR, 9)));
         outputs.add(new DataElement(LIGHT_CANNON_RELAY, new WsRelay(1, 2, Relay.Direction.kForward)));
     }
 }

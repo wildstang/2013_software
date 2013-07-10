@@ -12,6 +12,7 @@ import com.wildstangs.subsystems.WsShooter;
 import com.wildstangs.types.DataElement;
 import edu.wpi.first.wpilibj.networktables2.util.List;
 import com.wildstangs.subsystems.WsLightCannon;
+import com.wildstangs.subsystems.WsTurret;
 
 /**
  *
@@ -79,6 +80,7 @@ public class WsSubsystemContainer {
     public static final String WS_CLIMBER = "WsClimber";
     public static final String WS_LED = "WsLED";
     public static final String WS_LIGHT_CANNON = "WsLightCannon";
+    public static final String WS_TURRET = "WsTurret";
 
     /**
      * Constructor for the subsystem container.
@@ -97,6 +99,7 @@ public class WsSubsystemContainer {
         subsystem.add(new DataElement(WS_CLIMBER, new WsClimber(WS_CLIMBER)));
         subsystem.add(new DataElement(WS_LED, new WsLED(WS_LED)));
         subsystem.add(new DataElement(WS_LIGHT_CANNON, new WsLightCannon(WS_LIGHT_CANNON)));
+        subsystem.add(new DataElement(WS_TURRET, new WsTurret(WS_TURRET)));
 
     }
 }

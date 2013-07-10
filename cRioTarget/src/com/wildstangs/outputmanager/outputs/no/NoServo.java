@@ -2,28 +2,27 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.wildstangs.outputmanager.outputs;
+package com.wildstangs.outputmanager.outputs.no;
 
-import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.IServo;
+import com.wildstangs.outputmanager.outputs.*;
+import com.wildstangs.outputmanager.base.IOutput;
+import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
 import com.wildstangs.subjects.base.Subject;
-import edu.wpi.first.wpilibj.Servo;
 
 /**
  *
  * @author Rick a.k.a. Batman
  */
-public class WsServo implements IServo {
+public class NoServo implements IServo {
 
-    Servo servo;
     DoubleSubject position;
     private boolean angleSet;
 
-    public WsServo(String name, int channel) {
+    public NoServo(String name, int channel) {
         this.position = new DoubleSubject(name);
-        this.servo = new Servo(channel);
         angleSet = false;
     }
 
@@ -47,11 +46,6 @@ public class WsServo implements IServo {
 
     public void update() {
         this.position.updateValue();
-        if (angleSet) {
-            this.servo.setAngle(this.position.getValue());
-        } else {
-            this.servo.set(this.position.getValue());
-        }
     }
 
     public void notifyConfigChange() {

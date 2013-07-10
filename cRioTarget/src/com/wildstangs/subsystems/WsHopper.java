@@ -6,7 +6,7 @@ import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
-import com.wildstangs.outputmanager.outputs.WsServo;
+import com.wildstangs.outputmanager.base.IServo;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -145,7 +145,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
 
 
         WsOutputManager.getInstance().getOutput(WsOutputManager.KICKER).set((IOutputEnum) null, new Boolean(kickerValue));
-        ((WsServo) WsOutputManager.getInstance().getOutput(WsOutputManager.TOMAHAWK_SERVO))
+        ((IServo) WsOutputManager.getInstance().getOutput(WsOutputManager.TOMAHAWK_SERVO))
                 .setAngle((IOutputEnum) null, new Double(tomahawkUp ? tomahawkUpValue : tomahawkDownValue));
         WsOutputManager.getInstance().getOutput(WsOutputManager.LIFT).set((IOutputEnum) null, new Integer(liftValue.value));
 

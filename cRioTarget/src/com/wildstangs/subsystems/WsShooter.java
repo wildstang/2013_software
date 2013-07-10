@@ -7,8 +7,8 @@ import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickEnum;
 import com.wildstangs.logger.Logger;
+import com.wildstangs.outputmanager.base.IOutput;
 import com.wildstangs.outputmanager.base.WsOutputManager;
-import com.wildstangs.outputmanager.outputs.WsVictor;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.IObserver;
@@ -256,8 +256,8 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
         previousTime = newTime;
 
-        WsVictor victorEnter = (WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_ENTER);
-        WsVictor victorExit = (WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_EXIT);
+        IOutput victorEnter = (IOutput) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_ENTER);
+        IOutput victorExit = (IOutput) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_EXIT);
 
         if (((speedEnter < lowWheelSpeed) && (speedEnter < wheelEnterSetPoint))) {
             victorEnterValue = lowVictorSpeed;

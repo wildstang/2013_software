@@ -1,6 +1,7 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.config.DoubleConfigFileParameter;
+import com.wildstangs.inputmanager.base.IInput;
 import com.wildstangs.inputmanager.base.IInputEnum;
 import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.inputmanager.inputs.WsDigitalInput;
@@ -63,7 +64,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     }
 
     public void update() {
-        WsDigitalInput upSwitch = (WsDigitalInput) (WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH));
+        IInput upSwitch = (IInput) (WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH));
         boolean switchState = ((Boolean) (upSwitch.get((IInputEnum) null))).booleanValue();
         SmartDashboard.putBoolean("Accumulator Up Limit Switch", switchState);
         WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_SOLENOID).set(null, Boolean.valueOf(solenoidState));
