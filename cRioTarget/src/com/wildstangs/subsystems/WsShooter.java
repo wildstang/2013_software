@@ -139,29 +139,19 @@ public class WsShooter extends WsSubsystem implements IObserver {
             counterExit = new Counter(11);
         }
 
-
         //Implement this later for testing
         //Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON4);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.D_PAD_UP_DOWN);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.ENTER_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON2, this);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON4, this);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON5, this);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON7, this);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON8, this);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickEnum.D_PAD_UP_DOWN, this);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT, this);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT, this);
+        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT, this);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.ENTER_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
         subject.attach(this);
         subject = WsInputManager.getInstance().getOiInput(WsInputManager.EXIT_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
         subject.attach(this);

@@ -24,9 +24,6 @@ public class WsTurret extends WsSubsystem implements IObserver {
         super(name);
         WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON11 , this); 
         WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON12 , this); 
-        
-//        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON2);
-//        subject.attach(this);
     }
 
     public void init() {

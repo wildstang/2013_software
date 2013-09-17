@@ -1,6 +1,3 @@
-/*
- * Example drive base for the simulation env.
- */
 package com.wildstangs.subsystems;
 
 import com.wildstangs.autonomous.parameters.AutonomousBooleanConfigFileParameter;
@@ -83,38 +80,36 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     private static WsDriveBaseHeadingPidInput driveHeadingPidInput;
     private static WsDriveBaseHeadingPidOutput driveHeadingPidOutput;
     private static boolean driveHeadingPidEnabled = false;
-    
     private static WsSpeedPidController driveSpeedPid;
     private static WsDriveBaseSpeedPidInput driveSpeedPidInput;
     private static WsDriveBaseSpeedPidOutput driveSpeedPidOutput;
     private static ContinuousAccelFilter continuousAccelerationFilter;
     //Set low gear top speed to 8.5 ft/ second = 102 inches / second = 2.04 inches/ 20 ms 
-    private static double MAX_SPEED_INCHES_LOWGEAR = 90.0; 
-    private double goal_velocity = 0.0; 
-    private double distance_to_move = 0.0; 
-    private double distance_moved = 0.0; 
-    private double distance_remaining  = 0.0; 
-    private boolean motionProfileActive = false; 
-    private double currentProfileX =0.0; 
-    private double currentProfileV =0.0; 
-    private double currentProfileA =0.0; 
-    private static double FEED_FORWARD_VELOCITY_CONSTANT = 1.00; 
-    private static double FEED_FORWARD_ACCELERATION_CONSTANT = 0.00018; 
-    private double totalPosition = 0.0; 
-    private double previousPositionSinceLastReset = 0.0; 
-    private double previousRightPositionSinceLastReset = 0.0; 
-    private double previousLeftPositionSinceLastReset = 0.0; 
-    private double deltaPosition = 0.0; 
-    private double deltaTime = 0.0; 
-    private double deltaPosError = 0.0; 
-    private double deltaProfilePosition = 0.0; 
-    private double previousTime = 0.0; 
-    private double previousVelocity = 0.0; 
-    private double currentVelocity = 0.0; 
-    private double currentAcceleration = 0.0; 
+    private static double MAX_SPEED_INCHES_LOWGEAR = 90.0;
+    private double goal_velocity = 0.0;
+    private double distance_to_move = 0.0;
+    private double distance_moved = 0.0;
+    private double distance_remaining = 0.0;
+    private boolean motionProfileActive = false;
+    private double currentProfileX = 0.0;
+    private double currentProfileV = 0.0;
+    private double currentProfileA = 0.0;
+    private static double FEED_FORWARD_VELOCITY_CONSTANT = 1.00;
+    private static double FEED_FORWARD_ACCELERATION_CONSTANT = 0.00018;
+    private double totalPosition = 0.0;
+    private double previousPositionSinceLastReset = 0.0;
+    private double previousRightPositionSinceLastReset = 0.0;
+    private double previousLeftPositionSinceLastReset = 0.0;
+    private double deltaPosition = 0.0;
+    private double deltaTime = 0.0;
+    private double deltaPosError = 0.0;
+    private double deltaProfilePosition = 0.0;
+    private double previousTime = 0.0;
+    private double previousVelocity = 0.0;
+    private double currentVelocity = 0.0;
+    private double currentAcceleration = 0.0;
     private double DECELERATION_VELOCITY_THRESHOLD = 48; //Velocity in in/sec
     private double DECELERATION_MOTOR_SPEED = 0.3;
-    
     private static WsPidController driveDistancePid;
     private static WsDriveBaseDistancePidInput driveDistancePidInput;
     private static WsDriveBaseDistancePidOutput driveDistancePidOutput;
@@ -169,19 +164,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         QUICK_TURN_ANTITURBO_config = new DoubleConfigFileParameter(this.getClass().getName(), "quick_turn_antiturbo", 10.0);
 
         //Anti-Turbo button
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON8);
-        subject.attach(this);
+        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON8, this);
         //Turbo button
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON7);
-        subject.attach(this);
+        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON7, this);
         //Shifter Button
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON6);
-        subject.attach(this);
+        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON6, this);
         //Left/right slow turn buttons
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON1);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON3);
-        subject.attach(this);
+        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON1, this);
+        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON3, this);
 
         //Initialize the drive base encoders
         leftDriveEncoder = new Encoder(2, 3, true, EncodingType.k4X);
@@ -203,11 +193,11 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveHeadingPidInput = new WsDriveBaseHeadingPidInput();
         driveHeadingPidOutput = new WsDriveBaseHeadingPidOutput();
         driveHeadingPid = new WsPidController(driveHeadingPidInput, driveHeadingPidOutput, "WsDriveBaseHeadingPid");
-        
+
         driveSpeedPidInput = new WsDriveBaseSpeedPidInput();
         driveSpeedPidOutput = new WsDriveBaseSpeedPidOutput();
         driveSpeedPid = new WsSpeedPidController(driveSpeedPidInput, driveSpeedPidOutput, "WsDriveBaseSpeedPid");
-        continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0); 
+        continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
         init();
     }
 
@@ -220,9 +210,9 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         quickTurnFlag = false;
         this.disableDistancePidControl();
         this.disableHeadingPidControl();
-        motionProfileActive = false; 
-        previousTime =  Timer.getFPGATimestamp(); 
-        currentProfileX = 0.0; 
+        motionProfileActive = false;
+        previousTime = Timer.getFPGATimestamp();
+        currentProfileX = 0.0;
         continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
         //Zero out all motor values left over from autonomous
         (WsOutputManager.getInstance().getOutput(WsOutputManager.LEFT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(0.0));
@@ -236,22 +226,22 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         resetLeftEncoder();
         resetRightEncoder();
     }
-   
+
     public void update() {
-        updateSpeedAndAccelerationCalculations(); 
-        if (true == motionProfileActive ){
-            
+        updateSpeedAndAccelerationCalculations();
+        if (true == motionProfileActive) {
+
             //Update PID using profile velocity as setpoint and measured velocity as PID input 
             enableSpeedPidControl();
             setDriveSpeedPidSetpoint(continuousAccelerationFilter.getCurrVel());
             //Update system to get feed forward terms
-            deltaPosError = this.deltaPosition - (deltaProfilePosition); 
-            distance_moved += this.deltaPosition; 
+            deltaPosError = this.deltaPosition - (deltaProfilePosition);
+            distance_moved += this.deltaPosition;
 //            distance_remaining = this.distance_to_move - currentProfileX;
             distance_remaining = this.distance_to_move - distance_moved;
             //Logger.getLogger().debug(this.getClass().getName(), "AccelFilter", "distance_left: " + distance_remaining + " p: " + continuousAccelerationFilter.getCurrPos()+ " v: " + continuousAccelerationFilter.getCurrVel() + " a: " + continuousAccelerationFilter.getCurrAcc() );
-            continuousAccelerationFilter.calculateSystem(distance_remaining , currentProfileV, goal_velocity, MAX_ACCELERATION_DRIVE_PROFILE, MAX_SPEED_INCHES_LOWGEAR, deltaTime);
-            deltaProfilePosition = continuousAccelerationFilter.getCurrPos() - currentProfileX ;  
+            continuousAccelerationFilter.calculateSystem(distance_remaining, currentProfileV, goal_velocity, MAX_ACCELERATION_DRIVE_PROFILE, MAX_SPEED_INCHES_LOWGEAR, deltaTime);
+            deltaProfilePosition = continuousAccelerationFilter.getCurrPos() - currentProfileX;
             currentProfileX = continuousAccelerationFilter.getCurrPos();
             currentProfileV = continuousAccelerationFilter.getCurrVel();
             currentProfileA = continuousAccelerationFilter.getCurrAcc();
@@ -259,18 +249,17 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             SmartDashboard.putNumber("Speed PID Output", this.pidSpeedValue);
             SmartDashboard.putNumber("Distance Error", this.deltaPosError);
             //Update motor output with PID output and feed forward velocity and acceleration 
-            double throttleValue = this.pidSpeedValue 
-                                    + FEED_FORWARD_VELOCITY_CONSTANT*(continuousAccelerationFilter.getCurrVel()/ MAX_SPEED_INCHES_LOWGEAR )
-                                    + FEED_FORWARD_ACCELERATION_CONSTANT*continuousAccelerationFilter.getCurrAcc(); 
-            
-            if (((distance_remaining < getStoppingDistanceFromDistanceToMove(distance_to_move)) && (currentProfileV > 0) && (currentProfileA < 0 )) ||
-               ((distance_remaining > -getStoppingDistanceFromDistanceToMove(distance_to_move)) && (currentProfileV < 0) && (currentProfileA > 0 )))
-            {
-                throttleValue =0.0; 
+            double throttleValue = this.pidSpeedValue
+                    + FEED_FORWARD_VELOCITY_CONSTANT * (continuousAccelerationFilter.getCurrVel() / MAX_SPEED_INCHES_LOWGEAR)
+                    + FEED_FORWARD_ACCELERATION_CONSTANT * continuousAccelerationFilter.getCurrAcc();
+
+            if (((distance_remaining < getStoppingDistanceFromDistanceToMove(distance_to_move)) && (currentProfileV > 0) && (currentProfileA < 0))
+                    || ((distance_remaining > -getStoppingDistanceFromDistanceToMove(distance_to_move)) && (currentProfileV < 0) && (currentProfileA > 0))) {
+                throttleValue = 0.0;
             }
-            
+
             //Update the throttle value outside the function so that the acceleration factor is not applied. 
-            driveBaseThrottleValue = throttleValue; 
+            driveBaseThrottleValue = throttleValue;
             if (driveBaseThrottleValue > MAX_INPUT_THROTTLE_VALUE) {
                 driveBaseThrottleValue = MAX_INPUT_THROTTLE_VALUE;
             } else if (driveBaseThrottleValue < MAX_NEG_INPUT_THROTTLE_VALUE) {
@@ -329,8 +318,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             WsOutputManager.getInstance().getOutput(WsOutputManager.SHIFTER).set(null, new Integer(shifterFlag.value));
         } else {
         }
-        
-        
+
+
         SmartDashboard.putNumber("Left encoder count: ", this.getLeftEncoderValue());
         SmartDashboard.putNumber("Right encoder count: ", this.getRightEncoderValue());
         SmartDashboard.putNumber("Right Distance: ", this.getRightDistance());
@@ -338,7 +327,6 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         SmartDashboard.putNumber("Gyro angle", this.getGyroAngle());
     }
 
-    
     private void updateSpeedAndAccelerationCalculations() {
         double newTime = Timer.getFPGATimestamp();
         double leftDistance = this.getLeftDistance();
@@ -346,48 +334,50 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         double rightDelta = (rightDistance - previousRightPositionSinceLastReset);
         double leftDelta = (leftDistance - previousLeftPositionSinceLastReset);
         this.deltaPosition = (Math.abs(rightDelta) > Math.abs(leftDelta) ? rightDelta : leftDelta);
-        this.deltaTime = (newTime - previousTime); 
-        if (this.deltaTime > 0.060){ 
-            this.deltaTime = 0.060; 
+        this.deltaTime = (newTime - previousTime);
+        if (this.deltaTime > 0.060) {
+            this.deltaTime = 0.060;
         }
         //Do velocity internally in in/sec
-        currentVelocity= (deltaPosition / deltaTime ) ;
-        currentAcceleration = ((currentVelocity - previousVelocity) / deltaTime); 
-        
-        //Output velocity in ft/sec
-        SmartDashboard.putNumber("Velocity: ", this.currentVelocity/12.0);
-        SmartDashboard.putNumber("Accel: ", this.currentAcceleration/144.0);
+        currentVelocity = (deltaPosition / deltaTime);
+        currentAcceleration = ((currentVelocity - previousVelocity) / deltaTime);
 
-        totalPosition += deltaPosition; 
-        if ( Math.abs(deltaPosition) > 0.005 ){
+        //Output velocity in ft/sec
+        SmartDashboard.putNumber("Velocity: ", this.currentVelocity / 12.0);
+        SmartDashboard.putNumber("Accel: ", this.currentAcceleration / 144.0);
+
+        totalPosition += deltaPosition;
+        if (Math.abs(deltaPosition) > 0.005) {
             //Logger.getLogger().debug(this.getClass().getName(), "Kinematics", "tP: "+  totalPosition + " dP: " + deltaPosition + "dpp:" + deltaProfilePosition +  " dt: " + deltaTime + " cv: " + currentVelocity + " pv: " + previousVelocity + " ca: " + currentAcceleration);
         }
         previousPositionSinceLastReset += deltaPosition;
         previousRightPositionSinceLastReset += rightDelta;
         previousLeftPositionSinceLastReset += leftDelta;
-        previousTime = newTime; 
-        previousVelocity = currentVelocity; 
-        
-        
+        previousTime = newTime;
+        previousVelocity = currentVelocity;
+
+
     }
-    public void resetKinematics(){ 
-        previousPositionSinceLastReset = 0.0; 
-        previousVelocity = 0.0; 
-        currentVelocity = 0.0; 
-        currentAcceleration = 0.0; 
+
+    public void resetKinematics() {
+        previousPositionSinceLastReset = 0.0;
+        previousVelocity = 0.0;
+        currentVelocity = 0.0;
+        currentAcceleration = 0.0;
     }
-    
-    public double getDistanceRemaining(){
-        return this.distance_remaining; 
+
+    public double getDistanceRemaining() {
+        return this.distance_remaining;
     }
-    
-    public double getAcceleration(){ 
-     return currentAcceleration;    
+
+    public double getAcceleration() {
+        return currentAcceleration;
     }
-    public double getVelocity(){ 
-     return currentVelocity;    
+
+    public double getVelocity() {
+        return currentVelocity;
     }
-    
+
     public void setThrottleValue(double tValue) {
 
         // Taking into account Anti-Turbo
@@ -475,7 +465,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             driveBaseHeadingValue = MAX_NEG_INPUT_HEADING_VALUE;
         }
     }
-    
+
     public void overrideHeadingValue(double newHeading) {
         driveBaseHeadingValue = newHeading;
         if (driveBaseHeadingValue > MAX_INPUT_HEADING_VALUE) {
@@ -504,26 +494,26 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             // Quick turn does not take throttle into account
             leftMotorSpeed += driveBaseHeadingValue;
             rightMotorSpeed -= driveBaseHeadingValue;
-            
+
             /*if(true == antiTurboFlag) {
-                leftMotorSpeed /= ANTI_TURBO_MAX_DEFLECTION;
-                leftMotorSpeed *= QUICK_TURN_ANTITURBO;
-                rightMotorSpeed /= ANTI_TURBO_MAX_DEFLECTION;
-                rightMotorSpeed *= QUICK_TURN_ANTITURBO;
-            }
+             leftMotorSpeed /= ANTI_TURBO_MAX_DEFLECTION;
+             leftMotorSpeed *= QUICK_TURN_ANTITURBO;
+             rightMotorSpeed /= ANTI_TURBO_MAX_DEFLECTION;
+             rightMotorSpeed *= QUICK_TURN_ANTITURBO;
+             }
             
-            if(false == turboFlag) {
-                if (leftMotorSpeed > QUICK_TURN_CAP) {
-                    leftMotorSpeed = QUICK_TURN_CAP;
-                } else if (leftMotorSpeed < -QUICK_TURN_CAP) {
-                    leftMotorSpeed = -QUICK_TURN_CAP;
-                }
-                if (rightMotorSpeed > QUICK_TURN_CAP) {
-                    rightMotorSpeed = QUICK_TURN_CAP;
-                } else if (rightMotorSpeed < -QUICK_TURN_CAP) {
-                    rightMotorSpeed = -QUICK_TURN_CAP;
-                }
-            }*/
+             if(false == turboFlag) {
+             if (leftMotorSpeed > QUICK_TURN_CAP) {
+             leftMotorSpeed = QUICK_TURN_CAP;
+             } else if (leftMotorSpeed < -QUICK_TURN_CAP) {
+             leftMotorSpeed = -QUICK_TURN_CAP;
+             }
+             if (rightMotorSpeed > QUICK_TURN_CAP) {
+             rightMotorSpeed = QUICK_TURN_CAP;
+             } else if (rightMotorSpeed < -QUICK_TURN_CAP) {
+             rightMotorSpeed = -QUICK_TURN_CAP;
+             }
+             }*/
         } else {
             if (driveBaseThrottleValue >= 0) {
                 if (rightMotorSpeed < 0) {
@@ -564,18 +554,18 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 leftMotorSpeed = NEG_MAX_MOTOR_OUTPUT;
             }
         }
-        
-        if (useDriveOffset){
-            if(USE_LEFT_SIDE_FOR_OFFSET){
-                leftMotorSpeed = leftMotorSpeed * DRIVE_OFFSET; 
-            } else { 
-                rightMotorSpeed = rightMotorSpeed * DRIVE_OFFSET; 
+
+        if (useDriveOffset) {
+            if (USE_LEFT_SIDE_FOR_OFFSET) {
+                leftMotorSpeed = leftMotorSpeed * DRIVE_OFFSET;
+            } else {
+                rightMotorSpeed = rightMotorSpeed * DRIVE_OFFSET;
             }
         }
-        
+
         //If our throttle is within the zero deadband and our velocity is above the threshold,
         //use deceleration to slow us down
-        if((Math.abs(driveBaseThrottleValue) < DEADBAND) && (Math.abs(currentVelocity) > DECELERATION_VELOCITY_THRESHOLD) && (false == quickTurnFlag) && (false == slowTurnRightFlag) && (false ==slowTurnLeftFlag)) {
+        if ((Math.abs(driveBaseThrottleValue) < DEADBAND) && (Math.abs(currentVelocity) > DECELERATION_VELOCITY_THRESHOLD) && (false == quickTurnFlag) && (false == slowTurnRightFlag) && (false == slowTurnLeftFlag)) {
             //We are above the velocity threshold, apply a small inverse motor speed to decelerate
             if (currentVelocity > 0) {
                 //We are moving forward, apply a negative motor value
@@ -586,7 +576,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
                 rightMotorSpeed = DECELERATION_MOTOR_SPEED;
                 leftMotorSpeed = DECELERATION_MOTOR_SPEED;
             }
-        } else if ((Math.abs(driveBaseThrottleValue) < DEADBAND) && (Math.abs(currentVelocity) <= DECELERATION_VELOCITY_THRESHOLD) && (false == quickTurnFlag)&& (false == slowTurnRightFlag) && (false ==slowTurnLeftFlag)) {
+        } else if ((Math.abs(driveBaseThrottleValue) < DEADBAND) && (Math.abs(currentVelocity) <= DECELERATION_VELOCITY_THRESHOLD) && (false == quickTurnFlag) && (false == slowTurnRightFlag) && (false == slowTurnLeftFlag)) {
             //We are below the velocity threshold, zero the motor values to brake
             rightMotorSpeed = 0.0;
             leftMotorSpeed = 0.0;
@@ -657,6 +647,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveDistancePid.setSetPoint(distance);
         driveDistancePid.calcPid();
     }
+
     public void setDriveSpeedPidSetpoint(double speed) {
         driveSpeedPid.setSetPoint(speed);
         driveSpeedPid.calcPid();
@@ -732,6 +723,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         driveHeadingPid.reset();
         resetGyro();
     }
+
     public void enableSpeedPidControl() {
         driveSpeedPid.enable();
     }
@@ -745,28 +737,29 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     public void resetSpeedPid() {
         driveSpeedPid.reset();
     }
-    
-    public void startStraightMoveWithMotionProfile(double distance, double goal_velocity){
+
+    public void startStraightMoveWithMotionProfile(double distance, double goal_velocity) {
         startMoveWithHeadingAndMotionProfile(distance, goal_velocity, 0.0);
-        
+
     }
-    public void startMoveWithHeadingAndMotionProfile(double distance, double goal_velocity, double heading){
-        this.distance_to_move = distance; 
-        this.distance_moved = 0.0; 
+
+    public void startMoveWithHeadingAndMotionProfile(double distance, double goal_velocity, double heading) {
+        this.distance_to_move = distance;
+        this.distance_moved = 0.0;
         this.distance_remaining = distance;
-        this.goal_velocity = goal_velocity; 
-        motionProfileActive = true; 
+        this.goal_velocity = goal_velocity;
+        motionProfileActive = true;
         overrideHeadingValue(heading);
     }
-    
-    public void stopStraightMoveWithMotionProfile(){
-        disableSpeedPidControl(); 
+
+    public void stopStraightMoveWithMotionProfile() {
+        disableSpeedPidControl();
         continuousAccelerationFilter = new ContinuousAccelFilter(0, 0, 0);
-        currentProfileX = 0 ; 
-        this.distance_to_move = 0.0; 
-        this.distance_remaining = 0.0; 
+        currentProfileX = 0;
+        this.distance_to_move = 0.0;
+        this.distance_remaining = 0.0;
         this.goal_velocity = 0.0;
-        motionProfileActive =false; 
+        motionProfileActive = false;
         overrideHeadingValue(0.0);
     }
 
@@ -779,17 +772,19 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         pidHeadingValue = -pidHeading;
         Logger.getLogger().debug(this.getClass().getName(), "setPidHeadingValue", "Heading PID value set: " + pidHeading);
     }
+
     public void setPidSpeedValue(double pidSpeed) {
         //Add the feed forward velocity and acceleration
-        
+
         pidSpeedValue = pidSpeed;
     }
+
     public double getPidSpeedValue() {
         //Add the feed forward velocity and acceleration
-        
+
         return pidSpeedValue;
     }
-    
+
     public boolean getQuickTurnFlag() {
         return quickTurnFlag;
     }
@@ -812,7 +807,7 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         DEADBAND = DEADBAND_config.getValue();
         DECELERATION_VELOCITY_THRESHOLD = DECELERATION_VELOCITY_THRESHOLD_config.getValue();
         DECELERATION_MOTOR_SPEED = DECELERATION_MOTOR_SPEED_config.getValue();
-        STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR = STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config.getValue(); 
+        STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR = STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR_config.getValue();
         DRIVE_OFFSET = DRIVE_OFFSET_config.getValue();
         USE_LEFT_SIDE_FOR_OFFSET = USE_LEFT_SIDE_FOR_OFFSET_config.getValue();
         QUICK_TURN_CAP = QUICK_TURN_CAP_config.getValue();
@@ -838,19 +833,20 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             slowTurnRightFlag = ((BooleanSubject) subjectThatCaused).getValue();
         }
     }
-    
-    public double getSpeedError (){ 
-        return driveSpeedPid.getError(); 
+
+    public double getSpeedError() {
+        return driveSpeedPid.getError();
     }
-    public double getDeltaPosError (){ 
+
+    public double getDeltaPosError() {
         return deltaPosError;
     }
-    
+
     private double getStoppingDistanceFromDistanceToMove(double distance) {
         if (Math.abs(distance) > 40.0) {
             return STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR;
         } else {
-            return (STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR - ((3.0f/15.0f) * (40 - Math.abs(distance))));
+            return (STOPPING_DISTANCE_AT_MAX_SPEED_LOWGEAR - ((3.0f / 15.0f) * (40 - Math.abs(distance))));
         }
     }
 }
