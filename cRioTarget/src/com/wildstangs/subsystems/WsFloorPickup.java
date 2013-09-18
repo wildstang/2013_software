@@ -31,11 +31,11 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
 
     public WsFloorPickup(String name) {
         super(name);
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON5, this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON5);
 
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON7, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON7);
 
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON5, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
 
         Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);

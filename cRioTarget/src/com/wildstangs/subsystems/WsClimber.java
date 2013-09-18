@@ -1,6 +1,5 @@
 package com.wildstangs.subsystems;
 
-import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
@@ -21,7 +20,7 @@ public class WsClimber extends WsSubsystem implements IObserver {
 
     public WsClimber(String name) {
         super(name);
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON2, this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON2);
     }
 
     public void init() {

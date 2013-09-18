@@ -21,7 +21,7 @@ public class WsLightCannon extends WsSubsystem implements IObserver {
     public WsLightCannon(String name) {
         super(name);
 
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickEnum.D_PAD_UP_DOWN, this);
+        registerForJoystickButtonNotification(WsDriverJoystickEnum.D_PAD_UP_DOWN);
     }
 
     public void acceptNotification(Subject subjectThatCaused) {

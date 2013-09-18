@@ -40,11 +40,11 @@ public class WsLED extends WsSubsystem implements IObserver {
         t.start();
 
         //Kicker
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON6, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON6);
         //Intake
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON5, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
         //Climb
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON2, this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON2);
     }
 
     public void init() {

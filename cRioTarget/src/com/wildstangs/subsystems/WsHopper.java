@@ -51,14 +51,14 @@ public class WsHopper extends WsSubsystem implements IObserver {
         super(name);
         init();
 
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON6, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON6);
 
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON8, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON8);
 
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON1, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON1);
 
         //Needed for tomahawk control
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON5, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
         
         Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);

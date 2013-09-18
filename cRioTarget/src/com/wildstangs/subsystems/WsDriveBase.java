@@ -164,14 +164,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         QUICK_TURN_ANTITURBO_config = new DoubleConfigFileParameter(this.getClass().getName(), "quick_turn_antiturbo", 10.0);
 
         //Anti-Turbo button
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON8, this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON8);
         //Turbo button
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON7, this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON7);
         //Shifter Button
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON6, this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON6);
         //Left/right slow turn buttons
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON1, this);
-        WsInputManager.getInstance().attachJoystickButton(WsDriverJoystickButtonEnum.BUTTON3, this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON1);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON3);
 
         //Initialize the drive base encoders
         leftDriveEncoder = new Encoder(2, 3, true, EncodingType.k4X);

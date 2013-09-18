@@ -32,7 +32,7 @@ public class WsLoadingRamp extends WsSubsystem implements IObserver {
     public WsLoadingRamp(String name) {
         super(name);
 
-        WsInputManager.getInstance().attachJoystickButton(WsManipulatorJoystickButtonEnum.BUTTON3, this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON3);
 
         init();
 
