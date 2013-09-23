@@ -8,6 +8,7 @@ import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystick;
 import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystick;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.logger.Logger;
 import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
@@ -122,11 +123,11 @@ public class WsInputManager {
         if (button instanceof WsDriverJoystickButtonEnum){
             Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(button);
             subject.attach(observer);
-        }else if (button instanceof WsManipulatorJoystickButtonEnum){
+        } else if (button instanceof WsManipulatorJoystickButtonEnum){
             Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(button);
             subject.attach(observer);
-        }else {
-            //Function was not called with proper input
+        } else {
+            Logger.getLogger().debug(this.getClass().getName(), "attachJoystickButton", "Oops! Check that the inputs implement the required interfaces.");
         }
     }
     /**

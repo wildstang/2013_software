@@ -4,7 +4,6 @@ import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputmanager.base.IInput;
 import com.wildstangs.inputmanager.base.IInputEnum;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.WsDigitalInput;
 import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
@@ -32,16 +31,13 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
 
     public WsFloorPickup(String name) {
         super(name);
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON5);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON5);
 
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON7);
 
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
 
-        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
         maxVictorSpeed = maxSpeed.getValue();

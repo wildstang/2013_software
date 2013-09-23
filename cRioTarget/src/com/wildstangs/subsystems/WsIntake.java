@@ -44,20 +44,16 @@ public class WsIntake extends WsSubsystem implements IObserver {
         super(name);
 
         //Finger down override button
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON10);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON10);
         
         //Finger up override button
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON9);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON9);
 
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
 
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON7);
 
-        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.LEFT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.LEFT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
         subject = WsInputManager.getInstance().getSensorInput(WsInputManager.RIGHT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);

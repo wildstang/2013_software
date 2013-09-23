@@ -139,21 +139,15 @@ public class WsShooter extends WsSubsystem implements IObserver {
             counterExit = new Counter(11);
         }
 
-
         //Implement this later for testing
         //Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON2);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON4);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON7);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
-        subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.D_PAD_UP_DOWN);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON2);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON4);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON7);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON8);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.D_PAD_UP_DOWN);
         subject.attach(this);
         subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT);
         subject.attach(this);
