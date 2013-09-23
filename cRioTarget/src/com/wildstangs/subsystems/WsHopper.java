@@ -5,8 +5,8 @@ import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.IOutputEnum;
-import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.outputmanager.base.IServo;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -51,23 +51,19 @@ public class WsHopper extends WsSubsystem implements IObserver {
         super(name);
         init();
 
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON6);
 
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON8);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON8);
 
-        subject = WsInputManager.getInstance().getSensorInput(WsInputManager.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON1);
+
+        //Needed for tomahawk control
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
+        
+        Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
 
         subject = WsInputManager.getInstance().getSensorInput(WsInputManager.HOPPER_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
-        subject.attach(this);
-
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON1);
-        subject.attach(this);
-
-        //Needed for tomahawk control
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
         subject.attach(this);
     }
 

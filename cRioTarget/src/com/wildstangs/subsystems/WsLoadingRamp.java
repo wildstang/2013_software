@@ -7,8 +7,8 @@ package com.wildstangs.subsystems;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputmanager.base.WsInputManager;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
-import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.outputmanager.base.IServo;
+import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
@@ -32,8 +32,7 @@ public class WsLoadingRamp extends WsSubsystem implements IObserver {
     public WsLoadingRamp(String name) {
         super(name);
 
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON3);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON3);
 
         init();
 

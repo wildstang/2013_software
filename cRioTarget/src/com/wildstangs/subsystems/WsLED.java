@@ -38,16 +38,13 @@ public class WsLED extends WsSubsystem implements IObserver {
         Thread t = new Thread(messageSender = new MessageHandler());
         //This is safe because there is only one instance of the subsystem in the subsystem container.
         t.start();
-        
+
         //Kicker
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON6);
         //Intake
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
         //Climb
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(WsDriverJoystickButtonEnum.BUTTON2);
-        subject.attach(this);
+        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON2);
     }
 
     public void init() {
@@ -71,15 +68,13 @@ public class WsLED extends WsSubsystem implements IObserver {
         int station_location = DriverStation.getInstance().getLocation();
 
         /**
-         * --------------------------------------------------------- 
-         * | Function      | Cmd  | PL 1 | PL 2                    |
-         * --------------------------------------------------------- 
-         * | Shoot         | 0x05 | 0x13 | 0x14                    | 
-         * | Climb         | 0x06 | 0x11 | 0x12                    | 
-         * | Intake on     | 0x07 | 0x11 | 0x12 (same as off)      | 
-         * | Intake off    | 0x07 | 0x11 | 0x12(same as on)        |
-         * | Red Alliance  | 0x04 | 0x52 | station id(0x01 - 0x03) |
-         * | Blue Alliance | 0x04 | 0x47 | station id(0x01 - 0x03) |
+         * --------------------------------------------------------- | Function
+         * | Cmd | PL 1 | PL 2 |
+         * --------------------------------------------------------- | Shoot |
+         * 0x05 | 0x13 | 0x14 | | Climb | 0x06 | 0x11 | 0x12 | | Intake on |
+         * 0x07 | 0x11 | 0x12 (same as off) | | Intake off | 0x07 | 0x11 |
+         * 0x12(same as on) | | Red Alliance | 0x04 | 0x52 | station id(0x01 -
+         * 0x03) | | Blue Alliance | 0x04 | 0x47 | station id(0x01 - 0x03) |
          * ---------------------------------------------------------
          *
          * Send sequence once, no spamming the Arduino.
@@ -245,7 +240,8 @@ public class WsLED extends WsSubsystem implements IObserver {
                             i2c.transaction(sendData, sendSize, rcvBytes, 0);
                             dataToSend = false;
                         }
-                    } catch (InterruptedException e) {}   
+                    } catch (InterruptedException e) {
+                    }
                 }
             }
         }
