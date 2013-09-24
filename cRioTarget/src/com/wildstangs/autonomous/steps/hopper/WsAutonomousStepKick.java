@@ -6,7 +6,7 @@ package com.wildstangs.autonomous.steps.hopper;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.WsHopper;
@@ -22,14 +22,14 @@ public class WsAutonomousStepKick extends WsAutonomousStep {
     private boolean waitForKickerTrueToFalse;
 
     public void initialize() {
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickButtonEnum.MANIPULATOR_BUTTON_6);
         WsHopper subsystem = (WsHopper) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         //Check if the kicker is already kicking and set up wait
         if (subsystem.getKickerValue() == true) {
             waitForKickerTrueToFalse = true;
             waitForKickerFalseToTrue = false;
         } else {
-            subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+            subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickButtonEnum.MANIPULATOR_BUTTON_6);
             BooleanSubject button = (BooleanSubject) subject;
             button.setValue(true);
             waitForKickerFalseToTrue = true;
@@ -41,14 +41,14 @@ public class WsAutonomousStepKick extends WsAutonomousStep {
         WsHopper subsystem = (WsHopper) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_HOPPER));
         if (waitForKickerTrueToFalse) {
             if (subsystem.getKickerValue() == false) {
-                Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+                Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickButtonEnum.MANIPULATOR_BUTTON_6);
                 BooleanSubject button = (BooleanSubject) subject;
                 button.setValue(true);
                 waitForKickerFalseToTrue = true;
                 waitForKickerTrueToFalse = false;
             }
         } else if (waitForKickerFalseToTrue) {
-            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON6);
+            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickButtonEnum.MANIPULATOR_BUTTON_6);
             BooleanSubject button = (BooleanSubject) subject;
             if (subsystem.getKickerValue() == true) {
                 button.setValue(false);

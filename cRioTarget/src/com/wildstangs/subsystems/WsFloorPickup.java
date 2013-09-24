@@ -4,8 +4,7 @@ import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputmanager.base.IInput;
 import com.wildstangs.inputmanager.base.IInputEnum;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
@@ -31,11 +30,11 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
 
     public WsFloorPickup(String name) {
         super(name);
-        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON5);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.DRIVER_BUTTON_5);
 
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON7);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_7);
 
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_5);
 
         Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.ACCUMULATOR_UP_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
@@ -100,7 +99,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON5) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.DRIVER_BUTTON_5) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             solenoidState = button.getValue();
             //For now we activate the secondary solenoid whenever the primary one is activated.
@@ -110,7 +109,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
             if (false == button.getValue()) {
                 ((WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE)).latchAccumulatorSwitches();
             }
-        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_5) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             if (button.getValue()) {
                 motorForward = true;
@@ -118,7 +117,7 @@ public class WsFloorPickup extends WsSubsystem implements IObserver {
             } else {
                 motorForward = false;
             }
-        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_7) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             if (button.getValue()) {
                 motorForward = false;

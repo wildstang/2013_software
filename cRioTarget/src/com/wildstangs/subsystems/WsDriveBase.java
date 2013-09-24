@@ -5,8 +5,8 @@ import com.wildstangs.autonomous.parameters.AutonomousDoubleConfigFileParameter;
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickAxisEnum;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.motionprofile.ContinuousAccelFilter;
 import com.wildstangs.outputmanager.base.IOutputEnum;
@@ -164,14 +164,14 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         QUICK_TURN_ANTITURBO_config = new DoubleConfigFileParameter(this.getClass().getName(), "quick_turn_antiturbo", 10.0);
 
         //Anti-Turbo button
-        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON8);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.DRIVER_BUTTON_8);
         //Turbo button
-        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON7);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.DRIVER_BUTTON_7);
         //Shifter Button
-        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON6);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.DRIVER_BUTTON_6);
         //Left/right slow turn buttons
-        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON1);
-        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON3);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.DRIVER_BUTTON_1);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.DRIVER_BUTTON_3);
 
         //Initialize the drive base encoders
         leftDriveEncoder = new Encoder(2, 3, true, EncodingType.k4X);
@@ -219,8 +219,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
         (WsOutputManager.getInstance().getOutput(WsOutputManager.RIGHT_DRIVE_SPEED)).set((IOutputEnum) null, new Double(0.0));
         (WsOutputManager.getInstance().getOutput(WsOutputManager.LEFT_DRIVE_SPEED)).update();
         (WsOutputManager.getInstance().getOutput(WsOutputManager.RIGHT_DRIVE_SPEED)).update();
-        WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.THROTTLE, new Double(0.0));
-        WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsDriverJoystickEnum.HEADING, new Double(0.0));
+        WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsJoystickAxisEnum.DRIVER_THROTTLE, new Double(0.0));
+        WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).set(WsJoystickAxisEnum.DRIVER_HEADING, new Double(0.0));
         WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).update();
         //Clear encoders
         resetLeftEncoder();
@@ -297,8 +297,8 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
             double throttleValue = 0.0;
             double headingValue = 0.0;
 
-            throttleValue = ((Double) ((WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK))).get(WsDriverJoystickEnum.THROTTLE)).doubleValue();
-            headingValue = ((Double) ((WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK))).get(WsDriverJoystickEnum.HEADING)).doubleValue();
+            throttleValue = ((Double) ((WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK))).get(WsJoystickAxisEnum.DRIVER_THROTTLE)).doubleValue();
+            headingValue = ((Double) ((WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK))).get(WsJoystickAxisEnum.DRIVER_HEADING)).doubleValue();
 
             setThrottleValue(throttleValue);
             setHeadingValue(headingValue);
@@ -818,18 +818,18 @@ public class WsDriveBase extends WsSubsystem implements IObserver {
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON8) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.DRIVER_BUTTON_8) {
             antiTurboFlag = ((BooleanSubject) subjectThatCaused).getValue();
-        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON6) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.DRIVER_BUTTON_6) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
                 shifterFlag = shifterFlag.equals(DoubleSolenoid.Value.kForward)
                         ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward;
             }
-        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON7) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.DRIVER_BUTTON_7) {
             turboFlag = ((BooleanSubject) subjectThatCaused).getValue();
-        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON3) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.DRIVER_BUTTON_3) {
             slowTurnLeftFlag = ((BooleanSubject) subjectThatCaused).getValue();
-        } else if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON1) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.DRIVER_BUTTON_1) {
             slowTurnRightFlag = ((BooleanSubject) subjectThatCaused).getValue();
         }
     }

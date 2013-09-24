@@ -1,6 +1,6 @@
 package com.wildstangs.subsystems;
 
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
@@ -20,7 +20,7 @@ public class WsClimber extends WsSubsystem implements IObserver {
 
     public WsClimber(String name) {
         super(name);
-        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON2);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.DRIVER_BUTTON_2);
     }
 
     public void init() {
@@ -37,7 +37,7 @@ public class WsClimber extends WsSubsystem implements IObserver {
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON2) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.DRIVER_BUTTON_2) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             if (true == button.getValue() && false == button.getPreviousValue()) {
                 climbState = !climbState;

@@ -1,8 +1,7 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.Subject;
@@ -40,11 +39,11 @@ public class WsLED extends WsSubsystem implements IObserver {
         t.start();
 
         //Kicker
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON6);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_6);
         //Intake
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_5);
         //Climb
-        registerForJoystickButtonNotification(WsDriverJoystickButtonEnum.BUTTON2);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.DRIVER_BUTTON_2);
     }
 
     public void init() {
@@ -186,10 +185,10 @@ public class WsLED extends WsSubsystem implements IObserver {
     public void acceptNotification(Subject subjectThatCaused) {
         boolean buttonState = ((BooleanSubject) subjectThatCaused).getValue();
 
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_6) {
             kickerButtonPressed = buttonState;
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_5) {
             if (intakeButtonPreviousState == false) {
                 if ((intakeButtonPreviousState = buttonState) == true) {
                     intakeChanged = true;
@@ -201,7 +200,7 @@ public class WsLED extends WsSubsystem implements IObserver {
                 intakeChanged = false;
             }
         }
-        if (subjectThatCaused.getType() == WsDriverJoystickButtonEnum.BUTTON2) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.DRIVER_BUTTON_2) {
             climbButtonPressed = buttonState;
         }
 

@@ -4,8 +4,8 @@ import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickAxisEnum;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputmanager.base.IOutput;
 import com.wildstangs.outputmanager.base.WsOutputManager;
@@ -142,18 +142,18 @@ public class WsShooter extends WsSubsystem implements IObserver {
         //Implement this later for testing
         //Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.SHOOTER_SPEED_INPUT).getSubject(null);
         //subject.attach(this);
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON2);
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON4);
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON7);
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON8);
-        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.D_PAD_UP_DOWN);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_2);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_4);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_5);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_7);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_8);
+        Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickAxisEnum.MANIPULATOR_D_PAD_UP_DOWN);
         subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickAxisEnum.MANIPULATOR_D_PAD_LEFT_RIGHT);
         subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickAxisEnum.MANIPULATOR_ENTER_FLYWHEEL_ADJUSTMENT);
         subject.attach(this);
-        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT);
+        subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickAxisEnum.MANIPULATOR_EXIT_FLYWHEEL_ADJUSTMENT);
         subject.attach(this);
         subject = WsInputManager.getInstance().getOiInput(WsInputManager.ENTER_WHEEL_SHOOTER_SPEED_INPUT).getSubject((ISubjectEnum) null);
         subject.attach(this);
@@ -372,7 +372,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
     public void acceptNotification(Subject subjectThatCaused) {
         double dpadVal;
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON2) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_2) {
             if (((BooleanSubject) subjectThatCaused).getValue() == true) {
                 if (angleFlag == DoubleSolenoid.Value.kReverse) {
                     angleFlag = DoubleSolenoid.Value.kForward;
@@ -381,11 +381,11 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 }
             }
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON4) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_4) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             presetUnlock = button.getValue();
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.D_PAD_UP_DOWN) {
+        if (subjectThatCaused.getType() == WsJoystickAxisEnum.MANIPULATOR_D_PAD_UP_DOWN) {
             dpadVal = ((DoubleSubject) subjectThatCaused).getValue();
             if (dpadVal == -1 && presetUnlock) {
                 Logger.getLogger().debug(this.getClass().getName(), "acceptNotification",
@@ -404,7 +404,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 SmartDashboard.putString("Shooter Preset", "Enter: " + wheelEnterSetPoint + " Exit: " + wheelExitSetPoint + " Angle: " + angleToString(angleFlag));
             }
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT) {
+        if (subjectThatCaused.getType() == WsJoystickAxisEnum.MANIPULATOR_D_PAD_LEFT_RIGHT) {
             dpadVal = ((DoubleSubject) subjectThatCaused).getValue();
             if (dpadVal == -1 && presetUnlock) {
                 Logger.getLogger().debug(this.getClass().getName(), "acceptNotification",
@@ -424,7 +424,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
 
             }
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT) {
+        if (subjectThatCaused.getType() == WsJoystickAxisEnum.MANIPULATOR_ENTER_FLYWHEEL_ADJUSTMENT) {
             double currentValue = ((DoubleSubject) subjectThatCaused).getValue();
             double previousValue = ((DoubleSubject) subjectThatCaused).getPreviousValue();
             if (previousValue < 0.25 && currentValue > 0.25) {
@@ -435,7 +435,7 @@ public class WsShooter extends WsSubsystem implements IObserver {
                 wheelEnterSetPoint -= 50;
             }
         }
-        if (subjectThatCaused.getType() == WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT) {
+        if (subjectThatCaused.getType() == WsJoystickAxisEnum.MANIPULATOR_EXIT_FLYWHEEL_ADJUSTMENT) {
             double currentValue = ((DoubleSubject) subjectThatCaused).getValue();
             double previousValue = ((DoubleSubject) subjectThatCaused).getPreviousValue();
             if (previousValue < 0.25 && currentValue > 0.25) {

@@ -1,10 +1,12 @@
 package com.wildstangs.inputmanager.inputs.joystick;
 
+import com.wildstangs.inputmanager.base.IInputEnum;
+
 /**
  *
  * @author Joey
  */
-public class WsJoystickButtonEnum {
+public class WsJoystickButtonEnum implements IInputEnum{
     
     protected static WsJoystickButtonEnum[] driverButtons;
     protected static WsJoystickButtonEnum[] manipulatorButtons;

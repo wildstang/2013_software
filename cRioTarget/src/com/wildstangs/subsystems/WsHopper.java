@@ -3,7 +3,7 @@ package com.wildstangs.subsystems;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.config.IntegerConfigFileParameter;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.IServo;
 import com.wildstangs.outputmanager.base.WsOutputManager;
@@ -51,14 +51,14 @@ public class WsHopper extends WsSubsystem implements IObserver {
         super(name);
         init();
 
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON6);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_6);
 
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON8);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_8);
 
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON1);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_1);
 
         //Needed for tomahawk control
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_5);
         
         Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.HOPPER_DOWN_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
@@ -168,7 +168,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
     public void acceptNotification(Subject subjectThatCaused) {
         BooleanSubject button = (BooleanSubject) subjectThatCaused;
 
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON6) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_6) {
             kickerButtonPressed = button.getValue();
             if (button.getValue()) {
                 WsShooter shooter = (WsShooter) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_SHOOTER);
@@ -181,7 +181,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
 
                 }
             }
-        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON8) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_8) {
             if (button.getValue() == true && (button.getPreviousValue() == false)) {
                 if (liftValue == DoubleSolenoid.Value.kReverse) {
                     WsIntake intakeSubsystem = (WsIntake) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_INTAKE);
@@ -210,7 +210,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
                     .getSensorInput(WsInputManager.HOPPER_UP_LIMIT_SWITCH)
                     .getSubject(((ISubjectEnum) null))).getValue();
         } else if (subjectThatCaused == WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).
-                getSubject(WsManipulatorJoystickButtonEnum.BUTTON1)) {
+                getSubject(WsJoystickButtonEnum.MANIPULATOR_BUTTON_1)) {
             if (button.getValue() == true && (button.getPreviousValue() == false)) {
                 if (liftValue == DoubleSolenoid.Value.kForward) {
                     tomahawkUp = true;
@@ -218,7 +218,7 @@ public class WsHopper extends WsSubsystem implements IObserver {
                     tomahawkUp = !tomahawkUp;
                 }
             }
-        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_5) {
             if (true == button.getValue()) {
                 if (liftValue == DoubleSolenoid.Value.kReverse) {
                     tomahawkUp = true;
