@@ -2,7 +2,7 @@ package com.wildstangs.autonomous.steps.intake;
 
 import com.wildstangs.autonomous.WsAutonomousStep;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.IObserver;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -28,7 +28,7 @@ public class WsAutonomousStepIntakeIfFunnelatorTripped extends WsAutonomousStep 
             finished = true;
         } else {
             WsFloorPickup subsystem = (WsFloorPickup) (WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_FLOOR_PICKUP));
-            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickButtonEnum.MANIPULATOR_BUTTON_5);
             BooleanSubject backButton = (BooleanSubject) subject;
 
             if (subsystem.getMotorBack() == false) {
@@ -39,7 +39,7 @@ public class WsAutonomousStepIntakeIfFunnelatorTripped extends WsAutonomousStep 
 
     public void update() {
         if (false == funnelatorSwitch) {
-            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsManipulatorJoystickButtonEnum.BUTTON5);
+            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(WsJoystickButtonEnum.MANIPULATOR_BUTTON_5);
             BooleanSubject backButton = (BooleanSubject) subject;
             backButton.setValue(false);
             finished = true;

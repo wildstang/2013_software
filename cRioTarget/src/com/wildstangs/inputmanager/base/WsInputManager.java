@@ -5,9 +5,8 @@ import com.wildstangs.inputmanager.inputs.WsDigitalInput;
 import com.wildstangs.inputmanager.inputs.driverstation.WsDSAnalogInput;
 import com.wildstangs.inputmanager.inputs.driverstation.WsDSDigitalInput;
 import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystick;
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystick;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
 import com.wildstangs.logger.Logger;
 import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.IObserver;
@@ -120,13 +119,12 @@ public class WsInputManager {
     }
     
     final public void attachJoystickButton(IInputEnum button, IObserver observer ) {
-        if (button instanceof WsDriverJoystickButtonEnum){
-            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK).getSubject(button);
+        if (button instanceof WsJoystickButtonEnum)
+        {
+            Subject subject = WsInputManager.getInstance().getOiInput(((WsJoystickButtonEnum) button).isDriver() ? WsInputManager.DRIVER_JOYSTICK : WsInputManager.MANIPULATOR_JOYSTICK).getSubject(button);
             subject.attach(observer);
-        } else if (button instanceof WsManipulatorJoystickButtonEnum){
-            Subject subject = WsInputManager.getInstance().getOiInput(WsInputManager.MANIPULATOR_JOYSTICK).getSubject(button);
-            subject.attach(observer);
-        } else {
+        }
+        else {
             Logger.getLogger().debug(this.getClass().getName(), "attachJoystickButton", "Oops! Check that the inputs implement the required interfaces.");
         }
     }

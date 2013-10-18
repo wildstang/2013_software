@@ -3,7 +3,7 @@ package com.wildstangs.subsystems;
 import com.wildstangs.config.BooleanConfigFileParameter;
 import com.wildstangs.config.DoubleConfigFileParameter;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
@@ -44,14 +44,14 @@ public class WsIntake extends WsSubsystem implements IObserver {
         super(name);
 
         //Finger down override button
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON10);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_10);
         
         //Finger up override button
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON9);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_9);
 
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON5);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_5);
 
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON7);
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_7);
 
         Subject subject = WsInputManager.getInstance().getSensorInput(WsInputManager.LEFT_ACCUMULATOR_LIMIT_SWITCH).getSubject((ISubjectEnum) null);
         subject.attach(this);
@@ -182,18 +182,18 @@ public class WsIntake extends WsSubsystem implements IObserver {
 
     public void acceptNotification(Subject subjectThatCaused) {
         BooleanSubject button = (BooleanSubject) subjectThatCaused;
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON10) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_10) {
             fingerDownOverrideButtonState = button.getValue();
-        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON9) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_9) {
             fingerUpOverrideButtonState = button.getValue();
-        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON5) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_5) {
             if (button.getValue()) {
                 motorForward = true;
                 motorBack = false;
             } else {
                 motorForward = false;
             }
-        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON7) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_7) {
             if (button.getValue()) {
                 motorForward = false;
                 motorBack = true;

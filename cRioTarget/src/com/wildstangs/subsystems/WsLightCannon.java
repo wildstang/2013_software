@@ -1,7 +1,7 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickAxisEnum;
 import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.DoubleSubject;
@@ -21,7 +21,7 @@ public class WsLightCannon extends WsSubsystem implements IObserver {
     public WsLightCannon(String name) {
         super(name);
 
-        registerForJoystickButtonNotification(WsDriverJoystickEnum.D_PAD_UP_DOWN);
+        registerForJoystickButtonNotification(WsJoystickAxisEnum.DRIVER_D_PAD_UP_DOWN);
     }
 
     public void acceptNotification(Subject subjectThatCaused) {

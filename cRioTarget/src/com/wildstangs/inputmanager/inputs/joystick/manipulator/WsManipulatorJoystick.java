@@ -3,6 +3,8 @@ package com.wildstangs.inputmanager.inputs.joystick.manipulator;
 import com.wildstangs.inputmanager.base.IInput;
 import com.wildstangs.inputmanager.base.IInputEnum;
 import com.wildstangs.inputmanager.inputs.joystick.IHardwareJoystick;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickAxisEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.subjects.base.BooleanSubject;
 import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.ISubjectEnum;
@@ -24,16 +26,16 @@ public class WsManipulatorJoystick implements IInput {
     Joystick manipulatorJoystick = null;
 
     public Subject getSubject(ISubjectEnum subjectEnum) {
-        if (subjectEnum == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT) {
+        if (subjectEnum == WsJoystickAxisEnum.MANIPULATOR_ENTER_FLYWHEEL_ADJUSTMENT) {
             return enterFlywheelAdjustment;
-        } else if (subjectEnum == WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT) {
+        } else if (subjectEnum == WsJoystickAxisEnum.MANIPULATOR_EXIT_FLYWHEEL_ADJUSTMENT) {
             return exitFlywheelAdjustment;
-        } else if (subjectEnum == WsManipulatorJoystickEnum.D_PAD_UP_DOWN) {
+        } else if (subjectEnum == WsJoystickAxisEnum.MANIPULATOR_D_PAD_UP_DOWN) {
             return dPadUpDown;
-        } else if (subjectEnum == WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT) {
+        } else if (subjectEnum == WsJoystickAxisEnum.MANIPULATOR_D_PAD_LEFT_RIGHT) {
             return dPadLeftRight;
-        } else if (subjectEnum instanceof WsManipulatorJoystickButtonEnum) {
-            return buttons[((WsManipulatorJoystickButtonEnum) subjectEnum).toValue()];
+        } else if (subjectEnum instanceof WsJoystickButtonEnum && ((WsJoystickButtonEnum) subjectEnum).isDriver() == false) {
+            return buttons[((WsJoystickButtonEnum) subjectEnum).toValue()];
         } else {
             System.out.println("Subject not supported or incorrect.");
             return null;
@@ -41,10 +43,10 @@ public class WsManipulatorJoystick implements IInput {
     }
 
     public WsManipulatorJoystick() {
-        enterFlywheelAdjustment = new DoubleSubject(WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT);
-        exitFlywheelAdjustment = new DoubleSubject(WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT);
-        dPadUpDown = new DoubleSubject(WsManipulatorJoystickEnum.D_PAD_UP_DOWN);
-        dPadLeftRight = new DoubleSubject(WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT);
+        enterFlywheelAdjustment = new DoubleSubject(WsJoystickAxisEnum.MANIPULATOR_ENTER_FLYWHEEL_ADJUSTMENT);
+        exitFlywheelAdjustment = new DoubleSubject(WsJoystickAxisEnum.MANIPULATOR_EXIT_FLYWHEEL_ADJUSTMENT);
+        dPadUpDown = new DoubleSubject(WsJoystickAxisEnum.MANIPULATOR_D_PAD_UP_DOWN);
+        dPadLeftRight = new DoubleSubject(WsJoystickAxisEnum.MANIPULATOR_D_PAD_LEFT_RIGHT);
         manipulatorJoystick = (Joystick) new Joystick(2);
         manipulatorJoystick.setAxisChannel(Joystick.AxisType.kX, 1);
         manipulatorJoystick.setAxisChannel(Joystick.AxisType.kY, 2);
@@ -55,37 +57,37 @@ public class WsManipulatorJoystick implements IInput {
 
         buttons = new BooleanSubject[numberOfButtons];
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new BooleanSubject(WsManipulatorJoystickButtonEnum.getEnumFromIndex(i));
+            buttons[i] = new BooleanSubject(WsJoystickButtonEnum.getEnumFromIndex(false, i));
         }
     }
 
     public void set(IInputEnum key, Object value) {
-        if (key == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT) {
+        if (key == WsJoystickAxisEnum.MANIPULATOR_ENTER_FLYWHEEL_ADJUSTMENT) {
             enterFlywheelAdjustment.setValue(value);
-        } else if (key == WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT) {
+        } else if (key == WsJoystickAxisEnum.MANIPULATOR_EXIT_FLYWHEEL_ADJUSTMENT) {
             exitFlywheelAdjustment.setValue(value);
-        } else if (key == WsManipulatorJoystickEnum.D_PAD_UP_DOWN) {
+        } else if (key == WsJoystickAxisEnum.MANIPULATOR_D_PAD_UP_DOWN) {
             dPadUpDown.setValue(value);
-        } else if (key == WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT) {
+        } else if (key == WsJoystickAxisEnum.MANIPULATOR_D_PAD_LEFT_RIGHT) {
             dPadLeftRight.setValue(value);
-        } else if (key instanceof WsManipulatorJoystickButtonEnum) {
-            buttons[((WsManipulatorJoystickButtonEnum) key).toValue()].setValue(value);
+        } else if (key instanceof WsJoystickButtonEnum && ((WsJoystickButtonEnum) key).isDriver() == false) {
+            buttons[((WsJoystickButtonEnum) key).toValue()].setValue(value);
         } else {
             System.out.println("key not supported or incorrect.");
         }
     }
 
     public Object get(IInputEnum key) {
-        if (key == WsManipulatorJoystickEnum.ENTER_FLYWHEEL_ADJUSTMENT) {
+        if (key == WsJoystickAxisEnum.MANIPULATOR_ENTER_FLYWHEEL_ADJUSTMENT) {
             return enterFlywheelAdjustment.getValueAsObject();
-        } else if (key == WsManipulatorJoystickEnum.EXIT_FLYWHEEL_ADJUSTMENT) {
+        } else if (key == WsJoystickAxisEnum.MANIPULATOR_EXIT_FLYWHEEL_ADJUSTMENT) {
             return exitFlywheelAdjustment.getValueAsObject();
-        } else if (key == WsManipulatorJoystickEnum.D_PAD_UP_DOWN) {
+        } else if (key == WsJoystickAxisEnum.MANIPULATOR_D_PAD_UP_DOWN) {
             return dPadUpDown.getValueAsObject();
-        } else if (key == WsManipulatorJoystickEnum.D_PAD_LEFT_RIGHT) {
+        } else if (key == WsJoystickAxisEnum.MANIPULATOR_D_PAD_LEFT_RIGHT) {
             return dPadLeftRight.getValueAsObject();
-        } else if (key instanceof WsManipulatorJoystickButtonEnum) {
-            return buttons[((WsManipulatorJoystickButtonEnum) key).toValue()].getValueAsObject();
+        } else if (key instanceof WsJoystickButtonEnum && ((WsJoystickButtonEnum) key).isDriver() == false) {
+            return buttons[((WsJoystickButtonEnum) key).toValue()].getValueAsObject();
         } else {
             return new Double(-100);
         }

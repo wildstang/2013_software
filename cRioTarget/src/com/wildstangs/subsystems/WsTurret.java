@@ -1,8 +1,7 @@
 package com.wildstangs.subsystems;
 
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickButtonEnum;
-import com.wildstangs.inputmanager.inputs.joystick.manipulator.WsManipulatorJoystickButtonEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickButtonEnum;
 import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subjects.base.BooleanSubject;
@@ -22,8 +21,8 @@ public class WsTurret extends WsSubsystem implements IObserver {
     
     public WsTurret(String name) {
         super(name);
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON11); 
-        registerForJoystickButtonNotification(WsManipulatorJoystickButtonEnum.BUTTON12); 
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_11); 
+        registerForJoystickButtonNotification(WsJoystickButtonEnum.MANIPULATOR_BUTTON_12); 
     }
 
     public void init() {
@@ -50,10 +49,10 @@ public class WsTurret extends WsSubsystem implements IObserver {
     }
 
     public void acceptNotification(Subject subjectThatCaused) {
-        if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON12) {
+        if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_12) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             rightButton = button.getValue(); 
-        } else if (subjectThatCaused.getType() == WsManipulatorJoystickButtonEnum.BUTTON11) {
+        } else if (subjectThatCaused.getType() == WsJoystickButtonEnum.MANIPULATOR_BUTTON_11) {
             BooleanSubject button = (BooleanSubject) subjectThatCaused;
             leftButton = button.getValue();
         }
