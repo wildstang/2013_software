@@ -1,13 +1,12 @@
 
 package com.wildstangs.simulation.encoders;
 
-import com.wildstangs.graph.DoubleGraph;
-import com.wildstangs.logger.Logger;
 import com.wildstangs.outputmanager.base.IOutputEnum;
 import com.wildstangs.outputmanager.base.WsOutputManager;
 import com.wildstangs.subsystems.WsDriveBase;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class DriveBaseEncoders {
@@ -32,15 +31,6 @@ public class DriveBaseEncoders {
     private static final double ACCELERATION_PER_FRAME = (100.0/1000*20); 
 
     private static final boolean doModelWithCappedAcceleration = true; 
-        DoubleGraph actual_left_speed = new DoubleGraph();
-        DoubleGraph actual_right_speed= new DoubleGraph();
-        DoubleGraph left_distance= new DoubleGraph();
-        DoubleGraph right_distance = new DoubleGraph();
-        DoubleGraph measuredVelocity = new DoubleGraph();
-        DoubleGraph measuredAccel = new DoubleGraph();
-        DoubleGraph speedPIDError = new DoubleGraph();
-        DoubleGraph speedPIDValue = new DoubleGraph();
-        DoubleGraph distanceError = new DoubleGraph();
         
         static boolean motionProfileGraphs = false;
         static boolean kinematicGraphs = false; 
@@ -51,20 +41,6 @@ public class DriveBaseEncoders {
         desired_right_drive_speed = 0.0;
         actual_left_drive_speed = 0.0;
         actual_right_drive_speed = 0.0;
-        
-        if (motionProfileGraphs){
-            speedPIDError = new DoubleGraph("Speed PID Error", 0,200); 
-            speedPIDValue = new DoubleGraph("Speed PID Value", 0,600); 
-            distanceError = new DoubleGraph("Distance Error", 410,800); 
-        }
-        if (kinematicGraphs){
-            measuredVelocity = new DoubleGraph("Measured Velocity", 1430,0); 
-            measuredAccel = new DoubleGraph("Measured Accel", 1430,400); 
-        }
-        actual_left_speed = new DoubleGraph("Left Velocity", 820,0); 
-        actual_right_speed = new DoubleGraph("Right Velocity", 1130,0); 
-        left_distance = new DoubleGraph("Left Distance", 820,400); 
-        right_distance = new DoubleGraph("Right Distance", 1130,400); 
         
         //Create graphs for 
     }
@@ -187,20 +163,20 @@ public class DriveBaseEncoders {
 //            Logger.getLogger().debug(this.getClass().getName(), "SpeedPid", "value: " + db.getPidSpeedValue() + " error: " + db.getSpeedError() + " posError: " + db.getDeltaPosError() + " \n ");
         }
 
-        actual_left_speed.updateWithValue(actual_left_drive_speed, MAX_SPEED_INCHES); 
-        actual_right_speed.updateWithValue(actual_right_drive_speed, MAX_SPEED_INCHES); 
+        SmartDashboard.putNumber("Actual Left Speed", actual_left_drive_speed); 
+        SmartDashboard.putNumber("Actual Right Speed", actual_right_drive_speed); 
         if (motionProfileGraphs){
-            speedPIDError.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getSpeedError(), 50.0);
-            speedPIDValue.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getPidSpeedValue(), 0.75);
-            distanceError.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getDeltaPosError(), 4);
+            SmartDashboard.putNumber("Speed PID Error", ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getSpeedError());
+            SmartDashboard.putNumber("Speed PID Value", ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getPidSpeedValue());
+            SmartDashboard.putNumber("Distance Error", ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getDeltaPosError());
         }
         if (kinematicGraphs){
-            measuredVelocity.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getVelocity(), ((MAX_SPEED_INCHES * 50)) );
-            measuredAccel.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getAcceleration(), ((ACCELERATION_PER_FRAME *50)));
+            SmartDashboard.putNumber("Measured Velocity", ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getVelocity());
+            SmartDashboard.putNumber("Measured Acceleration", ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getAcceleration());
         }
         
-        left_distance.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftDistance(), 100); 
-        right_distance.updateWithValue(((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightDistance(), 100);
+        SmartDashboard.putNumber("Left Distance", ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getLeftDistance()); 
+        SmartDashboard.putNumber("Right Distance", ((WsDriveBase) WsSubsystemContainer.getInstance().getSubsystem(WsSubsystemContainer.WS_DRIVE_BASE)).getRightDistance());
         
         
     }

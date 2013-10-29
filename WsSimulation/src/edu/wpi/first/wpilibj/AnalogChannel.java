@@ -7,14 +7,6 @@
 
 package edu.wpi.first.wpilibj;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import javax.swing.JFrame;
-
-import java.awt.event.KeyListener;
-import javax.swing.JLabel;
-
 /**
  * Class to read a digital input.
  * This class will read digital inputs and return the current value on the channel. Other devices
@@ -22,10 +14,9 @@ import javax.swing.JLabel;
  * allocate digital inputs and outputs as required. This class is only for devices like switches
  * etc. that aren't implemented anywhere else.
  */
-public class AnalogChannel implements KeyListener{
+public class AnalogChannel {
 
     private int mChannel;
-    private JFrame frame;
     boolean inputState = false;
 
     /**
@@ -35,18 +26,6 @@ public class AnalogChannel implements KeyListener{
      */
     private void initDigitalInput(int moduleNumber, int channel) {
         mChannel = channel;
-        frame = new JFrame("Analog Channel Input Emulator: " + channel);
-        JLabel label = new JLabel("Currently alwyas returns 0.0");
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(300, 100));
-	frame.setLayout(new BorderLayout());
-        frame.addKeyListener(this);
-        
-        frame.add(label, BorderLayout.NORTH);
-  
-        frame.pack();
-        frame.setVisible(true);
     }
 
     /**
@@ -125,21 +104,5 @@ public class AnalogChannel implements KeyListener{
      * @param fallingEdge true to interrupt on falling edge
      */
     public void setUpSourceEdge(boolean risingEdge, boolean fallingEdge) {}
-    
-    public void keyPressed(KeyEvent e) {}
-    
-    public void keyReleased(KeyEvent e) {}
-    
-    public void keyTyped(KeyEvent e) {
-        int key = (int)e.getKeyChar()-48;        
-        if (key == mChannel) {
-            if (inputState == true) {
-                    inputState = false;
-                } else {
-                    inputState = true;
-                }
-                    
-        }
-    }
     
 }

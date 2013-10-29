@@ -7,6 +7,7 @@
 
 package edu.wpi.first.wpilibj;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
@@ -54,24 +55,11 @@ public class DoubleSolenoid {
     private int mForwardChannel;
     private int mReverseChannel;
     private Value solenoidState;
-    
-    private JFrame frame;
-    private JLabel outputLabel;
 /**
      * Common function to implement constructor behavior.
      */
     private void initSolenoid() {
 	 solenoidState = Value.kOff;
-        frame = new JFrame("DoubleSolenoid: Forward: " + mForwardChannel + " Reverse: " + mReverseChannel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(300, 100));
-	frame.setLayout(new BorderLayout());
-		
-	outputLabel = new JLabel("Double Solenoid State: Off");
-	frame.add(outputLabel, BorderLayout.NORTH);
-		
-	frame.pack();
-	frame.setVisible(true);
     }
 
     /**
@@ -111,8 +99,7 @@ public class DoubleSolenoid {
      */
     public void set(final Value value) {
 	solenoidState = value;
-	    
-	outputLabel.setText("Double Solenoid State: " + value.toString());
+        SmartDashboard.putString("DoubleSolenoid: Forward: " + mForwardChannel + " Reverse: " + mReverseChannel + " State", value.toString());
     }
 
     /**
@@ -124,4 +111,4 @@ public class DoubleSolenoid {
         return solenoidState;
     }
 
-    }
+}

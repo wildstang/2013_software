@@ -8,7 +8,6 @@
 package edu.wpi.first.wpilibj;
 
 import com.wildstangs.simulation.solenoids.WsSolenoidContainer;
-import com.wildstangs.simulation.*;
 
 
      /**

@@ -10,7 +10,7 @@ import com.wildstangs.autonomous.WsAutonomousManager;
 import com.wildstangs.configmanager.WsConfigManager;
 import com.wildstangs.configmanager.WsConfigManagerException;
 import com.wildstangs.inputmanager.base.WsInputManager;
-import com.wildstangs.inputmanager.inputs.joystick.driver.WsDriverJoystickEnum;
+import com.wildstangs.inputmanager.inputs.joystick.WsJoystickAxisEnum;
 import com.wildstangs.logger.*;
 import com.wildstangs.logviewer.LogViewer;
 import com.wildstangs.outputmanager.base.WsOutputManager;
@@ -22,9 +22,11 @@ import com.wildstangs.simulation.encoders.FlywheelEncoders;
 import com.wildstangs.simulation.funnelator.FunnelatorLimitSwitch;
 import com.wildstangs.simulation.gyro.GyroSimulation;
 import com.wildstangs.simulation.hopper.HopperLimitSwitches;
+import com.wildstangs.subjects.base.DoubleSubject;
 import com.wildstangs.subjects.base.Subject;
 import com.wildstangs.subsystems.base.WsSubsystemContainer;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -34,7 +36,7 @@ public class WsSimulation {
 
     static String c = "WsSimulation";
     
-    static boolean autonomousRun = true;
+    static boolean autonomousRun = false;
     
     //Display graphs 
     static boolean intakeMotorGraphs = false;
@@ -83,48 +85,56 @@ public class WsSimulation {
         WsInputManager.getInstance();
         WsOutputManager.getInstance();
         WsSubsystemContainer.getInstance();
+//        
+//        DoubleSubjectGraph leftDriveSpeed = new DoubleSubjectGraph() ; 
+//        DoubleSubjectGraph rightDriveSpeed = new DoubleSubjectGraph() ; 
+//        DoubleSubjectGraph accumulatorSpeed = new DoubleSubjectGraph() ; 
+//        DoubleSubjectGraph funnelatorSpeed = new DoubleSubjectGraph() ; 
+//        DoubleSubjectGraph driverThrottle = new DoubleSubjectGraph() ; 
+//        DoubleSubjectGraph enterSpeed = new DoubleSubjectGraph() ; 
+//        DoubleSubjectGraph exitSpeed = new DoubleSubjectGraph() ;
         
-        DoubleSubjectGraph leftDriveSpeed = new DoubleSubjectGraph() ; 
-        DoubleSubjectGraph rightDriveSpeed = new DoubleSubjectGraph() ; 
-        DoubleSubjectGraph accumulatorSpeed = new DoubleSubjectGraph() ; 
-        DoubleSubjectGraph funnelatorSpeed = new DoubleSubjectGraph() ; 
-        DoubleSubjectGraph driverThrottle = new DoubleSubjectGraph() ; 
-        DoubleSubjectGraph enterSpeed = new DoubleSubjectGraph() ; 
-        DoubleSubjectGraph exitSpeed = new DoubleSubjectGraph() ; 
+        DoubleSubject leftDriveSpeedSubject = (DoubleSubject) ((WsDriveSpeed) WsOutputManager.getInstance().getOutput(WsOutputManager.LEFT_DRIVE_SPEED)).getSubject(null);
+        DoubleSubject rightDriveSpeedSubject = (DoubleSubject) ((WsDriveSpeed) WsOutputManager.getInstance().getOutput(WsOutputManager.RIGHT_DRIVE_SPEED)).getSubject(null);
+        DoubleSubject accumulatorSpeedSubject = (DoubleSubject) ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_VICTOR)).getSubject(null);
+        DoubleSubject funnelatorSpeedSubject = (DoubleSubject) ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.FUNNELATOR_ROLLER)).getSubject(null);
+        DoubleSubject driveThrottleSubject = (DoubleSubject) ((WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK)).getSubject(WsJoystickAxisEnum.DRIVER_THROTTLE));
+        DoubleSubject enterSpeedSubject = (DoubleSubject) ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_ENTER)).getSubject(null);
+        DoubleSubject exitSpeedSubject = (DoubleSubject) ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_EXIT)).getSubject(null);
         
-        Subject subject;
-        if (driveMotorGraphs){
-            subject = ((WsDriveSpeed) WsOutputManager.getInstance().getOutput(WsOutputManager.LEFT_DRIVE_SPEED)).getSubject(null);
-            leftDriveSpeed = new DoubleSubjectGraph("Left Drive Speed", subject);
-            
-            subject = ((WsDriveSpeed) WsOutputManager.getInstance().getOutput(WsOutputManager.RIGHT_DRIVE_SPEED)).getSubject(null);
-            rightDriveSpeed = new DoubleSubjectGraph("Right Drive Speed", subject);
-            
-        }
-
-        if(intakeMotorGraphs){
-            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_VICTOR)).getSubject(null);
-            accumulatorSpeed = new DoubleSubjectGraph("Accumulator Speed", subject);
-
-            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.FUNNELATOR_ROLLER)).getSubject(null);
-            funnelatorSpeed = new DoubleSubjectGraph("Funnelator Speed", subject);
-            
-        }
-        
-        if (driveThrottleGraph){
-            subject = ((WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK)).getSubject(WsDriverJoystickEnum.THROTTLE));
-            driverThrottle = new DoubleSubjectGraph("Driver Throttle", subject);
-        }
-
-
-        if (flywheelSpeedGraphs){
-            
-            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_ENTER)).getSubject(null);
-            enterSpeed = new DoubleSubjectGraph("Enter Speed", subject);
-
-            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_EXIT)).getSubject(null);
-            exitSpeed = new DoubleSubjectGraph("Exit Speed", subject);
-        }
+//        Subject subject;
+//        if (driveMotorGraphs){
+//            subject = ((WsDriveSpeed) WsOutputManager.getInstance().getOutput(WsOutputManager.LEFT_DRIVE_SPEED)).getSubject(null);
+//            leftDriveSpeed = new DoubleSubjectGraph("Left Drive Speed", subject);
+//            
+//            subject = ((WsDriveSpeed) WsOutputManager.getInstance().getOutput(WsOutputManager.RIGHT_DRIVE_SPEED)).getSubject(null);
+//            rightDriveSpeed = new DoubleSubjectGraph("Right Drive Speed", subject);
+//            
+//        }
+//
+//        if(intakeMotorGraphs){
+//            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.ACCUMULATOR_VICTOR)).getSubject(null);
+//            accumulatorSpeed = new DoubleSubjectGraph("Accumulator Speed", subject);
+//
+//            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.FUNNELATOR_ROLLER)).getSubject(null);
+//            funnelatorSpeed = new DoubleSubjectGraph("Funnelator Speed", subject);
+//            
+//        }
+//        
+//        if (driveThrottleGraph){
+//            subject = ((WsInputManager.getInstance().getOiInput(WsInputManager.DRIVER_JOYSTICK)).getSubject(WsJoystickAxisEnum.DRIVER_THROTTLE));
+//            driverThrottle = new DoubleSubjectGraph("Driver Throttle", subject);
+//        }
+//
+//
+//        if (flywheelSpeedGraphs){
+//            
+//            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_ENTER)).getSubject(null);
+//            enterSpeed = new DoubleSubjectGraph("Enter Speed", subject);
+//
+//            subject = ((WsVictor) WsOutputManager.getInstance().getOutput(WsOutputManager.SHOOTER_VICTOR_EXIT)).getSubject(null);
+//            exitSpeed = new DoubleSubjectGraph("Exit Speed", subject);
+//        }
 
 
 //        double pid_setpoint = 10;
@@ -179,19 +189,19 @@ public class WsSimulation {
                 
                 //Update the Victor graphs
                 if (driveMotorGraphs){
-                    leftDriveSpeed.update();
-                    rightDriveSpeed.update();
+                    SmartDashboard.putNumber("Left Drive Speed", leftDriveSpeedSubject.getValue());
+                    SmartDashboard.putNumber("Right Drive Speed", rightDriveSpeedSubject.getValue());
                 }
                 if(intakeMotorGraphs){
-                    accumulatorSpeed.update(); 
-                    funnelatorSpeed.update(); 
+                    SmartDashboard.putNumber("Accumulator Speed", accumulatorSpeedSubject.getValue());
+                    SmartDashboard.putNumber("Funnelator Speed", funnelatorSpeedSubject.getValue());
                 }
                 if (driveThrottleGraph){
-                    driverThrottle.update(); 
+                    SmartDashboard.putNumber("Drive Throttle", driveThrottleSubject.getValue());
                 }
                 if (flywheelSpeedGraphs){
-                    enterSpeed.update();
-                    exitSpeed.update();
+                    SmartDashboard.putNumber("Enter Speed", enterSpeedSubject.getValue());
+                    SmartDashboard.putNumber("Exit Speed", exitSpeedSubject.getValue());
                 }
                 
                 gyro.update();

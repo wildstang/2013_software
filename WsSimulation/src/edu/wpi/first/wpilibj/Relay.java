@@ -6,10 +6,8 @@
 /*----------------------------------------------------------------------------*/
 package edu.wpi.first.wpilibj;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * Class for Spike style relay outputs.
@@ -140,9 +138,6 @@ public class Relay
     private int mChannel;
     private Direction mDirection;
     private boolean relayState;
-    private JFrame frame;
-    private JLabel directionLabel;
-    private JLabel relayLabel;
 
     /**
      * Common relay initialization method.
@@ -156,19 +151,6 @@ public class Relay
     private void initRelay(int moduleNumber)
     {
         relayState = false;
-        frame = new JFrame("Relay: " + mChannel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(300, 100));
-        frame.setLayout(new BorderLayout());
-
-        directionLabel = new JLabel("Direction: " + mDirection.toString());
-        relayLabel = new JLabel("Relay State: " + relayState);
-
-        frame.add(directionLabel, BorderLayout.NORTH);
-        frame.add(relayLabel, BorderLayout.SOUTH);
-
-        frame.pack();
-        frame.setVisible(true);
     }
 
     /**
@@ -301,8 +283,8 @@ public class Relay
             default:
             //Cannot hit this, limited by Value enum
         }
-        directionLabel.setText("Direction: " + mDirection.toString());
-        relayLabel.setText("Relay State: " + relayState);
+        SmartDashboard.putString("Relay: " + mChannel + " Direction", mDirection.toString());
+        SmartDashboard.putBoolean("Relay: " + mChannel + " State", relayState);
     }
 
     /**
